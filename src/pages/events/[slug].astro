@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
-import SectionDivider from '../../components/SectionDivider.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
 
 export async function getStaticPaths() {
@@ -27,8 +26,6 @@ const { Content } = await event.render();
     subtitle={event.data.location.venue}
     backgroundImage={heroBg}
   />
-
-  <SectionDivider color="#f9f7f1" />
 
   <section class="section section--white">
     <div class="container">

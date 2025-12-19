@@ -3,7 +3,6 @@ import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import FeatureCard from '../components/FeatureCard.astro';
-import SectionDivider from '../components/SectionDivider.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import EventHighlight from '../components/EventHighlight.astro';
 import CTASection from '../components/CTASection.astro';
@@ -48,8 +47,6 @@ const serviceImages = [
     ctaLink={homePage.data.hero.ctaLink}
   />
 
-  <SectionDivider color="#f9f7f1" />
-
   <!-- SECTION 2: Three Feature Cards -->
   <section class="section section--cream">
     <div class="container">
@@ -76,8 +73,6 @@ const serviceImages = [
     </div>
   </section>
 
-  <SectionDivider color="#ffffff" />
-
   <!-- SECTION 3: About ECRS Narrative (rendered from markdown) -->
   <section class="section section--white" id="about">
     <div class="container">
@@ -86,8 +81,6 @@ const serviceImages = [
       </div>
     </div>
   </section>
-
-  <SectionDivider color="#f4efe7" flip={true} />
 
   <!-- SECTION 4: Service Offerings -->
   <section class="section section--tan" id="programs">
@@ -136,8 +129,6 @@ const serviceImages = [
     </div>
   </section>
 
-  <SectionDivider color="#ffffff" />
-
   <!-- SECTION 5: Event Highlight (Winter Adventure) -->
   {featuredEvent && (
     <EventHighlight
@@ -148,8 +139,6 @@ const serviceImages = [
       link={`/events/${featuredEvent.slug}`}
     />
   )}
-
-  <SectionDivider color="#378e3c" flip={true} />
 
   <!-- SECTION 6: Call-to-Action Donation -->
   <CTASection
