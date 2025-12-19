@@ -1,19 +1,19 @@
 ---
 title: "Home"
 hero:
-  title: "Lorem Ipsum Dolor Sit"
-  subtitle: "Consectetur adipiscing elit sed do eiusmod"
+  title: "Welcome to ECRS!"
+  subtitle: "Come to Play. Play to Learn"
   backgroundImage: "../../assets/images/hero-bg.jpg"
   ctaText: "Lorem Ipsum"
   ctaLink: "#programs"
 featureCards:
-  - title: "Lorem Ipsum"
+  - title: "What We Do"
     icon: "../../assets/images/icons/activities.svg"
     description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
-  - title: "Dolor Sit"
+  - title: "Upcoming Events"
     icon: "../../assets/images/icons/events.svg"
     description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
-  - title: "Amet Consectetur"
+  - title: "Testemonials"
     icon: "../../assets/images/icons/testimonials.svg"
     description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla."
 donationCta:
