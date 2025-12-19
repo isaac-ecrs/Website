@@ -12,12 +12,14 @@ interface Props {
 }
 
 const { icon, image, title, description, link, linkText = 'Learn More' } = Astro.props;
+const CardWrapper = link ? 'a' : 'div';
+const wrapperProps = link ? { href: link } : {};
 ---
 
-<div class="feature-card animate-fade-bottom">
+<CardWrapper class="feature-card animate-fade-bottom" {...wrapperProps}>
   {image && (
     <div class="feature-image">
-      <Image src={image} alt={title} />
+      <Image src={image} alt={title} class="feature-card-image" />
     </div>
   )}
   {icon && !image && (
@@ -28,20 +30,24 @@ const { icon, image, title, description, link, linkText = 'Learn More' } = Astro
   <h3 class="feature-title">{title}</h3>
   <p class="feature-description">{description}</p>
   {link && (
-    <a href={link} class="feature-link">{linkText} →</a>
+    <span class="feature-link">{linkText} →</span>
   )}
-</div>
+</CardWrapper>
 
 <style lang="scss">
 @use '../styles/variables' as *;
 @use '../styles/mixins' as *;
 
 .feature-card {
+  display: block;
   background: white;
   padding: 2em;
   border-radius: $border-radius-card;
   box-shadow: $shadow-image;
   transition: transform $transition-fast, box-shadow $transition-fast;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-5px);
@@ -97,10 +103,15 @@ const { icon, image, title, description, link, linkText = 'Learn More' } = Astro
     color: $color-accent;
     font-weight: 600;
     text-decoration: none;
+    transition: color $transition-fast;
 
-    &:hover {
+    .feature-card:hover & {
       color: $color-teal;
     }
+  }
+
+  .feature-card-image {
+    display: block;
   }
 }
 </style>
