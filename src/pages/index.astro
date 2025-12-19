@@ -6,6 +6,19 @@ import SectionDivider from '../components/SectionDivider.astro';
 import ServiceCard from '../components/ServiceCard.astro';
 import EventHighlight from '../components/EventHighlight.astro';
 import CTASection from '../components/CTASection.astro';
+
+// Import images
+import heroBg from '../assets/images/hero-bg.jpg';
+import iconActivities from '../assets/images/icons/activities.svg';
+import iconEvents from '../assets/images/icons/events.svg';
+import iconTestimonials from '../assets/images/icons/testimonials.svg';
+import imageSinging from '../assets/images/services/singing.jpg';
+import imageDancing from '../assets/images/services/dancing.jpg';
+import imageDramatics from '../assets/images/services/dramatics.jpg';
+import imageGames from '../assets/images/services/games.jpg';
+import imageCrafts from '../assets/images/services/crafts.jpg';
+import imageDevelopment from '../assets/images/services/development.jpg';
+import imageWinterAdventure from '../assets/images/events/winter-adventure.jpg';
 ---
 
 <BaseLayout title="Home" description="ECRS - Come to Play. Play to Learn">
@@ -14,7 +27,7 @@ import CTASection from '../components/CTASection.astro';
   <Hero
     title="Lorem Ipsum Dolor Sit"
     subtitle="Consectetur adipiscing elit sed do eiusmod"
-    backgroundImage="/images/hero-bg.jpg"
+    backgroundImage={heroBg}
     ctaText="Lorem Ipsum"
     ctaLink="#programs"
   />
@@ -26,19 +39,19 @@ import CTASection from '../components/CTASection.astro';
     <div class="container">
       <div class="grid-3">
         <FeatureCard
-          icon="/images/icons/activities.svg"
+          icon={iconActivities}
           title="Lorem Ipsum"
           description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
           link="/activities"
         />
         <FeatureCard
-          icon="/images/icons/events.svg"
+          icon={iconEvents}
           title="Dolor Sit"
           description="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
           link="/events"
         />
         <FeatureCard
-          icon="/images/icons/testimonials.svg"
+          icon={iconTestimonials}
           title="Amet Consectetur"
           description="Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla."
           link="/testimonials"
@@ -83,32 +96,32 @@ import CTASection from '../components/CTASection.astro';
         <ServiceCard
           title="Lorem Ipsum One"
           description="Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-          image="/images/services/singing.jpg"
+          image={imageSinging}
         />
         <ServiceCard
           title="Lorem Ipsum Two"
           description="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-          image="/images/services/dancing.jpg"
+          image={imageDancing}
         />
         <ServiceCard
           title="Lorem Ipsum Three"
           description="Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-          image="/images/services/dramatics.jpg"
+          image={imageDramatics}
         />
         <ServiceCard
           title="Lorem Ipsum Four"
           description="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est."
-          image="/images/services/games.jpg"
+          image={imageGames}
         />
         <ServiceCard
           title="Lorem Ipsum Five"
           description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
-          image="/images/services/crafts.jpg"
+          image={imageCrafts}
         />
         <ServiceCard
           title="Lorem Ipsum Six"
           description="Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta."
-          image="/images/services/development.jpg"
+          image={imageDevelopment}
         />
       </div>
     </div>
@@ -121,7 +134,7 @@ import CTASection from '../components/CTASection.astro';
     title="Lorem Ipsum Event"
     date="January 15, 2026 @ 10:00 AM – January 20, 2026 @ 5:00 PM"
     description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation."
-    image="/images/events/winter-adventure.jpg"
+    image={imageWinterAdventure}
     link="/events/lorem-ipsum-event"
   />
 

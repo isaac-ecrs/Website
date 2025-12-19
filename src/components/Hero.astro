@@ -1,8 +1,11 @@
 ---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 interface Props {
   title: string;
   subtitle?: string;
-  backgroundImage: string;
+  backgroundImage: ImageMetadata;
   ctaText?: string;
   ctaLink?: string;
 }
@@ -10,7 +13,7 @@ interface Props {
 const { title, subtitle, backgroundImage, ctaText, ctaLink } = Astro.props;
 ---
 
-<section class="hero" style={`background-image: url(${backgroundImage})`}>
+<section class="hero" style={`background-image: url(${backgroundImage.src})`}>
   <div class="hero-content">
     <h1 class="hero-title animate-fade-bottom">{title}</h1>
     {subtitle && <p class="hero-subtitle animate-fade-bottom">{subtitle}</p>}

@@ -1,4 +1,7 @@
 ---
+import { Image } from 'astro:assets';
+import logoImg from '../assets/images/ecrs-logo.png';
+
 // Header component with fixed navigation
 ---
 
@@ -6,7 +9,7 @@
   <div class="container header-container">
     <div class="logo">
       <a href="/">
-        <img src="/images/ecrs-logo.png" alt="ECRS Logo" />
+        <Image src={logoImg} alt="ECRS Logo" />
       </a>
     </div>
     <nav class="main-nav">
