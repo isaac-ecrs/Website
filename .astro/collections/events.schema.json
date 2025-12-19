@@ -1,0 +1,101 @@
+{
+  "$ref": "#/definitions/events",
+  "definitions": {
+    "events": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "startDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "endDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "venue": {
+              "type": "string"
+            },
+            "address": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "zip": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "venue",
+            "address",
+            "city",
+            "state",
+            "zip"
+          ],
+          "additionalProperties": false
+        },
+        "image": {
+          "type": "string"
+        },
+        "cost": {
+          "type": "string"
+        },
+        "registrationEmail": {
+          "type": "string",
+          "format": "email"
+        },
+        "featured": {
+          "type": "boolean",
+          "default": false
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "startDate",
+        "endDate",
+        "location",
+        "image",
+        "cost",
+        "registrationEmail"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

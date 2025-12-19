@@ -1,0 +1,179 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import SectionDivider from '../../components/SectionDivider.astro';
+import heroBg from '../../assets/images/hero-bg.jpg';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  return events.map(event => ({
+    params: { slug: event.slug },
+    props: { event },
+  }));
+}
+
+interface Props {
+  event: any;
+}
+
+const { event } = Astro.props;
+const { Content } = await event.render();
+---
+
+<BaseLayout title={event.data.title} description={event.data.title}>
+  <Hero
+    title={event.data.title}
+    subtitle={event.data.location.venue}
+    backgroundImage={heroBg}
+  />
+
+  <SectionDivider color="#f9f7f1" />
+
+  <section class="section section--white">
+    <div class="container">
+      <div class="event-detail-grid">
+        <div class="event-content">
+          <Content />
+        </div>
+
+        <aside class="event-sidebar">
+          <div class="event-info-box">
+            <h3>Event Details</h3>
+
+            <div class="info-item">
+              <h4>Date & Time</h4>
+              <p>
+                <strong>Start:</strong> {new Date(event.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
+              </p>
+              <p>
+                <strong>End:</strong> {new Date(event.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
+              </p>
+            </div>
+
+            <div class="info-item">
+              <h4>Location</h4>
+              <p>
+                {event.data.location.venue}<br />
+                {event.data.location.address}<br />
+                {event.data.location.city}, {event.data.location.state} {event.data.location.zip}
+              </p>
+            </div>
+
+            <div class="info-item">
+              <h4>Cost</h4>
+              <p>{event.data.cost}</p>
+            </div>
+
+            <div class="info-item">
+              <h4>Registration</h4>
+              <p>
+                <a href={`mailto:${event.data.registrationEmail}`} class="btn btn--primary" style="display: inline-block;">
+                  Register Here
+                </a>
+              </p>
+              <p style="font-size: 14px; margin-top: 0.5em;">
+                Email: <a href={`mailto:${event.data.registrationEmail}`}>{event.data.registrationEmail}</a>
+              </p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.event-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 3em;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+
+  .event-content {
+    p {
+      line-height: $line-height-body;
+      margin-bottom: 1em;
+    }
+
+    h2 {
+      color: $color-primary;
+      margin: 2em 0 1em;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    h3 {
+      color: $color-primary;
+      margin: 1.5em 0 0.75em;
+    }
+
+    ul {
+      margin-left: 1.5em;
+      margin-bottom: 1em;
+
+      li {
+        margin-bottom: 0.5em;
+      }
+    }
+  }
+
+  .event-sidebar {
+    .event-info-box {
+      background: $color-accent;
+      color: white;
+      padding: 2em;
+      border-radius: $border-radius-card;
+
+      @include mobile {
+        margin-top: 2em;
+      }
+
+      h3 {
+        color: white;
+        margin-bottom: 1.5em;
+        padding-bottom: 1em;
+        border-bottom: 1px solid rgba(white, 0.2);
+      }
+
+      h4 {
+        color: white;
+        font-size: 16px;
+        margin-bottom: 0.5em;
+        font-weight: 600;
+      }
+
+      .info-item {
+        margin-bottom: 1.5em;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        p {
+          margin: 0;
+          line-height: 1.6;
+          font-size: 14px;
+        }
+
+        a {
+          color: white;
+          text-decoration: underline;
+
+          &:hover {
+            color: rgba(white, 0.8);
+          }
+        }
+      }
+    }
+  }
+}
+</style>

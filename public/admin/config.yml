@@ -1,0 +1,68 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: src/assets/images
+public_folder: ../../assets/images
+
+collections:
+  - name: pages
+    label: Pages
+    folder: src/content/pages
+    extension: md
+    format: yaml-frontmatter
+    create: false
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - label: "Hero Section"
+        name: "hero"
+        widget: "object"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Subtitle", name: "subtitle", widget: "string" }
+          - { label: "Background Image", name: "backgroundImage", widget: "hidden", default: "../../assets/images/hero-bg.jpg" }
+          - { label: "CTA Text", name: "ctaText", widget: "string" }
+          - { label: "CTA Link", name: "ctaLink", widget: "string" }
+      - label: "Feature Cards"
+        name: "featureCards"
+        widget: "list"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Icon", name: "icon", widget: "hidden" }
+      - label: "Donation CTA"
+        name: "donationCta"
+        widget: "object"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Button Text", name: "buttonText", widget: "string" }
+          - { label: "Button Link", name: "buttonLink", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: events
+    label: Events
+    folder: src/content/events
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Start Date & Time", name: "startDate", widget: "datetime" }
+      - { label: "End Date & Time", name: "endDate", widget: "datetime" }
+      - label: "Location"
+        name: "location"
+        widget: "object"
+        fields:
+          - { label: "Venue Name", name: "venue", widget: "string" }
+          - { label: "Address", name: "address", widget: "string" }
+          - { label: "City", name: "city", widget: "string" }
+          - { label: "State", name: "state", widget: "string" }
+          - { label: "ZIP Code", name: "zip", widget: "string" }
+      - { label: "Featured Image", name: "image", widget: "hidden", default: "../../assets/images/events/winter-adventure.jpg" }
+      - { label: "Cost", name: "cost", widget: "string" }
+      - { label: "Registration Email", name: "registrationEmail", widget: "string" }
+      - { label: "Featured Event", name: "featured", widget: "boolean", default: false }
+      - { label: "Description", name: "body", widget: "markdown" }

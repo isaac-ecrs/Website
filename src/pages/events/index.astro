@@ -1,0 +1,141 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import SectionDivider from '../../components/SectionDivider.astro';
+import heroBg from '../../assets/images/hero-bg.jpg';
+
+const allEvents = await getCollection('events');
+const upcomingEvents = allEvents
+  .filter(e => new Date(e.data.endDate) >= new Date())
+  .sort((a, b) => new Date(a.data.startDate).getTime() - new Date(b.data.startDate).getTime());
+
+const pastEvents = allEvents
+  .filter(e => new Date(e.data.endDate) < new Date())
+  .sort((a, b) => new Date(b.data.startDate).getTime() - new Date(a.data.startDate).getTime());
+---
+
+<BaseLayout title="Events" description="ECRS - Upcoming and Past Events">
+  <Hero
+    title="Events"
+    subtitle="Upcoming Activities and Adventures"
+    backgroundImage={heroBg}
+    ctaText="Learn More"
+    ctaLink="#upcoming"
+  />
+
+  <SectionDivider color="#f9f7f1" />
+
+  <!-- Upcoming Events Section -->
+  <section class="section section--white" id="upcoming">
+    <div class="container">
+      <h2 class="text-center">Upcoming Events</h2>
+
+      {upcomingEvents.length > 0 ? (
+        <div class="events-list">
+          {upcomingEvents.map(event => (
+            <div class="event-card">
+              <div class="event-info">
+                <h3><a href={`/events/${event.slug}`}>{event.data.title}</a></h3>
+                <p class="event-date">
+                  {new Date(event.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – {new Date(event.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
+                </p>
+                <p class="event-location">
+                  {event.data.location.venue} • {event.data.location.city}, {event.data.location.state}
+                </p>
+                <p class="event-cost">Cost: {event.data.cost}</p>
+                <a href={`/events/${event.slug}`} class="btn btn--primary">Learn More</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p class="text-center">No upcoming events at this time.</p>
+      )}
+    </div>
+  </section>
+
+  {pastEvents.length > 0 && (
+    <>
+      <SectionDivider color="#f4efe7" flip={true} />
+
+      <!-- Past Events Section -->
+      <section class="section section--cream">
+        <div class="container">
+          <h2 class="text-center">Past Events</h2>
+
+          <div class="events-list">
+            {pastEvents.map(event => (
+              <div class="event-card past">
+                <div class="event-info">
+                  <h3><a href={`/events/${event.slug}`}>{event.data.title}</a></h3>
+                  <p class="event-date">
+                    {new Date(event.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})} – {new Date(event.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})}
+                  </p>
+                  <p class="event-location">
+                    {event.data.location.venue} • {event.data.location.city}, {event.data.location.state}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  )}
+</BaseLayout>
+
+<style lang="scss">
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.events-list {
+  max-width: 800px;
+  margin: 2em auto 0;
+}
+
+.event-card {
+  border-bottom: 1px solid rgba($color-text-dark, 0.15);
+  padding: 2em 0;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &.past {
+    opacity: 0.8;
+  }
+
+  .event-info {
+    h3 {
+      color: $color-primary;
+      margin-bottom: 0.75em;
+
+      a {
+        text-decoration: none;
+        color: inherit;
+
+        &:hover {
+          color: $color-accent;
+        }
+      }
+    }
+
+    .event-date {
+      font-weight: 600;
+      color: $color-accent;
+      margin-bottom: 0.5em;
+    }
+
+    .event-location {
+      color: rgba($color-text-dark, 0.7);
+      margin-bottom: 0.75em;
+    }
+
+    .event-cost {
+      font-weight: 600;
+      margin-bottom: 1em;
+    }
+  }
+}
+</style>

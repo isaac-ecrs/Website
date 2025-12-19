@@ -1,4 +1,5 @@
 ---
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import FeatureCard from '../components/FeatureCard.astro';
@@ -19,17 +20,32 @@ import imageGames from '../assets/images/services/games.jpg';
 import imageCrafts from '../assets/images/services/crafts.jpg';
 import imageDevelopment from '../assets/images/services/development.jpg';
 import imageWinterAdventure from '../assets/images/events/winter-adventure.jpg';
+
+// Get content from collections
+const homePage = await getEntry('pages', 'home');
+const { Content } = await homePage.render();
+const featuredEvent = (await getCollection('events')).find(e => e.data.featured);
+
+// Service images array
+const serviceImages = [
+  imageSinging,
+  imageDancing,
+  imageDramatics,
+  imageGames,
+  imageCrafts,
+  imageDevelopment,
+];
 ---
 
 <BaseLayout title="Home" description="ECRS - Come to Play. Play to Learn">
 
   <!-- SECTION 1: Hero -->
   <Hero
-    title="Lorem Ipsum Dolor Sit"
-    subtitle="Consectetur adipiscing elit sed do eiusmod"
+    title={homePage.data.hero.title}
+    subtitle={homePage.data.hero.subtitle}
     backgroundImage={heroBg}
-    ctaText="Lorem Ipsum"
-    ctaLink="#programs"
+    ctaText={homePage.data.hero.ctaText}
+    ctaLink={homePage.data.hero.ctaLink}
   />
 
   <SectionDivider color="#f9f7f1" />
@@ -40,20 +56,20 @@ import imageWinterAdventure from '../assets/images/events/winter-adventure.jpg';
       <div class="grid-3">
         <FeatureCard
           icon={iconActivities}
-          title="Lorem Ipsum"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
+          title={homePage.data.featureCards[0].title}
+          description={homePage.data.featureCards[0].description}
           link="/activities"
         />
         <FeatureCard
           icon={iconEvents}
-          title="Dolor Sit"
-          description="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
+          title={homePage.data.featureCards[1].title}
+          description={homePage.data.featureCards[1].description}
           link="/events"
         />
         <FeatureCard
           icon={iconTestimonials}
-          title="Amet Consectetur"
-          description="Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla."
+          title={homePage.data.featureCards[2].title}
+          description={homePage.data.featureCards[2].description}
           link="/testimonials"
         />
       </div>
@@ -62,22 +78,11 @@ import imageWinterAdventure from '../assets/images/events/winter-adventure.jpg';
 
   <SectionDivider color="#ffffff" />
 
-  <!-- SECTION 3: About ECRS Narrative -->
+  <!-- SECTION 3: About ECRS Narrative (rendered from markdown) -->
   <section class="section section--white" id="about">
     <div class="container">
       <div class="about-content">
-        <h2 class="text-center">Lorem Ipsum Dolor</h2>
-        <div class="about-text">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-          </p>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-          </p>
-          <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-          </p>
-        </div>
+        <Content />
       </div>
     </div>
   </section>
@@ -124,28 +129,34 @@ import imageWinterAdventure from '../assets/images/events/winter-adventure.jpg';
           image={imageDevelopment}
         />
       </div>
+
+      <p class="text-center" style="margin-top: 2em; color: rgba(69, 67, 64, 0.8);">
+        The programs listed above are detailed in the markdown content and can be managed via Decap CMS.
+      </p>
     </div>
   </section>
 
   <SectionDivider color="#ffffff" />
 
   <!-- SECTION 5: Event Highlight (Winter Adventure) -->
-  <EventHighlight
-    title="Lorem Ipsum Event"
-    date="January 15, 2026 @ 10:00 AM – January 20, 2026 @ 5:00 PM"
-    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation."
-    image={imageWinterAdventure}
-    link="/events/lorem-ipsum-event"
-  />
+  {featuredEvent && (
+    <EventHighlight
+      title={featuredEvent.data.title}
+      date={`${new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – ${new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}`}
+      description={featuredEvent.body}
+      image={imageWinterAdventure}
+      link={`/events/${featuredEvent.slug}`}
+    />
+  )}
 
   <SectionDivider color="#378e3c" flip={true} />
 
   <!-- SECTION 6: Call-to-Action Donation -->
   <CTASection
-    title="Lorem Ipsum Support"
-    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse."
-    buttonText="Lorem Ipsum"
-    buttonLink="/donate"
+    title={homePage.data.donationCta.title}
+    description={homePage.data.donationCta.description}
+    buttonText={homePage.data.donationCta.buttonText}
+    buttonLink={homePage.data.donationCta.buttonLink}
     backgroundColor="#378e3c"
   />
 

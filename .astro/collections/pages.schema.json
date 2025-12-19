@@ -1,0 +1,99 @@
+{
+  "$ref": "#/definitions/pages",
+  "definitions": {
+    "pages": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "hero": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "subtitle": {
+              "type": "string"
+            },
+            "backgroundImage": {
+              "type": "string"
+            },
+            "ctaText": {
+              "type": "string"
+            },
+            "ctaLink": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "subtitle",
+            "backgroundImage",
+            "ctaText",
+            "ctaLink"
+          ],
+          "additionalProperties": false
+        },
+        "featureCards": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "icon": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "icon",
+              "description"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "donationCta": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "buttonText": {
+              "type": "string"
+            },
+            "buttonLink": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "buttonText",
+            "buttonLink"
+          ],
+          "additionalProperties": false
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "hero",
+        "featureCards",
+        "donationCta"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
