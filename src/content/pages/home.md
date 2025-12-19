@@ -1,26 +1,31 @@
 ---
-title: "Home"
+title: Home
 hero:
-  title: "Lorem Ipsum Dolor Sit"
-  subtitle: "Consectetur adipiscing elit sed do eiusmod"
-  backgroundImage: "../../assets/images/hero-bg.jpg"
-  ctaText: "Lorem Ipsum"
+  title: Welcome to ECRS
+  subtitle: Consectetur adipiscing elit sed do eiusmod
+  backgroundImage: ../../assets/images/hero-bg.jpg
+  ctaText: Lorem Ipsum
   ctaLink: "#programs"
 featureCards:
-  - title: "Lorem Ipsum"
-    icon: "../../assets/images/icons/activities.svg"
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
-  - title: "Dolor Sit"
-    icon: "../../assets/images/icons/events.svg"
-    description: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo."
-  - title: "Amet Consectetur"
-    icon: "../../assets/images/icons/testimonials.svg"
-    description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla."
+  - title: Lorem Ipsum
+    icon: ../../assets/images/icons/activities.svg
+    description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+      eiusmod tempor incididunt ut labore.
+  - title: Dolor Sit
+    icon: ../../assets/images/icons/events.svg
+    description: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+      nisi ut aliquip ex ea commodo.
+  - title: Amet Consectetur
+    icon: ../../assets/images/icons/testimonials.svg
+    description: Duis aute irure dolor in reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla.
 donationCta:
-  title: "Lorem Ipsum Support"
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse."
-  buttonText: "Lorem Ipsum"
-  buttonLink: "/donate"
+  title: Lorem Ipsum Support
+  description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+    eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure
+    dolor in reprehenderit in voluptate velit esse.
+  buttonText: Lorem Ipsum
+  buttonLink: /donate
 ---
 
 ## About
