@@ -1,0 +1,112 @@
+---
+// Footer with resource links
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-columns">
+      <div class="footer-column">
+        <h4>About ECRS</h4>
+        <p>Empowering children through recreation and service since 1934.</p>
+      </div>
+
+      <div class="footer-column">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/#about">About Us</a></li>
+          <li><a href="/events">Events</a></li>
+          <li><a href="/#programs">Programs</a></li>
+          <li><a href="/donate">Donate</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#resources">Games</a></li>
+          <li><a href="#resources">Songs</a></li>
+          <li><a href="#resources">Crafts</a></li>
+          <li><a href="#resources">Activities</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h4>Contact</h4>
+        <p>Email: info@ecrs.org</p>
+        <p>Follow us on social media</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {new Date().getFullYear()} ECRS. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<style lang="scss">
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.site-footer {
+  background-color: $color-dark-brown;
+  color: white;
+  padding: 3em 0 1.5em;
+
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2em;
+    margin-bottom: 2em;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 1.5em;
+    }
+  }
+
+  .footer-column {
+    h4 {
+      color: $color-accent;
+      font-size: 18px;
+      margin-bottom: 1em;
+      font-family: $font-heading;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+    }
+
+    ul {
+      list-style: none;
+
+      li {
+        margin-bottom: 0.5em;
+      }
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $color-accent;
+      }
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(white, 0.1);
+    padding-top: 1em;
+    text-align: center;
+
+    p {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+  }
+}
+</style>

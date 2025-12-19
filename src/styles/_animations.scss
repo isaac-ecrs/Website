@@ -1,0 +1,78 @@
+// ============================================
+// FADE ANIMATIONS
+// ============================================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeTop {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeBottom {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============================================
+// UTILITY CLASSES
+// ============================================
+.animate-fade-in {
+  animation: fadeIn 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.animate-fade-left {
+  animation: fadeLeft 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.animate-fade-right {
+  animation: fadeRight 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.animate-fade-top {
+  animation: fadeTop 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.animate-fade-bottom {
+  animation: fadeBottom 1s cubic-bezier(0.77, 0, 0.175, 1);
+}

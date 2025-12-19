@@ -1,0 +1,103 @@
+@use 'variables' as *;
+
+// ============================================
+// FONT IMPORTS
+// ============================================
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto+Condensed:wght@700&display=swap');
+
+// ============================================
+// BASE TYPOGRAPHY
+// ============================================
+body {
+  font-family: $font-body;
+  font-size: $font-size-base;
+  line-height: $line-height-body;
+  color: $color-text-dark;
+}
+
+// ============================================
+// HEADINGS
+// ============================================
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-heading;
+  text-transform: uppercase;
+  margin-bottom: $spacing-sm;
+  color: $color-text-dark;
+}
+
+h1 {
+  font-size: $font-size-h1;
+
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 36px;
+  }
+}
+
+h2 {
+  font-size: $font-size-h2;
+
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 30px;
+  }
+}
+
+h3 {
+  font-size: $font-size-h3;
+
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 24px;
+  }
+}
+
+h4 {
+  font-size: $font-size-h4;
+
+  @media (max-width: $breakpoint-mobile) {
+    font-size: 20px;
+  }
+}
+
+// ============================================
+// PARAGRAPHS & TEXT
+// ============================================
+p {
+  margin-bottom: 1em;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+a {
+  color: $color-link-blue;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-accent;
+  }
+}
+
+// ============================================
+// UTILITY CLASSES
+// ============================================
+.text-center {
+  text-align: center;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-accent {
+  color: $color-accent;
+}
+
+.text-primary {
+  color: $color-primary;
+}
+
+.text-white {
+  color: white;
+}

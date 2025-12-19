@@ -1,0 +1,80 @@
+// ============================================
+// COLOR PALETTE
+// ============================================
+$color-forest-green: #378e3c;
+$color-warm-orange: #faa634;
+$color-teal: #00afc6;
+$color-light-cream: #f9f7f1;
+$color-dark-brown: #454340;
+$color-light-tan: #f4efe7;
+$color-dark-charcoal: #1e1919;
+$color-link-blue: #2ea3f2;
+
+// Color aliases for semantic naming
+$color-primary: $color-forest-green;
+$color-accent: $color-warm-orange;
+$color-secondary: $color-teal;
+$color-bg-light: $color-light-cream;
+$color-text-dark: $color-dark-brown;
+
+// ============================================
+// TYPOGRAPHY
+// ============================================
+$font-heading: 'Roboto Condensed', Helvetica, Arial, sans-serif;
+$font-body: 'Open Sans', Helvetica, Arial, sans-serif;
+
+$font-weight-normal: 400;
+$font-weight-bold: 700;
+
+$font-size-base: 16px;
+$font-size-small: 13px;
+$font-size-h1: 52px;
+$font-size-h2: 40px;
+$font-size-h3: 32px;
+$font-size-h4: 24px;
+
+$line-height-heading: 1.3em;
+$line-height-body: 1.7em;
+
+// ============================================
+// SPACING
+// ============================================
+$spacing-xs: 0.5em;
+$spacing-sm: 1em;
+$spacing-md: 2em;
+$spacing-lg: 3em;
+$spacing-xl: 4em;
+
+$section-padding-desktop: 54px;
+$section-padding-mobile: 50px;
+
+$container-width: 80%;
+$container-max-width: 1080px;
+
+// ============================================
+// SHADOWS
+// ============================================
+$shadow-subtle: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-image: 9px 10px 0px 0px rgba(0, 0, 0, 0.09);
+$shadow-deep: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+// ============================================
+// BORDER RADIUS
+// ============================================
+$border-radius-button: 3px;
+$border-radius-card: 3px;
+$border-radius-circle: 100px;
+
+// ============================================
+// TRANSITIONS
+// ============================================
+$transition-fast: 0.3s ease;
+$transition-medium: 0.4s ease-in-out;
+$transition-slow: 1s cubic-bezier(0.77, 0, 0.175, 1);
+
+// ============================================
+// BREAKPOINTS
+// ============================================
+$breakpoint-mobile: 768px;
+$breakpoint-tablet: 980px;
+$breakpoint-desktop: 1200px;

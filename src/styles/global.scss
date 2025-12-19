@@ -1,0 +1,114 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'typography';
+@use 'animations';
+
+// ============================================
+// RESET & NORMALIZE
+// ============================================
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+// ============================================
+// BUTTON STYLES
+// ============================================
+.btn {
+  @include button-base;
+
+  &--primary {
+    @include button-primary;
+  }
+
+  &--secondary {
+    @include button-secondary;
+  }
+}
+
+// ============================================
+// CONTAINER
+// ============================================
+.container {
+  @include container;
+}
+
+// ============================================
+// SECTION BACKGROUNDS
+// ============================================
+.section {
+  @include section-padding;
+
+  &--cream {
+    background-color: $color-bg-light;
+  }
+
+  &--tan {
+    background-color: $color-light-tan;
+  }
+
+  &--white {
+    background-color: white;
+  }
+
+  &--dark {
+    background-color: $color-dark-brown;
+    color: white;
+  }
+}
+
+// ============================================
+// UTILITY CLASSES
+// ============================================
+.rounded-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: $border-radius-circle;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.shadow-image {
+  @include image-shadow;
+}
+
+// ============================================
+// GRID LAYOUTS
+// ============================================
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2em;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2em;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}

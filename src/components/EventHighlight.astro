@@ -1,0 +1,74 @@
+---
+interface Props {
+  title: string;
+  date: string;
+  description: string;
+  image: string;
+  link: string;
+}
+
+const { title, date, description, image, link } = Astro.props;
+---
+
+<section class="event-highlight" style={`background-image: url(${image})`}>
+  <div class="container">
+    <div class="event-highlight-content">
+      <span class="event-label">Upcoming Event</span>
+      <h2>{title}</h2>
+      <p class="event-date">{date}</p>
+      <p class="event-description">{description}</p>
+      <a href={link} class="btn btn--primary">Register Now</a>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.event-highlight {
+  @include parallax-bg(0.8);
+  @include section-padding;
+  color: white;
+
+  .event-highlight-content {
+    max-width: 600px;
+
+    .event-label {
+      display: inline-block;
+      background-color: $color-accent;
+      color: white;
+      padding: 0.5em 1em;
+      border-radius: $border-radius-button;
+      font-family: $font-heading;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+      font-size: 14px;
+      margin-bottom: 1em;
+    }
+
+    h2 {
+      color: white;
+      font-size: 42px;
+      margin-bottom: 0.5em;
+
+      @include mobile {
+        font-size: 32px;
+      }
+    }
+
+    .event-date {
+      font-size: 18px;
+      color: $color-accent;
+      margin-bottom: 1em;
+      font-weight: 600;
+    }
+
+    .event-description {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 1.5em;
+    }
+  }
+}
+</style>

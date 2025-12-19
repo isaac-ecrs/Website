@@ -1,0 +1,69 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  backgroundImage: string;
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+const { title, subtitle, backgroundImage, ctaText, ctaLink } = Astro.props;
+---
+
+<section class="hero" style={`background-image: url(${backgroundImage})`}>
+  <div class="hero-content">
+    <h1 class="hero-title animate-fade-bottom">{title}</h1>
+    {subtitle && <p class="hero-subtitle animate-fade-bottom">{subtitle}</p>}
+    {ctaText && ctaLink && (
+      <a href={ctaLink} class="btn btn--primary animate-fade-top">{ctaText}</a>
+    )}
+  </div>
+</section>
+
+<style lang="scss">
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.hero {
+  @include parallax-bg();
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 80px;
+
+  @include mobile {
+    min-height: 400px;
+    margin-top: 70px;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 800px;
+    padding: 2em;
+  }
+
+  .hero-title {
+    font-size: $font-size-h1;
+    margin-bottom: 0.5em;
+    color: white;
+
+    @include mobile {
+      font-size: 32px;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 24px;
+    margin-bottom: 1.5em;
+    font-weight: 300;
+
+    @include mobile {
+      font-size: 18px;
+    }
+  }
+}
+</style>

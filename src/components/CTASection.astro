@@ -1,0 +1,53 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  buttonText: string;
+  buttonLink: string;
+  backgroundColor?: string;
+}
+
+const { title, description, buttonText, buttonLink, backgroundColor = '#378e3c' } = Astro.props;
+---
+
+<section class="cta-section" style={`background-color: ${backgroundColor}`}>
+  <div class="container">
+    <div class="cta-content">
+      <h2>{title}</h2>
+      <p>{description}</p>
+      <a href={buttonLink} class="btn btn--primary">{buttonText}</a>
+    </div>
+  </div>
+</section>
+
+<style lang="scss">
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.cta-section {
+  @include section-padding;
+  color: white;
+  text-align: center;
+
+  .cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+
+    h2 {
+      color: white;
+      font-size: 36px;
+      margin-bottom: 0.75em;
+
+      @include mobile {
+        font-size: 28px;
+      }
+    }
+
+    p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 1.5em;
+    }
+  }
+}
+</style>

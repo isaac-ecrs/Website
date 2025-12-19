@@ -1,0 +1,142 @@
+@use 'variables' as *;
+
+// ============================================
+// RESPONSIVE BREAKPOINTS
+// ============================================
+@mixin mobile {
+  @media (max-width: #{$breakpoint-mobile}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-mobile + 1}) and (max-width: #{$breakpoint-tablet}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-tablet + 1}) {
+    @content;
+  }
+}
+
+// ============================================
+// CONTAINER
+// ============================================
+@mixin container {
+  width: $container-width;
+  max-width: $container-max-width;
+  margin: 0 auto;
+
+  @include mobile {
+    width: 90%;
+  }
+}
+
+// ============================================
+// SECTION SPACING
+// ============================================
+@mixin section-padding {
+  padding: $section-padding-desktop 0;
+
+  @include mobile {
+    padding: $section-padding-mobile 0;
+  }
+}
+
+// ============================================
+// PARALLAX BACKGROUND
+// ============================================
+@mixin parallax-bg($overlay-opacity: 0.71) {
+  position: relative;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba($color-dark-charcoal, $overlay-opacity);
+    z-index: 1;
+  }
+
+  > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  // Disable parallax on mobile for performance
+  @include mobile {
+    background-attachment: scroll;
+  }
+}
+
+// ============================================
+// IMAGE SHADOW
+// ============================================
+@mixin image-shadow {
+  box-shadow: $shadow-image;
+}
+
+// ============================================
+// HOVER TRANSITION
+// ============================================
+@mixin hover-transition($property: all) {
+  transition: #{$property} $transition-fast;
+
+  &:hover {
+    @content;
+  }
+}
+
+// ============================================
+// UPPERCASE HEADING STYLE
+// ============================================
+@mixin uppercase-heading {
+  font-family: $font-heading;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  line-height: $line-height-heading;
+}
+
+// ============================================
+// BUTTON STYLE
+// ============================================
+@mixin button-base {
+  display: inline-block;
+  padding: 12px 24px;
+  font-family: $font-heading;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  border-radius: $border-radius-button;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast;
+}
+
+@mixin button-primary {
+  @include button-base;
+  background-color: $color-accent;
+  color: white;
+
+  &:hover {
+    background-color: $color-teal;
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background-color: $color-primary;
+  color: white;
+
+  &:hover {
+    background-color: $color-accent;
+  }
+}

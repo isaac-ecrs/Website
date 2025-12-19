@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import SectionDivider from '../components/SectionDivider.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import EventHighlight from '../components/EventHighlight.astro';
+import CTASection from '../components/CTASection.astro';
+---
+
+<BaseLayout title="Home" description="ECRS - Come to Play. Play to Learn">
+
+  <!-- SECTION 1: Hero -->
+  <Hero
+    title="Come to Play. Play to Learn"
+    subtitle="Empowering children through recreation and service"
+    backgroundImage="/images/hero-bg.jpg"
+    ctaText="Explore Our Programs"
+    ctaLink="#programs"
+  />
+
+  <SectionDivider color="#f9f7f1" />
+
+  <!-- SECTION 2: Three Feature Cards -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="grid-3">
+        <FeatureCard
+          icon="/images/icons/activities.svg"
+          title="Activities"
+          description="Engaging programs designed to inspire creativity, build confidence, and foster community through play."
+          link="/activities"
+        />
+        <FeatureCard
+          icon="/images/icons/events.svg"
+          title="Events"
+          description="Join us for exciting events throughout the year, from Winter Adventure to summer camps and everything in between."
+          link="/events"
+        />
+        <FeatureCard
+          icon="/images/icons/testimonials.svg"
+          title="Testimonials"
+          description="Hear from families whose lives have been touched by ECRS programs and the lasting impact of our community."
+          link="/testimonials"
+        />
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider color="#ffffff" />
+
+  <!-- SECTION 3: About ECRS Narrative -->
+  <section class="section section--white" id="about">
+    <div class="container">
+      <div class="about-content">
+        <h2 class="text-center">About ECRS</h2>
+        <div class="about-text">
+          <p>
+            Since 1934, the Evangelical Covenant Recreation Service (ECRS) has been dedicated to
+            empowering children through recreation and service. Our mission is to provide meaningful
+            experiences that help young people discover their potential, build lasting friendships,
+            and develop leadership skills.
+          </p>
+          <p>
+            Through a blend of traditional activities and innovative programming, we create environments
+            where children can explore, learn, and grow. From singing and dancing to crafts and games,
+            every activity is designed with intention and care.
+          </p>
+          <p>
+            Our trained leaders bring passion and expertise to every program, ensuring that each child
+            feels valued, supported, and inspired to reach their full potential.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider color="#f4efe7" flip={true} />
+
+  <!-- SECTION 4: Service Offerings -->
+  <section class="section section--tan" id="programs">
+    <div class="container">
+      <h2 class="text-center">Our Programs</h2>
+      <p class="text-center section-intro">
+        ECRS offers a diverse range of activities designed to engage, inspire, and empower children.
+      </p>
+
+      <div class="services-grid">
+        <ServiceCard
+          title="Singing"
+          description="Discover the joy of music through group singing, choir activities, and fun musical games that build confidence and harmony."
+          image="/images/services/singing.jpg"
+        />
+        <ServiceCard
+          title="Dancing"
+          description="Move and groove with creative dance activities that promote physical fitness, coordination, and self-expression."
+          image="/images/services/dancing.jpg"
+        />
+        <ServiceCard
+          title="Dramatics"
+          description="Explore storytelling and performance through drama activities that develop creativity, communication skills, and teamwork."
+          image="/images/services/dramatics.jpg"
+        />
+        <ServiceCard
+          title="Games"
+          description="Engage in classic and innovative games that teach cooperation, strategy, and sportsmanship in a fun environment."
+          image="/images/services/games.jpg"
+        />
+        <ServiceCard
+          title="Crafts"
+          description="Create and design with hands-on craft projects that encourage imagination, fine motor skills, and artistic expression."
+          image="/images/services/crafts.jpg"
+        />
+        <ServiceCard
+          title="Personal Development"
+          description="Build character and leadership skills through intentional activities focused on personal growth and self-discovery."
+          image="/images/services/development.jpg"
+        />
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider color="#ffffff" />
+
+  <!-- SECTION 5: Event Highlight (Winter Adventure) -->
+  <EventHighlight
+    title="Winter Adventure 2025"
+    date="December 27, 2025 @ 4:00 PM – January 1, 2026 @ 10:30 AM"
+    description="Join us for our annual Winter Adventure! A week of recreation, fellowship, and personal growth in a beautiful winter setting. Registration is now open for participants ages 8-18."
+    image="/images/events/winter-adventure.jpg"
+    link="/events/winter-adventure-2025"
+  />
+
+  <SectionDivider color="#378e3c" flip={true} />
+
+  <!-- SECTION 6: Call-to-Action Donation -->
+  <CTASection
+    title="Support ECRS"
+    description="Your donation helps us provide life-changing experiences for children. Every contribution makes a difference in creating opportunities for growth, learning, and joy."
+    buttonText="Donate Now"
+    buttonLink="/donate"
+    backgroundColor="#378e3c"
+  />
+
+  <!-- SECTION 7: Footer (included in BaseLayout) -->
+
+</BaseLayout>
+
+<style lang="scss">
+@use '../styles/variables' as *;
+
+.about-content {
+  max-width: 800px;
+  margin: 0 auto;
+
+  h2 {
+    color: $color-primary;
+    margin-bottom: 1.5em;
+  }
+
+  .about-text {
+    p {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 1.5em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.section-intro {
+  max-width: 700px;
+  margin: 0 auto 3em;
+  font-size: 18px;
+  color: lighten($color-text-dark, 10%);
+}
+
+.services-grid {
+  margin-top: 2em;
+}
+</style>

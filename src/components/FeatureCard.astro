@@ -1,0 +1,82 @@
+---
+interface Props {
+  icon?: string;
+  title: string;
+  description: string;
+  link?: string;
+  linkText?: string;
+}
+
+const { icon, title, description, link, linkText = 'Learn More' } = Astro.props;
+---
+
+<div class="feature-card animate-fade-bottom">
+  {icon && (
+    <div class="feature-icon">
+      <img src={icon} alt={title} />
+    </div>
+  )}
+  <h3 class="feature-title">{title}</h3>
+  <p class="feature-description">{description}</p>
+  {link && (
+    <a href={link} class="feature-link">{linkText} →</a>
+  )}
+</div>
+
+<style lang="scss">
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.feature-card {
+  background: white;
+  padding: 2em;
+  border-radius: $border-radius-card;
+  box-shadow: $shadow-image;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $shadow-deep;
+  }
+
+  .feature-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: $border-radius-circle;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5em;
+    background-color: $color-accent;
+
+    img {
+      width: 60%;
+      height: 60%;
+      object-fit: contain;
+    }
+  }
+
+  .feature-title {
+    color: $color-primary;
+    margin-bottom: 0.75em;
+    font-size: 24px;
+  }
+
+  .feature-description {
+    color: $color-text-dark;
+    margin-bottom: 1em;
+  }
+
+  .feature-link {
+    display: inline-block;
+    color: $color-accent;
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-teal;
+    }
+  }
+}
+</style>
