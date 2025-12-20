@@ -17,6 +17,7 @@ const eventsCollection = defineCollection({
     cost: z.string(),
     registrationEmail: z.string().email(),
     featured: z.boolean().default(false),
+    shortDescription: z.string().optional(),
   }),
 });
 

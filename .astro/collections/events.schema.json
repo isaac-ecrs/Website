@@ -81,6 +81,9 @@
           "type": "boolean",
           "default": false
         },
+        "shortDescription": {
+          "type": "string"
+        },
         "$schema": {
           "type": "string"
         }

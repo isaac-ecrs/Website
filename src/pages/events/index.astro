@@ -17,8 +17,6 @@ const pastEvents = allEvents
 
 const featuredEvent = upcomingEvents[0];
 const otherUpcomingEvents = upcomingEvents.slice(1);
-
-const { Content: FeaturedContent } = featuredEvent ? await featuredEvent.render() : { Content: null };
 ---
 
 <BaseLayout title="Events" description="ECRS - Upcoming and Past Events">
@@ -37,31 +35,65 @@ const { Content: FeaturedContent } = featuredEvent ? await featuredEvent.render(
         {featuredEvent && (
           <div class="container">
             <div class="featured-event-container">
-              {featuredEvent.data.image && (
-                <div class="featured-event-image">
-                  <img src={featuredEvent.data.image} alt={featuredEvent.data.title} />
-                </div>
-              )}
+              <div class="featured-event-left">
+                {featuredEvent.data.image && (
+                  <div class="featured-event-image">
+                    <img src={featuredEvent.data.image} alt={featuredEvent.data.title} />
+                  </div>
+                )}
+                {
+                  (() => {
+                    const year = new Date(featuredEvent.data.startDate).getFullYear();
+                    const eventUrl = `/events/${featuredEvent.slug}-${year}`;
+                    return <a href={eventUrl} class="btn btn--secondary featured-event-btn">Details and Registration</a>;
+                  })()
+                }
+              </div>
               <div class="featured-event-content">
               <h2>{featuredEvent.data.title}</h2>
-              <p class="featured-event-date">
-                {new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – {new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
-              </p>
-              <p class="featured-event-location">
-                {featuredEvent.data.location.venue}<br />
-                {featuredEvent.data.location.address}<br />
-                {featuredEvent.data.location.city}, {featuredEvent.data.location.state} {featuredEvent.data.location.zip}
-              </p>
-              <div class="featured-event-body">
-                {FeaturedContent && <FeaturedContent />}
+              <div class="featured-event-info">
+                <div class="featured-event-info-item">
+                  <div class="featured-event-info-icon">
+                    {
+                      (() => {
+                        const startDate = new Date(featuredEvent.data.startDate).toDateString();
+                        const endDate = new Date(featuredEvent.data.endDate).toDateString();
+                        const isOneDay = startDate === endDate;
+                        return isOneDay ?
+                          <i class="fas fa-calendar-day"></i> :
+                          <i class="fas fa-calendar-days"></i>;
+                      })()
+                    }
+                  </div>
+                  <div class="featured-event-info-text">
+                    {new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})} - {new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})}
+                  </div>
+                </div>
+                <div class="featured-event-info-item">
+                  <div class="featured-event-info-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                  </div>
+                  <div class="featured-event-info-text">
+                    <a href="#">{featuredEvent.data.location.venue}</a><br />
+                    {featuredEvent.data.location.address}<br />
+                    {featuredEvent.data.location.city}, {featuredEvent.data.location.state} {featuredEvent.data.location.zip}
+                  </div>
+                </div>
               </div>
-              {
-                (() => {
-                  const year = new Date(featuredEvent.data.startDate).getFullYear();
-                  const eventUrl = `/events/${featuredEvent.slug}-${year}`;
-                  return <a href={eventUrl} class="btn btn--primary">Details and Registration</a>;
-                })()
-              }
+              <div class="featured-event-description">
+                <div class="featured-event-info-item">
+                  <div class="featured-event-info-icon">
+                    <i class="fas fa-circle-info"></i>
+                  </div>
+                  <div class="featured-event-info-text">
+                    {featuredEvent.data.shortDescription &&
+                      featuredEvent.data.shortDescription.split('\n\n').map((paragraph: string) => (
+                        <p>{paragraph}</p>
+                      ))
+                    }
+                  </div>
+                </div>
+              </div>
               </div>
             </div>
           </div>
@@ -113,8 +145,8 @@ const { Content: FeaturedContent } = featuredEvent ? await featuredEvent.render(
 
 .featured-event-container {
   display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 3em;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 4em;
   align-items: start;
   margin-bottom: 3em;
 
@@ -122,6 +154,12 @@ const { Content: FeaturedContent } = featuredEvent ? await featuredEvent.render(
     grid-template-columns: 1fr;
     gap: 2em;
     margin-bottom: 2em;
+  }
+
+  .featured-event-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
   }
 
   .featured-event-image {
@@ -133,59 +171,81 @@ const { Content: FeaturedContent } = featuredEvent ? await featuredEvent.render(
     }
   }
 
+  .featured-event-btn {
+    width: 100%;
+    text-align: center;
+    padding: 1em 2em;
+    font-weight: 600;
+  }
+
   .featured-event-content {
     h2 {
-      color: $color-primary;
+      color: $color-accent;
       font-size: 36px;
-      margin: 0 0 1em 0;
+      font-weight: 700;
+      margin: 0 0 1.2em 0;
 
       @include mobile {
         font-size: 28px;
       }
     }
 
-    .featured-event-date {
-      font-size: 16px;
-      color: $color-accent;
-      font-weight: 600;
-      margin-bottom: 0.5em;
+    .featured-event-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+      margin-bottom: 1.5em;
     }
 
-    .featured-event-location {
+    .featured-event-info-item {
+      display: flex;
+      gap: 1em;
+      align-items: flex-start;
+    }
+
+    .featured-event-info-icon {
+      flex-shrink: 0;
+      font-size: 38px;
+      color: $color-text-dark;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+    }
+
+    .featured-event-info-text {
       font-size: 15px;
       color: $color-text-dark;
-      margin-bottom: 1.5em;
       line-height: 1.6;
+
+      a {
+        color: $color-secondary;
+        text-decoration: underline;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
     }
 
-    .featured-event-body {
-      margin-bottom: 1.5em;
+    .featured-event-description {
+      margin-bottom: 2em;
 
       p {
         font-size: 15px;
         color: $color-text-dark;
         line-height: 1.7;
-        margin-bottom: 1em;
+        margin-bottom: 1.2em;
+      }
 
-        &:nth-of-type(n+4) {
-          display: none;
+      a {
+        color: $color-secondary;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
         }
       }
-
-      h2,
-      h3,
-      h4 {
-        display: none;
-      }
-
-      ul,
-      ol {
-        display: none;
-      }
-    }
-
-    .btn {
-      display: inline-block;
     }
   }
 }
