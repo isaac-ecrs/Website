@@ -1,0 +1,145 @@
+---
+interface Props {
+  event: any;
+  isPast?: boolean;
+  showImage?: boolean;
+  href: string;
+}
+
+const { event, isPast = false, showImage = true, href } = Astro.props;
+
+const startDate = new Date(event.data.startDate);
+const endDate = new Date(event.data.endDate);
+
+const startDateStr = startDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+const endDateStr = endDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+const location = `${event.data.location.venue} • ${event.data.location.city}, ${event.data.location.state}`;
+---
+
+<div class={`event-card ${isPast ? 'event-card--past' : ''}`}>
+  {showImage && event.data.image && (
+    <div class="event-card-image">
+      <img src={event.data.image} alt={event.data.title} />
+    </div>
+  )}
+
+  <div class="event-card-content">
+    <h3>
+      <a href={href}>{event.data.title}</a>
+    </h3>
+
+    <p class="event-date">
+      {startDateStr} – {endDateStr}
+    </p>
+
+    <p class="event-location">
+      {location}
+    </p>
+
+    <p class="event-cost">
+      Cost: {event.data.cost}
+    </p>
+
+    <a href={href} class="btn btn--primary">Learn More</a>
+  </div>
+</div>
+
+<style lang="scss">
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.event-card {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2em;
+  align-items: start;
+  padding: 2em;
+  background: white;
+  border-radius: $border-radius-card;
+  box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+  transition: all $transition-medium;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: 1.5em;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.12);
+  }
+
+  &.event-card--past {
+    opacity: 0.8;
+  }
+
+  .event-card-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 3px;
+
+    @include mobile {
+      height: 200px;
+      width: 100%;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 3px;
+    }
+  }
+
+  .event-card-content {
+    h3 {
+      color: $color-primary;
+      margin-bottom: 0.75em;
+      margin-top: 0;
+
+      a {
+        text-decoration: none;
+        color: inherit;
+
+        &:hover {
+          color: $color-accent;
+        }
+      }
+    }
+
+    .event-date {
+      font-weight: 600;
+      color: $color-accent;
+      margin-bottom: 0.5em;
+      font-size: 16px;
+    }
+
+    .event-location {
+      color: rgba($color-text-dark, 0.7);
+      margin-bottom: 0.75em;
+      font-size: 15px;
+    }
+
+    .event-cost {
+      font-weight: 600;
+      margin-bottom: 1.5em;
+      font-size: 15px;
+    }
+  }
+}
+</style>

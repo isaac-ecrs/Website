@@ -1,16 +1,18 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import Hero from '../../components/Hero.astro';
-import SectionDivider from '../../components/SectionDivider.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
 
 export async function getStaticPaths() {
   const events = await getCollection('events');
-  return events.map(event => ({
-    params: { slug: event.slug },
-    props: { event },
-  }));
+  return events.map(event => {
+    const year = new Date(event.data.startDate).getFullYear();
+    const customSlug = `${event.slug}-${year}`;
+    return {
+      params: { slug: customSlug },
+      props: { event },
+    };
+  });
 }
 
 interface Props {
@@ -22,13 +24,12 @@ const { Content } = await event.render();
 ---
 
 <BaseLayout title={event.data.title} description={event.data.title}>
-  <Hero
-    title={event.data.title}
-    subtitle={event.data.location.venue}
-    backgroundImage={heroBg}
-  />
-
-  <SectionDivider color="#f9f7f1" />
+  <section class="event-hero" style={`background-image: url(${event.data.image || heroBg.src})`}>
+    <div class="event-hero-content">
+      <h1 class="event-hero-title">{event.data.title}</h1>
+      <p class="event-hero-subtitle">{event.data.location.venue}</p>
+    </div>
+  </section>
 
   <section class="section section--white">
     <div class="container">
@@ -86,6 +87,51 @@ const { Content } = await event.render();
 <style lang="scss">
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
+
+.event-hero {
+  @include parallax-bg();
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-size: 100% auto;
+  background-position: center top;
+
+  @include mobile {
+    min-height: 300px;
+    margin-top: 70px;
+  }
+
+  .event-hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    max-width: 1200px;
+    padding: 2em;
+  }
+
+  .event-hero-title {
+    font-size: $font-size-h1;
+    margin-bottom: 0.5em;
+    color: white;
+
+    @include mobile {
+      font-size: 32px;
+    }
+  }
+
+  .event-hero-subtitle {
+    font-size: 24px;
+    margin-bottom: 0;
+    font-weight: 300;
+    max-width: 800px;
+
+    @include mobile {
+      font-size: 18px;
+    }
+  }
+}
 
 .event-detail-grid {
   display: grid;
