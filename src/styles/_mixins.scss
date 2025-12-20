@@ -22,7 +22,7 @@
 }
 
 // ============================================
-// CONTAINER
+// CONTAINERS
 // ============================================
 @mixin container {
   width: $container-width;
@@ -32,6 +32,12 @@
   @include mobile {
     width: 90%;
   }
+}
+
+@mixin full-width-container {
+  width: $full-width-container-width;
+  max-width: $full-width-container-max-width;
+  margin: 0 auto;
 }
 
 // ============================================

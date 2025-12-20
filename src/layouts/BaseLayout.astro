@@ -1,4 +1,5 @@
 ---
+import TopHeader from '../components/TopHeader.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import '../styles/global.scss';
@@ -19,12 +20,21 @@ const { title, description = "ECRS - Come to Play. Play to Learn" } = Astro.prop
   <meta name="description" content={description}>
   <title>{title} | ECRS</title>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Netlify Identity for Decap CMS authentication -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
+  <TopHeader />
   <Header />
-  <main>
+  <main style="padding-top: 120px;">
     <slot />
   </main>
   <Footer />
 </body>
 </html>
+
+<style>
+  body {
+    margin-top: 0;
+  }
+</style>

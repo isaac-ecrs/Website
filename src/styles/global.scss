@@ -53,6 +53,7 @@ img {
 // ============================================
 .section {
   @include section-padding;
+  position: relative;
 
   &--cream {
     background-color: $color-bg-light;
@@ -69,6 +70,38 @@ img {
   &--dark {
     background-color: $color-dark-brown;
     color: white;
+  }
+
+  // Diagonal top divider using clip-path
+  &--cream::before,
+  &--tan::before,
+  &--white::before,
+  &--dark::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: inherit;
+    clip-path: polygon(0 0, 100% 20%, 100% 100%, 0 100%);
+    pointer-events: none;
+  }
+
+  &--cream::before {
+    background-color: $color-bg-light;
+  }
+
+  &--tan::before {
+    background-color: $color-light-tan;
+  }
+
+  &--white::before {
+    background-color: white;
+  }
+
+  &--dark::before {
+    background-color: $color-dark-brown;
   }
 }
 

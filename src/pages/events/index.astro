@@ -2,7 +2,6 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
-import SectionDivider from '../../components/SectionDivider.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
 
 const allEvents = await getCollection('events');
@@ -23,8 +22,6 @@ const pastEvents = allEvents
     ctaText="Learn More"
     ctaLink="#upcoming"
   />
-
-  <SectionDivider color="#f9f7f1" />
 
   <!-- Upcoming Events Section -->
   <section class="section section--white" id="upcoming">
@@ -57,8 +54,6 @@ const pastEvents = allEvents
 
   {pastEvents.length > 0 && (
     <>
-      <SectionDivider color="#f4efe7" flip={true} />
-
       <!-- Past Events Section -->
       <section class="section section--cream">
         <div class="container">

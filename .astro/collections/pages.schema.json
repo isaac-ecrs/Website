@@ -58,27 +58,26 @@
             "additionalProperties": false
           }
         },
-        "donationCta": {
+        "about": {
+          "type": "string"
+        },
+        "whatWeDo": {
           "type": "object",
           "properties": {
-            "title": {
+            "image": {
               "type": "string"
             },
             "description": {
               "type": "string"
             },
-            "buttonText": {
-              "type": "string"
-            },
-            "buttonLink": {
+            "activities": {
               "type": "string"
             }
           },
           "required": [
-            "title",
+            "image",
             "description",
-            "buttonText",
-            "buttonLink"
+            "activities"
           ],
           "additionalProperties": false
         },
@@ -90,7 +89,8 @@
         "title",
         "hero",
         "featureCards",
-        "donationCta"
+        "about",
+        "whatWeDo"
       ],
       "additionalProperties": false
     }

@@ -38,11 +38,11 @@ const pagesCollection = defineCollection({
         description: z.string(),
       })
     ),
-    donationCta: z.object({
-      title: z.string(),
+    about: z.string(),
+    whatWeDo: z.object({
+      image: z.string(),
       description: z.string(),
-      buttonText: z.string(),
-      buttonLink: z.string(),
+      activities: z.string(),
     }),
   }),
 });
