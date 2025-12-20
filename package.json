@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@astrojs/netlify": "^6.6.3",
-    "astro": "^5.16.6"
+    "astro": "^5.16.6",
+    "marked": "^17.0.1"
   },
   "devDependencies": {
     "sass": "^1.77.8",

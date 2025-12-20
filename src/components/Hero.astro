@@ -6,8 +6,6 @@ interface Props {
   title: string;
   subtitle?: string;
   backgroundImage: ImageMetadata;
-  ctaText?: string;
-  ctaLink?: string;
 }
 
 const { title, subtitle, backgroundImage, ctaText, ctaLink } = Astro.props;
@@ -17,9 +15,6 @@ const { title, subtitle, backgroundImage, ctaText, ctaLink } = Astro.props;
   <div class="hero-content">
     <h1 class="hero-title animate-fade-bottom">{title}</h1>
     {subtitle && <p class="hero-subtitle animate-fade-bottom">{subtitle}</p>}
-    {ctaText && ctaLink && (
-      <a href={ctaLink} class="btn btn--primary animate-fade-top">{ctaText}</a>
-    )}
   </div>
 </section>
 
@@ -29,15 +24,16 @@ const { title, subtitle, backgroundImage, ctaText, ctaLink } = Astro.props;
 
 .hero {
   @include parallax-bg();
-  min-height: 600px;
+  min-height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-top: 80px;
+  background-size: 100% auto;
+  background-position: center top;
 
   @include mobile {
-    min-height: 400px;
+    min-height: 300px;
     margin-top: 70px;
   }
 
@@ -45,7 +41,7 @@ const { title, subtitle, backgroundImage, ctaText, ctaLink } = Astro.props;
     position: relative;
     z-index: 2;
     color: white;
-    max-width: 800px;
+    max-width: 1200px;
     padding: 2em;
   }
 
@@ -61,8 +57,9 @@ const { title, subtitle, backgroundImage, ctaText, ctaLink } = Astro.props;
 
   .hero-subtitle {
     font-size: 24px;
-    margin-bottom: 1.5em;
+    margin-bottom: 0;
     font-weight: 300;
+    max-width: 800px;
 
     @include mobile {
       font-size: 18px;

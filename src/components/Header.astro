@@ -1,11 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import logoImg from '../assets/images/ecrs-logo.png';
+import cloudBg from '../assets/images/cloud-nav-bg.gif';
 
 // Header component with fixed navigation
 ---
 
-<header class="site-header">
+<header class="site-header" style={`background-image: url(${cloudBg.src})`}>
   <div class="container header-container">
     <div class="logo">
       <a href="/">
@@ -31,16 +32,18 @@ import logoImg from '../assets/images/ecrs-logo.png';
 
 .site-header {
   position: fixed;
-  top: 0;
+  top: 28px;
   left: 0;
   right: 0;
-  background-color: $color-primary;
+  background-color: white;
+  background-repeat: repeat-x;
+  background-size: auto;
   box-shadow: $shadow-subtle;
   z-index: 1000;
   padding: 1em 0;
 
   .header-container {
-    @include container;
+    @include full-width-container;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -66,7 +69,7 @@ import logoImg from '../assets/images/ecrs-logo.png';
     }
 
     a {
-      color: white;
+      color: $color-primary;
       text-decoration: none;
       font-family: $font-heading;
       font-weight: $font-weight-bold;
