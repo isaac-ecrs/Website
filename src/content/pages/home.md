@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: Home
 hero:
   title: "Welcome to ECRS – Come to Play. Play to Learn"
   subtitle: "ECRS is an intergenerational organization providing creative and engaging activities that are fun, develop leadership and build community."
