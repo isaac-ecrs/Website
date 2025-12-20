@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import Card from './Card.astro';
 
 interface Props {
   icon?: ImageMetadata;
@@ -11,107 +12,80 @@ interface Props {
   linkText?: string;
 }
 
-const { icon, image, title, description, link, linkText = 'Learn More' } = Astro.props;
-const CardWrapper = link ? 'a' : 'div';
-const wrapperProps = link ? { href: link } : {};
+const { icon, image, title, description, link = '#', linkText = 'Learn More' } = Astro.props;
 ---
 
-<CardWrapper class="feature-card animate-fade-bottom" {...wrapperProps}>
-  {image && (
-    <div class="feature-image">
-      <Image src={image} alt={title} class="feature-card-image" />
-    </div>
-  )}
-  {icon && !image && (
-    <div class="feature-icon">
-      <Image src={icon} alt={title} />
-    </div>
-  )}
-  <h3 class="feature-title">{title}</h3>
-  <p class="feature-description">{description}</p>
-  {link && (
-    <span class="feature-link">{linkText} →</span>
-  )}
-</CardWrapper>
+<Card href={link} variant="vertical" class="animate-fade-bottom">
+  <div slot="media">
+    {image && (
+      <div class="feature-image">
+        <Image src={image} alt={title} class="feature-card-image" />
+      </div>
+    )}
+    {icon && !image && (
+      <div class="feature-icon">
+        <Image src={icon} alt={title} />
+      </div>
+    )}
+  </div>
+
+  <div slot="content">
+    <h3 class="feature-title">{title}</h3>
+    <p class="feature-description">{description}</p>
+  </div>
+
+  <span slot="cta" class="card-link">{linkText} →</span>
+</Card>
 
 <style lang="scss">
 @use '../styles/variables' as *;
 @use '../styles/mixins' as *;
 
-.feature-card {
-  display: block;
-  background: white;
-  padding: 2em;
-  border-radius: $border-radius-card;
-  box-shadow: $shadow-image;
-  transition: transform $transition-fast, box-shadow $transition-fast;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
+.feature-image {
+  width: 100%;
+  height: 200px;
+  border-radius: $border-radius-card-image;
+  overflow: hidden;
+  margin: 0 0 1.5em 0;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: $shadow-deep;
-  }
-
-  .feature-image {
+  img {
     width: 100%;
-    height: 200px;
+    height: 100%;
+    object-fit: cover;
     border-radius: $border-radius-card-image;
-    overflow: hidden;
-    margin: 0 0 1.5em 0;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: $border-radius-card-image;
-    }
   }
+}
 
-  .feature-icon {
-    width: 100px;
-    height: 100px;
-    border-radius: $border-radius-circle;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5em;
-    background-color: $color-accent;
+.feature-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: $border-radius-circle;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5em;
+  background-color: $color-accent;
 
-    img {
-      width: 60%;
-      height: 60%;
-      object-fit: contain;
-    }
+  img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
   }
+}
 
-  .feature-title {
-    color: $color-primary;
-    margin-bottom: 0.75em;
-    font-size: 24px;
-  }
+.feature-title {
+  color: $color-primary;
+  margin-bottom: 0.75em;
+  font-size: 24px;
+}
 
-  .feature-description {
-    color: $color-text-dark;
-    margin-bottom: 1em;
-  }
+.feature-description {
+  color: $color-text-dark;
+  margin-bottom: 1em;
+}
 
-  .feature-link {
-    display: inline-block;
-    color: $color-accent;
-    font-weight: 600;
-    text-decoration: none;
-    transition: color $transition-fast;
-
-    .feature-card:hover & {
-      color: $color-teal;
-    }
-  }
-
-  .feature-card-image {
-    display: block;
-  }
+.feature-card-image {
+  display: block;
 }
 </style>

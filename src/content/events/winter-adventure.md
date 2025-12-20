@@ -12,6 +12,12 @@ image: "/events/winter-adventure.jpg"
 cost: "Tuition: $110/person (18+); Room & Board: $355–$820/person depending on room type; Children under 18 have free tuition; Children under 5 have free room & board"
 registrationEmail: "registration@ecrs.org"
 featured: true
+shortDescription: |
+  Celebrate differently - ECRS Winter Adventure offers a joyful alternative holiday with diverse classes, free time for relaxation, and three delicious buffet meals daily.
+
+  Evenings bring singing, dancing, games, and themed celebrations, culminating in a festive New Year's ceremony. Enjoy winter sports like sledding and hiking, plus easy access to the Corning Museum of Glass.
+
+  Explore. Create. Connect. - Immerse yourself in our warm community while sampling from a smorgasbord of 2- and 4-day classes. With three sessions daily, you'll discover new passions, sharpen skills, and make memories – all while surrounded by folks who love to play as much as you do.
 ---
 
 Celebrate differently - ECRS Winter Adventure offers a joyful alternative holiday with diverse classes, free time for relaxation, and three delicious buffet meals daily.

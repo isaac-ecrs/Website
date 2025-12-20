@@ -124,7 +124,8 @@
   border: none;
   border-radius: $border-radius-button;
   cursor: pointer;
-  transition: background-color $transition-fast, color $transition-fast;
+  transition: transform $transition-fast, filter $transition-fast, box-shadow $transition-fast;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 @mixin button-primary {
@@ -133,16 +134,22 @@
   color: white;
 
   &:hover {
-    background-color: $color-teal;
+    color: white;
+    transform: translateY(-2px);
+    filter: brightness(0.9);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   }
 }
 
 @mixin button-secondary {
   @include button-base;
-  background-color: $color-primary;
+  background-color: $color-secondary;
   color: white;
 
   &:hover {
-    background-color: $color-accent;
+    color: white;
+    transform: translateY(-2px);
+    filter: brightness(0.9);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   }
 }
