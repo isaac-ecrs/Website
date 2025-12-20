@@ -1,11 +1,12 @@
 ---
+import { marked } from 'marked';
+
 interface Props {
   event: any;
   href: string;
 }
 
 const { event, href } = Astro.props;
-const { Content } = await event.render();
 
 const startDate = new Date(event.data.startDate);
 const endDate = new Date(event.data.endDate);
@@ -14,39 +15,35 @@ const startDateStr = startDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
 });
 
 const endDateStr = endDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
-  hour: '2-digit',
-  minute: '2-digit',
 });
 
-const location = `${event.data.location.venue} • ${event.data.location.city}, ${event.data.location.state}`;
+const location = `${event.data.location.venue}, ${event.data.location.city}, ${event.data.location.state}`;
+
+const shortDescriptionHtml = event.data.shortDescription
+  ? marked.parse(event.data.shortDescription)
+  : '';
 ---
 
 <div class="event-card-expanded">
-  <h3>
-    <a href={href}>{event.data.title}</a>
-  </h3>
+  <h3>{event.data.title}</h3>
 
-  <p class="event-date">
+  <p class="event-meta">
     {startDateStr} – {endDateStr}
   </p>
 
-  <p class="event-location">
+  <p class="event-meta">
     {location}
   </p>
 
-  <div class="event-body">
-    <Content />
-  </div>
-
-  <a href={href} class="btn btn--primary">Learn More</a>
+  {shortDescriptionHtml && (
+    <div class="event-description" set:html={shortDescriptionHtml}></div>
+  )}
 </div>
 
 <style lang="scss">
@@ -54,71 +51,62 @@ const location = `${event.data.location.venue} • ${event.data.location.city}, 
 @use '../styles/mixins' as *;
 
 .event-card-expanded {
-  padding: 3em 2.5em;
-  background: white;
-  border-radius: 0;
-  box-shadow: none;
+  padding: 0 0 3em 0;
+  background: transparent;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
 
   @include mobile {
-    padding: 2em 1.5em;
+    padding: 0 0 2em 0;
   }
 
   h3 {
     color: $color-accent;
-    font-size: 24px;
-    margin: 0 0 0.75em 0;
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 0.5em 0;
+    text-align: center;
 
-    a {
-      color: inherit;
-      text-decoration: none;
-
-      &:hover {
-        color: $color-primary;
-      }
+    @include mobile {
+      font-size: 26px;
     }
   }
 
-  .event-date {
-    color: $color-accent;
-    font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 0.5em;
-  }
-
-  .event-location {
+  .event-meta {
     color: $color-text-dark;
     font-size: 15px;
-    margin-bottom: 1.5em;
+    margin-bottom: 0.5em;
+    text-align: center;
   }
 
-  .event-body {
-    margin-bottom: 1.5em;
+  .event-description {
+    margin-top: 1.5em;
+    text-align: left;
 
     p {
       color: $color-text-dark;
       font-size: 15px;
       line-height: 1.7;
-      margin-bottom: 1em;
+      margin-bottom: 1.2em;
 
-      &:nth-of-type(n+3) {
-        display: none;
+      strong {
+        font-weight: 700;
+      }
+
+      em {
+        font-style: italic;
       }
     }
 
-    h2,
-    h3,
-    h4 {
-      display: none;
-    }
+    a {
+      color: $color-secondary;
+      text-decoration: none;
 
-    ul,
-    ol {
-      display: none;
+      &:hover {
+        text-decoration: underline;
+      }
     }
-  }
-
-  .btn {
-    display: inline-block;
   }
 }
 </style>
