@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import EventCard from '../../components/EventCard.astro';
+import EventCardExpanded from '../../components/EventCardExpanded.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
 
 const allEvents = await getCollection('events');
@@ -13,6 +14,11 @@ const upcomingEvents = allEvents
 const pastEvents = allEvents
   .filter(e => new Date(e.data.endDate) < new Date())
   .sort((a, b) => new Date(b.data.startDate).getTime() - new Date(a.data.startDate).getTime());
+
+const featuredEvent = upcomingEvents[0];
+const otherUpcomingEvents = upcomingEvents.slice(1);
+
+const { Content: FeaturedContent } = featuredEvent ? await featuredEvent.render() : { Content: null };
 ---
 
 <BaseLayout title="Events" description="ECRS - Upcoming and Past Events">
@@ -26,21 +32,59 @@ const pastEvents = allEvents
 
   <!-- Upcoming Events Section -->
   <section class="section section--white" id="upcoming">
-    <div class="container">
-      <h2 class="text-center">Upcoming Events</h2>
+    {upcomingEvents.length > 0 ? (
+      <>
+        {featuredEvent && (
+          <div class="container">
+            <div class="featured-event-container">
+              {featuredEvent.data.image && (
+                <div class="featured-event-image">
+                  <img src={featuredEvent.data.image} alt={featuredEvent.data.title} />
+                </div>
+              )}
+              <div class="featured-event-content">
+              <h2>{featuredEvent.data.title}</h2>
+              <p class="featured-event-date">
+                {new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – {new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
+              </p>
+              <p class="featured-event-location">
+                {featuredEvent.data.location.venue}<br />
+                {featuredEvent.data.location.address}<br />
+                {featuredEvent.data.location.city}, {featuredEvent.data.location.state} {featuredEvent.data.location.zip}
+              </p>
+              <div class="featured-event-body">
+                {FeaturedContent && <FeaturedContent />}
+              </div>
+              {
+                (() => {
+                  const year = new Date(featuredEvent.data.startDate).getFullYear();
+                  const eventUrl = `/events/${featuredEvent.slug}-${year}`;
+                  return <a href={eventUrl} class="btn btn--primary">Details and Registration</a>;
+                })()
+              }
+              </div>
+            </div>
+          </div>
+        )}
 
-      {upcomingEvents.length > 0 ? (
-        <div class="events-grid">
-          {upcomingEvents.map(event => {
-            const year = new Date(event.data.startDate).getFullYear();
-            const eventUrl = `/events/${event.slug}-${year}`;
-            return <EventCard event={event} isPast={false} href={eventUrl} />;
-          })}
-        </div>
-      ) : (
+        {otherUpcomingEvents.length > 0 && (
+          <div class="container">
+            <h2 class="text-center other-events-title">Other Upcoming Events</h2>
+            <div class="events-list">
+              {otherUpcomingEvents.map(event => {
+                const year = new Date(event.data.startDate).getFullYear();
+                const eventUrl = `/events/${event.slug}-${year}`;
+                return <EventCardExpanded event={event} href={eventUrl} />;
+              })}
+            </div>
+          </div>
+        )}
+      </>
+    ) : (
+      <div class="container">
         <p class="text-center">No upcoming events at this time.</p>
-      )}
-    </div>
+      </div>
+    )}
   </section>
 
   {pastEvents.length > 0 && (
@@ -67,14 +111,96 @@ const pastEvents = allEvents
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
-.events-grid {
+.featured-event-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 2em;
-  margin-top: 2em;
+  grid-template-columns: 300px 1fr;
+  gap: 3em;
+  align-items: start;
+  margin-bottom: 3em;
 
   @include mobile {
     grid-template-columns: 1fr;
+    gap: 2em;
+    margin-bottom: 2em;
   }
+
+  .featured-event-image {
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 3px;
+      box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+    }
+  }
+
+  .featured-event-content {
+    h2 {
+      color: $color-primary;
+      font-size: 36px;
+      margin: 0 0 1em 0;
+
+      @include mobile {
+        font-size: 28px;
+      }
+    }
+
+    .featured-event-date {
+      font-size: 16px;
+      color: $color-accent;
+      font-weight: 600;
+      margin-bottom: 0.5em;
+    }
+
+    .featured-event-location {
+      font-size: 15px;
+      color: $color-text-dark;
+      margin-bottom: 1.5em;
+      line-height: 1.6;
+    }
+
+    .featured-event-body {
+      margin-bottom: 1.5em;
+
+      p {
+        font-size: 15px;
+        color: $color-text-dark;
+        line-height: 1.7;
+        margin-bottom: 1em;
+
+        &:nth-of-type(n+4) {
+          display: none;
+        }
+      }
+
+      h2,
+      h3,
+      h4 {
+        display: none;
+      }
+
+      ul,
+      ol {
+        display: none;
+      }
+    }
+
+    .btn {
+      display: inline-block;
+    }
+  }
+}
+
+.other-events-title {
+  margin-top: 2em;
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+.events-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+  max-width: 900px;
+  margin: 0 auto;
 }
 </style>

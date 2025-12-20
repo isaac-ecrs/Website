@@ -13,7 +13,7 @@ const eventsCollection = defineCollection({
       state: z.string(),
       zip: z.string(),
     }),
-    image: z.string(),
+    image: z.string().optional(),
     cost: z.string(),
     registrationEmail: z.string().email(),
     featured: z.boolean().default(false),
