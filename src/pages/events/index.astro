@@ -203,4 +203,14 @@ const { Content: FeaturedContent } = featuredEvent ? await featuredEvent.render(
   max-width: 900px;
   margin: 0 auto;
 }
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2em;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
