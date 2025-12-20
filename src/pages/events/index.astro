@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
+import EventCard from '../../components/EventCard.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
 
 const allEvents = await getCollection('events');
@@ -29,22 +30,12 @@ const pastEvents = allEvents
       <h2 class="text-center">Upcoming Events</h2>
 
       {upcomingEvents.length > 0 ? (
-        <div class="events-list">
-          {upcomingEvents.map(event => (
-            <div class="event-card">
-              <div class="event-info">
-                <h3><a href={`/events/${event.slug}`}>{event.data.title}</a></h3>
-                <p class="event-date">
-                  {new Date(event.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – {new Date(event.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}
-                </p>
-                <p class="event-location">
-                  {event.data.location.venue} • {event.data.location.city}, {event.data.location.state}
-                </p>
-                <p class="event-cost">Cost: {event.data.cost}</p>
-                <a href={`/events/${event.slug}`} class="btn btn--primary">Learn More</a>
-              </div>
-            </div>
-          ))}
+        <div class="events-grid">
+          {upcomingEvents.map(event => {
+            const year = new Date(event.data.startDate).getFullYear();
+            const eventUrl = `/events/${event.slug}-${year}`;
+            return <EventCard event={event} isPast={false} href={eventUrl} />;
+          })}
         </div>
       ) : (
         <p class="text-center">No upcoming events at this time.</p>
@@ -59,20 +50,12 @@ const pastEvents = allEvents
         <div class="container">
           <h2 class="text-center">Past Events</h2>
 
-          <div class="events-list">
-            {pastEvents.map(event => (
-              <div class="event-card past">
-                <div class="event-info">
-                  <h3><a href={`/events/${event.slug}`}>{event.data.title}</a></h3>
-                  <p class="event-date">
-                    {new Date(event.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})} – {new Date(event.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})}
-                  </p>
-                  <p class="event-location">
-                    {event.data.location.venue} • {event.data.location.city}, {event.data.location.state}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div class="events-grid">
+            {pastEvents.map(event => {
+              const year = new Date(event.data.startDate).getFullYear();
+              const eventUrl = `/events/${event.slug}-${year}`;
+              return <EventCard event={event} isPast={true} href={eventUrl} />;
+            })}
           </div>
         </div>
       </section>
@@ -84,53 +67,14 @@ const pastEvents = allEvents
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
-.events-list {
-  max-width: 800px;
-  margin: 2em auto 0;
-}
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2em;
+  margin-top: 2em;
 
-.event-card {
-  border-bottom: 1px solid rgba($color-text-dark, 0.15);
-  padding: 2em 0;
-
-  &:first-child {
-    padding-top: 0;
-  }
-
-  &.past {
-    opacity: 0.8;
-  }
-
-  .event-info {
-    h3 {
-      color: $color-primary;
-      margin-bottom: 0.75em;
-
-      a {
-        text-decoration: none;
-        color: inherit;
-
-        &:hover {
-          color: $color-accent;
-        }
-      }
-    }
-
-    .event-date {
-      font-weight: 600;
-      color: $color-accent;
-      margin-bottom: 0.5em;
-    }
-
-    .event-location {
-      color: rgba($color-text-dark, 0.7);
-      margin-bottom: 0.75em;
-    }
-
-    .event-cost {
-      font-weight: 600;
-      margin-bottom: 1em;
-    }
+  @include mobile {
+    grid-template-columns: 1fr;
   }
 }
 </style>

@@ -8,7 +8,7 @@ location:
   city: "Lorem City"
   state: "MI"
   zip: "49307"
-image: "../../assets/images/events/winter-adventure.jpg"
+image: "/events/winter-adventure.jpg"
 cost: "$350 per participant"
 registrationEmail: "lorem@ipsum.org"
 featured: true
