@@ -34,13 +34,17 @@ const { Content } = await event.render();
   <section class="section section--white">
     <div class="container">
       <div class="event-detail-grid">
-        <div class="event-content">
-          <Content />
+        <div class="event-image-column">
+          {event.data.image && (
+            <div class="event-featured-image">
+              <img src={event.data.image} alt={event.data.title} />
+            </div>
+          )}
         </div>
 
-        <aside class="event-sidebar">
+        <div class="event-content-column">
           <div class="event-info-box">
-            <h3>Event Details</h3>
+            <h2>{event.data.title}</h2>
 
             <div class="info-item">
               <h4>Date & Time</h4>
@@ -78,7 +82,11 @@ const { Content } = await event.render();
               </p>
             </div>
           </div>
-        </aside>
+
+          <div class="event-description">
+            <Content />
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -135,66 +143,48 @@ const { Content } = await event.render();
 
 .event-detail-grid {
   display: grid;
-  grid-template-columns: 1fr 350px;
+  grid-template-columns: 1fr 1fr;
   gap: 3em;
+  align-items: start;
 
   @include mobile {
     grid-template-columns: 1fr;
   }
 
-  .event-content {
-    p {
-      line-height: $line-height-body;
-      margin-bottom: 1em;
-    }
-
-    h2 {
-      color: $color-primary;
-      margin: 2em 0 1em;
-
-      &:first-child {
-        margin-top: 0;
-      }
-    }
-
-    h3 {
-      color: $color-primary;
-      margin: 1.5em 0 0.75em;
-    }
-
-    ul {
-      margin-left: 1.5em;
-      margin-bottom: 1em;
-
-      li {
-        margin-bottom: 0.5em;
+  .event-image-column {
+    .event-featured-image {
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 3px;
+        box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
       }
     }
   }
 
-  .event-sidebar {
+  .event-content-column {
     .event-info-box {
-      background: $color-accent;
-      color: white;
-      padding: 2em;
-      border-radius: $border-radius-card;
+      background: white;
+      padding: 0;
+      border-radius: 0;
+      margin-bottom: 2em;
 
-      @include mobile {
-        margin-top: 2em;
-      }
+      h2 {
+        color: $color-primary;
+        font-size: 36px;
+        margin: 0 0 1.5em 0;
 
-      h3 {
-        color: white;
-        margin-bottom: 1.5em;
-        padding-bottom: 1em;
-        border-bottom: 1px solid rgba(white, 0.2);
+        @include mobile {
+          font-size: 28px;
+        }
       }
 
       h4 {
-        color: white;
+        color: $color-primary;
         font-size: 16px;
         margin-bottom: 0.5em;
         font-weight: 600;
+        text-transform: uppercase;
       }
 
       .info-item {
@@ -207,16 +197,49 @@ const { Content } = await event.render();
         p {
           margin: 0;
           line-height: 1.6;
-          font-size: 14px;
+          font-size: 15px;
+          color: $color-text-dark;
         }
 
         a {
           color: white;
-          text-decoration: underline;
+          text-decoration: none;
 
           &:hover {
-            color: rgba(white, 0.8);
+            opacity: 0.9;
           }
+        }
+      }
+    }
+
+    .event-description {
+      p {
+        line-height: $line-height-body;
+        margin-bottom: 1em;
+        color: $color-text-dark;
+      }
+
+      h2 {
+        color: $color-primary;
+        margin: 2em 0 1em;
+        font-size: 28px;
+
+        &:first-child {
+          margin-top: 0;
+        }
+      }
+
+      h3 {
+        color: $color-primary;
+        margin: 1.5em 0 0.75em;
+      }
+
+      ul {
+        margin-left: 1.5em;
+        margin-bottom: 1em;
+
+        li {
+          margin-bottom: 0.5em;
         }
       }
     }
