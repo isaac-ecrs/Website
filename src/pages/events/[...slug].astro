@@ -1,0 +1,978 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CountdownTimer from '../../components/CountdownTimer.astro';
+import heroBg from '../../assets/images/hero-bg.jpg';
+
+export async function getStaticPaths() {
+  const events = await getCollection('events');
+  return events.map(event => {
+    const year = new Date(event.data.startDate).getFullYear();
+    const customSlug = `${event.slug}-${year}`;
+    return {
+      params: { slug: customSlug },
+      props: { event },
+    };
+  });
+}
+
+interface Props {
+  event: any;
+}
+
+const { event } = Astro.props;
+const { Content } = await event.render();
+
+// Build location string for Google Maps
+const location = `${event.data.location.venue} • ${event.data.location.city}, ${event.data.location.state}`;
+
+// Check if address is valid for Google Maps
+const hasValidAddress = event.data.location.address &&
+  event.data.location.address.trim().length > 0 &&
+  !event.data.location.address.toLowerCase().includes('tbd') &&
+  !event.data.location.address.toLowerCase().includes('location in');
+
+// Format dates
+const startDate = new Date(event.data.startDate);
+const endDate = new Date(event.data.endDate);
+const dateOptions: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+const timeOptions: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: '2-digit' };
+const formattedStartDate = startDate.toLocaleDateString('en-US', dateOptions);
+const formattedEndDate = endDate.toLocaleDateString('en-US', dateOptions);
+const formattedStartTime = startDate.toLocaleTimeString('en-US', timeOptions);
+const formattedEndTime = endDate.toLocaleTimeString('en-US', timeOptions);
+
+// Check for extended content
+const hasHighlights = event.data.highlights && event.data.highlights.length > 0;
+const hasAccommodation = event.data.accommodation && event.data.accommodation.length > 0;
+const hasSchedule = event.data.schedule && event.data.schedule.daily && event.data.schedule.daily.length > 0;
+const hasTuition = event.data.tuition;
+const hasPolicies = event.data.policies && event.data.policies.length > 0;
+const hasDeadlines = event.data.deadlines && event.data.deadlines.length > 0;
+const hasClasses = event.data.classes && event.data.classes.length > 0;
+
+// Check if event is in the future (for countdown)
+const isFutureEvent = startDate > new Date();
+---
+
+<BaseLayout title={event.data.title} description={event.data.shortDescription || event.data.title}>
+  <!-- Hero Section -->
+  <section class="event-hero" style={`background-image: url(${event.data.image || heroBg.src})`}>
+    <div class="event-hero-content">
+      <h1 class="event-hero-title">{event.data.title}</h1>
+    </div>
+  </section>
+
+  <!-- Event Basics Bar -->
+  <section class="event-basics">
+    <div class="container">
+      <div class="basics-content">
+        <div class="basics-dates">
+          <span class="basics-label">Start:</span> {formattedStartTime}, {formattedStartDate}
+          <span class="basics-separator">|</span>
+          <span class="basics-label">End:</span> {formattedEndTime}, {formattedEndDate}
+        </div>
+        {(hasAccommodation || hasTuition || hasClasses) && (
+          <div class="basics-links">
+            {hasClasses && <a href="#classes">Classes</a>}
+            {hasAccommodation && <a href="#accommodation">Room & Board</a>}
+            {hasTuition && <a href="#costs">Costs</a>}
+            {hasSchedule && <a href="#schedule">Schedule</a>}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <!-- Highlights Section (What is this event?) -->
+  {hasHighlights && (
+    <section class="section section--white">
+      <div class="container">
+        <h2 class="section-title">What is {event.data.title}?</h2>
+        <div class="highlights-grid">
+          {event.data.highlights.map((highlight: any) => (
+            <div class="highlight-card">
+              {highlight.icon && (
+                <div class="highlight-icon">
+                  <img src={highlight.icon} alt="" />
+                </div>
+              )}
+              <h3>{highlight.title}</h3>
+              <p>{highlight.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Venue Section -->
+  {event.data.venueDescription && (
+    <section class="section section--cream">
+      <div class="container">
+        <h2 class="section-title">{event.data.location.venue}</h2>
+        <div class="venue-content">
+          <div class="venue-text">
+            <p>{event.data.venueDescription}</p>
+
+            <div class="venue-info-section">
+              {event.data.location.website && (
+                <div class="venue-info-item">
+                  <div class="venue-info-icon">
+                    <i class="fas fa-globe" aria-label="Venue website"></i>
+                  </div>
+                  <div class="venue-info-text">
+                    <a href={event.data.location.website}>{event.data.location.venue}</a>
+                  </div>
+                </div>
+              )}
+
+              <div class="venue-info-item">
+                <div class="venue-info-icon">
+                  <i class="fas fa-map-marker-alt" aria-label="Location"></i>
+                </div>
+                <div class="venue-info-text">
+                  {hasValidAddress ? (
+                    <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(location)}`}>
+                      {event.data.location.address}<br />{event.data.location.city}, {event.data.location.state} {event.data.location.zip}
+                    </a>
+                  ) : (
+                    <>
+                      {event.data.location.address && <>{event.data.location.address}<br /></>}
+                      {event.data.location.city}, {event.data.location.state} {event.data.location.zip}
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+            {event.data.venuePhone && (
+              <p class="venue-phone">
+                <strong>Phone:</strong> {event.data.venuePhone}
+              </p>
+            )}
+          </div>
+          {event.data.image && (
+            <div class="venue-image">
+              <img src={event.data.image} alt={event.data.location.venue} />
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Accommodation Section -->
+  {hasAccommodation && (
+    <section id="accommodation" class="section section--white">
+      <div class="container">
+        <h2 class="section-title">Accommodation Options</h2>
+        {event.data.ageNotes && (
+          <p class="age-notes">{event.data.ageNotes}</p>
+        )}
+        <div class="accommodation-grid">
+          {event.data.accommodation.map((acc: any) => (
+            <div class="accommodation-card">
+              <h3>{acc.name}</h3>
+              {acc.description && <p class="acc-description">{acc.description}</p>}
+              <table class="rates-table">
+                <thead>
+                  <tr>
+                    <th>Occupancy</th>
+                    <th>Adult (13+)</th>
+                    {acc.rates.some((r: any) => r.child) && <th>Child (6-12)</th>}
+                  </tr>
+                </thead>
+                <tbody>
+                  {acc.rates.map((rate: any) => (
+                    <tr>
+                      <td>{rate.occupancy}</td>
+                      <td>{rate.adult}</td>
+                      {acc.rates.some((r: any) => r.child) && <td>{rate.child || '—'}</td>}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Schedule Section -->
+  {hasSchedule && (
+    <section id="schedule" class="section section--cream">
+      <div class="container">
+        <h2 class="section-title">Daily Schedule</h2>
+        {event.data.schedule.checkIn && (
+          <p class="schedule-note"><strong>Check-in:</strong> {event.data.schedule.checkIn}</p>
+        )}
+        {event.data.schedule.checkOut && (
+          <p class="schedule-note"><strong>Check-out:</strong> {event.data.schedule.checkOut}</p>
+        )}
+        <div class="schedule-list">
+          {event.data.schedule.daily.map((item: any) => (
+            <div class="schedule-item">
+              <span class="schedule-time">{item.time}</span>
+              <span class="schedule-activity">{item.activity}</span>
+            </div>
+          ))}
+        </div>
+        {event.data.schedule.notes && (
+          <p class="schedule-notes">{event.data.schedule.notes}</p>
+        )}
+      </div>
+    </section>
+  )}
+
+  <!-- Classes Section -->
+  {hasClasses && (
+    <section id="classes" class="section section--white">
+      <div class="container">
+        <h2 class="section-title">Class Descriptions</h2>
+        {event.data.classes.map((period: any) => (
+          <div class="class-period">
+            <h3 class="period-title">{period.period}</h3>
+            <div class="classes-grid">
+              {period.offerings.map((cls: any) => (
+                <div class="class-card">
+                  <h4 class="class-title">{cls.title}</h4>
+                  <p class="class-instructor">
+                    <strong>Instructor:</strong> {cls.instructor}
+                  </p>
+                  {cls.days && (
+                    <p class="class-days">
+                      <strong>Days:</strong> {cls.days}
+                    </p>
+                  )}
+                  {cls.age && (
+                    <p class="class-age">
+                      <strong>Ages:</strong> {cls.age}
+                    </p>
+                  )}
+                  {cls.description && (
+                    <p class="class-description">{cls.description}</p>
+                  )}
+                  {cls.note && (
+                    <p class="class-note">{cls.note}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Costs Section -->
+  {hasTuition && (
+    <section id="costs" class="section section--accent">
+      <div class="container">
+        <h2 class="section-title section-title--light">Costs</h2>
+        <div class="costs-content">
+          <div class="tuition-box">
+            <h3>Tuition</h3>
+            <div class="tuition-rates">
+              <div class="tuition-rate">
+                <span class="rate-amount">{event.data.tuition.adult}</span>
+                <span class="rate-label">Adults (18+)</span>
+              </div>
+              {event.data.tuition.child && (
+                <div class="tuition-rate">
+                  <span class="rate-amount">{event.data.tuition.child}</span>
+                  <span class="rate-label">Children (0-17)</span>
+                </div>
+              )}
+            </div>
+            {event.data.tuition.notes && event.data.tuition.notes.length > 0 && (
+              <ul class="tuition-notes">
+                {event.data.tuition.notes.map((note: any) => (
+                  <li>{note}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {hasDeadlines && (
+            <div class="deadlines-box">
+              <h3>Registration Deadlines</h3>
+              <ul class="deadlines-list">
+                {event.data.deadlines.map((deadline: any) => (
+                  <li>
+                    <strong>{deadline.date}:</strong> {deadline.description}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Main Content (from markdown) -->
+  <section class="section section--white">
+    <div class="container">
+      <div class="event-content">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  <!-- Policies Section -->
+  {hasPolicies && (
+    <section class="section section--cream">
+      <div class="container">
+        <h2 class="section-title">Policies</h2>
+        <div class="policies-grid">
+          {event.data.policies.map((policy: any) => (
+            <div class="policy-card">
+              <h3>{policy.title}</h3>
+              <p>{policy.content}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Registration Section -->
+  <section class="section section--dark">
+    <div class="container">
+      <div class="registration-section">
+        <h2>Ready to Join Us?</h2>
+        <p>Register for {event.data.title} today!</p>
+        <div class="registration-actions">
+          <a href={`mailto:${event.data.registrationEmail}`} class="btn btn--primary">
+            Register Now
+          </a>
+        </div>
+        <p class="registration-contact">
+          Questions? Email us at <a href={`mailto:${event.data.registrationEmail}`}>{event.data.registrationEmail}</a>
+          {event.data.venuePhone && (
+            <span> or call {event.data.venuePhone}</span>
+          )}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Countdown Timer (for future events) -->
+  {isFutureEvent && (
+    <CountdownTimer targetDate={startDate} eventTitle={event.data.title} />
+  )}
+</BaseLayout>
+
+<style lang="scss">
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// Hero Section
+.event-hero {
+  @include parallax-bg();
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  @include mobile {
+    min-height: 280px;
+    margin-top: 70px;
+  }
+
+  .event-hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    padding: 2em;
+  }
+
+  .event-hero-title {
+    font-size: 53px;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    color: white;
+
+    @include mobile {
+      font-size: 32px;
+    }
+  }
+}
+
+// Event Basics Bar
+.event-basics {
+  background: $color-light-cream;
+  padding: 1.25em 0;
+  border-bottom: 1px solid rgba($color-text-dark, 0.1);
+
+  .basics-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1em;
+
+    @include mobile {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  .basics-dates {
+    font-size: 15px;
+    color: $color-text-dark;
+
+    .basics-label {
+      font-weight: $font-weight-bold;
+      color: $color-primary;
+    }
+
+    .basics-separator {
+      margin: 0 0.75em;
+      color: rgba($color-text-dark, 0.3);
+    }
+
+    @include mobile {
+      .basics-separator {
+        display: block;
+        visibility: hidden;
+        height: 0.5em;
+      }
+    }
+  }
+
+  .basics-links {
+    display: flex;
+    gap: 1.5em;
+
+    a {
+      color: $color-secondary;
+      text-decoration: none;
+      font-weight: $font-weight-bold;
+      font-size: 14px;
+      text-transform: uppercase;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Section Titles
+.section-title {
+  font-size: 32px;
+  color: $color-primary;
+  text-align: center;
+  margin-bottom: 1.5em;
+  text-transform: uppercase;
+  font-weight: $font-weight-bold;
+
+  &--light {
+    color: white;
+  }
+
+  @include mobile {
+    font-size: 26px;
+  }
+}
+
+// Highlights Grid
+.highlights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2em;
+}
+
+.highlight-card {
+  text-align: center;
+  padding: 1.5em;
+
+  .highlight-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  h3 {
+    color: $color-primary;
+    font-size: 20px;
+    margin-bottom: 0.75em;
+    text-transform: uppercase;
+  }
+
+  p {
+    color: $color-text-dark;
+    line-height: $line-height-body;
+    margin: 0;
+  }
+}
+
+// Venue Section
+.venue-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  align-items: center;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+
+  .venue-text {
+    p {
+      line-height: $line-height-body;
+      margin-bottom: 1em;
+      color: $color-text-dark;
+    }
+
+    .venue-address,
+    .venue-phone {
+      font-size: 15px;
+    }
+
+    .venue-info-section {
+      margin-top: 2em;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5em;
+    }
+
+    .venue-info-item {
+      display: flex;
+      gap: 1em;
+      align-items: flex-start;
+
+      .venue-info-icon {
+        flex-shrink: 0;
+        font-size: 24px;
+        color: $color-primary;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+      }
+
+      .venue-info-text {
+        font-size: 15px;
+        color: $color-text-dark;
+        line-height: 1.6;
+
+        a {
+          color: $color-secondary;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  .venue-image {
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 3px;
+      box-shadow: $shadow-image;
+    }
+  }
+}
+
+// Accommodation Section
+.age-notes {
+  text-align: center;
+  font-size: 14px;
+  color: $color-text-dark;
+  margin-bottom: 2em;
+  font-style: italic;
+}
+
+.accommodation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2em;
+}
+
+.accommodation-card {
+  background: $color-light-cream;
+  padding: 1.5em;
+  border-radius: 3px;
+
+  h3 {
+    color: $color-primary;
+    font-size: 22px;
+    margin-bottom: 0.5em;
+    text-transform: uppercase;
+  }
+
+  .acc-description {
+    font-size: 14px;
+    color: $color-text-dark;
+    margin-bottom: 1em;
+    line-height: $line-height-body;
+  }
+}
+
+.rates-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th, td {
+    padding: 0.75em;
+    text-align: left;
+    border-bottom: 1px solid rgba($color-text-dark, 0.1);
+  }
+
+  th {
+    background: $color-primary;
+    color: white;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+
+  td {
+    color: $color-text-dark;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:nth-child(even) td {
+    background: rgba($color-text-dark, 0.03);
+  }
+}
+
+// Schedule Section
+.schedule-note {
+  text-align: center;
+  margin-bottom: 0.5em;
+  color: $color-text-dark;
+}
+
+.schedule-list {
+  max-width: 600px;
+  margin: 2em auto 0;
+}
+
+.schedule-item {
+  display: flex;
+  padding: 0.75em 0;
+  border-bottom: 1px solid rgba($color-text-dark, 0.1);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.schedule-time {
+  font-weight: $font-weight-bold;
+  color: $color-primary;
+  min-width: 120px;
+}
+
+.schedule-activity {
+  color: $color-text-dark;
+}
+
+.schedule-notes {
+  text-align: center;
+  font-size: 14px;
+  color: $color-text-dark;
+  margin-top: 2em;
+  font-style: italic;
+}
+
+// Costs Section (Accent background)
+.section--accent {
+  background: $color-accent;
+  color: white;
+}
+
+.costs-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tuition-box,
+.deadlines-box {
+  background: rgba(white, 0.15);
+  padding: 2em;
+  border-radius: 3px;
+
+  h3 {
+    color: white;
+    font-size: 22px;
+    margin-bottom: 1em;
+    text-transform: uppercase;
+  }
+}
+
+.tuition-rates {
+  display: flex;
+  gap: 2em;
+  margin-bottom: 1.5em;
+
+  @include mobile {
+    flex-direction: column;
+    gap: 1em;
+  }
+}
+
+.tuition-rate {
+  display: flex;
+  flex-direction: column;
+
+  .rate-amount {
+    font-size: 28px;
+    font-weight: $font-weight-bold;
+  }
+
+  .rate-label {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+}
+
+.tuition-notes {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+
+  li {
+    padding: 0.5em 0;
+    border-top: 1px solid rgba(white, 0.2);
+
+    &:first-child {
+      border-top: none;
+    }
+  }
+}
+
+.deadlines-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    padding: 0.75em 0;
+    border-bottom: 1px solid rgba(white, 0.2);
+    font-size: 15px;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    strong {
+      display: block;
+      margin-bottom: 0.25em;
+    }
+  }
+}
+
+// Main Content
+.event-content {
+  max-width: 800px;
+  margin: 0 auto;
+
+  h2 {
+    color: $color-primary;
+    font-size: 28px;
+    margin: 2em 0 1em;
+    text-transform: uppercase;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  h3 {
+    color: $color-primary;
+    font-size: 22px;
+    margin: 1.5em 0 0.75em;
+  }
+
+  p {
+    line-height: $line-height-body;
+    margin-bottom: 1em;
+    color: $color-text-dark;
+  }
+
+  ul, ol {
+    margin-left: 1.5em;
+    margin-bottom: 1em;
+
+    li {
+      margin-bottom: 0.5em;
+      line-height: $line-height-body;
+    }
+  }
+
+  a {
+    color: $color-secondary;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Policies Section
+.policies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2em;
+}
+
+.policy-card {
+  background: white;
+  padding: 1.5em;
+  border-radius: 3px;
+  box-shadow: $shadow-subtle;
+
+  h3 {
+    color: $color-primary;
+    font-size: 18px;
+    margin-bottom: 0.75em;
+    text-transform: uppercase;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: $line-height-body;
+    color: $color-text-dark;
+    margin: 0;
+  }
+}
+
+// Registration Section
+.section--dark {
+  background: $color-dark-brown;
+  color: white;
+}
+
+.registration-section {
+  text-align: center;
+  padding: 2em 0;
+
+  h2 {
+    font-size: 32px;
+    margin-bottom: 0.5em;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  > p {
+    font-size: 18px;
+    margin-bottom: 1.5em;
+    opacity: 0.9;
+  }
+
+  .registration-actions {
+    margin-bottom: 1.5em;
+  }
+
+  .registration-contact {
+    font-size: 15px;
+    opacity: 0.8;
+
+    a {
+      color: $color-accent;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Classes Section
+.class-period {
+  margin-bottom: 3em;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.period-title {
+  color: $color-primary;
+  font-size: 24px;
+  text-transform: uppercase;
+  margin-bottom: 1.25em;
+  padding-bottom: 0.5em;
+  border-bottom: 2px solid $color-accent;
+}
+
+.classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5em;
+}
+
+.class-card {
+  background: $color-light-cream;
+  padding: 1.5em;
+  border-radius: 3px;
+  border-left: 4px solid $color-primary;
+
+  .class-title {
+    color: $color-primary;
+    font-size: 18px;
+    margin-bottom: 0.75em;
+    line-height: 1.3;
+  }
+
+  .class-instructor,
+  .class-days,
+  .class-age {
+    font-size: 14px;
+    margin-bottom: 0.5em;
+    color: $color-text-dark;
+
+    strong {
+      color: $color-primary;
+    }
+  }
+
+  .class-description {
+    font-size: 14px;
+    line-height: $line-height-body;
+    color: $color-text-dark;
+    margin-top: 1em;
+    margin-bottom: 0;
+  }
+
+  .class-note {
+    font-size: 13px;
+    font-style: italic;
+    color: $color-accent;
+    margin-top: 0.75em;
+    margin-bottom: 0;
+    padding-top: 0.75em;
+    border-top: 1px solid rgba($color-text-dark, 0.1);
+  }
+}
+</style>

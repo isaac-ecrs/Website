@@ -13,7 +13,9 @@ const eventsCollection = defineCollection({
       state: z.string(),
       zip: z.string(),
       website: z.string().url().optional(),
+      website: z.string().url().optional(),
     }),
+    image: z.string().optional(),
     image: z.string().optional(),
     cost: z.string(),
     registrationEmail: z.string().email(),
@@ -90,12 +92,23 @@ const pagesCollection = defineCollection({
         description: z.string(),
       })
     ),
-    donationCta: z.object({
-      title: z.string(),
+    about: z.string(),
+    whatWeDo: z.object({
+      image: z.string(),
       description: z.string(),
-      buttonText: z.string(),
-      buttonLink: z.string(),
+      activities: z.string(),
     }),
+  }),
+});
+
+const navigationCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    items: z.array(z.object({
+      label: z.string(),
+      href: z.string(),
+      isButton: z.boolean().default(false),
+    })),
   }),
 });
 
@@ -113,5 +126,6 @@ const navigationCollection = defineCollection({
 export const collections = {
   events: eventsCollection,
   pages: pagesCollection,
+  navigation: navigationCollection,
   navigation: navigationCollection,
 };

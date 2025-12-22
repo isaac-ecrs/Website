@@ -3,40 +3,33 @@ import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import FeatureCard from '../components/FeatureCard.astro';
-import ServiceCard from '../components/ServiceCard.astro';
 import EventHighlight from '../components/EventHighlight.astro';
-import CTASection from '../components/CTASection.astro';
+
+import { marked } from 'marked';
 
 // Import images
 import heroBg from '../assets/images/hero-bg.jpg';
 import iconActivities from '../assets/images/icons/activities.svg';
 import iconEvents from '../assets/images/icons/events.svg';
 import iconTestimonials from '../assets/images/icons/testimonials.svg';
+import { Image } from 'astro:assets';
 import imageWhatWeDo from '../assets/images/landing-page/what-we-do.jpg';
+import imageWhatWeDoDance from '../assets/images/landing-page/what-we-do-dance.jpg';
 import imageUpcomingEvents from '../assets/images/landing-page/upcoming-events.jpg';
 import imageTestimonials from '../assets/images/landing-page/testemonials.jpg';
-import imageSinging from '../assets/images/services/singing.jpg';
-import imageDancing from '../assets/images/services/dancing.jpg';
-import imageDramatics from '../assets/images/services/dramatics.jpg';
-import imageGames from '../assets/images/services/games.jpg';
-import imageCrafts from '../assets/images/services/crafts.jpg';
-import imageDevelopment from '../assets/images/services/development.jpg';
 import imageWinterAdventure from '../assets/images/events/winter-adventure.jpg';
 
 // Get content from collections
 const homePage = await getEntry('pages', 'home');
-const { Content } = await homePage.render();
-const featuredEvent = (await getCollection('events')).find(e => e.data.featured);
 
-// Service images array
-const serviceImages = [
-  imageSinging,
-  imageDancing,
-  imageDramatics,
-  imageGames,
-  imageCrafts,
-  imageDevelopment,
-];
+// Get the next upcoming event (earliest future event)
+const now = new Date();
+const allEvents = await getCollection('events');
+const upcomingEvents = allEvents
+  .filter(e => new Date(e.data.startDate) > now)
+  .sort((a, b) => new Date(a.data.startDate).getTime() - new Date(b.data.startDate).getTime());
+
+const featuredEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
 ---
 
 <BaseLayout title="Home" description="ECRS - Come to Play. Play to Learn">
@@ -79,85 +72,54 @@ const serviceImages = [
   <!-- SECTION 3: About ECRS Narrative (rendered from markdown) -->
   <section class="section section--white" id="about">
     <div class="container">
-      <div class="about-content">
-        <Content />
-      </div>
+      <div class="about-content" set:html={marked(homePage.data.about)} />
     </div>
   </section>
 
-  <!-- SECTION 4: Service Offerings -->
+  <!-- SECTION 4: What We Do -->
   <section class="section section--tan" id="programs">
     <div class="container">
-      <h2 class="text-center">Lorem Ipsum Programs</h2>
-      <p class="text-center section-intro">
-        Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt.
-      </p>
+      <h2 class="text-center">What We Do</h2>
 
-      <div class="services-grid">
-        <ServiceCard
-          title="Lorem Ipsum One"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-          image={imageSinging}
-        />
-        <ServiceCard
-          title="Lorem Ipsum Two"
-          description="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-          image={imageDancing}
-        />
-        <ServiceCard
-          title="Lorem Ipsum Three"
-          description="Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-          image={imageDramatics}
-        />
-        <ServiceCard
-          title="Lorem Ipsum Four"
-          description="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est."
-          image={imageGames}
-        />
-        <ServiceCard
-          title="Lorem Ipsum Five"
-          description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium."
-          image={imageCrafts}
-        />
-        <ServiceCard
-          title="Lorem Ipsum Six"
-          description="Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta."
-          image={imageDevelopment}
-        />
+      <div class="what-we-do-content">
+        <div class="what-we-do-image">
+          <Image src={imageWhatWeDoDance} alt="What We Do" />
+        </div>
+        <div class="what-we-do-text">
+          <p class="section-intro">
+            {homePage.data.whatWeDo.description}
+          </p>
+
+          <div class="activities-list" set:html={marked(homePage.data.whatWeDo.activities)} />
+        </div>
       </div>
-
-      <p class="text-center" style="margin-top: 2em; color: rgba(69, 67, 64, 0.8);">
-        The programs listed above are detailed in the markdown content and can be managed via Decap CMS.
-      </p>
     </div>
   </section>
 
-  <!-- SECTION 5: Event Highlight (Winter Adventure) -->
+  <!-- SECTION 5: Event Highlight (Next Upcoming Event) -->
   {featuredEvent && (
-    <EventHighlight
-      title={featuredEvent.data.title}
-      date={`${new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – ${new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}`}
-      description={featuredEvent.body}
-      image={imageWinterAdventure}
-      link={`/events/${featuredEvent.slug}`}
-    />
+    (() => {
+      const year = new Date(featuredEvent.data.startDate).getFullYear();
+      const eventUrl = `/events/${featuredEvent.slug}-${year}`;
+      return (
+        <EventHighlight
+          title={featuredEvent.data.title}
+          date={`${new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – ${new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}`}
+          description={featuredEvent.data.shortDescription || 'Event details coming soon.'}
+          image={imageWinterAdventure}
+          link={eventUrl}
+        />
+      );
+    })()
   )}
 
-  <!-- SECTION 6: Call-to-Action Donation -->
-  <CTASection
-    title={homePage.data.donationCta.title}
-    description={homePage.data.donationCta.description}
-    buttonText={homePage.data.donationCta.buttonText}
-    buttonLink={homePage.data.donationCta.buttonLink}
-    backgroundColor="#378e3c"
-  />
-
-  <!-- SECTION 7: Footer (included in BaseLayout) -->
+  <!-- SECTION 6: Footer (included in BaseLayout) -->
 
 </BaseLayout>
 
 <style lang="scss">
 @use '../styles/variables' as *;
+@use '../styles/mixins' as *;
 
 .about-content {
   max-width: 800px;
@@ -188,7 +150,56 @@ const serviceImages = [
   color: rgba($color-text-dark, 0.7);
 }
 
-.services-grid {
+.what-we-do-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3em;
+  align-items: start;
   margin-top: 2em;
+
+  @include mobile {
+    grid-template-columns: 1fr;
+    gap: 2em;
+  }
+}
+
+.what-we-do-image {
+  img {
+    width: 100%;
+    height: auto;
+    border-radius: 3px;
+    box-shadow: $shadow-image;
+  }
+}
+
+.what-we-do-text {
+  .section-intro {
+    margin-bottom: 1.5em;
+  }
+}
+
+.activities-list {
+  :global(ul) {
+    list-style: none;
+    padding-left: 0;
+  }
+
+  :global(li) {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 0.5em;
+    color: $color-text-dark;
+    padding-left: 1.5em;
+    position: relative;
+    list-style: none;
+
+    &::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: $color-accent;
+      font-weight: bold;
+    }
+  }
 }
 </style>

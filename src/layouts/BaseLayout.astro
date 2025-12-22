@@ -1,7 +1,10 @@
 ---
+import TopHeader from '../components/TopHeader.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ScrollToTop from '../components/ScrollToTop.astro';
 import '../styles/global.scss';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 interface Props {
   title: string;
@@ -23,10 +26,18 @@ const { title, description = "ECRS - Come to Play. Play to Learn" } = Astro.prop
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
+  <TopHeader />
   <Header />
-  <main>
+  <main style="padding-top: 120px;">
     <slot />
   </main>
   <Footer />
+  <ScrollToTop />
 </body>
 </html>
+
+<style>
+  body {
+    margin-top: 0;
+  }
+</style>

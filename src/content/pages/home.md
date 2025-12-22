@@ -1,8 +1,8 @@
 ---
-title: "Home"
+title: Home
 hero:
-  title: "Welcome to ECRS!"
-  subtitle: "Come to Play. Play to Learn"
+  title: "Welcome to ECRS – Come to Play. Play to Learn"
+  subtitle: "ECRS is an intergenerational organization providing creative and engaging activities that are fun, develop leadership and build community."
   backgroundImage: "../../assets/images/hero-bg.jpg"
   ctaText: "Lorem Ipsum"
   ctaLink: "#programs"
@@ -16,26 +16,20 @@ featureCards:
   - title: "Testemonials"
     icon: "../../assets/images/icons/testimonials.svg"
     description: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla."
-donationCta:
-  title: "Lorem Ipsum Support"
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit in voluptate velit esse."
-  buttonText: "Lorem Ipsum"
-  buttonLink: "/donate"
+about: |
+  ## About
+
+  *Want to play like a kid? Dance the cha-cha or a folk favorite? Foster close human relationships? Develop leadership skills? We offer fun activities – both active and relaxing – that emphasize enjoyment, creativity, cooperation and personal growth.*
+
+  ECRS is a warm and welcoming community for folks of all ages. Join us at an event and explore an ever-changing menu of optional daily classes – from drama and dance to crafts and creating personal change – led by our skilled and caring leaders (who are also members!). Meals are family-style and there's plenty of planned downtime for relaxing, connecting, or sharing your own recreational activity. In the evening (and sometimes into the wee hours) we make our own merriment when we gather for the evening program, a smorgasbord of folk dancing, singing, informal dramatics and cooperative games.
+whatWeDo:
+  image: "../../assets/images/landing-page/what-we-do-dance.jpg"
+  description: "An ECRS event is an experience not to be missed! We have been building community with fun-filled, intergenerational events for more than 75 years. Come experience for yourself at a one-day, weekend (including a camping weekend in early June), or our signature five-day-long Winter Adventure."
+  activities: |
+    - Singing
+    - Dancing
+    - Informal dramatics
+    - Cooperative games
+    - Crafts
+    - Personal development
 ---
-
-## About
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-
-## Programs
-
-- **Lorem Ipsum One**: Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-- **Lorem Ipsum Two**: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-- **Lorem Ipsum Three**: Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-- **Lorem Ipsum Four**: Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est.
-- **Lorem Ipsum Five**: Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.
-- **Lorem Ipsum Six**: Totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta.

@@ -1,11 +1,14 @@
 ---
 import { Image } from 'astro:assets';
+import { getEntry } from 'astro:content';
 import logoImg from '../assets/images/ecrs-logo.png';
+import cloudBg from '../assets/images/cloud-nav-bg.gif';
 
-// Header component with fixed navigation
+const navData = await getEntry('navigation', 'main');
+const navItems = navData?.data.items || [];
 ---
 
-<header class="site-header">
+<header class="site-header" style={`background-image: url(${cloudBg.src})`}>
   <div class="container header-container">
     <div class="logo">
       <a href="/">
@@ -14,12 +17,13 @@ import logoImg from '../assets/images/ecrs-logo.png';
     </div>
     <nav class="main-nav">
       <ul>
-        <li><a href="/">Lorem</a></li>
-        <li><a href="#about">Ipsum</a></li>
-        <li><a href="/events">Dolor</a></li>
-        <li><a href="#programs">Sit</a></li>
-        <li><a href="/#contact">Amet</a></li>
-        <li><a href="/donate" class="btn btn--primary">Consectetur</a></li>
+        {navItems.map((item) => (
+          <li>
+            <a href={item.href} class={item.isButton ? 'btn btn--primary' : ''}>
+              {item.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   </div>
@@ -31,16 +35,18 @@ import logoImg from '../assets/images/ecrs-logo.png';
 
 .site-header {
   position: fixed;
-  top: 0;
+  top: 28px;
   left: 0;
   right: 0;
-  background-color: $color-primary;
+  background-color: white;
+  background-repeat: repeat-x;
+  background-size: auto;
   box-shadow: $shadow-subtle;
   z-index: 1000;
   padding: 1em 0;
 
   .header-container {
-    @include container;
+    @include full-width-container;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -66,7 +72,7 @@ import logoImg from '../assets/images/ecrs-logo.png';
     }
 
     a {
-      color: white;
+      color: $color-primary;
       text-decoration: none;
       font-family: $font-heading;
       font-weight: $font-weight-bold;
