@@ -1,0 +1,16 @@
+items:
+  - label: Home
+    href: /
+    isButton: false
+  - label: About
+    href: "#about"
+    isButton: false
+  - label: Events
+    href: /events
+    isButton: false
+  - label: Contact
+    href: "/#contact"
+    isButton: false
+  - label: Donate
+    href: /donate
+    isButton: true

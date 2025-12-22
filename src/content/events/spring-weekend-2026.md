@@ -8,14 +8,9 @@ location:
   city: "Wallingford"
   state: "PA"
   zip: "19086"
-image: "/events/spring-weekend-2026.jpg"
 cost: "Rates coming early in 2026"
 registrationEmail: "registration@ecrs.org"
 featured: false
-shortDescription: |
-  Join us for a weekend of ECRS fun and community at a new location! Newcomers and ECRS veterans alike will love a weekend of pure play at Pendle Hill. Dive into daytime classes that spark your curiosity – dancing, singing, informal dramatics, crafts, or games. Then Friday and Saturday nights, the whole community comes together for folk dancing, singing, games, and good conversation over snacks. All ages, all welcome.
-
-  Pendle Hill is a historic Quaker retreat center (since 1930) nestled on 24 wooded acres in Wallingford, PA – just outside Philly. Between activities, explore the grounds, browse the bookstore, or cozy up in the library. Accommodations feature twin beds in private or shared rooms with hall baths. Expect delicious family-style meals with organic garden produce (vegetarian, vegan, and gluten-free available).
 ---
 
 ## Join us for a weekend of ECRS fun and community at a new location!

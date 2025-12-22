@@ -8,14 +8,9 @@ location:
   city: "Ottsville"
   state: "PA"
   zip: "18942"
-image: "/events/june-weekend.jpg"
 cost: "Registration and details coming May 2026"
 registrationEmail: "registration@ecrs.org"
 featured: false
-shortDescription: |
-  Ready to unplug and reconnect? Our Camping Weekend is ECRS's most affordable residential event – where newcomers and longtime members gather under the stars for a weekend of pure play. Dive into daytime classes that spark your curiosity, then join the whole community Friday and Saturday nights for folk dancing, singing, games, and good conversation over snacks. All ages, all welcome.
-
-  Bring a friend to the bonfire and make a dozen more!
 ---
 
 ## Ready to unplug and reconnect?

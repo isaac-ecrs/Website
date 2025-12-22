@@ -56,6 +56,10 @@
             },
             "zip": {
               "type": "string"
+            },
+            "website": {
+              "type": "string",
+              "format": "uri"
             }
           },
           "required": [
@@ -82,7 +86,222 @@
           "default": false
         },
         "shortDescription": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "venueDescription": {
           "type": "string"
+        },
+        "venuePhone": {
+          "type": "string"
+        },
+        "highlights": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "icon": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "description"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "accommodation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "rates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "occupancy": {
+                      "type": "string"
+                    },
+                    "adult": {
+                      "type": "string"
+                    },
+                    "child": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "occupancy",
+                    "adult"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "name",
+              "rates"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "schedule": {
+          "type": "object",
+          "properties": {
+            "checkIn": {
+              "type": "string"
+            },
+            "checkOut": {
+              "type": "string"
+            },
+            "daily": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "time": {
+                    "type": "string"
+                  },
+                  "activity": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "time",
+                  "activity"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "notes": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "tuition": {
+          "type": "object",
+          "properties": {
+            "adult": {
+              "type": "string"
+            },
+            "child": {
+              "type": "string"
+            },
+            "notes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "adult"
+          ],
+          "additionalProperties": false
+        },
+        "deadlines": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "date",
+              "description"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "policies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "content": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "title",
+              "content"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "ageNotes": {
+          "type": "string"
+        },
+        "classes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "period": {
+                "type": "string"
+              },
+              "offerings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "instructor": {
+                      "type": "string"
+                    },
+                    "days": {
+                      "type": "string"
+                    },
+                    "age": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "note": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "title",
+                    "instructor"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "period",
+              "offerings"
+            ],
+            "additionalProperties": false
+          }
         },
         "$schema": {
           "type": "string"
