@@ -107,8 +107,8 @@
                 <strong>Debug Info:</strong><br/>
                 CMS Object: ${typeof window.CMS}<br/>
                 netlifyIdentity: ${typeof window.netlifyIdentity}<br/>
-                Current URL: ${window.location.href}<br/>
-                Origin: ${window.location.origin}
+                Current URL: <span id="current-url"></span><br/>
+                Origin: <span id="origin"></span>
               </div>
               <p style="margin-top: 2rem; font-size: 12px; color: #999;">
                 Try refreshing the page, or check that you're logged into Netlify Identity.
@@ -117,6 +117,15 @@
           </div>
         `;
             document.body.innerHTML = errorHTML;
+
+            var currentUrlElem = document.getElementById('current-url');
+            if (currentUrlElem) {
+              currentUrlElem.textContent = window.location.href;
+            }
+            var originElem = document.getElementById('origin');
+            if (originElem) {
+              originElem.textContent = window.location.origin;
+            }
           }
         },
         false
