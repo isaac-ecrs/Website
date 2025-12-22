@@ -1,5 +1,6 @@
 ---
 title: 'Camp Onas 2024'
+eventSlug: 'camp-onas-2024'
 startDate: 2024-06-07T10:00:00
 endDate: 2024-06-09T17:00:00
 location:

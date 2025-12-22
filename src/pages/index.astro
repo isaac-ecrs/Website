@@ -106,8 +106,7 @@ const featuredEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
   {
     featuredEvent &&
       (() => {
-        const year = new Date(featuredEvent.data.startDate).getFullYear();
-        const eventUrl = `/events/${featuredEvent.slug}-${year}`;
+        const eventUrl = `/events/${featuredEvent.data.eventSlug}`;
         return (
           <EventHighlight
             title={featuredEvent.data.title}

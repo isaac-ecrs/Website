@@ -1,5 +1,6 @@
 ---
 title: 'June Weekend'
+eventSlug: 'june-weekend-2026'
 startDate: 2026-06-12T18:00:00
 endDate: 2026-06-14T14:00:00
 location:

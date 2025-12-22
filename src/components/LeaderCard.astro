@@ -1,0 +1,149 @@
+---
+interface Props {
+  leader: any;
+  variant?: 'full' | 'compact';
+  showBio?: boolean;
+}
+
+const { leader, variant = 'full', showBio = true } = Astro.props;
+
+// Handle bio content from leader.data.bio
+const bioContent = leader.data.bio || '';
+---
+
+<div class={`leader-card leader-card--${variant}`}>
+  {
+    leader.data.image && (
+      <div class="leader-image">
+        <img src={leader.data.image} alt={leader.data.name} />
+      </div>
+    )
+  }
+  <div class="leader-content">
+    <h3 class="leader-name">{leader.data.name}</h3>
+    {leader.data.title && <p class="leader-title">{leader.data.title}</p>}
+    {
+      leader.data.location && (
+        <p class="leader-location">{leader.data.location}</p>
+      )
+    }
+    {showBio && <div class="leader-bio" set:html={bioContent} />}
+  </div>
+</div>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .leader-card {
+    background: $color-light-cream;
+    border-radius: 3px;
+    overflow: hidden;
+    box-shadow: $shadow-subtle;
+    display: flex;
+    gap: 1em;
+    padding: 1em;
+
+    // Full variant: larger cards for leaders page
+    &.leader-card--full {
+      .leader-image {
+        width: 150px;
+        min-width: 150px;
+        height: 150px;
+      }
+
+      .leader-content {
+        padding: 0.5em 0;
+        flex: 1;
+      }
+    }
+
+    // Compact variant: cards for popover
+    &.leader-card--compact {
+      .leader-image {
+        width: 120px;
+        min-width: 120px;
+        height: 120px;
+      }
+
+      .leader-content {
+        padding: 0.5em 0;
+        flex: 1;
+      }
+
+      .leader-name {
+        font-size: 20px;
+      }
+
+      .leader-title {
+        font-size: 13px;
+      }
+
+      .leader-location {
+        font-size: 13px;
+      }
+
+      .leader-bio {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .leader-image {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 100%;
+    margin: auto;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .leader-content {
+    // Padding is set by variant modifier
+  }
+
+  .leader-name {
+    color: $color-primary;
+    font-size: 22px;
+    font-weight: $font-weight-bold;
+    margin: 0 0 0.5em 0;
+    text-transform: uppercase;
+  }
+
+  .leader-title {
+    color: $color-secondary;
+    font-size: 14px;
+    font-weight: $font-weight-bold;
+    margin: 0 0 0.25em 0;
+    text-transform: uppercase;
+  }
+
+  .leader-location {
+    color: rgba($color-text-dark, 0.7);
+    font-size: 13px;
+    margin: 0 0 1em 0;
+    font-style: italic;
+  }
+
+  .leader-bio {
+    font-size: 15px;
+    line-height: $line-height-body;
+    color: $color-text-dark;
+
+    :global(p) {
+      margin: 0.75em 0;
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 title: 'Spring Weekend at Stony Point 2023'
+eventSlug: 'spring-weekend-2023'
 startDate: 2023-03-24T10:00:00
 endDate: 2023-03-26T17:00:00
 location:

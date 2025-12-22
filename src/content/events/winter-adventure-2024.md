@@ -1,5 +1,6 @@
 ---
 title: 'Winter Adventure 2024'
+eventSlug: 'winter-adventure-2024'
 startDate: 2024-12-27T10:00:00
 endDate: 2025-01-01T17:00:00
 location:

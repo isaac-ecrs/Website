@@ -1,9 +1,35 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, z, reference } from 'astro:content';
+
+const leadersCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    name: z.string(),
+    title: z.string().optional(),
+    bio: z.string(),
+    image: z.string().optional(),
+    location: z.string().optional(),
+  }),
+});
+
+const classesCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    leader: reference('leaders'),
+    descriptions: z.array(
+      z.object({
+        year: z.number(),
+        content: z.string(),
+      })
+    ),
+  }),
+});
 
 const eventsCollection = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
+    eventSlug: z.string().regex(/^[a-z0-9-]+-\d{4}$/),
     startDate: z.coerce.date(),
     endDate: z.coerce.date(),
     location: z.object({
@@ -84,17 +110,16 @@ const eventsCollection = defineCollection({
       )
       .optional(),
     ageNotes: z.string().optional(),
-    classes: z
+    classPeriods: z
       .array(
         z.object({
           period: z.string(),
           offerings: z.array(
             z.object({
-              title: z.string(),
-              instructor: z.string(),
+              class: z.string(),
+              descriptionYear: z.number().optional(),
               days: z.string().optional(),
               age: z.string().optional(),
-              description: z.string().optional(),
               note: z.string().optional(),
             })
           ),
@@ -148,4 +173,6 @@ export const collections = {
   events: eventsCollection,
   pages: pagesCollection,
   navigation: navigationCollection,
+  leaders: leadersCollection,
+  classes: classesCollection,
 };
