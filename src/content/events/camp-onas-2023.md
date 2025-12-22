@@ -10,7 +10,6 @@ location:
   zip: ""
 cost: "Contact for pricing"
 registrationEmail: "registration@ecrs.org"
-featured: false
 ---
 
 Singing, dancing, and playing at a Quaker-rooted camp with active games, outdoor exploration, chair yoga, dramatics, and folk/line dancing.

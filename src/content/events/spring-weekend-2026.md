@@ -10,7 +10,6 @@ location:
   zip: "19086"
 cost: "Rates coming early in 2026"
 registrationEmail: "registration@ecrs.org"
-featured: false
 ---
 
 ## Join us for a weekend of ECRS fun and community at a new location!

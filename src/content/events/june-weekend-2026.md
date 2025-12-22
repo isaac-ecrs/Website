@@ -10,7 +10,6 @@ location:
   zip: "18942"
 cost: "Registration and details coming May 2026"
 registrationEmail: "registration@ecrs.org"
-featured: false
 ---
 
 ## Ready to unplug and reconnect?

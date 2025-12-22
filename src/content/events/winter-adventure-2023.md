@@ -10,7 +10,6 @@ location:
   zip: "14870"
 cost: "Contact for pricing"
 registrationEmail: "registration@ecrs.org"
-featured: false
 ---
 
 A creative and joyous alternative holiday experience with diverse classes, evening programs, games, dancing, and community meals.

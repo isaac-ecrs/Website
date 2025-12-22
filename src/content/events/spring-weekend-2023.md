@@ -10,7 +10,6 @@ location:
   zip: ""
 cost: "Contact for pricing"
 registrationEmail: "registration@ecrs.org"
-featured: false
 ---
 
 Folk dancing, improv, song swap, games, flowers craft, small scenes, outdoor exploration, and music-making.

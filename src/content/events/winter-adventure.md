@@ -12,7 +12,6 @@ location:
 image: "/events/winter-adventure.jpg"
 cost: "Tuition: $110/adult; Room & Board: $355–$820/person"
 registrationEmail: "registration@ecrs.org"
-featured: true
 shortDescription: |
   A creative and joyous alternative holiday experience with diverse classes, evening community gatherings, buffet-style meals, and the chance to celebrate New Year's Eve in a uniquely ECRS way.
 venueDescription: "Located on 600 acres near Corning, NY, The Y at Watson Woods conference center offers ideal positioning for winter activities and local attractions including the Corning Museum of Glass. The facility is wheelchair accessible."

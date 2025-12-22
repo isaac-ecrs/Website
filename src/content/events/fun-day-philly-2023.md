@@ -10,7 +10,6 @@ location:
   zip: ""
 cost: "Suggested donation"
 registrationEmail: "registration@ecrs.org"
-featured: false
 ---
 
 International folk dancing, singing, collaborative games, and crafts with workshops and evening program.

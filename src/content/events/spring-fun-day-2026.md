@@ -10,7 +10,6 @@ location:
   zip: ""
 cost: "TBD"
 registrationEmail: "registration@ecrs.org"
-featured: false
 ---
 
 ## A whole day — packed with play!

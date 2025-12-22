@@ -13,11 +13,12 @@ const eventsCollection = defineCollection({
       state: z.string(),
       zip: z.string(),
       website: z.string().url().optional(),
+      website: z.string().url().optional(),
     }),
+    image: z.string().optional(),
     image: z.string().optional(),
     cost: z.string(),
     registrationEmail: z.string().email(),
-    featured: z.boolean().default(false),
     shortDescription: z.string().nullish(),
     // Extended fields for detailed event pages
     venueDescription: z.string().optional(),
@@ -111,8 +112,20 @@ const navigationCollection = defineCollection({
   }),
 });
 
+const navigationCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    items: z.array(z.object({
+      label: z.string(),
+      href: z.string(),
+      isButton: z.boolean().default(false),
+    })),
+  }),
+});
+
 export const collections = {
   events: eventsCollection,
   pages: pagesCollection,
+  navigation: navigationCollection,
   navigation: navigationCollection,
 };

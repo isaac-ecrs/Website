@@ -10,7 +10,6 @@ location:
   zip: ""
 cost: "Suggested donation $10–$20 ($5 for newcomers)"
 registrationEmail: "registration@ecrs.org"
-featured: false
 ---
 
 International folk dancing, singing, collaborative games, and crafts with workshops, potluck dinner, and evening program.
