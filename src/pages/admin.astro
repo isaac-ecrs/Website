@@ -1,0 +1,11 @@
+---
+// Serve the Decap CMS admin interface
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+// Read the admin index.html file
+const adminPath = resolve('./public/admin/index.html');
+const adminContent = readFileSync(adminPath, 'utf-8');
+---
+
+<html is:raw>{adminContent}</html>
