@@ -168,4 +168,4 @@ Content collection schemas are defined in `src/content/config.ts` using Zod for 
 
 ## License
 
-All rights reserved © 2024 Eastern Cooperative Recreation School (ECRS)
+All rights reserved © 2025 Eastern Cooperative Recreation School (ECRS)
