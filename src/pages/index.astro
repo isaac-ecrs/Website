@@ -21,7 +21,15 @@ import imageWinterAdventure from '../assets/images/events/winter-adventure.jpg';
 
 // Get content from collections
 const homePage = await getEntry('pages', 'home');
-const featuredEvent = (await getCollection('events')).find(e => e.data.featured);
+
+// Get the next upcoming event (earliest future event)
+const now = new Date();
+const allEvents = await getCollection('events');
+const upcomingEvents = allEvents
+  .filter(e => new Date(e.data.startDate) > now)
+  .sort((a, b) => new Date(a.data.startDate).getTime() - new Date(b.data.startDate).getTime());
+
+const featuredEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
 ---
 
 <BaseLayout title="Home" description="ECRS - Come to Play. Play to Learn">
@@ -88,15 +96,21 @@ const featuredEvent = (await getCollection('events')).find(e => e.data.featured)
     </div>
   </section>
 
-  <!-- SECTION 5: Event Highlight (Winter Adventure) -->
+  <!-- SECTION 5: Event Highlight (Next Upcoming Event) -->
   {featuredEvent && (
-    <EventHighlight
-      title={featuredEvent.data.title}
-      date={`${new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – ${new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}`}
-      description={featuredEvent.body}
-      image={imageWinterAdventure}
-      link={`/events/${featuredEvent.slug}`}
-    />
+    (() => {
+      const year = new Date(featuredEvent.data.startDate).getFullYear();
+      const eventUrl = `/events/${featuredEvent.slug}-${year}`;
+      return (
+        <EventHighlight
+          title={featuredEvent.data.title}
+          date={`${new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – ${new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}`}
+          description={featuredEvent.data.shortDescription || 'Event details coming soon.'}
+          image={imageWinterAdventure}
+          link={eventUrl}
+        />
+      );
+    })()
   )}
 
   <!-- SECTION 6: Footer (included in BaseLayout) -->

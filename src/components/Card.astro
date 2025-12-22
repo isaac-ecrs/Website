@@ -3,39 +3,41 @@ interface Props {
   href: string;            // Required - cards are always clickable
   variant?: 'vertical' | 'horizontal';  // Layout direction (default: vertical)
   isPast?: boolean;        // For dimmed styling (events only)
+  hasMedia?: boolean;      // Whether the card has media (for horizontal layout)
   class?: string;          // Additional classes
 }
 
-const { href, variant = 'vertical', isPast = false, class: additionalClass = '' } = Astro.props;
+const { href, variant = 'vertical', isPast = false, hasMedia = false, class: additionalClass = '' } = Astro.props;
 ---
 
-<a href={href} class={`card card--${variant} ${isPast ? 'card--past' : ''} ${additionalClass}`}>
+<article class={`card card--${variant} ${isPast ? 'card--past' : ''} ${hasMedia ? 'card--has-media' : 'card--no-media'} ${additionalClass}`}>
   <slot name="media" />
   <slot name="content" />
-  <slot name="cta" />
-</a>
+  <a href={href} class="card-main-link">
+    <slot name="cta" />
+  </a>
+</article>
 
 <style lang="scss">
 @use '../styles/variables' as *;
 @use '../styles/mixins' as *;
 
 .card {
+  position: relative;
   display: block;
   background: white;
   padding: 2em;
   border-radius: $border-radius-card;
   box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
   transition: transform $transition-fast, box-shadow $transition-fast;
-  text-decoration: none;
   color: inherit;
-  cursor: pointer;
 
   &:hover {
     transform: translateY(-5px);
     box-shadow: 10px 10px 0px rgba($color-text-dark, 0.12);
   }
 
-  &:focus-visible {
+  &:has(.card-main-link:focus-visible) {
     outline: 2px solid $color-accent;
     outline-offset: 4px;
   }
@@ -53,7 +55,7 @@ const { href, variant = 'vertical', isPast = false, class: additionalClass = '' 
 
   &.card--horizontal {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 1fr;
     gap: 2em;
     align-items: start;
 
@@ -61,6 +63,48 @@ const { href, variant = 'vertical', isPast = false, class: additionalClass = '' 
       grid-template-columns: 1fr;
       gap: 1.5em;
     }
+
+    &.card--has-media {
+      grid-template-columns: 200px 1fr;
+
+      @include mobile {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    &.card--no-media {
+      grid-template-columns: 1fr;
+    }
+
+    // Hide empty media slots
+    :global([slot="media"]:empty) {
+      display: none;
+    }
+  }
+
+  // Internal links (venue website, directions, etc.) need higher z-index
+  :global(a:not(.card-main-link)) {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+// Main card link - covers entire card with pseudo-element
+.card-main-link {
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+
+  // Pseudo-element covers entire card for click area
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  &:focus-visible {
+    outline: none;  // Outline handled by parent .card
   }
 }
 
@@ -71,11 +115,10 @@ const { href, variant = 'vertical', isPast = false, class: additionalClass = '' 
   font-weight: 600;
   text-decoration: none;
   transition: color $transition-fast;
-  pointer-events: none;  // Parent card handles click
 }
 
 .card:hover :global(.card-link),
-.card:focus-visible :global(.card-link) {
+.card:has(.card-main-link:focus-visible) :global(.card-link) {
   color: $color-teal;
 }
 </style>

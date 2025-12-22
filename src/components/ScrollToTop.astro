@@ -1,0 +1,171 @@
+---
+// No props needed - purely client-side functionality
+---
+
+<button
+  class="scroll-to-top"
+  aria-label="Scroll to top"
+  type="button"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
+<script>
+  function initScrollToTop() {
+    const scrollBtn = document.querySelector('.scroll-to-top');
+    if (!scrollBtn) return;
+
+    // Calculate position based on countdown timer
+    function updatePosition() {
+      const countdown = document.querySelector('.countdown-float');
+      if (countdown && !countdown.classList.contains('countdown-float--minimized')) {
+        const countdownHeight = countdown.offsetHeight;
+        const spacing = 24;
+        const bottomValue = countdownHeight + spacing;
+        scrollBtn.style.setProperty('--scroll-btn-bottom', `${bottomValue}px`);
+      } else {
+        scrollBtn.style.setProperty('--scroll-btn-bottom', '24px');
+      }
+    }
+
+    // Visibility toggle based on scroll position
+    function toggleVisibility() {
+      if (window.scrollY > 300) {
+        scrollBtn.classList.add('scroll-to-top--visible');
+      } else {
+        scrollBtn.classList.remove('scroll-to-top--visible');
+      }
+    }
+
+    // Smooth scroll to top
+    function scrollToTop(e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    // Event listeners
+    window.addEventListener('scroll', toggleVisibility, { passive: true });
+    scrollBtn.addEventListener('click', scrollToTop);
+
+    // Keyboard accessibility
+    scrollBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        scrollToTop(e);
+      }
+    });
+
+    // Listen for countdown timer changes
+    const countdown = document.querySelector('.countdown-float');
+    if (countdown) {
+      countdown.addEventListener('click', () => {
+        setTimeout(updatePosition, 350); // After countdown transition
+      });
+    }
+
+    // Initial setup
+    updatePosition();
+    toggleVisibility();
+  }
+
+  // Initialize on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollToTop);
+  } else {
+    initScrollToTop();
+  }
+
+  // Handle Astro view transitions
+  document.addEventListener('astro:after-swap', initScrollToTop);
+</script>
+
+<style lang="scss">
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.scroll-to-top {
+  position: fixed;
+  bottom: var(--scroll-btn-bottom, 24px);
+  right: 24px;
+  z-index: 999;
+
+  // Circular outline button
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: rgba($color-dark-brown, 0.8);
+  backdrop-filter: blur(8px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  // Initially hidden
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+
+  transition: opacity $transition-fast,
+              visibility $transition-fast,
+              transform $transition-fast,
+              background-color $transition-fast,
+              box-shadow $transition-fast;
+
+  // Icon styling
+  svg {
+    color: white;
+    width: 24px;
+    height: 24px;
+    transition: transform $transition-fast;
+  }
+
+  // Visible state
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  // Hover state
+  &:hover {
+    background: rgba($color-primary, 0.9);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+
+    svg {
+      transform: translateY(-2px);
+    }
+  }
+
+  // Focus state for accessibility
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+
+  // Active state
+  &:active {
+    transform: translateY(0);
+  }
+
+  // Mobile adjustments
+  @include mobile {
+    right: 16px;
+    width: 44px;
+    height: 44px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+</style>

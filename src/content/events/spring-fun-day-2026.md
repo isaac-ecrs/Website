@@ -8,14 +8,9 @@ location:
   city: "Philadelphia"
   state: "PA"
   zip: ""
-image: "/events/spring-fun-day.jpg"
 cost: "TBD"
 registrationEmail: "registration@ecrs.org"
 featured: false
-shortDescription: |
-  A whole day — packed with play! We'll start with an *opening program* to warm people up with ice breakers, dancing, and games. Then dive into *workshops*, share a **potluck feast**, and come together for our *signature evening program* with more games, dancing, and singing.
-
-  Whether leading a workshop or showing up ready to play, you'll build community and skills while having an absolute blast. All ages, all energy levels – just bring yourself!
 ---
 
 ## A whole day — packed with play!

@@ -2,6 +2,7 @@
 import TopHeader from '../components/TopHeader.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ScrollToTop from '../components/ScrollToTop.astro';
 import '../styles/global.scss';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -31,6 +32,7 @@ const { title, description = "ECRS - Come to Play. Play to Learn" } = Astro.prop
     <slot />
   </main>
   <Footer />
+  <ScrollToTop />
 </body>
 </html>
 

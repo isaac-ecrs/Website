@@ -1,0 +1,249 @@
+---
+interface Props {
+  targetDate: Date;
+  eventTitle: string;
+}
+
+const { targetDate, eventTitle } = Astro.props;
+const targetTimestamp = targetDate.getTime();
+---
+
+<div class="countdown-float" data-target={targetTimestamp} data-title={eventTitle} role="button" tabindex="0" aria-label="Toggle countdown timer">
+  <div class="countdown-content">
+    <div class="countdown-label">Time until {eventTitle}</div>
+    <div class="countdown-units">
+      <div class="countdown-unit">
+        <span class="countdown-value" data-unit="days">--</span>
+        <span class="countdown-name">Days</span>
+      </div>
+      <div class="countdown-unit">
+        <span class="countdown-value" data-unit="hours">--</span>
+        <span class="countdown-name">Hours</span>
+      </div>
+      <div class="countdown-unit">
+        <span class="countdown-value" data-unit="minutes">--</span>
+        <span class="countdown-name">Min</span>
+      </div>
+      <div class="countdown-unit">
+        <span class="countdown-value" data-unit="seconds">--</span>
+        <span class="countdown-name">Sec</span>
+      </div>
+    </div>
+  </div>
+  <div class="countdown-toggle" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
+  </div>
+</div>
+
+<script>
+  function initCountdown() {
+    const container = document.querySelector('.countdown-float') as HTMLElement;
+    if (!container) return;
+
+    const targetTimestamp = parseInt(container.dataset.target || '0');
+    const daysEl = container.querySelector('[data-unit="days"]');
+    const hoursEl = container.querySelector('[data-unit="hours"]');
+    const minutesEl = container.querySelector('[data-unit="minutes"]');
+    const secondsEl = container.querySelector('[data-unit="seconds"]');
+    const toggleBtn = container.querySelector('.countdown-toggle') as HTMLButtonElement;
+
+    function updateCountdown() {
+      const now = Date.now();
+      const diff = targetTimestamp - now;
+
+      if (diff <= 0) {
+        container.classList.add('countdown-float--ended');
+        if (daysEl) daysEl.textContent = '0';
+        if (hoursEl) hoursEl.textContent = '0';
+        if (minutesEl) minutesEl.textContent = '0';
+        if (secondsEl) secondsEl.textContent = '0';
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      if (daysEl) daysEl.textContent = days.toString();
+      if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+      if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+      if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+    }
+
+    // Toggle minimized state on click
+    container.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      container.classList.toggle('countdown-float--minimized');
+    });
+
+    // Handle keyboard accessibility
+    container.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        e.stopPropagation();
+        container.classList.toggle('countdown-float--minimized');
+      }
+    });
+
+    // Initial update and interval
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
+
+  // Initialize on page load and for Astro view transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCountdown);
+  } else {
+    initCountdown();
+  }
+
+  // Handle Astro view transitions
+  document.addEventListener('astro:after-swap', initCountdown);
+</script>
+
+<style lang="scss">
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.countdown-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: $color-dark-brown;
+  color: white;
+  padding: 1em 1.5em;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+
+  &:hover {
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-accent;
+    outline-offset: 2px;
+  }
+
+  @include mobile {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    padding: 0.75em 1em;
+  }
+
+  &--minimized {
+    .countdown-content {
+      display: none;
+    }
+
+    padding: 0.75em 1em;
+
+    .countdown-toggle svg {
+      transform: rotate(180deg);
+    }
+
+    &::before {
+      content: attr(data-title);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: $font-weight-bold;
+    }
+  }
+
+  &--ended {
+    background: $color-primary;
+
+    .countdown-label::after {
+      content: ' - Event Started!';
+    }
+  }
+}
+
+.countdown-content {
+  flex: 1;
+}
+
+.countdown-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+.countdown-units {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+
+  @include mobile {
+    gap: 0.75em;
+  }
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 48px;
+
+  @include mobile {
+    min-width: 40px;
+  }
+}
+
+.countdown-value {
+  font-size: 28px;
+  font-weight: $font-weight-bold;
+  font-family: $font-heading;
+  line-height: 1;
+  color: $color-accent;
+
+  @include mobile {
+    font-size: 22px;
+  }
+}
+
+.countdown-name {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.countdown-toggle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: white;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+
+  svg {
+    transition: transform 0.3s ease;
+  }
+}
+
+.countdown-float:hover .countdown-toggle {
+  opacity: 1;
+}
+</style>

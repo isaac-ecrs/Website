@@ -3,8 +3,8 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import EventCard from '../../components/EventCard.astro';
-import EventCardExpanded from '../../components/EventCardExpanded.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
+import { marked } from 'marked';
 
 const allEvents = await getCollection('events');
 const upcomingEvents = allEvents
@@ -17,6 +17,22 @@ const pastEvents = allEvents
 
 const featuredEvent = upcomingEvents[0];
 const otherUpcomingEvents = upcomingEvents.slice(1);
+
+// Helper function to build location string
+const getLocationString = (eventData: any) => `${eventData.location.venue} • ${eventData.location.city}, ${eventData.location.state}`;
+
+// Helper function to check if address is valid for Google Maps
+const hasValidAddress = (eventData: any) => {
+  return eventData.location.address &&
+    eventData.location.address.trim().length > 0 &&
+    !eventData.location.address.toLowerCase().includes('tbd') &&
+    !eventData.location.address.toLowerCase().includes('location in');
+};
+
+// Process featured event's shortDescription markdown if it exists
+const featuredDescription = featuredEvent?.data.shortDescription
+  ? marked.parse(featuredEvent.data.shortDescription, { async: false })
+  : null;
 ---
 
 <BaseLayout title="Events" description="ECRS - Upcoming and Past Events">
@@ -29,7 +45,7 @@ const otherUpcomingEvents = upcomingEvents.slice(1);
   />
 
   <!-- Upcoming Events Section -->
-  <section class="section section--white" id="upcoming">
+  <section class="section section--cream" id="upcoming">
     {upcomingEvents.length > 0 ? (
       <>
         {featuredEvent && (
@@ -69,14 +85,31 @@ const otherUpcomingEvents = upcomingEvents.slice(1);
                     {new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})} - {new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})}
                   </div>
                 </div>
+                {featuredEvent.data.location.website && (
+                  <div class="featured-event-info-item">
+                    <div class="featured-event-info-icon">
+                      <i class="fas fa-globe" aria-label="Venue website"></i>
+                    </div>
+                    <div class="featured-event-info-text">
+                      <a href={featuredEvent.data.location.website}>{featuredEvent.data.location.venue}</a>
+                    </div>
+                  </div>
+                )}
                 <div class="featured-event-info-item">
                   <div class="featured-event-info-icon">
-                    <i class="fas fa-map-marker-alt"></i>
+                    <i class="fas fa-map-marker-alt" aria-label="Location"></i>
                   </div>
                   <div class="featured-event-info-text">
-                    <a href="#">{featuredEvent.data.location.venue}</a><br />
-                    {featuredEvent.data.location.address}<br />
-                    {featuredEvent.data.location.city}, {featuredEvent.data.location.state} {featuredEvent.data.location.zip}
+                    {hasValidAddress(featuredEvent.data) ? (
+                      <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(getLocationString(featuredEvent.data))}`}>
+                        {featuredEvent.data.location.address}<br />{featuredEvent.data.location.city}, {featuredEvent.data.location.state} {featuredEvent.data.location.zip}
+                      </a>
+                    ) : (
+                      <>
+                        {featuredEvent.data.location.address && <>{featuredEvent.data.location.address}<br /></>}
+                        {featuredEvent.data.location.city}, {featuredEvent.data.location.state} {featuredEvent.data.location.zip}
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -86,11 +119,9 @@ const otherUpcomingEvents = upcomingEvents.slice(1);
                     <i class="fas fa-circle-info"></i>
                   </div>
                   <div class="featured-event-info-text">
-                    {featuredEvent.data.shortDescription &&
-                      featuredEvent.data.shortDescription.split('\n\n').map((paragraph: string) => (
-                        <p>{paragraph}</p>
-                      ))
-                    }
+                    {featuredDescription && (
+                      <div set:html={featuredDescription} />
+                    )}
                   </div>
                 </div>
               </div>
@@ -102,11 +133,11 @@ const otherUpcomingEvents = upcomingEvents.slice(1);
         {otherUpcomingEvents.length > 0 && (
           <div class="container">
             <h2 class="text-center other-events-title">Other Upcoming Events</h2>
-            <div class="events-list">
+            <div class={`events-grid ${otherUpcomingEvents.length % 2 === 1 ? 'events-grid--odd' : ''}`}>
               {otherUpcomingEvents.map(event => {
                 const year = new Date(event.data.startDate).getFullYear();
                 const eventUrl = `/events/${event.slug}-${year}`;
-                return <EventCardExpanded event={event} href={eventUrl} />;
+                return <EventCard event={event} href={eventUrl} />;
               })}
             </div>
           </div>
@@ -122,7 +153,7 @@ const otherUpcomingEvents = upcomingEvents.slice(1);
   {pastEvents.length > 0 && (
     <>
       <!-- Past Events Section -->
-      <section class="section section--cream">
+      <section class="section section--white">
         <div class="container">
           <h2 class="text-center">Past Events</h2>
 
@@ -253,15 +284,6 @@ const otherUpcomingEvents = upcomingEvents.slice(1);
 .other-events-title {
   margin-top: 2em;
   margin-bottom: 2em;
-  text-align: center;
-}
-
-.events-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4em;
-  max-width: 900px;
-  margin: 0 auto;
 }
 
 .events-grid {
@@ -272,5 +294,9 @@ const otherUpcomingEvents = upcomingEvents.slice(1);
   @include mobile {
     grid-template-columns: 1fr;
   }
+}
+
+.events-grid--odd > :global(:first-child) {
+  grid-column: 1 / -1;
 }
 </style>
