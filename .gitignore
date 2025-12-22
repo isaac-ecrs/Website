@@ -1,6 +1,7 @@
 # build output
 dist/
 .output/
+.astro/
 
 # dependencies
 node_modules/
@@ -29,3 +30,6 @@ pnpm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+# Claude Code
+.claude/
