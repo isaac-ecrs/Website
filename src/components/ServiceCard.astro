@@ -12,11 +12,13 @@ const { title, description, image } = Astro.props;
 ---
 
 <div class="service-card">
-  {image && (
-    <div class="service-image">
-      <Image src={image} alt={title} class="shadow-image" />
-    </div>
-  )}
+  {
+    image && (
+      <div class="service-image">
+        <Image src={image} alt={title} class="shadow-image" />
+      </div>
+    )
+  }
   <div class="service-content">
     <h3>{title}</h3>
     <p>{description}</p>
@@ -24,42 +26,42 @@ const { title, description, image } = Astro.props;
 </div>
 
 <style lang="scss">
-@use '../styles/variables' as *;
-@use '../styles/mixins' as *;
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
 
-.service-card {
-  display: flex;
-  gap: 2em;
-  margin-bottom: 2em;
-
-  @include mobile {
-    flex-direction: column;
-  }
-
-  .service-image {
-    flex: 0 0 300px;
+  .service-card {
+    display: flex;
+    gap: 2em;
+    margin-bottom: 2em;
 
     @include mobile {
-      flex: 0 0 auto;
+      flex-direction: column;
     }
 
-    img {
-      width: 100%;
-      border-radius: $border-radius-card;
+    .service-image {
+      flex: 0 0 300px;
+
+      @include mobile {
+        flex: 0 0 auto;
+      }
+
+      img {
+        width: 100%;
+        border-radius: $border-radius-card;
+      }
+    }
+
+    .service-content {
+      flex: 1;
+
+      h3 {
+        color: $color-primary;
+        margin-bottom: 0.75em;
+      }
+
+      p {
+        line-height: $line-height-body;
+      }
     }
   }
-
-  .service-content {
-    flex: 1;
-
-    h3 {
-      color: $color-primary;
-      margin-bottom: 0.75em;
-    }
-
-    p {
-      line-height: $line-height-body;
-    }
-  }
-}
 </style>

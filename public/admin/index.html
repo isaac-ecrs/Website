@@ -1,86 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex" />
-  <title>Content Manager - ECRS</title>
-  <link rel="stylesheet" href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css" />
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    }
-    #nc-root {
-      height: 100%;
-    }
-    .error-page {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: #f5f5f5;
-    }
-    .error-box {
-      background: white;
-      padding: 3rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      max-width: 600px;
-    }
-    .error-box h1 {
-      color: #d32f2f;
-      margin-top: 0;
-    }
-    .error-box ul {
-      margin: 1rem 0;
-      padding-left: 2rem;
-    }
-    .error-box li {
-      margin: 0.5rem 0;
-    }
-    .debug-info {
-      background: #f0f0f0;
-      padding: 1rem;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 12px;
-      margin-top: 1rem;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-  </style>
-</head>
-<body>
-  <div id="nc-root"></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Content Manager - ECRS</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css"
+    />
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+          sans-serif;
+      }
+      #nc-root {
+        height: 100%;
+      }
+      .error-page {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: #f5f5f5;
+      }
+      .error-box {
+        background: white;
+        padding: 3rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+      }
+      .error-box h1 {
+        color: #d32f2f;
+        margin-top: 0;
+      }
+      .error-box ul {
+        margin: 1rem 0;
+        padding-left: 2rem;
+      }
+      .error-box li {
+        margin: 0.5rem 0;
+      }
+      .debug-info {
+        background: #f0f0f0;
+        padding: 1rem;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        margin-top: 1rem;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="nc-root"></div>
 
-  <script>
-    // Check if Netlify Identity is available
-    if (typeof netlifyIdentity === 'undefined') {
-      console.log('Netlify Identity not loaded');
-    }
+    <script>
+      // Check if Netlify Identity is available
+      if (typeof netlifyIdentity === 'undefined') {
+        console.log('Netlify Identity not loaded');
+      }
 
-    // Log config path
-    console.log('Config file path:', '/admin/config.yml');
-    console.log('Base URL:', window.location.origin);
-  </script>
+      // Log config path
+      console.log('Config file path:', '/admin/config.yml');
+      console.log('Base URL:', window.location.origin);
+    </script>
 
-  <script src="https://unpkg.com/netlify-identity-widget"></script>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/netlify-identity-widget"></script>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
-  <script>
-    // Wait for scripts to load
-    window.addEventListener('load', function() {
-      console.log('Window loaded');
-      console.log('CMS available:', typeof window.CMS !== 'undefined');
-      console.log('netlifyIdentity available:', typeof window.netlifyIdentity !== 'undefined');
+    <script>
+      // Wait for scripts to load
+      window.addEventListener(
+        'load',
+        function () {
+          console.log('Window loaded');
+          console.log('CMS available:', typeof window.CMS !== 'undefined');
+          console.log(
+            'netlifyIdentity available:',
+            typeof window.netlifyIdentity !== 'undefined'
+          );
 
-      if (!window.CMS) {
-        const errorHTML = `
+          if (!window.CMS) {
+            const errorHTML = `
           <div class="error-page">
             <div class="error-box">
               <h1>⚠️ Decap CMS Not Loaded</h1>
@@ -95,8 +107,8 @@
                 <strong>Debug Info:</strong><br/>
                 CMS Object: ${typeof window.CMS}<br/>
                 netlifyIdentity: ${typeof window.netlifyIdentity}<br/>
-                Current URL: ${window.location.href}<br/>
-                Origin: ${window.location.origin}
+                Current URL: <span id="current-url"></span><br/>
+                Origin: <span id="origin"></span>
               </div>
               <p style="margin-top: 2rem; font-size: 12px; color: #999;">
                 Try refreshing the page, or check that you're logged into Netlify Identity.
@@ -104,14 +116,25 @@
             </div>
           </div>
         `;
-        document.body.innerHTML = errorHTML;
-      }
-    }, false);
+            document.body.innerHTML = errorHTML;
 
-    // Also catch any errors
-    window.addEventListener('error', function(event) {
-      console.error('Script error:', event.error);
-    });
-  </script>
-</body>
+            var currentUrlElem = document.getElementById('current-url');
+            if (currentUrlElem) {
+              currentUrlElem.textContent = window.location.href;
+            }
+            var originElem = document.getElementById('origin');
+            if (originElem) {
+              originElem.textContent = window.location.origin;
+            }
+          }
+        },
+        false
+      );
+
+      // Also catch any errors
+      window.addEventListener('error', function (event) {
+        console.error('Script error:', event.error);
+      });
+    </script>
+  </body>
 </html>

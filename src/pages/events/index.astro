@@ -8,25 +8,36 @@ import { marked } from 'marked';
 
 const allEvents = await getCollection('events');
 const upcomingEvents = allEvents
-  .filter(e => new Date(e.data.endDate) >= new Date())
-  .sort((a, b) => new Date(a.data.startDate).getTime() - new Date(b.data.startDate).getTime());
+  .filter((e) => new Date(e.data.endDate) >= new Date())
+  .sort(
+    (a, b) =>
+      new Date(a.data.startDate).getTime() -
+      new Date(b.data.startDate).getTime()
+  );
 
 const pastEvents = allEvents
-  .filter(e => new Date(e.data.endDate) < new Date())
-  .sort((a, b) => new Date(b.data.startDate).getTime() - new Date(a.data.startDate).getTime());
+  .filter((e) => new Date(e.data.endDate) < new Date())
+  .sort(
+    (a, b) =>
+      new Date(b.data.startDate).getTime() -
+      new Date(a.data.startDate).getTime()
+  );
 
 const featuredEvent = upcomingEvents[0];
 const otherUpcomingEvents = upcomingEvents.slice(1);
 
 // Helper function to build location string
-const getLocationString = (eventData: any) => `${eventData.location.venue} • ${eventData.location.city}, ${eventData.location.state}`;
+const getLocationString = (eventData: any) =>
+  `${eventData.location.venue} • ${eventData.location.city}, ${eventData.location.state}`;
 
 // Helper function to check if address is valid for Google Maps
 const hasValidAddress = (eventData: any) => {
-  return eventData.location.address &&
+  return (
+    eventData.location.address &&
     eventData.location.address.trim().length > 0 &&
     !eventData.location.address.toLowerCase().includes('tbd') &&
-    !eventData.location.address.toLowerCase().includes('location in');
+    !eventData.location.address.toLowerCase().includes('location in')
+  );
 };
 
 // Process featured event's shortDescription markdown if it exists
@@ -46,119 +57,171 @@ const featuredDescription = featuredEvent?.data.shortDescription
 
   <!-- Upcoming Events Section -->
   <section class="section section--cream" id="upcoming">
-    {upcomingEvents.length > 0 ? (
-      <>
-        {featuredEvent && (
-          <div class="container">
-            <div class="featured-event-container">
-              <div class="featured-event-left">
-                {featuredEvent.data.image && (
-                  <div class="featured-event-image">
-                    <img src={featuredEvent.data.image} alt={featuredEvent.data.title} />
-                  </div>
-                )}
-                {
-                  (() => {
-                    const year = new Date(featuredEvent.data.startDate).getFullYear();
+    {
+      upcomingEvents.length > 0 ? (
+        <>
+          {featuredEvent && (
+            <div class="container">
+              <div class="featured-event-container">
+                <div class="featured-event-left">
+                  {featuredEvent.data.image && (
+                    <div class="featured-event-image">
+                      <img
+                        src={featuredEvent.data.image}
+                        alt={featuredEvent.data.title}
+                      />
+                    </div>
+                  )}
+                  {(() => {
+                    const year = new Date(
+                      featuredEvent.data.startDate
+                    ).getFullYear();
                     const eventUrl = `/events/${featuredEvent.slug}-${year}`;
-                    return <a href={eventUrl} class="btn btn--secondary featured-event-btn">Details and Registration</a>;
-                  })()
-                }
-              </div>
-              <div class="featured-event-content">
-              <h2>{featuredEvent.data.title}</h2>
-              <div class="featured-event-info">
-                <div class="featured-event-info-item">
-                  <div class="featured-event-info-icon">
-                    {
-                      (() => {
-                        const startDate = new Date(featuredEvent.data.startDate).toDateString();
-                        const endDate = new Date(featuredEvent.data.endDate).toDateString();
-                        const isOneDay = startDate === endDate;
-                        return isOneDay ?
-                          <i class="fas fa-calendar-day"></i> :
-                          <i class="fas fa-calendar-days"></i>;
-                      })()
-                    }
-                  </div>
-                  <div class="featured-event-info-text">
-                    {new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})} - {new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric'})}
-                  </div>
-                </div>
-                {featuredEvent.data.location.website && (
-                  <div class="featured-event-info-item">
-                    <div class="featured-event-info-icon">
-                      <i class="fas fa-globe" aria-label="Venue website"></i>
-                    </div>
-                    <div class="featured-event-info-text">
-                      <a href={featuredEvent.data.location.website}>{featuredEvent.data.location.venue}</a>
-                    </div>
-                  </div>
-                )}
-                <div class="featured-event-info-item">
-                  <div class="featured-event-info-icon">
-                    <i class="fas fa-map-marker-alt" aria-label="Location"></i>
-                  </div>
-                  <div class="featured-event-info-text">
-                    {hasValidAddress(featuredEvent.data) ? (
-                      <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(getLocationString(featuredEvent.data))}`}>
-                        {featuredEvent.data.location.address}<br />{featuredEvent.data.location.city}, {featuredEvent.data.location.state} {featuredEvent.data.location.zip}
+                    return (
+                      <a
+                        href={eventUrl}
+                        class="btn btn--secondary featured-event-btn"
+                      >
+                        Details and Registration
                       </a>
-                    ) : (
-                      <>
-                        {featuredEvent.data.location.address && <>{featuredEvent.data.location.address}<br /></>}
-                        {featuredEvent.data.location.city}, {featuredEvent.data.location.state} {featuredEvent.data.location.zip}
-                      </>
+                    );
+                  })()}
+                </div>
+                <div class="featured-event-content">
+                  <h2>{featuredEvent.data.title}</h2>
+                  <div class="featured-event-info">
+                    <div class="featured-event-info-item">
+                      <div class="featured-event-info-icon">
+                        {(() => {
+                          const startDate = new Date(
+                            featuredEvent.data.startDate
+                          ).toDateString();
+                          const endDate = new Date(
+                            featuredEvent.data.endDate
+                          ).toDateString();
+                          const isOneDay = startDate === endDate;
+                          return isOneDay ? (
+                            <i class="fas fa-calendar-day" />
+                          ) : (
+                            <i class="fas fa-calendar-days" />
+                          );
+                        })()}
+                      </div>
+                      <div class="featured-event-info-text">
+                        {new Date(
+                          featuredEvent.data.startDate
+                        ).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}{' '}
+                        -{' '}
+                        {new Date(
+                          featuredEvent.data.endDate
+                        ).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                        })}
+                      </div>
+                    </div>
+                    {featuredEvent.data.location.website && (
+                      <div class="featured-event-info-item">
+                        <div class="featured-event-info-icon">
+                          <i class="fas fa-globe" aria-label="Venue website" />
+                        </div>
+                        <div class="featured-event-info-text">
+                          <a href={featuredEvent.data.location.website}>
+                            {featuredEvent.data.location.venue}
+                          </a>
+                        </div>
+                      </div>
                     )}
+                    <div class="featured-event-info-item">
+                      <div class="featured-event-info-icon">
+                        <i
+                          class="fas fa-map-marker-alt"
+                          aria-label="Location"
+                        />
+                      </div>
+                      <div class="featured-event-info-text">
+                        {hasValidAddress(featuredEvent.data) ? (
+                          <a
+                            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(getLocationString(featuredEvent.data))}`}
+                          >
+                            {featuredEvent.data.location.address}
+                            <br />
+                            {featuredEvent.data.location.city},{' '}
+                            {featuredEvent.data.location.state}{' '}
+                            {featuredEvent.data.location.zip}
+                          </a>
+                        ) : (
+                          <>
+                            {featuredEvent.data.location.address && (
+                              <>
+                                {featuredEvent.data.location.address}
+                                <br />
+                              </>
+                            )}
+                            {featuredEvent.data.location.city},{' '}
+                            {featuredEvent.data.location.state}{' '}
+                            {featuredEvent.data.location.zip}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="featured-event-description">
+                    <div class="featured-event-info-item">
+                      <div class="featured-event-info-icon">
+                        <i class="fas fa-circle-info" />
+                      </div>
+                      <div class="featured-event-info-text">
+                        {featuredDescription && (
+                          <div set:html={featuredDescription} />
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="featured-event-description">
-                <div class="featured-event-info-item">
-                  <div class="featured-event-info-icon">
-                    <i class="fas fa-circle-info"></i>
-                  </div>
-                  <div class="featured-event-info-text">
-                    {featuredDescription && (
-                      <div set:html={featuredDescription} />
-                    )}
-                  </div>
-                </div>
-              </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {otherUpcomingEvents.length > 0 && (
-          <div class="container">
-            <h2 class="text-center other-events-title">Other Upcoming Events</h2>
-            <div class={`events-grid ${otherUpcomingEvents.length % 2 === 1 ? 'events-grid--odd' : ''}`}>
-              {otherUpcomingEvents.map(event => {
-                const year = new Date(event.data.startDate).getFullYear();
-                const eventUrl = `/events/${event.slug}-${year}`;
-                return <EventCard event={event} href={eventUrl} />;
-              })}
+          {otherUpcomingEvents.length > 0 && (
+            <div class="container">
+              <h2 class="text-center other-events-title">
+                Other Upcoming Events
+              </h2>
+              <div
+                class={`events-grid ${otherUpcomingEvents.length % 2 === 1 ? 'events-grid--odd' : ''}`}
+              >
+                {otherUpcomingEvents.map((event) => {
+                  const year = new Date(event.data.startDate).getFullYear();
+                  const eventUrl = `/events/${event.slug}-${year}`;
+                  return <EventCard event={event} href={eventUrl} />;
+                })}
+              </div>
             </div>
-          </div>
-        )}
-      </>
-    ) : (
-      <div class="container">
-        <p class="text-center">No upcoming events at this time.</p>
-      </div>
-    )}
+          )}
+        </>
+      ) : (
+        <div class="container">
+          <p class="text-center">No upcoming events at this time.</p>
+        </div>
+      )
+    }
   </section>
 
-  {pastEvents.length > 0 && (
-    <>
-      <!-- Past Events Section -->
+  {/* Past Events Section */}
+  {
+    pastEvents.length > 0 && (
       <section class="section section--white">
         <div class="container">
           <h2 class="text-center">Past Events</h2>
 
           <div class="events-grid">
-            {pastEvents.map(event => {
+            {pastEvents.map((event) => {
               const year = new Date(event.data.startDate).getFullYear();
               const eventUrl = `/events/${event.slug}-${year}`;
               return <EventCard event={event} isPast={true} href={eventUrl} />;
@@ -166,137 +229,137 @@ const featuredDescription = featuredEvent?.data.shortDescription
           </div>
         </div>
       </section>
-    </>
-  )}
+    )
+  }
 </BaseLayout>
 
 <style lang="scss">
-@use '../../styles/variables' as *;
-@use '../../styles/mixins' as *;
+  @use '../../styles/variables' as *;
+  @use '../../styles/mixins' as *;
 
-.featured-event-container {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 4em;
-  align-items: start;
-  margin-bottom: 3em;
+  .featured-event-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4em;
+    align-items: start;
+    margin-bottom: 3em;
 
-  @include mobile {
-    grid-template-columns: 1fr;
-    gap: 2em;
-    margin-bottom: 2em;
-  }
-
-  .featured-event-left {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5em;
-  }
-
-  .featured-event-image {
-    img {
-      width: 100%;
-      height: auto;
-      border-radius: 3px;
-      box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
-    }
-  }
-
-  .featured-event-btn {
-    width: 100%;
-    text-align: center;
-    padding: 1em 2em;
-    font-weight: 600;
-  }
-
-  .featured-event-content {
-    h2 {
-      color: $color-accent;
-      font-size: 36px;
-      font-weight: 700;
-      margin: 0 0 1.2em 0;
-
-      @include mobile {
-        font-size: 28px;
-      }
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 2em;
+      margin-bottom: 2em;
     }
 
-    .featured-event-info {
+    .featured-event-left {
       display: flex;
       flex-direction: column;
       gap: 1.5em;
-      margin-bottom: 1.5em;
     }
 
-    .featured-event-info-item {
-      display: flex;
-      gap: 1em;
-      align-items: flex-start;
-    }
-
-    .featured-event-info-icon {
-      flex-shrink: 0;
-      font-size: 38px;
-      color: $color-text-dark;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-    }
-
-    .featured-event-info-text {
-      font-size: 15px;
-      color: $color-text-dark;
-      line-height: 1.6;
-
-      a {
-        color: $color-secondary;
-        text-decoration: underline;
-
-        &:hover {
-          text-decoration: none;
-        }
+    .featured-event-image {
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 3px;
+        box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
       }
     }
 
-    .featured-event-description {
-      margin-bottom: 2em;
+    .featured-event-btn {
+      width: 100%;
+      text-align: center;
+      padding: 1em 2em;
+      font-weight: 600;
+    }
 
-      p {
+    .featured-event-content {
+      h2 {
+        color: $color-accent;
+        font-size: 36px;
+        font-weight: 700;
+        margin: 0 0 1.2em 0;
+
+        @include mobile {
+          font-size: 28px;
+        }
+      }
+
+      .featured-event-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5em;
+        margin-bottom: 1.5em;
+      }
+
+      .featured-event-info-item {
+        display: flex;
+        gap: 1em;
+        align-items: flex-start;
+      }
+
+      .featured-event-info-icon {
+        flex-shrink: 0;
+        font-size: 38px;
+        color: $color-text-dark;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+      }
+
+      .featured-event-info-text {
         font-size: 15px;
         color: $color-text-dark;
-        line-height: 1.7;
-        margin-bottom: 1.2em;
+        line-height: 1.6;
+
+        a {
+          color: $color-secondary;
+          text-decoration: underline;
+
+          &:hover {
+            text-decoration: none;
+          }
+        }
       }
 
-      a {
-        color: $color-secondary;
-        text-decoration: none;
+      .featured-event-description {
+        margin-bottom: 2em;
 
-        &:hover {
-          text-decoration: underline;
+        p {
+          font-size: 15px;
+          color: $color-text-dark;
+          line-height: 1.7;
+          margin-bottom: 1.2em;
+        }
+
+        a {
+          color: $color-secondary;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }
   }
-}
 
-.other-events-title {
-  margin-top: 2em;
-  margin-bottom: 2em;
-}
-
-.events-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2em;
-
-  @include mobile {
-    grid-template-columns: 1fr;
+  .other-events-title {
+    margin-top: 2em;
+    margin-bottom: 2em;
   }
-}
 
-.events-grid--odd > :global(:first-child) {
-  grid-column: 1 / -1;
-}
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2em;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .events-grid--odd > :global(:first-child) {
+    grid-column: 1 / -1;
+  }
 </style>

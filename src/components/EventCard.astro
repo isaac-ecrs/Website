@@ -12,7 +12,10 @@ interface Props {
 const { event, isPast = false, showImage = true, href } = Astro.props;
 
 // Check if event actually has a valid image
-const hasValidImage = showImage && typeof event.data.image === 'string' && event.data.image.trim().length > 0;
+const hasValidImage =
+  showImage &&
+  typeof event.data.image === 'string' &&
+  event.data.image.trim().length > 0;
 
 const startDate = new Date(event.data.startDate);
 const endDate = new Date(event.data.endDate);
@@ -36,7 +39,8 @@ const endDateStr = endDate.toLocaleDateString('en-US', {
 const location = `${event.data.location.venue} • ${event.data.location.city}, ${event.data.location.state}`;
 
 // Check if we have a valid street address (not TBD, not empty, not just a description)
-const hasValidAddress = event.data.location.address &&
+const hasValidAddress =
+  event.data.location.address &&
   event.data.location.address.trim().length > 0 &&
   !event.data.location.address.toLowerCase().includes('tbd') &&
   !event.data.location.address.toLowerCase().includes('location in');
@@ -51,43 +55,61 @@ const processedDescription = event.data.shortDescription
 ---
 
 <Card href={href} variant="horizontal" isPast={isPast} hasMedia={hasValidImage}>
-  {hasValidImage && (
-    <div slot="media" class="event-image">
-      <img src={event.data.image} alt={event.data.title} />
-    </div>
-  )}
+  {
+    hasValidImage && (
+      <div slot="media" class="event-image">
+        <img src={event.data.image} alt={event.data.title} />
+      </div>
+    )
+  }
 
   <div slot="content" class="event-content">
     <h3 class="event-title">{event.data.title}</h3>
 
-    {processedDescription && (
-      <div class="event-short-description" set:html={processedDescription} />
-    )}
+    {
+      processedDescription && (
+        <div class="event-short-description" set:html={processedDescription} />
+      )
+    }
 
     <div class="event-info-section">
       <div class="event-info-item">
-        <i class={`fas ${isOneDay ? 'fa-calendar-day' : 'fa-calendar-days'}`} aria-label="Event date"></i>
+        <i
+          class={`fas ${isOneDay ? 'fa-calendar-day' : 'fa-calendar-days'}`}
+          aria-label="Event date"></i>
         <span>{startDateStr} – {endDateStr}</span>
       </div>
 
-      {event.data.location.website && (
-        <div class="event-info-item">
-          <i class="fas fa-globe" aria-label="Venue website"></i>
-          <a href={event.data.location.website}>{event.data.location.venue}</a>
-        </div>
-      )}
+      {
+        event.data.location.website && (
+          <div class="event-info-item">
+            <i class="fas fa-globe" aria-label="Venue website" />
+            <a href={event.data.location.website}>
+              {event.data.location.venue}
+            </a>
+          </div>
+        )
+      }
 
       <div class="event-info-item">
         <i class="fas fa-map-marker-alt" aria-label="Location"></i>
-        {hasValidAddress ? (
-          <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(location)}`}>
-            {event.data.location.address}, {event.data.location.city}, {event.data.location.state} {event.data.location.zip}
-          </a>
-        ) : (
-          <span>
-            {event.data.location.address && `${event.data.location.address}, `}{event.data.location.city}, {event.data.location.state} {event.data.location.zip}
-          </span>
-        )}
+        {
+          hasValidAddress ? (
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(location)}`}
+            >
+              {event.data.location.address}, {event.data.location.city},{' '}
+              {event.data.location.state} {event.data.location.zip}
+            </a>
+          ) : (
+            <span>
+              {event.data.location.address &&
+                `${event.data.location.address}, `}
+              {event.data.location.city}, {event.data.location.state}{' '}
+              {event.data.location.zip}
+            </span>
+          )
+        }
       </div>
     </div>
   </div>
@@ -96,67 +118,67 @@ const processedDescription = event.data.shortDescription
 </Card>
 
 <style lang="scss">
-@use '../styles/variables' as *;
-@use '../styles/mixins' as *;
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
 
-.event-image {
-  width: 100%;
-  height: 200px;
-  overflow: hidden;
-  border-radius: 3px;
-
-  img {
+  .event-image {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: 200px;
+    overflow: hidden;
     border-radius: 3px;
-  }
-}
 
-.event-content {
-  .event-title {
-    color: $color-primary;
-    margin-bottom: 0.75em;
-    margin-top: 0;
-  }
-
-  .event-short-description {
-    color: $color-text-dark;
-    font-size: 15px;
-    line-height: 1.6;
-    margin-bottom: 1em;
-    margin-top: 0;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 3px;
+    }
   }
 
-  .event-info-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75em;
-  }
-
-  .event-info-item {
-    display: flex;
-    gap: 0.75em;
-    align-items: center;
-    font-size: 15px;
-
-    i {
+  .event-content {
+    .event-title {
       color: $color-primary;
-      min-width: 16px;
+      margin-bottom: 0.75em;
+      margin-top: 0;
     }
 
-    a {
-      color: $color-secondary;
-      text-decoration: none;
+    .event-short-description {
+      color: $color-text-dark;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 1em;
+      margin-top: 0;
+    }
 
-      &:hover {
-        text-decoration: underline;
+    .event-info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75em;
+    }
+
+    .event-info-item {
+      display: flex;
+      gap: 0.75em;
+      align-items: center;
+      font-size: 15px;
+
+      i {
+        color: $color-primary;
+        min-width: 16px;
+      }
+
+      a {
+        color: $color-secondary;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      span {
+        color: $color-text-dark;
       }
     }
-
-    span {
-      color: $color-text-dark;
-    }
   }
-}
 </style>

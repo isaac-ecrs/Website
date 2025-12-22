@@ -25,52 +25,52 @@ const { title, date, description, image, link } = Astro.props;
 </section>
 
 <style lang="scss">
-@use '../styles/variables' as *;
-@use '../styles/mixins' as *;
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
 
-.event-highlight {
-  @include parallax-bg(0.8);
-  @include section-padding;
-  color: white;
+  .event-highlight {
+    @include parallax-bg(0.8);
+    @include section-padding;
+    color: white;
 
-  .event-highlight-content {
-    max-width: 600px;
+    .event-highlight-content {
+      max-width: 600px;
 
-    .event-label {
-      display: inline-block;
-      background-color: $color-accent;
-      color: white;
-      padding: 0.5em 1em;
-      border-radius: $border-radius-button;
-      font-family: $font-heading;
-      font-weight: $font-weight-bold;
-      text-transform: uppercase;
-      font-size: 14px;
-      margin-bottom: 1em;
-    }
+      .event-label {
+        display: inline-block;
+        background-color: $color-accent;
+        color: white;
+        padding: 0.5em 1em;
+        border-radius: $border-radius-button;
+        font-family: $font-heading;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        font-size: 14px;
+        margin-bottom: 1em;
+      }
 
-    h2 {
-      color: white;
-      font-size: 42px;
-      margin-bottom: 0.5em;
+      h2 {
+        color: white;
+        font-size: 42px;
+        margin-bottom: 0.5em;
 
-      @include mobile {
-        font-size: 32px;
+        @include mobile {
+          font-size: 32px;
+        }
+      }
+
+      .event-date {
+        font-size: 18px;
+        color: $color-accent;
+        margin-bottom: 1em;
+        font-weight: 600;
+      }
+
+      .event-description {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 1.5em;
       }
     }
-
-    .event-date {
-      font-size: 18px;
-      color: $color-accent;
-      margin-bottom: 1em;
-      font-weight: 600;
-    }
-
-    .event-description {
-      font-size: 18px;
-      line-height: 1.6;
-      margin-bottom: 1.5em;
-    }
   }
-}
 </style>

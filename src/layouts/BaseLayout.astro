@@ -11,29 +11,31 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "ECRS - Come to Play. Play to Learn" } = Astro.props;
+const { title, description = 'ECRS - Come to Play. Play to Learn' } =
+  Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content={description}>
-  <title>{title} | ECRS</title>
-  <link rel="icon" type="image/x-icon" href="/favicon.ico">
-  <!-- Netlify Identity for Decap CMS authentication -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-</head>
-<body>
-  <TopHeader />
-  <Header />
-  <main style="padding-top: 120px;">
-    <slot />
-  </main>
-  <Footer />
-  <ScrollToTop />
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title} | ECRS</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <!-- Netlify Identity for Decap CMS authentication -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+    ></script>
+  </head>
+  <body>
+    <TopHeader />
+    <Header />
+    <main style="padding-top: 120px;">
+      <slot />
+    </main>
+    <Footer />
+    <ScrollToTop />
+  </body>
 </html>
 
 <style>

@@ -17,83 +17,88 @@ const navItems = navData?.data.items || [];
     </div>
     <nav class="main-nav">
       <ul>
-        {navItems.map((item) => (
-          <li>
-            <a href={item.href} class={item.isButton ? 'btn btn--primary' : ''}>
-              {item.label}
-            </a>
-          </li>
-        ))}
+        {
+          navItems.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class={item.isButton ? 'btn btn--primary' : ''}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </nav>
   </div>
 </header>
 
 <style lang="scss">
-@use '../styles/variables' as *;
-@use '../styles/mixins' as *;
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
 
-.site-header {
-  position: fixed;
-  top: 28px;
-  left: 0;
-  right: 0;
-  background-color: white;
-  background-repeat: repeat-x;
-  background-size: auto;
-  box-shadow: $shadow-subtle;
-  z-index: 1000;
-  padding: 1em 0;
+  .site-header {
+    position: fixed;
+    top: 28px;
+    left: 0;
+    right: 0;
+    background-color: white;
+    background-repeat: repeat-x;
+    background-size: auto;
+    box-shadow: $shadow-subtle;
+    z-index: 1000;
+    padding: 1em 0;
 
-  .header-container {
-    @include full-width-container;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .logo {
-    img {
-      height: 60px;
-      width: auto;
-    }
-  }
-
-  .main-nav {
-    ul {
+    .header-container {
+      @include full-width-container;
       display: flex;
-      list-style: none;
-      gap: 2em;
+      justify-content: space-between;
       align-items: center;
+    }
 
-      @include mobile {
-        display: none; // Mobile menu implementation later
+    .logo {
+      img {
+        height: 60px;
+        width: auto;
       }
     }
 
-    a {
-      color: $color-primary;
-      text-decoration: none;
-      font-family: $font-heading;
-      font-weight: $font-weight-bold;
-      text-transform: uppercase;
-      font-size: 14px;
-      transition: color $transition-fast;
+    .main-nav {
+      ul {
+        display: flex;
+        list-style: none;
+        gap: 2em;
+        align-items: center;
 
-      &:hover {
-        color: $color-accent;
+        @include mobile {
+          display: none; // Mobile menu implementation later
+        }
       }
 
-      &.btn {
-        color: white;
-        padding: 8px 16px;
-        font-size: 12px;
+      a {
+        color: $color-primary;
+        text-decoration: none;
+        font-family: $font-heading;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        font-size: 14px;
+        transition: color $transition-fast;
 
         &:hover {
+          color: $color-accent;
+        }
+
+        &.btn {
           color: white;
+          padding: 8px 16px;
+          font-size: 12px;
+
+          &:hover {
+            color: white;
+          }
         }
       }
     }
   }
-}
 </style>

@@ -9,9 +9,6 @@ import { marked } from 'marked';
 
 // Import images
 import heroBg from '../assets/images/hero-bg.jpg';
-import iconActivities from '../assets/images/icons/activities.svg';
-import iconEvents from '../assets/images/icons/events.svg';
-import iconTestimonials from '../assets/images/icons/testimonials.svg';
 import { Image } from 'astro:assets';
 import imageWhatWeDo from '../assets/images/landing-page/what-we-do.jpg';
 import imageWhatWeDoDance from '../assets/images/landing-page/what-we-do-dance.jpg';
@@ -21,19 +18,25 @@ import imageWinterAdventure from '../assets/images/events/winter-adventure.jpg';
 
 // Get content from collections
 const homePage = await getEntry('pages', 'home');
+if (!homePage) {
+  throw new Error('Home page content not found');
+}
 
 // Get the next upcoming event (earliest future event)
 const now = new Date();
 const allEvents = await getCollection('events');
 const upcomingEvents = allEvents
-  .filter(e => new Date(e.data.startDate) > now)
-  .sort((a, b) => new Date(a.data.startDate).getTime() - new Date(b.data.startDate).getTime());
+  .filter((e) => new Date(e.data.startDate) > now)
+  .sort(
+    (a, b) =>
+      new Date(a.data.startDate).getTime() -
+      new Date(b.data.startDate).getTime()
+  );
 
 const featuredEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
 ---
 
 <BaseLayout title="Home" description="ECRS - Come to Play. Play to Learn">
-
   <!-- SECTION 1: Hero -->
   <Hero
     title={homePage.data.hero.title}
@@ -90,116 +93,122 @@ const featuredEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
             {homePage.data.whatWeDo.description}
           </p>
 
-          <div class="activities-list" set:html={marked(homePage.data.whatWeDo.activities)} />
+          <div
+            class="activities-list"
+            set:html={marked(homePage.data.whatWeDo.activities)}
+          />
         </div>
       </div>
     </div>
   </section>
 
   <!-- SECTION 5: Event Highlight (Next Upcoming Event) -->
-  {featuredEvent && (
-    (() => {
-      const year = new Date(featuredEvent.data.startDate).getFullYear();
-      const eventUrl = `/events/${featuredEvent.slug}-${year}`;
-      return (
-        <EventHighlight
-          title={featuredEvent.data.title}
-          date={`${new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})} – ${new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'})}`}
-          description={featuredEvent.data.shortDescription || 'Event details coming soon.'}
-          image={imageWinterAdventure}
-          link={eventUrl}
-        />
-      );
-    })()
-  )}
+  {
+    featuredEvent &&
+      (() => {
+        const year = new Date(featuredEvent.data.startDate).getFullYear();
+        const eventUrl = `/events/${featuredEvent.slug}-${year}`;
+        return (
+          <EventHighlight
+            title={featuredEvent.data.title}
+            date={`${new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })} – ${new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`}
+            description={
+              featuredEvent.data.shortDescription ||
+              'Event details coming soon.'
+            }
+            image={imageWinterAdventure}
+            link={eventUrl}
+          />
+        );
+      })()
+  }
 
   <!-- SECTION 6: Footer (included in BaseLayout) -->
-
 </BaseLayout>
 
 <style lang="scss">
-@use '../styles/variables' as *;
-@use '../styles/mixins' as *;
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
 
-.about-content {
-  max-width: 800px;
-  margin: 0 auto;
+  .about-content {
+    max-width: 800px;
+    margin: 0 auto;
 
-  h2 {
-    color: $color-primary;
-    margin-bottom: 1.5em;
-  }
-
-  .about-text {
-    p {
-      font-size: 18px;
-      line-height: 1.8;
+    h2 {
+      color: $color-primary;
       margin-bottom: 1.5em;
+    }
 
-      &:last-child {
-        margin-bottom: 0;
+    .about-text {
+      p {
+        font-size: 18px;
+        line-height: 1.8;
+        margin-bottom: 1.5em;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
   }
-}
 
-.section-intro {
-  max-width: 700px;
-  margin: 0 auto 3em;
-  font-size: 18px;
-  color: rgba($color-text-dark, 0.7);
-}
-
-.what-we-do-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3em;
-  align-items: start;
-  margin-top: 2em;
-
-  @include mobile {
-    grid-template-columns: 1fr;
-    gap: 2em;
-  }
-}
-
-.what-we-do-image {
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: 3px;
-    box-shadow: $shadow-image;
-  }
-}
-
-.what-we-do-text {
   .section-intro {
-    margin-bottom: 1.5em;
-  }
-}
-
-.activities-list {
-  :global(ul) {
-    list-style: none;
-    padding-left: 0;
-  }
-
-  :global(li) {
+    max-width: 700px;
+    margin: 0 auto 3em;
     font-size: 18px;
-    line-height: 1.8;
-    margin-bottom: 0.5em;
-    color: $color-text-dark;
-    padding-left: 1.5em;
-    position: relative;
-    list-style: none;
+    color: rgba($color-text-dark, 0.7);
+  }
 
-    &::before {
-      content: '→';
-      position: absolute;
-      left: 0;
-      color: $color-accent;
-      font-weight: bold;
+  .what-we-do-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3em;
+    align-items: start;
+    margin-top: 2em;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 2em;
     }
   }
-}
+
+  .what-we-do-image {
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 3px;
+      box-shadow: $shadow-image;
+    }
+  }
+
+  .what-we-do-text {
+    .section-intro {
+      margin-bottom: 1.5em;
+    }
+  }
+
+  .activities-list {
+    :global(ul) {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    :global(li) {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 0.5em;
+      color: $color-text-dark;
+      padding-left: 1.5em;
+      position: relative;
+      list-style: none;
+
+      &::before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: $color-accent;
+        font-weight: bold;
+      }
+    }
+  }
 </style>

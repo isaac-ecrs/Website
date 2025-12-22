@@ -1,14 +1,15 @@
 ---
-import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
   title: string;
   subtitle?: string;
   backgroundImage: ImageMetadata;
+  ctaText?: string;
+  ctaLink?: string;
 }
 
-const { title, subtitle, backgroundImage, ctaText, ctaLink } = Astro.props;
+const { title, subtitle, backgroundImage } = Astro.props;
 ---
 
 <section class="hero" style={`background-image: url(${backgroundImage.src})`}>
@@ -19,51 +20,51 @@ const { title, subtitle, backgroundImage, ctaText, ctaLink } = Astro.props;
 </section>
 
 <style lang="scss">
-@use '../styles/variables' as *;
-@use '../styles/mixins' as *;
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
 
-.hero {
-  @include parallax-bg();
-  min-height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background-size: 100% auto;
-  background-position: center top;
-
-  @include mobile {
+  .hero {
+    @include parallax-bg();
     min-height: 300px;
-    margin-top: 70px;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    color: white;
-    max-width: 1200px;
-    padding: 2em;
-  }
-
-  .hero-title {
-    font-size: $font-size-h1;
-    margin-bottom: 0.5em;
-    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-size: 100% auto;
+    background-position: center top;
 
     @include mobile {
-      font-size: 32px;
+      min-height: 300px;
+      margin-top: 70px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      color: white;
+      max-width: 1200px;
+      padding: 2em;
+    }
+
+    .hero-title {
+      font-size: $font-size-h1;
+      margin-bottom: 0.5em;
+      color: white;
+
+      @include mobile {
+        font-size: 32px;
+      }
+    }
+
+    .hero-subtitle {
+      font-size: 24px;
+      margin-bottom: 0;
+      font-weight: 300;
+      max-width: 800px;
+
+      @include mobile {
+        font-size: 18px;
+      }
     }
   }
-
-  .hero-subtitle {
-    font-size: 24px;
-    margin-bottom: 0;
-    font-weight: 300;
-    max-width: 800px;
-
-    @include mobile {
-      font-size: 18px;
-    }
-  }
-}
 </style>
