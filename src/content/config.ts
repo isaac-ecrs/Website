@@ -112,20 +112,8 @@ const navigationCollection = defineCollection({
   }),
 });
 
-const navigationCollection = defineCollection({
-  type: 'data',
-  schema: z.object({
-    items: z.array(z.object({
-      label: z.string(),
-      href: z.string(),
-      isButton: z.boolean().default(false),
-    })),
-  }),
-});
-
 export const collections = {
   events: eventsCollection,
   pages: pagesCollection,
-  navigation: navigationCollection,
   navigation: navigationCollection,
 };
