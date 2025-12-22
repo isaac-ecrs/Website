@@ -47,22 +47,26 @@ collections:
     extension: md
     format: yaml-frontmatter
     create: true
+    duplicate: true
     slug: "{{slug}}"
+    sortable_fields: ["startDate", "endDate", "title"]
+    sort: "startDate:desc"
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Start Date & Time", name: "startDate", widget: "datetime" }
-      - { label: "End Date & Time", name: "endDate", widget: "datetime" }
+      - { label: "Title", name: "title", widget: "string", placeholder: "Winter Adventure 2025" }
+      - { label: "Start Date & Time", name: "startDate", widget: "datetime", hint: "When the event begins (include check-in time for multi-day events)" }
+      - { label: "End Date & Time", name: "endDate", widget: "datetime", hint: "When the event ends (include check-out time for multi-day events)" }
       - label: "Location"
         name: "location"
         widget: "object"
         fields:
-          - { label: "Venue Name", name: "venue", widget: "string" }
-          - { label: "Address", name: "address", widget: "string" }
-          - { label: "City", name: "city", widget: "string" }
-          - { label: "State", name: "state", widget: "string" }
-          - { label: "ZIP Code", name: "zip", widget: "string" }
-      - { label: "Featured Image", name: "image", widget: "hidden", default: "../../assets/images/events/winter-adventure.jpg" }
-      - { label: "Cost", name: "cost", widget: "string" }
-      - { label: "Registration Email", name: "registrationEmail", widget: "string" }
-      - { label: "Featured Event", name: "featured", widget: "boolean", default: false }
-      - { label: "Description", name: "body", widget: "markdown" }
+          - { label: "Venue Name", name: "venue", widget: "string", placeholder: "The Y at Watson Woods" }
+          - { label: "Address", name: "address", widget: "string", placeholder: "9620 Dry Run Road", hint: "Use 'TBD' or 'Location in the [area] area TBD' if not yet determined" }
+          - { label: "City", name: "city", widget: "string", placeholder: "Painted Post" }
+          - { label: "State", name: "state", widget: "string", placeholder: "PA" }
+          - { label: "ZIP Code", name: "zip", widget: "string", required: false, placeholder: "19086", hint: "Leave empty if location is TBD" }
+          - { label: "Venue Website", name: "website", widget: "string", required: false, placeholder: "https://example.com", hint: "Optional link to venue's website" }
+      - { label: "Event Image", name: "image", widget: "string", required: false, placeholder: "/events/winter-adventure.jpg", hint: "Path to event image in /public/events/ folder" }
+      - { label: "Cost Summary", name: "cost", widget: "string", placeholder: "Tuition: $110/adult; Room & Board: $355–$820/person", hint: "Brief overview of costs. Use 'TBD' or 'Contact for pricing' if not yet available" }
+      - { label: "Registration Email", name: "registrationEmail", widget: "string", default: "registration@ecrs.org" }
+      - { label: "Short Description", name: "shortDescription", widget: "text", required: false, placeholder: "A creative and joyous alternative holiday experience...", hint: "Optional brief summary displayed on event cards. Leave empty if the main description is sufficient" }
+      - { label: "Description", name: "body", widget: "markdown", hint: "Full event description with details, schedule, policies, etc. Supports markdown formatting" }
