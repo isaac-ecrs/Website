@@ -5,6 +5,7 @@ Eastern Cooperative Recreation School (ECRS) website built with [Astro](https://
 ## Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Git
 
@@ -111,15 +112,15 @@ All content is stored as markdown files in `src/content/`:
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run dev:cms` | Start dev server + CMS proxy |
-| `npm run cms:proxy` | Start CMS proxy server only |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint and type checking |
-| `npm run format` | Format code with Prettier |
+| Command             | Description                  |
+| ------------------- | ---------------------------- |
+| `npm run dev`       | Start development server     |
+| `npm run dev:cms`   | Start dev server + CMS proxy |
+| `npm run cms:proxy` | Start CMS proxy server only  |
+| `npm run build`     | Build for production         |
+| `npm run preview`   | Preview production build     |
+| `npm run lint`      | Run ESLint and type checking |
+| `npm run format`    | Format code with Prettier    |
 
 ## Deployment
 
@@ -143,6 +144,7 @@ Create a `.env` file for local development (not committed to Git):
 ### Astro Config
 
 See `astro.config.mjs` for Astro-specific configuration including:
+
 - Netlify adapter
 - Image optimization
 - Markdown processing
