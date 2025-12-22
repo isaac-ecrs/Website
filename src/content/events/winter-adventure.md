@@ -3,16 +3,15 @@ title: 'Winter Adventure 2025'
 startDate: 2025-12-27T15:30:00
 endDate: 2026-01-01T10:30:00
 location:
-  venue: 'The Y at Watson Woods'
-  address: '9620 Dry Run Road'
-  city: 'Painted Post'
-  state: 'NY'
-  zip: '14870'
-  website: 'https://rochesterymca.org/locations/ymca-watson-woods'
-image: '/events/winter-adventure.jpg'
-cost: 'Tuition: $110/adult; Room & Board: $355–$820/person'
-registrationEmail: 'registration@ecrs.org'
-featured: true
+  venue: "The Y at Watson Woods"
+  address: "9620 Dry Run Road"
+  city: "Painted Post"
+  state: "NY"
+  zip: "14870"
+  website: "https://rochesterymca.org/locations/ymca-watson-woods"
+image: "/events/winter-adventure.jpg"
+cost: "Tuition: $110/adult; Room & Board: $355–$820/person"
+registrationEmail: "registration@ecrs.org"
 shortDescription: |
   A creative and joyous alternative holiday experience with diverse classes, evening community gatherings, buffet-style meals, and the chance to celebrate New Year's Eve in a uniquely ECRS way.
 venueDescription: 'Located on 600 acres near Corning, NY, The Y at Watson Woods conference center offers ideal positioning for winter activities and local attractions including the Corning Museum of Glass. The facility is wheelchair accessible.'

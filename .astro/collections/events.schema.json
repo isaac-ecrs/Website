@@ -81,10 +81,6 @@
           "type": "string",
           "format": "email"
         },
-        "featured": {
-          "type": "boolean",
-          "default": false
-        },
         "shortDescription": {
           "type": [
             "string",

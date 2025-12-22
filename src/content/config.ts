@@ -13,11 +13,12 @@ const eventsCollection = defineCollection({
       state: z.string(),
       zip: z.string(),
       website: z.string().url().optional(),
+      website: z.string().url().optional(),
     }),
+    image: z.string().optional(),
     image: z.string().optional(),
     cost: z.string(),
     registrationEmail: z.string().email(),
-    featured: z.boolean().default(false),
     shortDescription: z.string().nullish(),
     // Extended fields for detailed event pages
     venueDescription: z.string().optional(),

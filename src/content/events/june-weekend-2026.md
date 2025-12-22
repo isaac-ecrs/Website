@@ -1,16 +1,15 @@
 ---
-title: 'June Weekend'
+title: "June Weekend"
 startDate: 2026-06-12T18:00:00
 endDate: 2026-06-14T14:00:00
 location:
-  venue: 'Camp Onas'
-  address: '1495 Ottsville Road'
-  city: 'Ottsville'
-  state: 'PA'
-  zip: '18942'
-cost: 'Registration and details coming May 2026'
-registrationEmail: 'registration@ecrs.org'
-featured: false
+  venue: "Camp Onas"
+  address: "1495 Ottsville Road"
+  city: "Ottsville"
+  state: "PA"
+  zip: "18942"
+cost: "Registration and details coming May 2026"
+registrationEmail: "registration@ecrs.org"
 ---
 
 ## Ready to unplug and reconnect?

@@ -1,16 +1,15 @@
 ---
-title: 'Spring Weekend 2026'
+title: "Spring Weekend 2026"
 startDate: 2026-04-10T18:00:00
 endDate: 2026-04-12T14:00:00
 location:
-  venue: 'Pendle Hill'
-  address: '338 Plush Mill Road'
-  city: 'Wallingford'
-  state: 'PA'
-  zip: '19086'
-cost: 'Rates coming early in 2026'
-registrationEmail: 'registration@ecrs.org'
-featured: false
+  venue: "Pendle Hill"
+  address: "338 Plush Mill Road"
+  city: "Wallingford"
+  state: "PA"
+  zip: "19086"
+cost: "Rates coming early in 2026"
+registrationEmail: "registration@ecrs.org"
 ---
 
 ## Join us for a weekend of ECRS fun and community at a new location!

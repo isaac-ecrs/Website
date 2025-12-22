@@ -1,16 +1,15 @@
 ---
-title: 'Spring Fun Day'
+title: "Spring Fun Day"
 startDate: 2026-05-01T00:00:00
 endDate: 2026-05-01T23:59:59
 location:
-  venue: 'TBD'
-  address: 'Location in the Philly area TBD'
-  city: 'Philadelphia'
-  state: 'PA'
-  zip: ''
-cost: 'TBD'
-registrationEmail: 'registration@ecrs.org'
-featured: false
+  venue: "TBD"
+  address: "Location in the Philly area TBD"
+  city: "Philadelphia"
+  state: "PA"
+  zip: ""
+cost: "TBD"
+registrationEmail: "registration@ecrs.org"
 ---
 
 ## A whole day — packed with play!
