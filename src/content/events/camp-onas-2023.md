@@ -1,5 +1,6 @@
 ---
 title: 'Camp Onas 2023'
+eventSlug: 'camp-onas-2023'
 startDate: 2023-06-09T10:00:00
 endDate: 2023-06-11T17:00:00
 location:

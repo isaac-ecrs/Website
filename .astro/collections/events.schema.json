@@ -7,6 +7,10 @@
         "title": {
           "type": "string"
         },
+        "eventSlug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+-\\d{4}$"
+        },
         "startDate": {
           "anyOf": [
             {
@@ -252,7 +256,7 @@
         "ageNotes": {
           "type": "string"
         },
-        "classes": {
+        "classPeriods": {
           "type": "array",
           "items": {
             "type": "object",
@@ -265,11 +269,11 @@
                 "items": {
                   "type": "object",
                   "properties": {
-                    "title": {
+                    "class": {
                       "type": "string"
                     },
-                    "instructor": {
-                      "type": "string"
+                    "descriptionYear": {
+                      "type": "number"
                     },
                     "days": {
                       "type": "string"
@@ -277,16 +281,12 @@
                     "age": {
                       "type": "string"
                     },
-                    "description": {
-                      "type": "string"
-                    },
                     "note": {
                       "type": "string"
                     }
                   },
                   "required": [
-                    "title",
-                    "instructor"
+                    "class"
                   ],
                   "additionalProperties": false
                 }
@@ -305,6 +305,7 @@
       },
       "required": [
         "title",
+        "eventSlug",
         "startDate",
         "endDate",
         "location",

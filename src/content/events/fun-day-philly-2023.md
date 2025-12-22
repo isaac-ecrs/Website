@@ -1,5 +1,6 @@
 ---
 title: 'Fun Day in Philly 2023'
+eventSlug: 'fun-day-philly-2023'
 startDate: 2023-10-14T14:00:00
 endDate: 2023-10-14T20:15:00
 location:

@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && eslint && astro check && prettier --write .",
+    "process-images": "node scripts/process-images.js",
+    "build": "npm run process-images && astro build && eslint && astro check && prettier --write .",
     "preview": "astro preview",
     "astro": "astro",
     "cms:proxy": "decap-server",
@@ -29,6 +30,7 @@
     "prettier": "^3.7.4",
     "prettier-plugin-astro": "^0.14.1",
     "sass": "^1.77.8",
+    "sharp": "^0.33.1",
     "typescript": "^5.4.5"
   }
 }
