@@ -3,13 +3,13 @@ items:
     href: /
     isButton: false
   - label: About
-    href: "#about"
+    href: '#about'
     isButton: false
   - label: Events
     href: /events
     isButton: false
   - label: Contact
-    href: "/#contact"
+    href: '/#contact'
     isButton: false
   - label: Donate
     href: /donate

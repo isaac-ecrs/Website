@@ -1,15 +1,15 @@
 ---
-title: "Camp Onas 2024"
+title: 'Camp Onas 2024'
 startDate: 2024-06-07T10:00:00
 endDate: 2024-06-09T17:00:00
 location:
-  venue: "Camp Onas"
-  address: ""
-  city: "Ottsville"
-  state: "PA"
-  zip: ""
-cost: "Contact for pricing"
-registrationEmail: "registration@ecrs.org"
+  venue: 'Camp Onas'
+  address: ''
+  city: 'Ottsville'
+  state: 'PA'
+  zip: ''
+cost: 'Contact for pricing'
+registrationEmail: 'registration@ecrs.org'
 featured: false
 ---
 

@@ -7,7 +7,10 @@
     <div class="footer-columns">
       <div class="footer-column">
         <h4>Lorem Ipsum</h4>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod.</p>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do
+          eiusmod.
+        </p>
       </div>
 
       <div class="footer-column">
@@ -44,69 +47,69 @@
 </footer>
 
 <style lang="scss">
-@use '../styles/variables' as *;
-@use '../styles/mixins' as *;
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
 
-.site-footer {
-  background-color: $color-dark-brown;
-  color: white;
-  padding: 3em 0 1.5em;
+  .site-footer {
+    background-color: $color-dark-brown;
+    color: white;
+    padding: 3em 0 1.5em;
 
-  .footer-columns {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2em;
-    margin-bottom: 2em;
+    .footer-columns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2em;
+      margin-bottom: 2em;
 
-    @include mobile {
-      grid-template-columns: 1fr;
-      gap: 1.5em;
-    }
-  }
-
-  .footer-column {
-    h4 {
-      color: $color-accent;
-      font-size: 18px;
-      margin-bottom: 1em;
-      font-family: $font-heading;
-      font-weight: $font-weight-bold;
-      text-transform: uppercase;
-    }
-
-    ul {
-      list-style: none;
-
-      li {
-        margin-bottom: 0.5em;
+      @include mobile {
+        grid-template-columns: 1fr;
+        gap: 1.5em;
       }
     }
 
-    a {
-      color: white;
-      text-decoration: none;
-      transition: color $transition-fast;
-
-      &:hover {
+    .footer-column {
+      h4 {
         color: $color-accent;
+        font-size: 18px;
+        margin-bottom: 1em;
+        font-family: $font-heading;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+      }
+
+      ul {
+        list-style: none;
+
+        li {
+          margin-bottom: 0.5em;
+        }
+      }
+
+      a {
+        color: white;
+        text-decoration: none;
+        transition: color $transition-fast;
+
+        &:hover {
+          color: $color-accent;
+        }
+      }
+
+      p {
+        font-size: 14px;
+        line-height: 1.6;
       }
     }
 
-    p {
-      font-size: 14px;
-      line-height: 1.6;
+    .footer-bottom {
+      border-top: 1px solid rgba(white, 0.1);
+      padding-top: 1em;
+      text-align: center;
+
+      p {
+        font-size: 13px;
+        opacity: 0.8;
+      }
     }
   }
-
-  .footer-bottom {
-    border-top: 1px solid rgba(white, 0.1);
-    padding-top: 1em;
-    text-align: center;
-
-    p {
-      font-size: 13px;
-      opacity: 0.8;
-    }
-  }
-}
 </style>

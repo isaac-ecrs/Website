@@ -12,21 +12,32 @@ interface Props {
   linkText?: string;
 }
 
-const { icon, image, title, description, link = '#', linkText = 'Learn More' } = Astro.props;
+const {
+  icon,
+  image,
+  title,
+  description,
+  link = '#',
+  linkText = 'Learn More',
+} = Astro.props;
 ---
 
 <Card href={link} variant="vertical" class="animate-fade-bottom">
   <div slot="media">
-    {image && (
-      <div class="feature-image">
-        <Image src={image} alt={title} class="feature-card-image" />
-      </div>
-    )}
-    {icon && !image && (
-      <div class="feature-icon">
-        <Image src={icon} alt={title} />
-      </div>
-    )}
+    {
+      image && (
+        <div class="feature-image">
+          <Image src={image} alt={title} class="feature-card-image" />
+        </div>
+      )
+    }
+    {
+      icon && !image && (
+        <div class="feature-icon">
+          <Image src={icon} alt={title} />
+        </div>
+      )
+    }
   </div>
 
   <div slot="content">
@@ -38,54 +49,54 @@ const { icon, image, title, description, link = '#', linkText = 'Learn More' } =
 </Card>
 
 <style lang="scss">
-@use '../styles/variables' as *;
-@use '../styles/mixins' as *;
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
 
-.feature-image {
-  width: 100%;
-  height: 200px;
-  border-radius: $border-radius-card-image;
-  overflow: hidden;
-  margin: 0 0 1.5em 0;
-
-  img {
+  .feature-image {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: 200px;
     border-radius: $border-radius-card-image;
+    overflow: hidden;
+    margin: 0 0 1.5em 0;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: $border-radius-card-image;
+    }
   }
-}
 
-.feature-icon {
-  width: 100px;
-  height: 100px;
-  border-radius: $border-radius-circle;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.5em;
-  background-color: $color-accent;
+  .feature-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: $border-radius-circle;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5em;
+    background-color: $color-accent;
 
-  img {
-    width: 60%;
-    height: 60%;
-    object-fit: contain;
+    img {
+      width: 60%;
+      height: 60%;
+      object-fit: contain;
+    }
   }
-}
 
-.feature-title {
-  color: $color-primary;
-  margin-bottom: 0.75em;
-  font-size: 24px;
-}
+  .feature-title {
+    color: $color-primary;
+    margin-bottom: 0.75em;
+    font-size: 24px;
+  }
 
-.feature-description {
-  color: $color-text-dark;
-  margin-bottom: 1em;
-}
+  .feature-description {
+    color: $color-text-dark;
+    margin-bottom: 1em;
+  }
 
-.feature-card-image {
-  display: block;
-}
+  .feature-card-image {
+    display: block;
+  }
 </style>
