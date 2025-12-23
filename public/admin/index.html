@@ -66,14 +66,13 @@
     <div id="nc-root"></div>
 
     <script>
-      // Check if Netlify Identity is available
-      if (typeof netlifyIdentity === 'undefined') {
-        console.log('Netlify Identity not loaded');
-      }
+      // Enable manual CMS initialization so we can set branch dynamically
+      window.CMS_MANUAL_INIT = true;
 
-      // Log config path
-      console.log('Config file path:', '/admin/config.yml');
-      console.log('Base URL:', window.location.origin);
+      // Determine which branch to use based on environment
+      var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      var cmsBranch = isLocal ? 'develop' : 'main';
+      console.log('CMS branch:', cmsBranch, '(isLocal:', isLocal + ')');
     </script>
 
     <script src="https://unpkg.com/netlify-identity-widget"></script>
@@ -90,6 +89,19 @@
             'netlifyIdentity available:',
             typeof window.netlifyIdentity !== 'undefined'
           );
+
+          // Initialize CMS with dynamic branch
+          if (window.CMS) {
+            window.CMS.init({
+              config: {
+                load_config_file: true,
+                backend: {
+                  branch: cmsBranch
+                },
+                local_backend: isLocal
+              }
+            });
+          }
 
           if (!window.CMS) {
             const errorHTML = `

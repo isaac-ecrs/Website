@@ -5,8 +5,7 @@ backend:
 # Enable editorial workflow (Draft -> In Review -> Ready -> Published)
 publish_mode: editorial_workflow
 
-# Local backend for development/testing
-local_backend: true
+# Local backend is enabled dynamically in index.html for localhost
 
 media_folder: src/assets/images
 public_folder: /assets/images
