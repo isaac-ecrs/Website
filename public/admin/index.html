@@ -65,16 +65,6 @@
   <body>
     <div id="nc-root"></div>
 
-    <script>
-      // Enable manual CMS initialization so we can set branch dynamically
-      window.CMS_MANUAL_INIT = true;
-
-      // Determine which branch to use based on environment
-      var isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-      var cmsBranch = isLocal ? 'develop' : 'main';
-      console.log('CMS branch:', cmsBranch, '(isLocal:', isLocal + ')');
-    </script>
-
     <script src="https://unpkg.com/netlify-identity-widget"></script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
@@ -89,19 +79,6 @@
             'netlifyIdentity available:',
             typeof window.netlifyIdentity !== 'undefined'
           );
-
-          // Initialize CMS with dynamic branch
-          if (window.CMS) {
-            window.CMS.init({
-              config: {
-                load_config_file: true,
-                backend: {
-                  branch: cmsBranch
-                },
-                local_backend: isLocal
-              }
-            });
-          }
 
           if (!window.CMS) {
             const errorHTML = `

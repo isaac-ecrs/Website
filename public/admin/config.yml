@@ -1,11 +1,12 @@
 backend:
   name: git-gateway
-  branch: main
+  branch: develop
 
 # Enable editorial workflow (Draft -> In Review -> Ready -> Published)
 publish_mode: editorial_workflow
 
-# Local backend is enabled dynamically in index.html for localhost
+# Local backend for development (ignored in production)
+local_backend: true
 
 media_folder: src/assets/images
 public_folder: /assets/images
