@@ -127,12 +127,22 @@ collections:
               hint: "Optional link to venue's website",
             }
       - {
-          label: 'Event Image',
-          name: 'image',
-          widget: 'string',
+          label: 'Hero Image',
+          name: 'heroImage',
+          widget: 'image',
           required: false,
-          placeholder: '/events/winter-adventure.jpg',
-          hint: 'Path to event image in /public/events/ folder',
+          media_folder: 'src/assets/images/events',
+          public_folder: '/assets/images/events',
+          hint: 'Large banner image displayed at top of event page. Recommended: 1920x600px',
+        }
+      - {
+          label: 'Body Image',
+          name: 'bodyImage',
+          widget: 'image',
+          required: false,
+          media_folder: 'src/assets/images/events',
+          public_folder: '/assets/images/events',
+          hint: 'Image displayed in venue section and content area. Recommended: 800x600px',
         }
       - {
           label: 'Cost Summary',

@@ -14,8 +14,8 @@ const { event, isPast = false, showImage = true, href } = Astro.props;
 // Check if event actually has a valid image
 const hasValidImage =
   showImage &&
-  typeof event.data.image === 'string' &&
-  event.data.image.trim().length > 0;
+  typeof event.data.heroImage === 'string' &&
+  event.data.heroImage.trim().length > 0;
 
 const startDate = new Date(event.data.startDate);
 const endDate = new Date(event.data.endDate);
@@ -58,7 +58,7 @@ const processedDescription = event.data.shortDescription
   {
     hasValidImage && (
       <div slot="media" class="event-image">
-        <img src={event.data.image} alt={event.data.title} />
+        <img src={event.data.heroImage} alt={event.data.title} />
       </div>
     )
   }

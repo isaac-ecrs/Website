@@ -75,7 +75,10 @@
           ],
           "additionalProperties": false
         },
-        "image": {
+        "heroImage": {
+          "type": "string"
+        },
+        "bodyImage": {
           "type": "string"
         },
         "cost": {
