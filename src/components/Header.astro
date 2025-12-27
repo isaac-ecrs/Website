@@ -15,7 +15,9 @@ const navItems = navData?.data.items || [];
         <Image src={logoImg} alt="ECRS Logo" />
       </a>
     </div>
-    <nav class="main-nav">
+
+    <!-- Desktop Navigation -->
+    <nav class="main-nav desktop-nav">
       <ul>
         {
           navItems.map((item) => (
@@ -31,8 +33,68 @@ const navItems = navData?.data.items || [];
         }
       </ul>
     </nav>
+
+    <!-- Mobile Menu Button -->
+    <button
+      class="mobile-menu-toggle"
+      aria-label="Toggle mobile menu"
+      aria-expanded="false"
+      aria-controls="mobile-nav"
+    >
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
   </div>
+
+  <!-- Mobile Navigation Drawer -->
+  <nav class="mobile-nav" id="mobile-nav" aria-hidden="true">
+    <ul>
+      {
+        navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class={item.isButton ? 'btn btn--primary' : ''}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
 </header>
+
+<script>
+  // WHY: Event listener on astro:page-load handles view transitions
+  // Without this, the script would only run on initial page load
+  document.addEventListener('astro:page-load', () => {
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+
+    if (!menuToggle || !mobileNav) return;
+
+    menuToggle.addEventListener('click', () => {
+      const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+
+      menuToggle.setAttribute('aria-expanded', String(!isOpen));
+      menuToggle.classList.toggle('is-active');
+      mobileNav.classList.toggle('is-open');
+      mobileNav.setAttribute('aria-hidden', String(isOpen));
+    });
+
+    // Close menu when clicking a link
+    mobileNav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.classList.remove('is-active');
+        mobileNav.classList.remove('is-open');
+        mobileNav.setAttribute('aria-hidden', 'true');
+      });
+    });
+  });
+</script>
 
 <style lang="scss">
   @use '../styles/variables' as *;
@@ -40,7 +102,8 @@ const navItems = navData?.data.items || [];
 
   .site-header {
     position: fixed;
-    top: 28px;
+    // WHY: Use CSS variable to stay in sync with TopHeader height from _variables.scss
+    top: var(--header-top-height);
     left: 0;
     right: 0;
     background-color: white;
@@ -64,7 +127,8 @@ const navItems = navData?.data.items || [];
       }
     }
 
-    .main-nav {
+    // Desktop navigation
+    .desktop-nav {
       ul {
         display: flex;
         list-style: none;
@@ -72,7 +136,7 @@ const navItems = navData?.data.items || [];
         align-items: center;
 
         @include mobile {
-          display: none; // Mobile menu implementation later
+          display: none;
         }
       }
 
@@ -97,6 +161,107 @@ const navItems = navData?.data.items || [];
           &:hover {
             color: white;
           }
+        }
+      }
+    }
+  }
+
+  // Mobile menu toggle button (hamburger)
+  .mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+
+    @include mobile {
+      display: flex;
+    }
+
+    .hamburger-line {
+      display: block;
+      width: 100%;
+      height: 3px;
+      background-color: $color-primary;
+      border-radius: 2px;
+      transition: all $transition-fast;
+    }
+
+    // Animate to X when active
+    &.is-active {
+      .hamburger-line:nth-child(1) {
+        transform: translateY(8.5px) rotate(45deg);
+      }
+
+      .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+
+      .hamburger-line:nth-child(3) {
+        transform: translateY(-8.5px) rotate(-45deg);
+      }
+    }
+  }
+
+  // Mobile navigation drawer
+  .mobile-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    box-shadow: $shadow-subtle;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height $transition-fast, padding $transition-fast;
+
+    @include mobile {
+      display: block;
+    }
+
+    &.is-open {
+      max-height: 400px;
+      padding: 1em 0;
+    }
+
+    ul {
+      list-style: none;
+      text-align: center;
+    }
+
+    li {
+      padding: 0.75em 0;
+    }
+
+    a {
+      color: $color-primary;
+      text-decoration: none;
+      font-family: $font-heading;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+      font-size: 16px;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $color-accent;
+      }
+
+      &.btn {
+        display: inline-block;
+        color: white;
+        padding: 10px 24px;
+        font-size: 14px;
+        margin-top: 0.5em;
+
+        &:hover {
+          color: white;
         }
       }
     }

@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
-import { marked } from 'marked';
+import { renderMarkdown } from '../lib/markdown';
 
 const page = await getEntry('pages', 'donate');
 if (!page || page.data.pageType !== 'donate') {
@@ -22,7 +22,7 @@ const { hero, intro, taxInfo, formPlaceholderId } = page.data;
   <!-- Intro Section -->
   <section class="section section--cream">
     <div class="container">
-      <div class="intro-content" set:html={marked(intro)} />
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
     </div>
   </section>
 
@@ -35,7 +35,7 @@ const { hero, intro, taxInfo, formPlaceholderId } = page.data;
             <div class="tax-icon">
               <i class="fa-solid fa-hand-holding-heart" />
             </div>
-            <div class="tax-content" set:html={marked(taxInfo)} />
+            <div class="tax-content" set:html={renderMarkdown(taxInfo)} />
           </div>
         </div>
       </section>

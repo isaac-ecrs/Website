@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import ResourceCard from '../components/ResourceCard.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
-import { marked } from 'marked';
+import { renderMarkdown } from '../lib/markdown';
 
 const page = await getEntry('pages', 'resources');
 if (!page || page.data.pageType !== 'resources') {
@@ -25,7 +25,7 @@ const { hero, intro, sections } = page.data;
     intro && (
       <section class="section section--cream">
         <div class="container">
-          <div class="intro-content" set:html={marked(intro)} />
+          <div class="intro-content" set:html={renderMarkdown(intro)} />
         </div>
       </section>
     )
@@ -43,7 +43,10 @@ const { hero, intro, sections } = page.data;
             <p class="section-description">{section.description}</p>
           )}
           {section.content && (
-            <div class="section-content" set:html={marked(section.content)} />
+            <div
+              class="section-content"
+              set:html={renderMarkdown(section.content)}
+            />
           )}
           {section.links && section.links.length > 0 && (
             <div class="resources-grid">

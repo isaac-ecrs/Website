@@ -4,6 +4,17 @@
 @use 'animations';
 
 // ============================================
+// CSS CUSTOM PROPERTIES
+// WHY: Expose SCSS variables as CSS custom properties for use in inline styles
+// and JavaScript. Keeps header heights in sync across components.
+// ============================================
+:root {
+  --header-top-height: #{$header-top-height};
+  --header-main-height: #{$header-main-height};
+  --header-total-height: #{$header-total-height};
+}
+
+// ============================================
 // RESET & NORMALIZE
 // ============================================
 * {

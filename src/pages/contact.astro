@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import ContactCard from '../components/ContactCard.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
-import { marked } from 'marked';
+import { renderMarkdown } from '../lib/markdown';
 
 const page = await getEntry('pages', 'contact');
 if (!page || page.data.pageType !== 'contact') {
@@ -23,7 +23,7 @@ const { hero, intro, formPlaceholderId, contactsTitle, contacts } = page.data;
   <!-- Intro Section -->
   <section class="section section--cream">
     <div class="container">
-      <div class="intro-content" set:html={marked(intro)} />
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
     </div>
   </section>
 

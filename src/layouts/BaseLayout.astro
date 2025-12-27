@@ -50,8 +50,9 @@ const { title, description = 'ECRS - Come to Play. Play to Learn' } =
   <body>
     <TopHeader />
     <Header />
-    <!-- WHY 120px: Offsets content below the fixed TopHeader + Header -->
-    <main style="padding-top: 120px;">
+    <!-- WHY: Offsets content below the fixed TopHeader + Header. Uses CSS variable
+         from global.scss so this stays in sync with _variables.scss header heights. -->
+    <main style="padding-top: var(--header-total-height);">
       <slot />
     </main>
     <Footer />

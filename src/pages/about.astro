@@ -7,7 +7,7 @@ import IconCard from '../components/IconCard.astro';
 import PrincipleCard from '../components/PrincipleCard.astro';
 import OfferingsCard from '../components/OfferingsCard.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
-import { marked } from 'marked';
+import { renderMarkdown } from '../lib/markdown';
 
 const page = await getEntry('pages', 'about');
 if (!page || page.data.pageType !== 'about') {
@@ -51,7 +51,7 @@ function getActivityIcon(title: string): string {
   <!-- Intro Section -->
   <section class="section section--cream">
     <div class="container">
-      <div class="intro-content" set:html={marked(intro)} />
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
     </div>
   </section>
 
@@ -60,7 +60,10 @@ function getActivityIcon(title: string): string {
     philosophy && (
       <section class="section section--white">
         <div class="container">
-          <div class="philosophy-content" set:html={marked(philosophy)} />
+          <div
+            class="philosophy-content"
+            set:html={renderMarkdown(philosophy)}
+          />
         </div>
       </section>
     )

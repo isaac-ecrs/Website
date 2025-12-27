@@ -169,7 +169,7 @@ const isFutureEvent = startDate > new Date();
                   <div class="venue-info-text">
                     {hasValidAddress ? (
                       <a
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(location)}`}
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(location)}`}
                       >
                         {event.data.location.address}
                         <br />

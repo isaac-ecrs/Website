@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import EventCard from '../../components/EventCard.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
-import { marked } from 'marked';
+import { renderMarkdown } from '../../lib/markdown';
 
 const allEvents = await getCollection('events');
 const upcomingEvents = allEvents
@@ -42,7 +42,7 @@ const hasValidAddress = (eventData: any) => {
 
 // Process featured event's shortDescription markdown if it exists
 const featuredDescription = featuredEvent?.data.shortDescription
-  ? marked.parse(featuredEvent.data.shortDescription, { async: false })
+  ? renderMarkdown(featuredEvent.data.shortDescription)
   : null;
 ---
 
@@ -139,7 +139,7 @@ const featuredDescription = featuredEvent?.data.shortDescription
                       <div class="featured-event-info-text">
                         {hasValidAddress(featuredEvent.data) ? (
                           <a
-                            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(getLocationString(featuredEvent.data))}`}
+                            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(getLocationString(featuredEvent.data))}`}
                           >
                             {featuredEvent.data.location.address}
                             <br />

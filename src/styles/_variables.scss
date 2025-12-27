@@ -48,6 +48,15 @@ $spacing-xl: 4em;
 $section-padding-desktop: 54px;
 $section-padding-mobile: 50px;
 
+// ============================================
+// HEADER HEIGHTS
+// WHY: Centralize header dimensions so main content padding-top stays in sync.
+// If header heights change, update these values in one place.
+// ============================================
+$header-top-height: 28px;
+$header-main-height: 92px;
+$header-total-height: $header-top-height + $header-main-height; // 120px
+
 $container-width: 80%;
 $container-max-width: 1080px;
 

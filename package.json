@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "process-images": "node scripts/process-images.js",
-    "build": "npm run process-images && astro build && eslint && astro check && prettier --write .",
+    "build": "npm run lint && npm run process-images && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "cms:proxy": "decap-server",
@@ -19,6 +19,7 @@
     "@astrojs/netlify": "^6.6.3",
     "@fortawesome/fontawesome-free": "^7.1.0",
     "astro": "^5.16.6",
+    "isomorphic-dompurify": "^2.35.0",
     "marked": "^17.0.1"
   },
   "devDependencies": {

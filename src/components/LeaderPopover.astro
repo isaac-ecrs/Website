@@ -1,8 +1,9 @@
 ---
 import LeaderCard from './LeaderCard.astro';
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  leader: any;
+  leader: CollectionEntry<'leaders'>;
   dialogId: string;
 }
 

@@ -5,7 +5,7 @@ import Hero from '../components/Hero.astro';
 import PricingCard from '../components/PricingCard.astro';
 import IconCard from '../components/IconCard.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
-import { marked } from 'marked';
+import { renderMarkdown } from '../lib/markdown';
 
 const page = await getEntry('pages', 'membership');
 if (!page || page.data.pageType !== 'membership') {
@@ -39,7 +39,7 @@ const benefitIcons = [
   <!-- Intro Section -->
   <section class="section section--cream">
     <div class="container">
-      <div class="intro-content" set:html={marked(intro)} />
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
     </div>
   </section>
 

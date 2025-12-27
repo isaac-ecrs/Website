@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page Not Found" description="The page you're looking for doesn't exist.">
+  <section class="section section--cream not-found">
+    <div class="container">
+      <div class="not-found-content">
+        <h1>Page Not Found</h1>
+        <p class="not-found-message">
+          Sorry, the page you're looking for doesn't exist or has been moved.
+        </p>
+        <div class="not-found-actions">
+          <a href="/" class="btn btn--primary">Back to Home</a>
+          <a href="/events" class="btn btn--secondary">View Events</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .not-found {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  .not-found-content {
+    max-width: 600px;
+    margin: 0 auto;
+
+    h1 {
+      color: $color-primary;
+      font-size: 48px;
+      margin-bottom: 0.5em;
+
+      @include mobile {
+        font-size: 36px;
+      }
+    }
+  }
+
+  .not-found-message {
+    font-size: 20px;
+    color: $color-text-dark;
+    line-height: 1.6;
+    margin-bottom: 2em;
+
+    @include mobile {
+      font-size: 18px;
+    }
+  }
+
+  .not-found-actions {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>
