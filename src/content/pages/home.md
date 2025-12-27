@@ -5,18 +5,18 @@ hero:
   title: 'Welcome to ECRS – Come to Play. Play to Learn'
   subtitle: 'ECRS is an intergenerational organization providing creative and engaging activities that are fun, develop leadership and build community.'
   backgroundImage: '../../assets/images/hero-bg.jpg'
-  ctaText: 'Lorem Ipsum'
-  ctaLink: '#programs'
+  ctaText: 'View Upcoming Events'
+  ctaLink: '/events'
 featureCards:
   - title: 'What We Do'
     icon: '../../assets/images/icons/activities.svg'
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.'
+    description: 'Develop leadership & build community for the whole family through play and the arts.'
   - title: 'Upcoming Events'
     icon: '../../assets/images/icons/events.svg'
-    description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo.'
-  - title: 'Testemonials'
+    description: 'Playful creativity and community. Come grow along with us in body, mind, and spirit!'
+  - title: 'Testimonials'
     icon: '../../assets/images/icons/testimonials.svg'
-    description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla.'
+    description: "ECRS is the joyful community you didn't know you were missing in your modern life."
 about: |
   ## About
 

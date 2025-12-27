@@ -12,6 +12,7 @@ const { name, price, duration, description, highlighted = false } = Astro.props;
 
 <article
   class={`pricing-card ${highlighted ? 'pricing-card--highlighted' : ''}`}
+  data-reveal="bottom"
 >
   <div class="pricing-card__header">
     <h3 class="pricing-card__name">{name}</h3>

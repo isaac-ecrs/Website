@@ -63,7 +63,7 @@ const featuredDescription = featuredEvent?.data.shortDescription
           {featuredEvent && (
             <div class="container">
               <div class="featured-event-container">
-                <div class="featured-event-left">
+                <div class="featured-event-left" data-reveal="left">
                   {featuredEvent.data.heroImage && (
                     <div class="featured-event-image">
                       <img
@@ -79,7 +79,7 @@ const featuredDescription = featuredEvent?.data.shortDescription
                     Details and Registration
                   </a>
                 </div>
-                <div class="featured-event-content">
+                <div class="featured-event-content" data-reveal="right">
                   <h2>{featuredEvent.data.title}</h2>
                   <div class="featured-event-info">
                     <div class="featured-event-info-item">

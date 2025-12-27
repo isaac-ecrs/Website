@@ -24,6 +24,8 @@ sections:
       ECRS was founded with a mission to develop recreation leaders who could bring the joy of cooperative play to their communities. The Leadership Development Committee played a key role in evaluating competencies and helping members grow as facilitators and teachers.
 
       From the beginning, ECRS emphasized learning by doing. Participants didn't just attend classes—they learned to lead them. This apprenticeship model remains central to our approach today.
+    image: /images/history.jpg
+    imageCaption: ECRS members enjoying cooperative recreation through the decades
   - title: ECRS Evolving
     content: |
       Over the decades, ECRS has expanded its programming to include new forms of creative expression. While we've maintained our traditional core activities—folk dancing, singing, games, and dramatics—we've also embraced new offerings.

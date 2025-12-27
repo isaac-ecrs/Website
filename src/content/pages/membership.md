@@ -20,7 +20,7 @@ benefits:
   - title: Support ECRS
     description: Help sustain an organization that's been building community since 1940
 pricingIntro: |
-  Annual dues are affordable, and lifetime membership options are available for those who want to make a long-term commitment to ECRS.
+  Annual dues are affordable, and lifetime membership options are available for those who want to make a long-term commitment to ECRS. Annual dues expire December 31.
 pricingTiers:
   - name: Annual - Single
     price: $25

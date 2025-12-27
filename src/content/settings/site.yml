@@ -1,0 +1,29 @@
+organizationName: Eastern Cooperative Recreation School
+tagline: Come grow with us in body, mind, and spirit.
+
+footer:
+  aboutText: A nonprofit organization founded in 1940 to provide cooperative recreation as a way to rest, refresh, and build community.
+  copyrightText: All rights reserved.
+  columns:
+    - title: Get to Know Us
+      links:
+        - label: Who We Are
+          href: /about
+        - label: Our History
+          href: /history
+        - label: Our Leadership
+          href: /leaders
+        - label: What Makes Us Special
+          href: /special
+    - title: Get Involved
+      links:
+        - label: Upcoming Events
+          href: /events
+        - label: Become a Member
+          href: /membership
+        - label: Make a Donation
+          href: /donate
+        - label: Resources
+          href: /resources
+  contactText: Questions? Reach out to one of our regional contacts.
+  contactLink: /contact

@@ -198,7 +198,7 @@ const isFutureEvent = startDate > new Date();
               )}
             </div>
             {event.data.bodyImage && (
-              <div class="venue-image">
+              <div class="venue-image" data-reveal="right">
                 <img
                   src={event.data.bodyImage}
                   alt={event.data.location.venue}

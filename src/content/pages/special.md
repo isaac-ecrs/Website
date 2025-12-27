@@ -22,4 +22,5 @@ principles:
 ctaTitle: Support Our Mission
 ctaText: Help us continue creating joyous, creative events for our community
 ctaLink: /donate
+ctaButtonText: Donate Now
 ---

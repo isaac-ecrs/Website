@@ -5,6 +5,7 @@ interface Props {
   isPast?: boolean; // For dimmed styling (events only)
   hasMedia?: boolean; // Whether the card has media (for horizontal layout)
   class?: string; // Additional classes
+  'data-reveal'?: string; // Animation direction for scroll reveal
 }
 
 const {
@@ -13,11 +14,13 @@ const {
   isPast = false,
   hasMedia = false,
   class: additionalClass = '',
+  'data-reveal': dataReveal,
 } = Astro.props;
 ---
 
 <article
   class={`card card--${variant} ${isPast ? 'card--past' : ''} ${hasMedia ? 'card--has-media' : 'card--no-media'} ${additionalClass}`}
+  data-reveal={dataReveal}
 >
   <slot name="media" />
   <slot name="content" />

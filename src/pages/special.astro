@@ -10,7 +10,8 @@ if (!page || page.data.pageType !== 'special') {
   throw new Error('Special page content not found');
 }
 
-const { hero, intro, principles, ctaTitle, ctaText, ctaLink } = page.data;
+const { hero, intro, principles, ctaTitle, ctaText, ctaLink, ctaButtonText } =
+  page.data;
 
 // Font Awesome icons for principles
 const principleIcons = [
@@ -64,7 +65,7 @@ const principleIcons = [
           {ctaText && <p class="cta-text">{ctaText}</p>}
           {ctaLink && (
             <a href={ctaLink} class="btn btn--primary">
-              Donate Now
+              {ctaButtonText || 'Learn More'}
             </a>
           )}
         </div>

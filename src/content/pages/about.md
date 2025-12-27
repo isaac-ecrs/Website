@@ -10,6 +10,13 @@ intro: |
   We believe that play is fundamental to human experience, offering benefits like community building and personal growth. ECRS provides creative and engaging activities for all ages that are fun, build community and develop leadership.
 philosophy: |
   At ECRS, we believe that recreation is more than just entertainment—it's a pathway to enriched living. Our programs emphasize enjoyment, creativity, cooperation, and personal growth. We create spaces where people of all ages can connect, learn, and play together in a warm and welcoming environment.
+guidingPrinciples:
+  - title: Recreation Has Intrinsic Value
+    description: Play is not frivolous—it enriches lives, builds community, and develops the whole person.
+  - title: Recreation Fulfills Human Needs
+    description: Creative expression and cooperative play are essential for mental, physical, and social well-being.
+  - title: Personal Growth Over Competition
+    description: We value individual development and self-expression over winning or outperforming others.
 activities:
   - title: Games
     icon: /assets/images/icons/games.svg
@@ -29,6 +36,19 @@ activities:
   - title: Theory
     icon: /assets/images/icons/theory.svg
     description: Leadership practices and program planning
+additionalOfferings:
+  - Creative writing
+  - Outdoor exploration
+  - Drumming circles
+  - Personality development
+  - Mindfulness practices
+typicalProgramming:
+  - 5-day Winter Adventure retreat
+  - Camping weekends at Camp Onas
+  - Retreat-style weekends at various venues
+  - Local one-day Fun Day events
+  - Evening entertainment programs
+  - Children's programming for ages 11 and under
 subPages:
   - title: History of ECRS
     description: Learn about our founding in 1940 and our evolution over the decades

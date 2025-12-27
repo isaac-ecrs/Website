@@ -55,6 +55,33 @@
 }
 
 // ============================================
+// INITIAL STATES FOR SCROLL REVEAL
+// ============================================
+[data-reveal='fade'] {
+  opacity: 0;
+}
+
+[data-reveal='left'] {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+[data-reveal='right'] {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+[data-reveal='top'] {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+[data-reveal='bottom'] {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+// ============================================
 // UTILITY CLASSES
 // ============================================
 .animate-fade-in {

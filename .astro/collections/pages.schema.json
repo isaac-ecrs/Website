@@ -121,6 +121,25 @@
             "philosophy": {
               "type": "string"
             },
+            "guidingPrinciples": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            },
             "activities": {
               "type": "array",
               "items": {
@@ -141,6 +160,18 @@
                   "description"
                 ],
                 "additionalProperties": false
+              }
+            },
+            "additionalOfferings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "typicalProgramming": {
+              "type": "array",
+              "items": {
+                "type": "string"
               }
             },
             "subPages": {
@@ -285,6 +316,9 @@
               "type": "string"
             },
             "ctaLink": {
+              "type": "string"
+            },
+            "ctaButtonText": {
               "type": "string"
             }
           },
@@ -539,6 +573,52 @@
             "title",
             "hero",
             "intro"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "pageType": {
+              "type": "string",
+              "const": "testimonials"
+            },
+            "title": {
+              "type": "string"
+            },
+            "hero": {
+              "$ref": "#/definitions/pages/anyOf/0/properties/hero"
+            },
+            "intro": {
+              "type": "string"
+            },
+            "testimonials": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "quote": {
+                    "type": "string"
+                  },
+                  "author": {
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "quote"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "pageType",
+            "title",
+            "hero",
+            "testimonials"
           ],
           "additionalProperties": false
         }

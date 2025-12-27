@@ -243,7 +243,17 @@ const pagesCollection = defineCollection({
       hero: heroSchema,
       intro: z.string(),
       philosophy: z.string().optional(),
+      guidingPrinciples: z
+        .array(
+          z.object({
+            title: z.string(),
+            description: z.string(),
+          })
+        )
+        .optional(),
       activities: z.array(activitySchema).optional(),
+      additionalOfferings: z.array(z.string()).optional(),
+      typicalProgramming: z.array(z.string()).optional(),
       subPages: z.array(subPageCardSchema).optional(),
       ctaText: z.string().optional(),
       ctaLink: z.string().optional(),
@@ -267,6 +277,7 @@ const pagesCollection = defineCollection({
       ctaTitle: z.string().optional(),
       ctaText: z.string().optional(),
       ctaLink: z.string().optional(),
+      ctaButtonText: z.string().optional(),
     }),
     // Resources page schema
     z.object({
@@ -307,6 +318,20 @@ const pagesCollection = defineCollection({
       taxInfo: z.string().optional(),
       formPlaceholderId: z.string().optional(),
     }),
+    // Testimonials page schema
+    z.object({
+      pageType: z.literal('testimonials'),
+      title: z.string(),
+      hero: heroSchema,
+      intro: z.string().optional(),
+      testimonials: z.array(
+        z.object({
+          quote: z.string(),
+          author: z.string().optional(),
+          role: z.string().optional(),
+        })
+      ),
+    }),
   ]),
 });
 
@@ -323,10 +348,37 @@ const navigationCollection = defineCollection({
   }),
 });
 
+// Site settings collection (footer, global content)
+const settingsCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    organizationName: z.string(),
+    tagline: z.string(),
+    footer: z.object({
+      aboutText: z.string(),
+      copyrightText: z.string(),
+      columns: z.array(
+        z.object({
+          title: z.string(),
+          links: z.array(
+            z.object({
+              label: z.string(),
+              href: z.string(),
+            })
+          ),
+        })
+      ),
+      contactText: z.string(),
+      contactLink: z.string(),
+    }),
+  }),
+});
+
 export const collections = {
   events: eventsCollection,
   pages: pagesCollection,
   navigation: navigationCollection,
+  settings: settingsCollection,
   leaders: leadersCollection,
   classes: classesCollection,
 };

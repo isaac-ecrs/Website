@@ -53,7 +53,10 @@ const { hero, intro, nameExplanation, sections } = page.data;
                 <div set:html={marked(section.content)} />
               </div>
               {section.image && (
-                <div class="history-image">
+                <div
+                  class="history-image"
+                  data-reveal={index % 2 === 0 ? 'right' : 'left'}
+                >
                   <img
                     src={section.image}
                     alt={section.imageCaption || section.title}

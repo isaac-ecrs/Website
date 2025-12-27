@@ -464,6 +464,53 @@ collections:
               required: false,
             }
 
+      # Testimonials Page
+      - name: testimonials
+        label: Testimonials Page
+        file: src/content/pages/testimonials.md
+        fields:
+          - {
+              label: 'Page Type',
+              name: 'pageType',
+              widget: 'hidden',
+              default: 'testimonials',
+            }
+          - { label: 'Title', name: 'title', widget: 'string' }
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Subtitle',
+                  name: 'subtitle',
+                  widget: 'text',
+                  required: false,
+                }
+          - {
+              label: 'Introduction',
+              name: 'intro',
+              widget: 'text',
+              required: false,
+            }
+          - label: 'Testimonials'
+            name: 'testimonials'
+            widget: 'list'
+            fields:
+              - { label: 'Quote', name: 'quote', widget: 'text' }
+              - {
+                  label: 'Author Name',
+                  name: 'author',
+                  widget: 'string',
+                  required: false,
+                }
+              - {
+                  label: 'Author Role/Title',
+                  name: 'role',
+                  widget: 'string',
+                  required: false,
+                }
+
   - name: events
     label: Events
     folder: src/content/events
@@ -583,3 +630,64 @@ collections:
           widget: 'markdown',
           hint: 'Full event description with details, schedule, policies, etc. Supports markdown formatting',
         }
+
+  # Site Settings
+  - name: settings
+    label: Site Settings
+    files:
+      - name: site
+        label: Global Settings
+        file: src/content/settings/site.yml
+        fields:
+          - {
+              label: 'Organization Name',
+              name: 'organizationName',
+              widget: 'string',
+              hint: 'Full name used in copyright and other places',
+            }
+          - {
+              label: 'Tagline',
+              name: 'tagline',
+              widget: 'string',
+              hint: 'Displayed in footer and potentially elsewhere',
+            }
+          - label: 'Footer'
+            name: 'footer'
+            widget: 'object'
+            fields:
+              - {
+                  label: 'About Text',
+                  name: 'aboutText',
+                  widget: 'text',
+                  hint: 'Brief description in the footer about column',
+                }
+              - {
+                  label: 'Copyright Text',
+                  name: 'copyrightText',
+                  widget: 'string',
+                  default: 'All rights reserved.',
+                }
+              - label: 'Navigation Columns'
+                name: 'columns'
+                widget: 'list'
+                max: 2
+                fields:
+                  - { label: 'Column Title', name: 'title', widget: 'string' }
+                  - label: 'Links'
+                    name: 'links'
+                    widget: 'list'
+                    fields:
+                      - { label: 'Label', name: 'label', widget: 'string' }
+                      - { label: 'URL', name: 'href', widget: 'string' }
+              - {
+                  label: 'Contact Text',
+                  name: 'contactText',
+                  widget: 'string',
+                  hint: 'Text before the contact link',
+                }
+              - {
+                  label: 'Contact Link',
+                  name: 'contactLink',
+                  widget: 'string',
+                  default: '/contact',
+                }

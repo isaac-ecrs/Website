@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import PricingCard from '../components/PricingCard.astro';
+import IconCard from '../components/IconCard.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
 import { marked } from 'marked';
 
@@ -49,13 +50,12 @@ const benefitIcons = [
       <div class="benefits-grid">
         {
           benefits.map((benefit, index) => (
-            <article class="benefit-card">
-              <div class="benefit-icon">
-                <i class={`fa-solid ${benefitIcons[index] || 'fa-star'}`} />
-              </div>
-              <h3>{benefit.title}</h3>
-              <p>{benefit.description}</p>
-            </article>
+            <IconCard
+              title={benefit.title}
+              description={benefit.description}
+              icon={benefitIcons[index] || 'fa-star'}
+              size="small"
+            />
           ))
         }
       </div>
@@ -135,43 +135,6 @@ const benefitIcons = [
     @include mobile {
       grid-template-columns: repeat(2, 1fr);
       gap: 1.5em;
-    }
-  }
-
-  .benefit-card {
-    background: white;
-    padding: 1.5em;
-    border-radius: $border-radius-card;
-    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
-    text-align: center;
-
-    h3 {
-      color: $color-primary;
-      margin-bottom: 0.5em;
-      font-size: 1.125rem;
-    }
-
-    p {
-      color: rgba($color-text-dark, 0.8);
-      font-size: 0.9375rem;
-      line-height: 1.6;
-      margin: 0;
-    }
-  }
-
-  .benefit-icon {
-    width: 60px;
-    height: 60px;
-    background: $color-accent;
-    border-radius: $border-radius-circle;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1em;
-
-    i {
-      font-size: 1.5rem;
-      color: white;
     }
   }
 

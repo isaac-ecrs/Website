@@ -54,7 +54,13 @@ const processedDescription = event.data.shortDescription
   : null;
 ---
 
-<Card href={href} variant="horizontal" isPast={isPast} hasMedia={hasValidImage}>
+<Card
+  href={href}
+  variant="horizontal"
+  isPast={isPast}
+  hasMedia={hasValidImage}
+  data-reveal="bottom"
+>
   {
     hasValidImage && (
       <div slot="media" class="event-image">

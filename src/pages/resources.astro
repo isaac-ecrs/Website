@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import ResourceCard from '../components/ResourceCard.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
 import { marked } from 'marked';
 
@@ -47,16 +48,11 @@ const { hero, intro, sections } = page.data;
           {section.links && section.links.length > 0 && (
             <div class="resources-grid">
               {section.links.map((link) => (
-                <a
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="resource-card"
-                >
-                  <h3>{link.name}</h3>
-                  {link.description && <p>{link.description}</p>}
-                  <span class="resource-link">Visit Website →</span>
-                </a>
+                <ResourceCard
+                  name={link.name}
+                  description={link.description}
+                  url={link.url}
+                />
               ))}
             </div>
           )}
@@ -119,47 +115,6 @@ const { hero, intro, sections } = page.data;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5em;
-  }
-
-  .resource-card {
-    display: block;
-    background: white;
-    padding: 1.5em;
-    border-radius: $border-radius-card;
-    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
-    text-decoration: none;
-    transition:
-      transform $transition-fast,
-      box-shadow $transition-fast;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 10px 10px 0px rgba($color-text-dark, 0.12);
-
-      .resource-link {
-        color: $color-teal;
-      }
-    }
-
-    h3 {
-      color: $color-primary;
-      margin-bottom: 0.5em;
-      font-size: 1.125rem;
-    }
-
-    p {
-      color: rgba($color-text-dark, 0.8);
-      font-size: 0.9375rem;
-      line-height: 1.6;
-      margin-bottom: 1em;
-    }
-  }
-
-  .resource-link {
-    color: $color-accent;
-    font-weight: 600;
-    font-size: 0.875rem;
-    transition: color $transition-fast;
   }
 
   .cta-text {

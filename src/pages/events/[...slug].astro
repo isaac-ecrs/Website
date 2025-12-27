@@ -281,7 +281,7 @@ const isFutureEvent = startDate > new Date();
               )}
             </div>
             {bodyImageData && (
-              <div class="venue-image">
+              <div class="venue-image" data-reveal="right">
                 <Image
                   src={bodyImageData}
                   alt={event.data.location.venue}
@@ -520,7 +520,7 @@ const isFutureEvent = startDate > new Date();
       <div class="event-content">
         {
           bodyImageData && (
-            <div class="content-image">
+            <div class="content-image" data-reveal="left">
               <Image
                 src={bodyImageData}
                 alt={event.data.title}

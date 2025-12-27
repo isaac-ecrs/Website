@@ -2,6 +2,7 @@
 import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import ContactCard from '../components/ContactCard.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
 import { marked } from 'marked';
 
@@ -47,16 +48,12 @@ const { hero, intro, formPlaceholderId, contactsTitle, contacts } = page.data;
       <div class="contacts-grid">
         {
           contacts.map((contact) => (
-            <article class="contact-card">
-              <h3>{contact.region}</h3>
-              <p class="contact-name">{contact.name}</p>
-              <a
-                href={`tel:${contact.phone.replace(/[^0-9+]/g, '')}`}
-                class="contact-phone"
-              >
-                {contact.phone}
-              </a>
-            </article>
+            <ContactCard
+              region={contact.region}
+              name={contact.name}
+              phone={contact.phone}
+              email={contact.email}
+            />
           ))
         }
       </div>
@@ -119,36 +116,5 @@ const { hero, intro, formPlaceholderId, contactsTitle, contacts } = page.data;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1.5em;
-  }
-
-  .contact-card {
-    background: white;
-    padding: 1.5em;
-    border-radius: $border-radius-card;
-    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
-    text-align: center;
-
-    h3 {
-      color: $color-primary;
-      margin-bottom: 0.5em;
-      font-size: 1rem;
-    }
-  }
-
-  .contact-name {
-    color: $color-text-dark;
-    font-weight: 600;
-    margin-bottom: 0.5em;
-  }
-
-  .contact-phone {
-    color: $color-accent;
-    font-weight: 600;
-    text-decoration: none;
-    transition: color $transition-fast;
-
-    &:hover {
-      color: $color-teal;
-    }
   }
 </style>
