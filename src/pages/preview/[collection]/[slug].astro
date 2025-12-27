@@ -82,7 +82,7 @@ const isFutureEvent = startDate > new Date();
   <!-- Hero Section -->
   <section
     class="event-hero"
-    style={`background-image: url(${event.data.image || heroBg.src})`}
+    style={`background-image: url(${event.data.heroImage || heroBg.src})`}
   >
     <div class="event-hero-content">
       <h1 class="event-hero-title">{event.data.title}</h1>
@@ -197,9 +197,12 @@ const isFutureEvent = startDate > new Date();
                 </p>
               )}
             </div>
-            {event.data.image && (
-              <div class="venue-image">
-                <img src={event.data.image} alt={event.data.location.venue} />
+            {event.data.bodyImage && (
+              <div class="venue-image" data-reveal="right">
+                <img
+                  src={event.data.bodyImage}
+                  alt={event.data.location.venue}
+                />
               </div>
             )}
           </div>

@@ -1,0 +1,79 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  icon: string; // Font Awesome icon class (e.g., 'fa-music')
+  size?: 'small' | 'large'; // Icon size variant (default: large)
+}
+
+const { title, description, icon, size = 'large' } = Astro.props;
+---
+
+<article class={`icon-card icon-card--${size}`} data-reveal="bottom">
+  <div class="icon-card__icon">
+    <i class={`fa-solid ${icon}`}></i>
+  </div>
+  <h3>{title}</h3>
+  <p>{description}</p>
+</article>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .icon-card {
+    background: white;
+    padding: 1.5em;
+    border-radius: $border-radius-card;
+    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+    text-align: center;
+
+    h3 {
+      color: $color-primary;
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      color: rgba($color-text-dark, 0.8);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+
+  .icon-card__icon {
+    background: $color-accent;
+    border-radius: $border-radius-circle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1em;
+
+    i {
+      color: white;
+    }
+  }
+
+  // Size variants
+  .icon-card--large .icon-card__icon {
+    width: 80px;
+    height: 80px;
+
+    i {
+      font-size: 2rem;
+    }
+  }
+
+  .icon-card--small .icon-card__icon {
+    width: 60px;
+    height: 60px;
+
+    i {
+      font-size: 1.5rem;
+    }
+  }
+
+  .icon-card--small h3 {
+    font-size: 1.125rem;
+  }
+</style>

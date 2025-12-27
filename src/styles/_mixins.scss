@@ -156,3 +156,110 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   }
 }
+
+// ============================================
+// CONTENT SECTION
+// For intro, philosophy, and similar prose sections
+// ============================================
+@mixin content-section($centered: false, $max-width: 800px) {
+  max-width: $max-width;
+  margin: 0 auto;
+  @if $centered {
+    text-align: center;
+  }
+
+  :global(p) {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 1.5em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// ============================================
+// ICON CIRCLE
+// For circular icon containers (activities, benefits, etc.)
+// ============================================
+@mixin icon-circle($size: 70px, $icon-size: 1.75rem, $bg-color: $color-accent) {
+  width: $size;
+  height: $size;
+  background: $bg-color;
+  border-radius: $border-radius-circle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1em;
+
+  i {
+    font-size: $icon-size;
+    color: white;
+  }
+}
+
+// ============================================
+// FORM PLACEHOLDER
+// For Cognito form embed placeholders
+// ============================================
+@mixin form-placeholder($bg-color: $color-light-tan) {
+  max-width: 600px;
+  margin: 2em auto 0;
+  padding: 3em 2em;
+  background: $bg-color;
+  border: 2px dashed rgba($color-text-dark, 0.2);
+  border-radius: $border-radius-card;
+  text-align: center;
+
+  .placeholder-text {
+    font-size: 1.125rem;
+    color: rgba($color-text-dark, 0.6);
+    margin-bottom: 0.5em;
+  }
+
+  .placeholder-note {
+    font-size: 0.875rem;
+    color: rgba($color-text-dark, 0.4);
+    font-family: monospace;
+    margin: 0;
+  }
+}
+
+// ============================================
+// CARD BASE
+// Common card styling with shadow
+// ============================================
+@mixin card-base($padding: 1.5em) {
+  background: white;
+  padding: $padding;
+  border-radius: $border-radius-card;
+  box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+}
+
+@mixin card-hover {
+  transition:
+    transform $transition-fast,
+    box-shadow $transition-fast;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.12);
+  }
+}
+
+// ============================================
+// CTA SECTION DARK
+// For dark call-to-action sections
+// ============================================
+@mixin cta-section-dark {
+  .cta-text {
+    color: rgba(white, 0.9);
+    font-size: 1.125rem;
+    margin-bottom: 1.5em;
+  }
+
+  h2 {
+    color: white;
+  }
+}

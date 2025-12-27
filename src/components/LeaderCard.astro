@@ -11,7 +11,7 @@ const { leader, variant = 'full', showBio = true } = Astro.props;
 const bioContent = leader.data.bio || '';
 ---
 
-<div class={`leader-card leader-card--${variant}`}>
+<div class={`leader-card leader-card--${variant}`} data-reveal="bottom">
   {
     leader.data.image && (
       <div class="leader-image">

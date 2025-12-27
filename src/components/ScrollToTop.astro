@@ -27,10 +27,7 @@
     function updatePosition() {
       if (!scrollBtn) return;
       const countdown = document.querySelector<HTMLElement>('.countdown-float');
-      if (
-        countdown &&
-        !countdown.classList.contains('countdown-float--minimized')
-      ) {
+      if (countdown) {
         const countdownHeight = countdown.offsetHeight;
         const spacing = 24;
         const bottomValue = countdownHeight + spacing;
@@ -71,11 +68,15 @@
       }
     });
 
-    // Listen for countdown timer changes
+    // Listen for countdown timer changes using MutationObserver
     const countdown = document.querySelector('.countdown-float');
     if (countdown) {
-      countdown.addEventListener('click', () => {
+      const observer = new MutationObserver(() => {
         setTimeout(updatePosition, 350); // After countdown transition
+      });
+      observer.observe(countdown, {
+        attributes: true,
+        attributeFilter: ['class'],
       });
     }
 

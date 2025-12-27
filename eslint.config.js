@@ -1,5 +1,6 @@
 import eslint from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
+import globals from 'globals';
 
 export default [
   {
@@ -23,6 +24,19 @@ export default [
       globals: {
         console: 'readonly',
         process: 'readonly',
+      },
+    },
+  },
+  {
+    files: ['src/scripts/**/*.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+      globals: {
+        ...globals.browser,
       },
     },
   },

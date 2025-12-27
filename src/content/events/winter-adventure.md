@@ -10,7 +10,8 @@ location:
   state: 'NY'
   zip: '14870'
   website: 'https://rochesterymca.org/locations/ymca-watson-woods'
-image: '/events/winter-adventure.jpg'
+heroImage: '/assets/images/events/winter-adventure.jpg'
+bodyImage: '/assets/images/events/winter-adventure.jpg'
 cost: 'Tuition: $110/adult; Room & Board: $355–$820/person'
 registrationEmail: 'registration@ecrs.org'
 shortDescription: |

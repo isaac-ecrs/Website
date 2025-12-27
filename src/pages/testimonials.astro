@@ -1,0 +1,148 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+
+const page = await getEntry('pages', 'testimonials');
+if (!page || page.data.pageType !== 'testimonials') {
+  throw new Error('Testimonials page content not found');
+}
+
+const { hero, intro, testimonials } = page.data;
+---
+
+<BaseLayout
+  title={page.data.title}
+  description="Hear what our community has to say about ECRS"
+>
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  {
+    intro && (
+      <section class="section section--cream">
+        <div class="container">
+          <p class="intro-text">{intro}</p>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Testimonials Section -->
+  <section class="section section--white">
+    <div class="container">
+      <div class="testimonials-grid">
+        {
+          testimonials.map((testimonial) => (
+            <article class="testimonial-card">
+              <div class="quote-icon">
+                <i class="fa-solid fa-quote-left" />
+              </div>
+              <blockquote>
+                <p>{testimonial.quote}</p>
+                {testimonial.author && (
+                  <footer>
+                    <cite>
+                      <strong>{testimonial.author}</strong>
+                      {testimonial.role && <span>{testimonial.role}</span>}
+                    </cite>
+                  </footer>
+                )}
+              </blockquote>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-text {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.8;
+    color: $color-text-dark;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2em;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 1.5em;
+    }
+  }
+
+  .testimonial-card {
+    background: white;
+    padding: 2em;
+    border-radius: $border-radius-card;
+    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+    position: relative;
+
+    blockquote {
+      margin: 0;
+      padding: 0;
+
+      p {
+        font-size: 1.0625rem;
+        line-height: 1.7;
+        color: $color-text-dark;
+        font-style: italic;
+        margin-bottom: 1em;
+
+        &::before {
+          content: '"';
+        }
+
+        &::after {
+          content: '"';
+        }
+      }
+
+      footer {
+        cite {
+          font-style: normal;
+          display: block;
+
+          strong {
+            color: $color-primary;
+            font-weight: $font-weight-bold;
+          }
+
+          span {
+            display: block;
+            font-size: 0.875rem;
+            color: rgba($color-text-dark, 0.7);
+            margin-top: 0.25em;
+          }
+        }
+      }
+    }
+  }
+
+  .quote-icon {
+    width: 50px;
+    height: 50px;
+    background: $color-accent;
+    border-radius: $border-radius-circle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1em;
+
+    i {
+      font-size: 1.25rem;
+      color: white;
+    }
+  }
+</style>
