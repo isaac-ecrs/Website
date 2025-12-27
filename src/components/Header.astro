@@ -73,7 +73,7 @@ const navItems = navData?.data.items || [];
     if (!menuToggle || !mobileNav) return;
 
     // Remove existing listeners by cloning (prevents duplicates on view transitions)
-    const newToggle = menuToggle.cloneNode(true);
+    const newToggle = menuToggle.cloneNode(true) as HTMLButtonElement;
     menuToggle.parentNode?.replaceChild(newToggle, menuToggle);
 
     newToggle.addEventListener('click', () => {
