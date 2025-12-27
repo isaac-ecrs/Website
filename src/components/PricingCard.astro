@@ -1,0 +1,97 @@
+---
+interface Props {
+  name: string;
+  price: string;
+  duration: string;
+  description?: string;
+  highlighted?: boolean;
+}
+
+const { name, price, duration, description, highlighted = false } = Astro.props;
+---
+
+<article
+  class={`pricing-card ${highlighted ? 'pricing-card--highlighted' : ''}`}
+>
+  <div class="pricing-card__header">
+    <h3 class="pricing-card__name">{name}</h3>
+    <div class="pricing-card__price">{price}</div>
+    <div class="pricing-card__duration">{duration}</div>
+  </div>
+  {description && <p class="pricing-card__description">{description}</p>}
+</article>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .pricing-card {
+    background: white;
+    padding: 2em;
+    border-radius: $border-radius-card;
+    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+    text-align: center;
+    transition:
+      transform $transition-fast,
+      box-shadow $transition-fast;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 10px 10px 0px rgba($color-text-dark, 0.12);
+    }
+
+    &--highlighted {
+      border: 3px solid $color-accent;
+      position: relative;
+
+      &::before {
+        content: 'Best Value';
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: $color-accent;
+        color: white;
+        padding: 0.25em 1em;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    }
+
+    &__header {
+      margin-bottom: 1em;
+    }
+
+    &__name {
+      font-size: 1.25rem;
+      color: $color-text-dark;
+      margin-bottom: 0.5em;
+    }
+
+    &__price {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: $color-primary;
+      line-height: 1;
+      margin-bottom: 0.25em;
+    }
+
+    &__duration {
+      font-size: 0.875rem;
+      color: rgba($color-text-dark, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    &__description {
+      color: rgba($color-text-dark, 0.8);
+      font-size: 0.9375rem;
+      margin: 0;
+      padding-top: 1em;
+      border-top: 1px solid rgba($color-text-dark, 0.1);
+    }
+  }
+</style>

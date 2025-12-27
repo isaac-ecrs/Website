@@ -1,0 +1,154 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+import { marked } from 'marked';
+
+const page = await getEntry('pages', 'contact');
+if (!page || page.data.pageType !== 'contact') {
+  throw new Error('Contact page content not found');
+}
+
+const { hero, intro, formPlaceholderId, contactsTitle, contacts } = page.data;
+---
+
+<BaseLayout
+  title={page.data.title}
+  description="Contact ECRS - get in touch with us"
+>
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="intro-content" set:html={marked(intro)} />
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section class="section section--white">
+    <div class="container">
+      <h2 class="text-center">Send Us a Message</h2>
+      <div class="form-placeholder" id={formPlaceholderId}>
+        <p class="placeholder-text">Contact form will be embedded here</p>
+        <p class="placeholder-note">Cognito Form ID: {formPlaceholderId}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Regional Contacts Section -->
+  <section class="section section--tan">
+    <div class="container">
+      <h2 class="text-center">{contactsTitle || 'Regional Contacts'}</h2>
+      <p class="contacts-intro">
+        You can also reach out directly to one of our regional representatives:
+      </p>
+      <div class="contacts-grid">
+        {
+          contacts.map((contact) => (
+            <article class="contact-card">
+              <h3>{contact.region}</h3>
+              <p class="contact-name">{contact.name}</p>
+              <a
+                href={`tel:${contact.phone.replace(/[^0-9+]/g, '')}`}
+                class="contact-phone"
+              >
+                {contact.phone}
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+
+    :global(p) {
+      font-size: 18px;
+      line-height: 1.8;
+    }
+  }
+
+  h2 {
+    color: $color-primary;
+    margin-bottom: 1em;
+  }
+
+  .form-placeholder {
+    max-width: 600px;
+    margin: 2em auto 0;
+    padding: 3em 2em;
+    background: $color-light-tan;
+    border: 2px dashed rgba($color-text-dark, 0.2);
+    border-radius: $border-radius-card;
+    text-align: center;
+  }
+
+  .placeholder-text {
+    font-size: 1.125rem;
+    color: rgba($color-text-dark, 0.6);
+    margin-bottom: 0.5em;
+  }
+
+  .placeholder-note {
+    font-size: 0.875rem;
+    color: rgba($color-text-dark, 0.4);
+    font-family: monospace;
+    margin: 0;
+  }
+
+  .contacts-intro {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 2em;
+    color: rgba($color-text-dark, 0.8);
+    font-size: 1.125rem;
+  }
+
+  .contacts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5em;
+  }
+
+  .contact-card {
+    background: white;
+    padding: 1.5em;
+    border-radius: $border-radius-card;
+    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+    text-align: center;
+
+    h3 {
+      color: $color-primary;
+      margin-bottom: 0.5em;
+      font-size: 1rem;
+    }
+  }
+
+  .contact-name {
+    color: $color-text-dark;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+  }
+
+  .contact-phone {
+    color: $color-accent;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-teal;
+    }
+  }
+</style>

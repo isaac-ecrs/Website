@@ -1,0 +1,172 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+import { marked } from 'marked';
+
+const page = await getEntry('pages', 'history');
+if (!page || page.data.pageType !== 'history') {
+  throw new Error('History page content not found');
+}
+
+const { hero, intro, nameExplanation, sections } = page.data;
+---
+
+<BaseLayout
+  title={page.data.title}
+  description="The history of ECRS - over 80 years of building community through play"
+>
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="intro-content" set:html={marked(intro)} />
+    </div>
+  </section>
+
+  <!-- Name Explanation Section -->
+  {
+    nameExplanation && (
+      <section class="section section--white">
+        <div class="container">
+          <h2 class="text-center">What's in a Name?</h2>
+          <div class="name-explanation" set:html={marked(nameExplanation)} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- History Sections -->
+  {
+    sections &&
+      sections.length > 0 &&
+      sections.map((section, index) => (
+        <section
+          class={`section ${index % 2 === 0 ? 'section--tan' : 'section--white'}`}
+        >
+          <div class="container">
+            <div class="history-section">
+              <div class="history-text">
+                <h2>{section.title}</h2>
+                <div set:html={marked(section.content)} />
+              </div>
+              {section.image && (
+                <div class="history-image">
+                  <img
+                    src={section.image}
+                    alt={section.imageCaption || section.title}
+                  />
+                  {section.imageCaption && (
+                    <p class="image-caption">{section.imageCaption}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      ))
+  }
+
+  <!-- CTA Section -->
+  <section class="section section--dark">
+    <div class="container text-center">
+      <h2>Be Part of Our Story</h2>
+      <p class="cta-text">Join ECRS and help write the next chapter</p>
+      <a href="/membership" class="btn btn--primary">Become a Member</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-content {
+    max-width: 800px;
+    margin: 0 auto;
+
+    :global(p) {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 1.5em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .name-explanation {
+    max-width: 800px;
+    margin: 2em auto 0;
+
+    :global(p) {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 1.5em;
+    }
+
+    :global(strong) {
+      color: $color-primary;
+    }
+  }
+
+  .history-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3em;
+    align-items: start;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 2em;
+    }
+  }
+
+  .history-text {
+    h2 {
+      color: $color-primary;
+      margin-bottom: 1em;
+    }
+
+    :global(p) {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 1.5em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .history-image {
+    img {
+      width: 100%;
+      border-radius: $border-radius-card;
+      box-shadow: $shadow-image;
+    }
+  }
+
+  .image-caption {
+    margin-top: 1em;
+    font-size: 0.875rem;
+    color: rgba($color-text-dark, 0.7);
+    font-style: italic;
+    text-align: center;
+  }
+
+  .cta-text {
+    color: rgba(white, 0.9);
+    font-size: 1.125rem;
+    margin-bottom: 1.5em;
+  }
+
+  .section--dark {
+    h2 {
+      color: white;
+    }
+  }
+</style>

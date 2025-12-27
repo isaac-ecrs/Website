@@ -1,0 +1,163 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+import { marked } from 'marked';
+
+const page = await getEntry('pages', 'special');
+if (!page || page.data.pageType !== 'special') {
+  throw new Error('Special page content not found');
+}
+
+const { hero, intro, principles, ctaTitle, ctaText, ctaLink } = page.data;
+
+// Font Awesome icons for principles
+const principleIcons = [
+  'fa-paintbrush', // Creating Our Own Fun
+  'fa-gem', // Intrinsic Value
+  'fa-seedling', // Process Over Product
+  'fa-users', // Community Focus
+  'fa-handshake', // Cooperative Activities
+  'fa-heart', // Experiences Over Materialism
+];
+---
+
+<BaseLayout
+  title={page.data.title}
+  description="What makes ECRS special - our core principles"
+>
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="intro-content" set:html={marked(intro)} />
+    </div>
+  </section>
+
+  <!-- Principles Section -->
+  <section class="section section--white">
+    <div class="container">
+      <div class="principles-grid">
+        {
+          principles.map((principle, index) => (
+            <article class="principle-card">
+              <div class="principle-icon">
+                <i class={`fa-solid ${principleIcons[index] || 'fa-star'}`} />
+              </div>
+              <h3>{principle.title}</h3>
+              <p>{principle.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  {
+    ctaTitle && (
+      <section class="section section--dark">
+        <div class="container text-center">
+          <h2>{ctaTitle}</h2>
+          {ctaText && <p class="cta-text">{ctaText}</p>}
+          {ctaLink && (
+            <a href={ctaLink} class="btn btn--primary">
+              Donate Now
+            </a>
+          )}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+
+    :global(p) {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 1.5em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 1.5em;
+    }
+  }
+
+  .principle-card {
+    background: white;
+    padding: 2em;
+    border-radius: $border-radius-card;
+    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+    text-align: center;
+    transition:
+      transform $transition-fast,
+      box-shadow $transition-fast;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 10px 10px 0px rgba($color-text-dark, 0.12);
+    }
+
+    h3 {
+      color: $color-primary;
+      margin-bottom: 0.75em;
+      font-size: 1.25rem;
+    }
+
+    p {
+      color: rgba($color-text-dark, 0.8);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+
+  .principle-icon {
+    width: 70px;
+    height: 70px;
+    background: $color-accent;
+    border-radius: $border-radius-circle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1em;
+
+    i {
+      font-size: 1.75rem;
+      color: white;
+    }
+  }
+
+  .cta-text {
+    color: rgba(white, 0.9);
+    font-size: 1.125rem;
+    margin-bottom: 1.5em;
+  }
+
+  .section--dark {
+    h2 {
+      color: white;
+    }
+  }
+</style>

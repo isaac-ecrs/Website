@@ -2,21 +2,283 @@
   "$ref": "#/definitions/pages",
   "definitions": {
     "pages": {
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string"
-        },
-        "hero": {
+      "anyOf": [
+        {
           "type": "object",
           "properties": {
+            "pageType": {
+              "type": "string",
+              "const": "home"
+            },
             "title": {
               "type": "string"
             },
-            "subtitle": {
+            "hero": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "subtitle": {
+                  "type": "string"
+                },
+                "backgroundImage": {
+                  "type": "string"
+                },
+                "ctaText": {
+                  "type": "string"
+                },
+                "ctaLink": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title"
+              ],
+              "additionalProperties": false
+            },
+            "featureCards": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "icon": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "link": {
+                    "type": "string"
+                  },
+                  "linkText": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "about": {
               "type": "string"
             },
-            "backgroundImage": {
+            "whatWeDo": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "activities": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "image",
+                "description",
+                "activities"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "pageType",
+            "title",
+            "hero",
+            "featureCards",
+            "about",
+            "whatWeDo"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "pageType": {
+              "type": "string",
+              "const": "about"
+            },
+            "title": {
+              "type": "string"
+            },
+            "hero": {
+              "$ref": "#/definitions/pages/anyOf/0/properties/hero"
+            },
+            "intro": {
+              "type": "string"
+            },
+            "philosophy": {
+              "type": "string"
+            },
+            "activities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "icon": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "subPages": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "link": {
+                    "type": "string"
+                  },
+                  "linkText": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description",
+                  "link"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "ctaText": {
+              "type": "string"
+            },
+            "ctaLink": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "pageType",
+            "title",
+            "hero",
+            "intro"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "pageType": {
+              "type": "string",
+              "const": "history"
+            },
+            "title": {
+              "type": "string"
+            },
+            "hero": {
+              "$ref": "#/definitions/pages/anyOf/0/properties/hero"
+            },
+            "intro": {
+              "type": "string"
+            },
+            "nameExplanation": {
+              "type": "string"
+            },
+            "sections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "image": {
+                    "type": "string"
+                  },
+                  "imageCaption": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "content"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "pageType",
+            "title",
+            "hero",
+            "intro"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "pageType": {
+              "type": "string",
+              "const": "special"
+            },
+            "title": {
+              "type": "string"
+            },
+            "hero": {
+              "$ref": "#/definitions/pages/anyOf/0/properties/hero"
+            },
+            "intro": {
+              "type": "string"
+            },
+            "principles": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "icon": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "ctaTitle": {
               "type": "string"
             },
             "ctaText": {
@@ -27,72 +289,260 @@
             }
           },
           "required": [
+            "pageType",
             "title",
-            "subtitle",
-            "backgroundImage",
-            "ctaText",
-            "ctaLink"
+            "hero",
+            "intro",
+            "principles"
           ],
           "additionalProperties": false
         },
-        "featureCards": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "title": {
-                "type": "string"
-              },
-              "icon": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "title",
-              "icon",
-              "description"
-            ],
-            "additionalProperties": false
-          }
-        },
-        "about": {
-          "type": "string"
-        },
-        "whatWeDo": {
+        {
           "type": "object",
           "properties": {
-            "image": {
+            "pageType": {
+              "type": "string",
+              "const": "resources"
+            },
+            "title": {
               "type": "string"
             },
-            "description": {
+            "hero": {
+              "$ref": "#/definitions/pages/anyOf/0/properties/hero"
+            },
+            "intro": {
               "type": "string"
             },
-            "activities": {
+            "sections": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "links": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "url": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "url"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "content": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "pageType",
+            "title",
+            "hero",
+            "sections"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "pageType": {
+              "type": "string",
+              "const": "membership"
+            },
+            "title": {
+              "type": "string"
+            },
+            "hero": {
+              "$ref": "#/definitions/pages/anyOf/0/properties/hero"
+            },
+            "intro": {
+              "type": "string"
+            },
+            "benefits": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "icon": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "pricingIntro": {
+              "type": "string"
+            },
+            "pricingTiers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "string"
+                  },
+                  "duration": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "highlighted": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "name",
+                  "price",
+                  "duration"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "formPlaceholderId": {
+              "type": "string"
+            },
+            "tagline": {
               "type": "string"
             }
           },
           "required": [
-            "image",
-            "description",
-            "activities"
+            "pageType",
+            "title",
+            "hero",
+            "intro",
+            "benefits",
+            "pricingTiers"
           ],
           "additionalProperties": false
         },
-        "$schema": {
-          "type": "string"
+        {
+          "type": "object",
+          "properties": {
+            "pageType": {
+              "type": "string",
+              "const": "contact"
+            },
+            "title": {
+              "type": "string"
+            },
+            "hero": {
+              "$ref": "#/definitions/pages/anyOf/0/properties/hero"
+            },
+            "intro": {
+              "type": "string"
+            },
+            "formPlaceholderId": {
+              "type": "string"
+            },
+            "contactsTitle": {
+              "type": "string"
+            },
+            "contacts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "region": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "region",
+                  "phone"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "pageType",
+            "title",
+            "hero",
+            "intro",
+            "contacts"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "pageType": {
+              "type": "string",
+              "const": "donate"
+            },
+            "title": {
+              "type": "string"
+            },
+            "hero": {
+              "$ref": "#/definitions/pages/anyOf/0/properties/hero"
+            },
+            "intro": {
+              "type": "string"
+            },
+            "taxInfo": {
+              "type": "string"
+            },
+            "formPlaceholderId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "pageType",
+            "title",
+            "hero",
+            "intro"
+          ],
+          "additionalProperties": false
         }
-      },
-      "required": [
-        "title",
-        "hero",
-        "featureCards",
-        "about",
-        "whatWeDo"
-      ],
-      "additionalProperties": false
+      ]
     }
   },
   "$schema": "http://json-schema.org/draft-07/schema#"

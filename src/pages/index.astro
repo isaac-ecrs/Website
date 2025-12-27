@@ -33,9 +33,12 @@ async function getFeaturedEventImage(event: any) {
 
 // Get content from collections
 const homePage = await getEntry('pages', 'home');
-if (!homePage) {
+if (!homePage || homePage.data.pageType !== 'home') {
   throw new Error('Home page content not found');
 }
+
+// Type assertion for TypeScript - we've verified pageType above
+const homeData = homePage.data;
 
 // Get the next upcoming event (earliest future event)
 const now = new Date();
@@ -59,11 +62,11 @@ const featuredEventImage = featuredEvent
 <BaseLayout title="Home" description="ECRS - Come to Play. Play to Learn">
   <!-- SECTION 1: Hero -->
   <Hero
-    title={homePage.data.hero.title}
-    subtitle={homePage.data.hero.subtitle}
+    title={homeData.hero.title}
+    subtitle={homeData.hero.subtitle}
     backgroundImage={heroBg}
-    ctaText={homePage.data.hero.ctaText}
-    ctaLink={homePage.data.hero.ctaLink}
+    ctaText={homeData.hero.ctaText}
+    ctaLink={homeData.hero.ctaLink}
   />
 
   <!-- SECTION 2: Three Feature Cards -->
@@ -72,21 +75,21 @@ const featuredEventImage = featuredEvent
       <div class="grid-3">
         <FeatureCard
           image={imageWhatWeDo}
-          title={homePage.data.featureCards[0].title}
-          description={homePage.data.featureCards[0].description}
-          link="/activities"
+          title={homeData.featureCards[0].title}
+          description={homeData.featureCards[0].description}
+          link="/about"
         />
         <FeatureCard
           image={imageUpcomingEvents}
-          title={homePage.data.featureCards[1].title}
-          description={homePage.data.featureCards[1].description}
+          title={homeData.featureCards[1].title}
+          description={homeData.featureCards[1].description}
           link="/events"
         />
         <FeatureCard
           image={imageTestimonials}
-          title={homePage.data.featureCards[2].title}
-          description={homePage.data.featureCards[2].description}
-          link="/testimonials"
+          title={homeData.featureCards[2].title}
+          description={homeData.featureCards[2].description}
+          link="/about"
         />
       </div>
     </div>
@@ -95,7 +98,7 @@ const featuredEventImage = featuredEvent
   <!-- SECTION 3: About ECRS Narrative (rendered from markdown) -->
   <section class="section section--white" id="about">
     <div class="container">
-      <div class="about-content" set:html={marked(homePage.data.about)} />
+      <div class="about-content" set:html={marked(homeData.about)} />
     </div>
   </section>
 
@@ -110,12 +113,12 @@ const featuredEventImage = featuredEvent
         </div>
         <div class="what-we-do-text">
           <p class="section-intro">
-            {homePage.data.whatWeDo.description}
+            {homeData.whatWeDo.description}
           </p>
 
           <div
             class="activities-list"
-            set:html={marked(homePage.data.whatWeDo.activities)}
+            set:html={marked(homeData.whatWeDo.activities)}
           />
         </div>
       </div>

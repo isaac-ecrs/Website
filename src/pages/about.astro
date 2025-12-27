@@ -1,0 +1,195 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+import { marked } from 'marked';
+
+const page = await getEntry('pages', 'about');
+if (!page || page.data.pageType !== 'about') {
+  throw new Error('About page content not found');
+}
+
+const { hero, intro, philosophy, activities, subPages, ctaText, ctaLink } =
+  page.data;
+
+// Font Awesome icon mapping for activities
+const activityIcons: Record<string, string> = {
+  Games: 'fa-dice',
+  Dance: 'fa-person-dancing',
+  Singing: 'fa-music',
+  Dramatics: 'fa-masks-theater',
+  Crafts: 'fa-palette',
+  Theory: 'fa-book-open',
+};
+
+function getActivityIcon(title: string): string {
+  return activityIcons[title] || 'fa-star';
+}
+---
+
+<BaseLayout
+  title={page.data.title}
+  description="Learn about ECRS - who we are and what we do"
+>
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="intro-content" set:html={marked(intro)} />
+    </div>
+  </section>
+
+  <!-- Philosophy Section -->
+  {
+    philosophy && (
+      <section class="section section--white">
+        <div class="container">
+          <div class="philosophy-content" set:html={marked(philosophy)} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Activities Section -->
+  {
+    activities && activities.length > 0 && (
+      <section class="section section--tan">
+        <div class="container">
+          <h2 class="text-center">What We Teach</h2>
+          <div class="activities-grid">
+            {activities.map((activity) => (
+              <div class="activity-item">
+                <div class="activity-icon">
+                  <i class={`fa-solid ${getActivityIcon(activity.title)}`} />
+                </div>
+                <h3>{activity.title}</h3>
+                <p>{activity.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Sub-Pages Section -->
+  {
+    subPages && subPages.length > 0 && (
+      <section class="section section--white">
+        <div class="container">
+          <h2 class="text-center">Learn More About ECRS</h2>
+          <div class="grid-3">
+            {subPages.map((subPage) => (
+              <FeatureCard
+                title={subPage.title}
+                description={subPage.description}
+                link={subPage.link}
+                linkText={subPage.linkText || 'Learn More'}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- CTA Section -->
+  {
+    ctaText && ctaLink && (
+      <section class="section section--dark">
+        <div class="container text-center">
+          <h2>Ready to Join Us?</h2>
+          <p class="cta-text">
+            Experience the joy of creative recreation with ECRS
+          </p>
+          <a href={ctaLink} class="btn btn--primary">
+            {ctaText}
+          </a>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-content,
+  .philosophy-content {
+    max-width: 800px;
+    margin: 0 auto;
+
+    :global(p) {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 1.5em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .activities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+    margin-top: 2em;
+
+    @include mobile {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5em;
+    }
+  }
+
+  .activity-item {
+    text-align: center;
+    padding: 1.5em;
+    background: white;
+    border-radius: $border-radius-card;
+    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+
+    h3 {
+      color: $color-primary;
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      color: rgba($color-text-dark, 0.8);
+      font-size: 0.9375rem;
+      margin: 0;
+    }
+  }
+
+  .activity-icon {
+    width: 80px;
+    height: 80px;
+    background: $color-accent;
+    border-radius: $border-radius-circle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1em;
+
+    i {
+      font-size: 2rem;
+      color: white;
+    }
+  }
+
+  .cta-text {
+    color: rgba(white, 0.9);
+    font-size: 1.125rem;
+    margin-bottom: 1.5em;
+  }
+
+  .section--dark {
+    h2 {
+      color: white;
+    }
+  }
+</style>

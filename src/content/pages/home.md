@@ -1,4 +1,5 @@
 ---
+pageType: home
 title: Home
 hero:
   title: 'Welcome to ECRS – Come to Play. Play to Learn'

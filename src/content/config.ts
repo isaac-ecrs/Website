@@ -130,31 +130,184 @@ const eventsCollection = defineCollection({
   }),
 });
 
+// Hero schema used by all pages
+const heroSchema = z.object({
+  title: z.string(),
+  subtitle: z.string().optional(),
+  backgroundImage: z.string().optional(),
+  ctaText: z.string().optional(),
+  ctaLink: z.string().optional(),
+});
+
+// Feature card schema
+const featureCardSchema = z.object({
+  title: z.string(),
+  icon: z.string().optional(),
+  image: z.string().optional(),
+  description: z.string(),
+  link: z.string().optional(),
+  linkText: z.string().optional(),
+});
+
+// Activity item schema
+const activitySchema = z.object({
+  title: z.string(),
+  icon: z.string().optional(),
+  description: z.string(),
+});
+
+// Sub-page link card schema
+const subPageCardSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  image: z.string().optional(),
+  link: z.string(),
+  linkText: z.string().optional(),
+});
+
+// Principle card schema (for What Makes ECRS Special)
+const principleSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  icon: z.string().optional(),
+});
+
+// Membership benefit schema
+const benefitSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  icon: z.string().optional(),
+});
+
+// Membership pricing tier schema
+const pricingTierSchema = z.object({
+  name: z.string(),
+  price: z.string(),
+  duration: z.string(),
+  description: z.string().optional(),
+  highlighted: z.boolean().optional(),
+});
+
+// Contact person schema
+const contactSchema = z.object({
+  name: z.string(),
+  region: z.string(),
+  phone: z.string(),
+  email: z.string().optional(),
+});
+
+// Resource link schema
+const resourceLinkSchema = z.object({
+  name: z.string(),
+  url: z.string().url(),
+  description: z.string().optional(),
+});
+
+// Resource section schema
+const resourceSectionSchema = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  links: z.array(resourceLinkSchema).optional(),
+  content: z.string().optional(),
+});
+
+// History section schema
+const historySectionSchema = z.object({
+  title: z.string(),
+  content: z.string(),
+  image: z.string().optional(),
+  imageCaption: z.string().optional(),
+});
+
+// Pages collection with discriminated union by pageType
 const pagesCollection = defineCollection({
   type: 'content',
-  schema: z.object({
-    title: z.string(),
-    hero: z.object({
+  schema: z.discriminatedUnion('pageType', [
+    // Home page schema (existing)
+    z.object({
+      pageType: z.literal('home'),
       title: z.string(),
-      subtitle: z.string(),
-      backgroundImage: z.string(),
-      ctaText: z.string(),
-      ctaLink: z.string(),
-    }),
-    featureCards: z.array(
-      z.object({
-        title: z.string(),
-        icon: z.string(),
+      hero: heroSchema,
+      featureCards: z.array(featureCardSchema),
+      about: z.string(),
+      whatWeDo: z.object({
+        image: z.string(),
         description: z.string(),
-      })
-    ),
-    about: z.string(),
-    whatWeDo: z.object({
-      image: z.string(),
-      description: z.string(),
-      activities: z.string(),
+        activities: z.string(),
+      }),
     }),
-  }),
+    // About page schema
+    z.object({
+      pageType: z.literal('about'),
+      title: z.string(),
+      hero: heroSchema,
+      intro: z.string(),
+      philosophy: z.string().optional(),
+      activities: z.array(activitySchema).optional(),
+      subPages: z.array(subPageCardSchema).optional(),
+      ctaText: z.string().optional(),
+      ctaLink: z.string().optional(),
+    }),
+    // History page schema
+    z.object({
+      pageType: z.literal('history'),
+      title: z.string(),
+      hero: heroSchema,
+      intro: z.string(),
+      nameExplanation: z.string().optional(),
+      sections: z.array(historySectionSchema).optional(),
+    }),
+    // Special page schema (What Makes ECRS Special)
+    z.object({
+      pageType: z.literal('special'),
+      title: z.string(),
+      hero: heroSchema,
+      intro: z.string(),
+      principles: z.array(principleSchema),
+      ctaTitle: z.string().optional(),
+      ctaText: z.string().optional(),
+      ctaLink: z.string().optional(),
+    }),
+    // Resources page schema
+    z.object({
+      pageType: z.literal('resources'),
+      title: z.string(),
+      hero: heroSchema,
+      intro: z.string().optional(),
+      sections: z.array(resourceSectionSchema),
+    }),
+    // Membership page schema
+    z.object({
+      pageType: z.literal('membership'),
+      title: z.string(),
+      hero: heroSchema,
+      intro: z.string(),
+      benefits: z.array(benefitSchema),
+      pricingIntro: z.string().optional(),
+      pricingTiers: z.array(pricingTierSchema),
+      formPlaceholderId: z.string().optional(),
+      tagline: z.string().optional(),
+    }),
+    // Contact page schema
+    z.object({
+      pageType: z.literal('contact'),
+      title: z.string(),
+      hero: heroSchema,
+      intro: z.string(),
+      formPlaceholderId: z.string().optional(),
+      contactsTitle: z.string().optional(),
+      contacts: z.array(contactSchema),
+    }),
+    // Donate page schema
+    z.object({
+      pageType: z.literal('donate'),
+      title: z.string(),
+      hero: heroSchema,
+      intro: z.string(),
+      taxInfo: z.string().optional(),
+      formPlaceholderId: z.string().optional(),
+    }),
+  ]),
 });
 
 const navigationCollection = defineCollection({
