@@ -1,0 +1,169 @@
+---
+import LeaderCard from './LeaderCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  leader: CollectionEntry<'leaders'>;
+  dialogId: string;
+}
+
+const { leader, dialogId } = Astro.props;
+---
+
+<dialog class="leader-popover" id={dialogId}>
+  <div class="popover-content">
+    <button class="popover-close" type="button" aria-label="Close dialog">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="24"
+        height="24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <LeaderCard leader={leader} variant="compact" />
+  </div>
+</dialog>
+
+<script define:vars={{ dialogId }}>
+  const dialogElement = document.getElementById(dialogId);
+  const closeButton = dialogElement?.querySelector('.popover-close');
+
+  if (closeButton && dialogElement) {
+    // Close button handler
+    closeButton.addEventListener('click', () => {
+      dialogElement.close();
+    });
+
+    // Click outside to close
+    dialogElement.addEventListener('click', (event) => {
+      const rect = dialogElement.getBoundingClientRect();
+      const isInDialog =
+        event.clientX > rect.left &&
+        event.clientX < rect.right &&
+        event.clientY > rect.top &&
+        event.clientY < rect.bottom;
+
+      if (!isInDialog) {
+        dialogElement.close();
+      }
+    });
+
+    // ESC key to close (native behavior with dialog element)
+    // No need to add additional handler - dialog element handles this automatically
+  }
+</script>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .leader-popover {
+    max-width: 450px;
+    width: 90vw;
+    border: none;
+    border-radius: 3px;
+    padding: 0;
+    background: transparent;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-height: 90vh;
+
+    // Backdrop styling
+    &::backdrop {
+      background: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease;
+    }
+
+    // Modal animation
+    animation: slideIn 0.3s ease;
+
+    &[open] {
+      display: block;
+    }
+  }
+
+  .popover-content {
+    position: relative;
+    background: white;
+    border-radius: 3px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .popover-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.25rem;
+    z-index: 10;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: $color-text-dark;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      background: $color-accent;
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: scale(1.1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translate(-50%, -48%);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, -50%);
+      opacity: 1;
+    }
+  }
+
+  // Mobile responsive
+  @include mobile {
+    .leader-popover {
+      max-width: 95vw;
+      max-height: 95vh;
+
+      .popover-content {
+        max-height: 95vh;
+        padding-top: 3rem;
+      }
+    }
+  }
+</style>

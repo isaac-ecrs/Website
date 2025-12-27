@@ -1,0 +1,52 @@
+---
+interface Props {
+  number: number;
+  title: string;
+  description: string;
+}
+
+const { number, title, description } = Astro.props;
+---
+
+<div class="principle-card" data-reveal="bottom">
+  <span class="principle-number">{number}</span>
+  <h3>{title}</h3>
+  <p>{description}</p>
+</div>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .principle-card {
+    @include card-base(2em);
+    text-align: center;
+
+    h3 {
+      color: $color-primary;
+      margin-bottom: 0.5em;
+      font-size: 1.125rem;
+    }
+
+    p {
+      color: rgba($color-text-dark, 0.8);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+
+  .principle-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: $color-accent;
+    color: white;
+    font-weight: 700;
+    font-size: 1.25rem;
+    border-radius: $border-radius-circle;
+    margin-bottom: 1em;
+  }
+</style>

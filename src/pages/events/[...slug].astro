@@ -1,27 +1,45 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CountdownTimer from '../../components/CountdownTimer.astro';
+import LeaderPopover from '../../components/LeaderPopover.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
+
+async function loadEventImage(imagePath: string | undefined, fallback: any) {
+  if (!imagePath) return fallback;
+
+  try {
+    const assetsPath = imagePath.replace('/assets/', '../../assets/');
+    const images = import.meta.glob(
+      '../../assets/images/**/*.{jpg,jpeg,png,webp,avif}'
+    );
+    const imageModule = (await images[assetsPath]()) as any;
+    return imageModule.default;
+  } catch (error) {
+    console.warn(`Failed to load image: ${imagePath}, using fallback`, error);
+    return fallback;
+  }
+}
 
 export async function getStaticPaths() {
   const events = await getCollection('events');
   return events.map((event) => {
-    const year = new Date(event.data.startDate).getFullYear();
-    const customSlug = `${event.slug}-${year}`;
     return {
-      params: { slug: customSlug },
+      params: { slug: event.data.eventSlug },
       props: { event },
     };
   });
 }
 
-interface Props {
-  event: any;
-}
-
 const { event } = Astro.props;
 const { Content } = await event.render();
+
+// Load hero and body images
+const heroImage = await loadEventImage(event.data.heroImage, heroBg);
+const bodyImageData = event.data.bodyImage
+  ? await loadEventImage(event.data.bodyImage, null)
+  : null;
 
 // Build location string for Google Maps
 const location = `${event.data.location.venue} • ${event.data.location.city}, ${event.data.location.state}`;
@@ -50,6 +68,11 @@ const formattedEndDate = endDate.toLocaleDateString('en-US', dateOptions);
 const formattedStartTime = startDate.toLocaleTimeString('en-US', timeOptions);
 const formattedEndTime = endDate.toLocaleTimeString('en-US', timeOptions);
 
+// Helper function to check if leader has bio for popover
+const hasLeaderBio = (leader: any) => {
+  return leader && leader.data.bio && leader.data.bio.trim().length > 0;
+};
+
 // Check for extended content
 const hasHighlights = event.data.highlights && event.data.highlights.length > 0;
 const hasAccommodation =
@@ -59,9 +82,79 @@ const hasSchedule =
   event.data.schedule.daily &&
   event.data.schedule.daily.length > 0;
 const hasTuition = event.data.tuition;
-const hasPolicies = event.data.policies && event.data.policies.length > 0;
-const hasDeadlines = event.data.deadlines && event.data.deadlines.length > 0;
-const hasClasses = event.data.classes && event.data.classes.length > 0;
+const hasClasses =
+  event.data.classPeriods && event.data.classPeriods.length > 0;
+
+// Process class periods to fetch class and leader data
+interface ClassOffering {
+  classEntry: any;
+  leader: any;
+  description: string;
+  days?: string;
+  age?: string;
+  note?: string;
+}
+
+interface ProcessedClassPeriod {
+  period: string;
+  offerings: ClassOffering[];
+}
+
+const processedClassPeriods: ProcessedClassPeriod[] = [];
+
+if (event.data.classPeriods && event.data.classPeriods.length > 0) {
+  // Get all classes to look up by title
+  const allClasses = await getCollection('classes');
+
+  for (const period of event.data.classPeriods) {
+    const offerings: ClassOffering[] = [];
+
+    for (const offering of period.offerings) {
+      // Find class by title (CMS stores title, not ID)
+      const classEntry = allClasses.find(
+        (c) => c.data.title === offering.class
+      );
+      if (!classEntry) continue;
+
+      // Get the leader ID from the reference
+      const leaderId =
+        typeof classEntry.data.leader === 'string'
+          ? classEntry.data.leader
+          : (classEntry.data.leader as any)?.id;
+      const leader = leaderId ? await getEntry('leaders', leaderId) : null;
+
+      // Find the description for the specified year, or use the most recent
+      let description = '';
+      if (offering.descriptionYear) {
+        const desc = classEntry.data.descriptions.find(
+          (d: any) => d.year === offering.descriptionYear
+        );
+        description =
+          desc?.content || classEntry.data.descriptions[0]?.content || '';
+      } else {
+        // Use the most recent description
+        const sortedDescs = [...classEntry.data.descriptions].sort(
+          (a: any, b: any) => b.year - a.year
+        );
+        description = sortedDescs[0]?.content || '';
+      }
+
+      offerings.push({
+        classEntry,
+        leader,
+        description,
+        days: offering.days,
+        age: offering.age,
+        note: offering.note,
+      });
+    }
+
+    processedClassPeriods.push({
+      period: period.period,
+      offerings,
+    });
+  }
+}
 
 // Check if event is in the future (for countdown)
 const isFutureEvent = startDate > new Date();
@@ -72,10 +165,7 @@ const isFutureEvent = startDate > new Date();
   description={event.data.shortDescription || event.data.title}
 >
   <!-- Hero Section -->
-  <section
-    class="event-hero"
-    style={`background-image: url(${event.data.image || heroBg.src})`}
-  >
+  <section class="event-hero" style={`background-image: url(${heroImage.src})`}>
     <div class="event-hero-content">
       <h1 class="event-hero-title">{event.data.title}</h1>
     </div>
@@ -113,17 +203,18 @@ const isFutureEvent = startDate > new Date();
         <div class="container">
           <h2 class="section-title">What is {event.data.title}?</h2>
           <div class="highlights-grid">
-            {event.data.highlights.map((highlight: any) => (
-              <div class="highlight-card">
-                {highlight.icon && (
-                  <div class="highlight-icon">
-                    <img src={highlight.icon} alt="" />
-                  </div>
-                )}
-                <h3>{highlight.title}</h3>
-                <p>{highlight.description}</p>
-              </div>
-            ))}
+            {event.data.highlights &&
+              event.data.highlights.map((highlight: any) => (
+                <div class="highlight-card">
+                  {highlight.icon && (
+                    <div class="highlight-icon">
+                      <img src={highlight.icon} alt="" />
+                    </div>
+                  )}
+                  <h3>{highlight.title}</h3>
+                  <p>{highlight.description}</p>
+                </div>
+              ))}
           </div>
         </div>
       </section>
@@ -161,7 +252,7 @@ const isFutureEvent = startDate > new Date();
                   <div class="venue-info-text">
                     {hasValidAddress ? (
                       <a
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(location)}`}
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(location)}`}
                       >
                         {event.data.location.address}
                         <br />
@@ -189,9 +280,15 @@ const isFutureEvent = startDate > new Date();
                 </p>
               )}
             </div>
-            {event.data.image && (
-              <div class="venue-image">
-                <img src={event.data.image} alt={event.data.location.venue} />
+            {bodyImageData && (
+              <div class="venue-image" data-reveal="right">
+                <Image
+                  src={bodyImageData}
+                  alt={event.data.location.venue}
+                  width={800}
+                  height={600}
+                  class="venue-img"
+                />
               </div>
             )}
           </div>
@@ -210,36 +307,37 @@ const isFutureEvent = startDate > new Date();
             <p class="age-notes">{event.data.ageNotes}</p>
           )}
           <div class="accommodation-grid">
-            {event.data.accommodation.map((acc: any) => (
-              <div class="accommodation-card">
-                <h3>{acc.name}</h3>
-                {acc.description && (
-                  <p class="acc-description">{acc.description}</p>
-                )}
-                <table class="rates-table">
-                  <thead>
-                    <tr>
-                      <th>Occupancy</th>
-                      <th>Adult (13+)</th>
-                      {acc.rates.some((r: any) => r.child) && (
-                        <th>Child (6-12)</th>
-                      )}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {acc.rates.map((rate: any) => (
+            {event.data.accommodation &&
+              event.data.accommodation.map((acc: any) => (
+                <div class="accommodation-card">
+                  <h3>{acc.name}</h3>
+                  {acc.description && (
+                    <p class="acc-description">{acc.description}</p>
+                  )}
+                  <table class="rates-table">
+                    <thead>
                       <tr>
-                        <td>{rate.occupancy}</td>
-                        <td>{rate.adult}</td>
+                        <th>Occupancy</th>
+                        <th>Adult (13+)</th>
                         {acc.rates.some((r: any) => r.child) && (
-                          <td>{rate.child || '—'}</td>
+                          <th>Child (6-12)</th>
                         )}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ))}
+                    </thead>
+                    <tbody>
+                      {acc.rates.map((rate: any) => (
+                        <tr>
+                          <td>{rate.occupancy}</td>
+                          <td>{rate.adult}</td>
+                          {acc.rates.some((r: any) => r.child) && (
+                            <td>{rate.child || '—'}</td>
+                          )}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
           </div>
         </div>
       </section>
@@ -248,7 +346,7 @@ const isFutureEvent = startDate > new Date();
 
   <!-- Schedule Section -->
   {
-    hasSchedule && (
+    event.data.schedule && (
       <section id="schedule" class="section section--cream">
         <div class="container">
           <h2 class="section-title">Daily Schedule</h2>
@@ -263,12 +361,13 @@ const isFutureEvent = startDate > new Date();
             </p>
           )}
           <div class="schedule-list">
-            {event.data.schedule.daily.map((item: any) => (
-              <div class="schedule-item">
-                <span class="schedule-time">{item.time}</span>
-                <span class="schedule-activity">{item.activity}</span>
-              </div>
-            ))}
+            {event.data.schedule.daily &&
+              event.data.schedule.daily.map((item: any) => (
+                <div class="schedule-item">
+                  <span class="schedule-time">{item.time}</span>
+                  <span class="schedule-activity">{item.activity}</span>
+                </div>
+              ))}
           </div>
           {event.data.schedule.notes && (
             <p class="schedule-notes">{event.data.schedule.notes}</p>
@@ -284,32 +383,81 @@ const isFutureEvent = startDate > new Date();
       <section id="classes" class="section section--white">
         <div class="container">
           <h2 class="section-title">Class Descriptions</h2>
-          {event.data.classes.map((period: any) => (
+          {processedClassPeriods.map((period) => (
             <div class="class-period">
               <h3 class="period-title">{period.period}</h3>
               <div class="classes-grid">
-                {period.offerings.map((cls: any) => (
-                  <div class="class-card">
-                    <h4 class="class-title">{cls.title}</h4>
-                    <p class="class-instructor">
-                      <strong>Instructor:</strong> {cls.instructor}
-                    </p>
-                    {cls.days && (
-                      <p class="class-days">
-                        <strong>Days:</strong> {cls.days}
-                      </p>
-                    )}
-                    {cls.age && (
-                      <p class="class-age">
-                        <strong>Ages:</strong> {cls.age}
-                      </p>
-                    )}
-                    {cls.description && (
-                      <p class="class-description">{cls.description}</p>
-                    )}
-                    {cls.note && <p class="class-note">{cls.note}</p>}
-                  </div>
-                ))}
+                {period.offerings.map((offering, index) => {
+                  const dialogId = offering.leader
+                    ? `leader-${offering.leader.id}-${index}`
+                    : '';
+                  const showPopover =
+                    offering.leader && hasLeaderBio(offering.leader);
+
+                  return (
+                    <div class="class-card">
+                      <h4 class="class-title">
+                        {offering.classEntry.data.title}
+                      </h4>
+                      {offering.leader && (
+                        <>
+                          <p class="class-instructor">
+                            <strong>Leader:</strong>
+                            {showPopover ? (
+                              <>
+                                <button
+                                  class="leader-link"
+                                  type="button"
+                                  data-dialog-target={dialogId}
+                                >
+                                  {offering.leader.data.image && (
+                                    <img
+                                      src={offering.leader.data.image}
+                                      alt={offering.leader.data.name}
+                                      class="leader-thumb"
+                                    />
+                                  )}
+                                  {offering.leader.data.name}
+                                </button>
+                                <LeaderPopover
+                                  leader={offering.leader}
+                                  dialogId={dialogId}
+                                />
+                              </>
+                            ) : (
+                              <>
+                                {offering.leader.data.image && (
+                                  <img
+                                    src={offering.leader.data.image}
+                                    alt={offering.leader.data.name}
+                                    class="leader-thumb"
+                                  />
+                                )}
+                                {offering.leader.data.name}
+                              </>
+                            )}
+                          </p>
+                        </>
+                      )}
+                      {offering.days && (
+                        <p class="class-days">
+                          <strong>Days:</strong> {offering.days}
+                        </p>
+                      )}
+                      {offering.age && (
+                        <p class="class-age">
+                          <strong>Ages:</strong> {offering.age}
+                        </p>
+                      )}
+                      {offering.description && (
+                        <p class="class-description">{offering.description}</p>
+                      )}
+                      {offering.note && (
+                        <p class="class-note">{offering.note}</p>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}
@@ -320,7 +468,7 @@ const isFutureEvent = startDate > new Date();
 
   <!-- Costs Section -->
   {
-    hasTuition && (
+    event.data.tuition && (
       <section id="costs" class="section section--accent">
         <div class="container">
           <h2 class="section-title section-title--light">Costs</h2>
@@ -348,7 +496,7 @@ const isFutureEvent = startDate > new Date();
                   </ul>
                 )}
             </div>
-            {hasDeadlines && (
+            {event.data.deadlines && event.data.deadlines.length > 0 && (
               <div class="deadlines-box">
                 <h3>Registration Deadlines</h3>
                 <ul class="deadlines-list">
@@ -370,6 +518,18 @@ const isFutureEvent = startDate > new Date();
   <section class="section section--white">
     <div class="container">
       <div class="event-content">
+        {
+          bodyImageData && (
+            <div class="content-image" data-reveal="left">
+              <Image
+                src={bodyImageData}
+                alt={event.data.title}
+                width={800}
+                height={600}
+              />
+            </div>
+          )
+        }
         <Content />
       </div>
     </div>
@@ -377,7 +537,7 @@ const isFutureEvent = startDate > new Date();
 
   <!-- Policies Section -->
   {
-    hasPolicies && (
+    event.data.policies && event.data.policies.length > 0 && (
       <section class="section section--cream">
         <div class="container">
           <h2 class="section-title">Policies</h2>
@@ -1021,6 +1181,9 @@ const isFutureEvent = startDate > new Date();
       font-size: 14px;
       margin-bottom: 0.5em;
       color: $color-text-dark;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
 
       strong {
         color: $color-primary;
@@ -1045,4 +1208,54 @@ const isFutureEvent = startDate > new Date();
       border-top: 1px solid rgba($color-text-dark, 0.1);
     }
   }
+
+  // Leader Link Button
+  .leader-link {
+    background: none;
+    border: none;
+    color: $color-secondary;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+    transition: color $transition-fast;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+
+    &:hover {
+      color: $color-accent;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-accent;
+      outline-offset: 2px;
+    }
+  }
+
+  // Leader Thumbnail Image
+  .leader-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid $color-secondary;
+    flex-shrink: 0;
+  }
 </style>
+
+<script>
+  // Handle leader popover dialog triggers
+  // WHY: Using event delegation instead of inline onclick handlers prevents XSS
+  // vulnerabilities from user-controlled dialog IDs in CMS content.
+  document.querySelectorAll('[data-dialog-target]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const dialogId = button.getAttribute('data-dialog-target');
+      if (dialogId) {
+        const dialog = document.getElementById(dialogId) as HTMLDialogElement;
+        dialog?.showModal();
+      }
+    });
+  });
+</script>

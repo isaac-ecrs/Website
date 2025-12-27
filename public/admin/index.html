@@ -65,17 +65,6 @@
   <body>
     <div id="nc-root"></div>
 
-    <script>
-      // Check if Netlify Identity is available
-      if (typeof netlifyIdentity === 'undefined') {
-        console.log('Netlify Identity not loaded');
-      }
-
-      // Log config path
-      console.log('Config file path:', '/admin/config.yml');
-      console.log('Base URL:', window.location.origin);
-    </script>
-
     <script src="https://unpkg.com/netlify-identity-widget"></script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 

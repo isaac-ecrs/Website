@@ -1,0 +1,94 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ContactCard from '../components/ContactCard.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+import { renderMarkdown } from '../lib/markdown';
+
+const page = await getEntry('pages', 'contact');
+if (!page || page.data.pageType !== 'contact') {
+  throw new Error('Contact page content not found');
+}
+
+const { hero, intro, formPlaceholderId, contactsTitle, contacts } = page.data;
+---
+
+<BaseLayout
+  title={page.data.title}
+  description="Contact ECRS - get in touch with us"
+>
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section class="section section--white">
+    <div class="container">
+      <h2 class="text-center">Send Us a Message</h2>
+      <div class="form-placeholder" id={formPlaceholderId}>
+        <p class="placeholder-text">Contact form will be embedded here</p>
+        <p class="placeholder-note">Cognito Form ID: {formPlaceholderId}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Regional Contacts Section -->
+  <section class="section section--tan">
+    <div class="container">
+      <h2 class="text-center">{contactsTitle || 'Regional Contacts'}</h2>
+      <p class="contacts-intro">
+        You can also reach out directly to one of our regional representatives:
+      </p>
+      <div class="contacts-grid">
+        {
+          contacts.map((contact) => (
+            <ContactCard
+              region={contact.region}
+              name={contact.name}
+              phone={contact.phone}
+              email={contact.email}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-content {
+    @include content-section(true);
+  }
+
+  h2 {
+    color: $color-primary;
+    margin-bottom: 1em;
+  }
+
+  .form-placeholder {
+    @include form-placeholder($color-light-tan);
+  }
+
+  .contacts-intro {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 2em;
+    color: rgba($color-text-dark, 0.8);
+    font-size: 1.125rem;
+  }
+
+  .contacts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5em;
+  }
+</style>

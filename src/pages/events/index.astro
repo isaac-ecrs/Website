@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Hero from '../../components/Hero.astro';
 import EventCard from '../../components/EventCard.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
-import { marked } from 'marked';
+import { renderMarkdown } from '../../lib/markdown';
 
 const allEvents = await getCollection('events');
 const upcomingEvents = allEvents
@@ -42,7 +42,7 @@ const hasValidAddress = (eventData: any) => {
 
 // Process featured event's shortDescription markdown if it exists
 const featuredDescription = featuredEvent?.data.shortDescription
-  ? marked.parse(featuredEvent.data.shortDescription, { async: false })
+  ? renderMarkdown(featuredEvent.data.shortDescription)
   : null;
 ---
 
@@ -63,31 +63,23 @@ const featuredDescription = featuredEvent?.data.shortDescription
           {featuredEvent && (
             <div class="container">
               <div class="featured-event-container">
-                <div class="featured-event-left">
-                  {featuredEvent.data.image && (
+                <div class="featured-event-left" data-reveal="left">
+                  {featuredEvent.data.heroImage && (
                     <div class="featured-event-image">
                       <img
-                        src={featuredEvent.data.image}
+                        src={featuredEvent.data.heroImage}
                         alt={featuredEvent.data.title}
                       />
                     </div>
                   )}
-                  {(() => {
-                    const year = new Date(
-                      featuredEvent.data.startDate
-                    ).getFullYear();
-                    const eventUrl = `/events/${featuredEvent.slug}-${year}`;
-                    return (
-                      <a
-                        href={eventUrl}
-                        class="btn btn--secondary featured-event-btn"
-                      >
-                        Details and Registration
-                      </a>
-                    );
-                  })()}
+                  <a
+                    href={`/events/${featuredEvent.data.eventSlug}`}
+                    class="btn btn--secondary featured-event-btn"
+                  >
+                    Details and Registration
+                  </a>
                 </div>
-                <div class="featured-event-content">
+                <div class="featured-event-content" data-reveal="right">
                   <h2>{featuredEvent.data.title}</h2>
                   <div class="featured-event-info">
                     <div class="featured-event-info-item">
@@ -147,7 +139,7 @@ const featuredDescription = featuredEvent?.data.shortDescription
                       <div class="featured-event-info-text">
                         {hasValidAddress(featuredEvent.data) ? (
                           <a
-                            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(getLocationString(featuredEvent.data))}`}
+                            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(getLocationString(featuredEvent.data))}`}
                           >
                             {featuredEvent.data.location.address}
                             <br />
@@ -196,11 +188,12 @@ const featuredDescription = featuredEvent?.data.shortDescription
               <div
                 class={`events-grid ${otherUpcomingEvents.length % 2 === 1 ? 'events-grid--odd' : ''}`}
               >
-                {otherUpcomingEvents.map((event) => {
-                  const year = new Date(event.data.startDate).getFullYear();
-                  const eventUrl = `/events/${event.slug}-${year}`;
-                  return <EventCard event={event} href={eventUrl} />;
-                })}
+                {otherUpcomingEvents.map((event) => (
+                  <EventCard
+                    event={event}
+                    href={`/events/${event.data.eventSlug}`}
+                  />
+                ))}
               </div>
             </div>
           )}
@@ -221,11 +214,13 @@ const featuredDescription = featuredEvent?.data.shortDescription
           <h2 class="text-center">Past Events</h2>
 
           <div class="events-grid">
-            {pastEvents.map((event) => {
-              const year = new Date(event.data.startDate).getFullYear();
-              const eventUrl = `/events/${event.slug}-${year}`;
-              return <EventCard event={event} isPast={true} href={eventUrl} />;
-            })}
+            {pastEvents.map((event) => (
+              <EventCard
+                event={event}
+                isPast={true}
+                href={`/events/${event.data.eventSlug}`}
+              />
+            ))}
           </div>
         </div>
       </section>

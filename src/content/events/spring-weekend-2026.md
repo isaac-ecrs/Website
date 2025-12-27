@@ -1,5 +1,6 @@
 ---
 title: 'Spring Weekend 2026'
+eventSlug: 'spring-weekend-2026'
 startDate: 2026-04-10T18:00:00
 endDate: 2026-04-12T14:00:00
 location:

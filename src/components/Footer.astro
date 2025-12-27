@@ -1,47 +1,73 @@
 ---
-// Footer with resource links
+import { getEntry } from 'astro:content';
+
+const siteSettings = await getEntry('settings', 'site');
+const { organizationName, tagline, footer } = siteSettings?.data || {
+  organizationName: 'ECRS',
+  tagline: '',
+  footer: {
+    aboutText: '',
+    copyrightText: 'All rights reserved.',
+    columns: [],
+    contactText: '',
+    contactLink: '/contact',
+  },
+};
 ---
 
 <footer class="site-footer">
   <div class="container">
     <div class="footer-columns">
       <div class="footer-column">
-        <h4>Lorem Ipsum</h4>
+        <h4>About ECRS</h4>
+        <p>{footer.aboutText}</p>
+      </div>
+
+      {
+        footer.columns.map((column) => (
+          <div class="footer-column">
+            <h4>{column.title}</h4>
+            <ul>
+              {column.links.map((link) => (
+                <li>
+                  <a href={link.href}>{link.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+
+      <div class="footer-column">
+        <h4>Contact</h4>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do
-          eiusmod.
+          {
+            /* Safely handle contact text - if pattern not found, show full text with link */
+          }
+          {
+            footer.contactText.includes('regional contacts') ? (
+              <>
+                {footer.contactText.split('regional contacts')[0]}
+                <a href={footer.contactLink}>regional contacts</a>
+                {footer.contactText.split('regional contacts')[1] || '.'}
+              </>
+            ) : (
+              <>
+                {footer.contactText} <a href={footer.contactLink}>Contact us</a>
+                .
+              </>
+            )
+          }
         </p>
-      </div>
-
-      <div class="footer-column">
-        <h4>Lorem Links</h4>
-        <ul>
-          <li><a href="/#about">Lorem Ipsum One</a></li>
-          <li><a href="/events">Lorem Ipsum Two</a></li>
-          <li><a href="/#programs">Lorem Ipsum Three</a></li>
-          <li><a href="/donate">Lorem Ipsum Four</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-column">
-        <h4>Dolor Sit</h4>
-        <ul>
-          <li><a href="#resources">Lorem Ipsum</a></li>
-          <li><a href="#resources">Dolor Sit</a></li>
-          <li><a href="#resources">Amet Cons</a></li>
-          <li><a href="#resources">Adipiscing</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-column">
-        <h4>Lorem Contact</h4>
-        <p>Email: lorem@ipsum.org</p>
-        <p>Dolor sit amet online</p>
+        {tagline && <p class="tagline">{tagline}</p>}
       </div>
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; {new Date().getFullYear()} Lorem Ipsum. All rights reserved.</p>
+      <p>
+        &copy; {new Date().getFullYear()}
+        {organizationName}. {footer.copyrightText}
+      </p>
     </div>
   </div>
 </footer>
@@ -98,6 +124,12 @@
       p {
         font-size: 14px;
         line-height: 1.6;
+      }
+
+      .tagline {
+        font-style: italic;
+        margin-top: 1em;
+        color: $color-accent;
       }
     }
 

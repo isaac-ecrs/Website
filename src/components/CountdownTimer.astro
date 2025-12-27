@@ -18,23 +18,8 @@ const targetTimestamp = targetDate.getTime();
 >
   <div class="countdown-content">
     <div class="countdown-label">Time until {eventTitle}</div>
-    <div class="countdown-units">
-      <div class="countdown-unit">
-        <span class="countdown-value" data-unit="days">--</span>
-        <span class="countdown-name">Days</span>
-      </div>
-      <div class="countdown-unit">
-        <span class="countdown-value" data-unit="hours">--</span>
-        <span class="countdown-name">Hours</span>
-      </div>
-      <div class="countdown-unit">
-        <span class="countdown-value" data-unit="minutes">--</span>
-        <span class="countdown-name">Min</span>
-      </div>
-      <div class="countdown-unit">
-        <span class="countdown-value" data-unit="seconds">--</span>
-        <span class="countdown-name">Sec</span>
-      </div>
+    <div class="countdown-display" data-display-container>
+      <!-- Content dynamically populated based on time remaining -->
     </div>
   </div>
   <div class="countdown-toggle" aria-hidden="true">
@@ -60,10 +45,76 @@ const targetTimestamp = targetDate.getTime();
     if (!container) return;
 
     const targetTimestamp = parseInt(container.dataset.target || '0');
-    const daysEl = container.querySelector('[data-unit="days"]');
-    const hoursEl = container.querySelector('[data-unit="hours"]');
-    const minutesEl = container.querySelector('[data-unit="minutes"]');
-    const secondsEl = container.querySelector('[data-unit="seconds"]');
+    const displayContainer = container.querySelector(
+      '[data-display-container]'
+    );
+    if (!displayContainer) return;
+
+    // Time constants
+    const MS_PER_SECOND = 1000;
+    const MS_PER_MINUTE = MS_PER_SECOND * 60;
+    const MS_PER_HOUR = MS_PER_MINUTE * 60;
+    const MS_PER_DAY = MS_PER_HOUR * 24;
+    const MS_PER_WEEK = MS_PER_DAY * 7;
+    const MS_PER_MONTH = MS_PER_DAY * 30.44; // Average month
+    const MS_PER_YEAR = MS_PER_DAY * 365.25; // Account for leap years
+
+    type UnitConfig = { value: number; singular: string; plural: string };
+    let currentMode = '';
+    let currentText = '';
+
+    function formatFluentText(units: UnitConfig[]): string {
+      // Filter out zero values
+      const nonZero = units.filter((u) => u.value > 0);
+      if (nonZero.length === 0) return 'now';
+
+      const parts = nonZero.map(
+        (u) => `${u.value} ${u.value === 1 ? u.singular : u.plural}`
+      );
+
+      if (parts.length === 1) {
+        return parts[0];
+      } else if (parts.length === 2) {
+        return `${parts[0]} and ${parts[1]}`;
+      } else {
+        const last = parts.pop();
+        return `${parts.join(', ')}, and ${last}`;
+      }
+    }
+
+    function renderFluentText(text: string) {
+      // WHY: Using textContent instead of innerHTML prevents XSS and is safer
+      displayContainer!.textContent = '';
+      const span = document.createElement('span');
+      span.className = 'countdown-text';
+      span.textContent = text;
+      displayContainer!.appendChild(span);
+      displayContainer!.classList.remove('countdown-units');
+      displayContainer!.classList.add('countdown-fluent');
+    }
+
+    function renderUnits(units: UnitConfig[]) {
+      // Filter out zero values for grid display too
+      const nonZero = units.filter((u) => u.value > 0);
+      // WHY: Using textContent = '' instead of innerHTML = '' is safer
+      displayContainer!.textContent = '';
+      displayContainer!.classList.remove('countdown-fluent');
+      displayContainer!.classList.add('countdown-units');
+      nonZero.forEach((unit) => {
+        const el = document.createElement('div');
+        el.className = 'countdown-unit';
+        // WHY: Building DOM elements instead of innerHTML prevents potential XSS
+        const valueSpan = document.createElement('span');
+        valueSpan.className = 'countdown-value';
+        valueSpan.textContent = String(unit.value);
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'countdown-name';
+        nameSpan.textContent = unit.value === 1 ? unit.singular : unit.plural;
+        el.appendChild(valueSpan);
+        el.appendChild(nameSpan);
+        displayContainer!.appendChild(el);
+      });
+    }
 
     function updateCountdown() {
       const now = Date.now();
@@ -71,26 +122,104 @@ const targetTimestamp = targetDate.getTime();
 
       if (diff <= 0) {
         container.classList.add('countdown-float--ended');
-        if (daysEl) daysEl.textContent = '0';
-        if (hoursEl) hoursEl.textContent = '0';
-        if (minutesEl) minutesEl.textContent = '0';
-        if (secondsEl) secondsEl.textContent = '0';
+        renderFluentText('Event has started!');
         return;
       }
 
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      let units: UnitConfig[] = [];
+      let newMode = '';
+      let useFluent = true;
 
-      if (daysEl) daysEl.textContent = days.toString();
-      if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
-      if (minutesEl)
-        minutesEl.textContent = minutes.toString().padStart(2, '0');
-      if (secondsEl)
-        secondsEl.textContent = seconds.toString().padStart(2, '0');
+      if (diff >= MS_PER_YEAR) {
+        // More than a year: show years, months, weeks
+        const years = Math.floor(diff / MS_PER_YEAR);
+        const remainingAfterYears = diff % MS_PER_YEAR;
+        const months = Math.floor(remainingAfterYears / MS_PER_MONTH);
+        const remainingAfterMonths = remainingAfterYears % MS_PER_MONTH;
+        const weeks = Math.floor(remainingAfterMonths / MS_PER_WEEK);
+
+        units = [
+          { value: years, singular: 'year', plural: 'years' },
+          { value: months, singular: 'month', plural: 'months' },
+          { value: weeks, singular: 'week', plural: 'weeks' },
+        ];
+        newMode = 'years';
+      } else if (diff >= MS_PER_MONTH) {
+        // More than a month: show months, weeks, days
+        const months = Math.floor(diff / MS_PER_MONTH);
+        const remainingAfterMonths = diff % MS_PER_MONTH;
+        const weeks = Math.floor(remainingAfterMonths / MS_PER_WEEK);
+        const remainingAfterWeeks = remainingAfterMonths % MS_PER_WEEK;
+        const days = Math.floor(remainingAfterWeeks / MS_PER_DAY);
+
+        units = [
+          { value: months, singular: 'month', plural: 'months' },
+          { value: weeks, singular: 'week', plural: 'weeks' },
+          { value: days, singular: 'day', plural: 'days' },
+        ];
+        newMode = 'months';
+      } else if (diff >= MS_PER_WEEK) {
+        // More than a week: show weeks, days
+        const weeks = Math.floor(diff / MS_PER_WEEK);
+        const remainingAfterWeeks = diff % MS_PER_WEEK;
+        const days = Math.floor(remainingAfterWeeks / MS_PER_DAY);
+
+        units = [
+          { value: weeks, singular: 'week', plural: 'weeks' },
+          { value: days, singular: 'day', plural: 'days' },
+        ];
+        newMode = 'weeks';
+      } else {
+        // Less than a week: show days, hours, minutes, seconds (grid format)
+        const days = Math.floor(diff / MS_PER_DAY);
+        const hours = Math.floor((diff % MS_PER_DAY) / MS_PER_HOUR);
+        const minutes = Math.floor((diff % MS_PER_HOUR) / MS_PER_MINUTE);
+        const seconds = Math.floor((diff % MS_PER_MINUTE) / MS_PER_SECOND);
+
+        units = [
+          { value: days, singular: 'Day', plural: 'Days' },
+          { value: hours, singular: 'Hr', plural: 'Hrs' },
+          { value: minutes, singular: 'Min', plural: 'Min' },
+          { value: seconds, singular: 'Sec', plural: 'Sec' },
+        ];
+        newMode = 'days';
+        useFluent = false;
+      }
+
+      if (useFluent) {
+        const newText = formatFluentText(units);
+        if (newMode !== currentMode || newText !== currentText) {
+          currentMode = newMode;
+          currentText = newText;
+          renderFluentText(newText);
+        }
+      } else {
+        // Grid mode for final countdown
+        if (newMode !== currentMode) {
+          currentMode = newMode;
+          renderUnits(units);
+        } else {
+          // Update existing values (filter zeros)
+          const nonZero = units.filter((u) => u.value > 0);
+          const unitEls = displayContainer!.querySelectorAll('.countdown-unit');
+
+          // If number of displayed units changed, re-render
+          if (unitEls.length !== nonZero.length) {
+            renderUnits(units);
+          } else {
+            const valueEls =
+              displayContainer!.querySelectorAll('.countdown-value');
+            const nameEls =
+              displayContainer!.querySelectorAll('.countdown-name');
+            nonZero.forEach((unit, i) => {
+              if (valueEls[i]) valueEls[i].textContent = unit.value.toString();
+              if (nameEls[i])
+                nameEls[i].textContent =
+                  unit.value === 1 ? unit.singular : unit.plural;
+            });
+          }
+        }
+      }
     }
 
     // Toggle minimized state on click
@@ -209,45 +338,61 @@ const targetTimestamp = targetDate.getTime();
     text-align: center;
   }
 
-  .countdown-units {
-    display: flex;
-    gap: 1em;
-    justify-content: center;
+  .countdown-display {
+    text-align: center;
 
-    @include mobile {
-      gap: 0.75em;
+    // Use :global for dynamically-generated content
+    :global(.countdown-text) {
+      font-size: 1.25rem;
+      font-weight: $font-weight-bold;
+      font-family: $font-heading;
+      color: $color-accent;
+
+      @include mobile {
+        font-size: 1.1rem;
+      }
     }
-  }
 
-  .countdown-unit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 48px;
+    :global(.countdown-unit) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 48px;
 
-    @include mobile {
-      min-width: 40px;
+      @include mobile {
+        min-width: 40px;
+      }
     }
-  }
 
-  .countdown-value {
-    font-size: 28px;
-    font-weight: $font-weight-bold;
-    font-family: $font-heading;
-    line-height: 1;
-    color: $color-accent;
+    :global(.countdown-value) {
+      font-size: 28px;
+      font-weight: $font-weight-bold;
+      font-family: $font-heading;
+      line-height: 1;
+      color: $color-accent;
 
-    @include mobile {
-      font-size: 22px;
+      @include mobile {
+        font-size: 22px;
+      }
     }
-  }
 
-  .countdown-name {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    opacity: 0.7;
-    margin-top: 4px;
+    :global(.countdown-name) {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    &:global(.countdown-units) {
+      display: flex;
+      gap: 1em;
+      justify-content: center;
+
+      @include mobile {
+        gap: 0.75em;
+      }
+    }
   }
 
   .countdown-toggle {

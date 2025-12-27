@@ -1,0 +1,57 @@
+---
+interface Props {
+  name: string;
+  description?: string;
+  url: string;
+}
+
+const { name, description, url } = Astro.props;
+---
+
+<a
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer"
+  class="resource-card"
+  data-reveal="bottom"
+>
+  <h3>{name}</h3>
+  {description && <p>{description}</p>}
+  <span class="resource-link">Visit Website →</span>
+</a>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .resource-card {
+    @include card-base(1.5em);
+    @include card-hover;
+    display: block;
+    text-decoration: none;
+
+    &:hover .resource-link {
+      color: $color-secondary;
+    }
+
+    h3 {
+      color: $color-primary;
+      margin-bottom: 0.5em;
+      font-size: 1.125rem;
+    }
+
+    p {
+      color: rgba($color-text-dark, 0.8);
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      margin-bottom: 1em;
+    }
+  }
+
+  .resource-link {
+    color: $color-accent;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: color $transition-fast;
+  }
+</style>

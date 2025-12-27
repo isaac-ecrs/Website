@@ -1,0 +1,255 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import IconCard from '../components/IconCard.astro';
+import PrincipleCard from '../components/PrincipleCard.astro';
+import OfferingsCard from '../components/OfferingsCard.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+import { renderMarkdown } from '../lib/markdown';
+
+const page = await getEntry('pages', 'about');
+if (!page || page.data.pageType !== 'about') {
+  throw new Error('About page content not found');
+}
+
+const {
+  hero,
+  intro,
+  philosophy,
+  guidingPrinciples,
+  activities,
+  additionalOfferings,
+  typicalProgramming,
+  subPages,
+  ctaText,
+  ctaLink,
+} = page.data;
+
+// Font Awesome icon mapping for activities
+const activityIcons: Record<string, string> = {
+  Games: 'fa-people-group',
+  Dance: 'fa-shoe-prints',
+  Singing: 'fa-music',
+  Dramatics: 'fa-masks-theater',
+  Crafts: 'fa-palette',
+  Theory: 'fa-book-open',
+};
+
+function getActivityIcon(title: string): string {
+  return activityIcons[title] || 'fa-star';
+}
+---
+
+<BaseLayout
+  title={page.data.title}
+  description="Learn about ECRS - who we are and what we do"
+>
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
+    </div>
+  </section>
+
+  <!-- Philosophy Section -->
+  {
+    philosophy && (
+      <section class="section section--white">
+        <div class="container">
+          <div
+            class="philosophy-content"
+            set:html={renderMarkdown(philosophy)}
+          />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Guiding Principles Section -->
+  {
+    guidingPrinciples && guidingPrinciples.length > 0 && (
+      <section class="section section--tan">
+        <div class="container">
+          <h2 class="text-center">Our Guiding Principles</h2>
+          <p class="section-subtitle">
+            These beliefs have guided ECRS since our founding in 1940
+          </p>
+          <div class="principles-grid">
+            {guidingPrinciples.map((principle, index) => (
+              <PrincipleCard
+                number={index + 1}
+                title={principle.title}
+                description={principle.description}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Activities Section -->
+  {
+    activities && activities.length > 0 && (
+      <section class="section section--white">
+        <div class="container">
+          <h2 class="text-center">What We Teach</h2>
+          <div class="activities-grid">
+            {activities.map((activity) => (
+              <IconCard
+                title={activity.title}
+                description={activity.description}
+                icon={getActivityIcon(activity.title)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Additional Offerings & Programming Section -->
+  {
+    (additionalOfferings || typicalProgramming) && (
+      <section class="section section--tan">
+        <div class="container">
+          <div class="offerings-grid">
+            {additionalOfferings && additionalOfferings.length > 0 && (
+              <OfferingsCard
+                title="Additional Offerings"
+                intro="Beyond our core activities, we also offer:"
+                items={additionalOfferings}
+              />
+            )}
+            {typicalProgramming && typicalProgramming.length > 0 && (
+              <OfferingsCard
+                title="Typical Annual Programming"
+                intro="Throughout the year, ECRS hosts:"
+                items={typicalProgramming}
+              />
+            )}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Sub-Pages Section -->
+  {
+    subPages && subPages.length > 0 && (
+      <section class="section section--white">
+        <div class="container">
+          <h2 class="text-center">Learn More About ECRS</h2>
+          <div class="grid-3">
+            {subPages.map((subPage) => (
+              <FeatureCard
+                title={subPage.title}
+                description={subPage.description}
+                link={subPage.link}
+                linkText={subPage.linkText || 'Learn More'}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- CTA Section -->
+  {
+    ctaText && ctaLink && (
+      <section class="section section--dark">
+        <div class="container text-center">
+          <h2>Ready to Join Us?</h2>
+          <p class="cta-text">
+            Experience the joy of creative recreation with ECRS
+          </p>
+          <a href={ctaLink} class="btn btn--primary">
+            {ctaText}
+          </a>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-content,
+  .philosophy-content {
+    max-width: 800px;
+    margin: 0 auto;
+
+    :global(p) {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 1.5em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .activities-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+    margin-top: 2em;
+
+    @include mobile {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5em;
+    }
+  }
+
+  .cta-text {
+    color: rgba(white, 0.9);
+    font-size: 1.125rem;
+    margin-bottom: 1.5em;
+  }
+
+  .section--dark {
+    h2 {
+      color: white;
+    }
+  }
+
+  // Guiding Principles Section
+  .section-subtitle {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 2em;
+    color: rgba($color-text-dark, 0.8);
+    font-size: 1.125rem;
+  }
+
+  .principles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 1.5em;
+    }
+  }
+
+  // Additional Offerings Section
+  .offerings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3em;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 2em;
+    }
+  }
+</style>

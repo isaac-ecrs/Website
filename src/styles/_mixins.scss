@@ -1,7 +1,25 @@
+/**
+ * SCSS Mixins
+ *
+ * WHY MIXINS?
+ * Many components share identical styling (cards, buttons, form placeholders).
+ * Defining these patterns once means:
+ * 1. One place to change shadow/radius/padding values
+ * 2. Components only specify what's different
+ * 3. Consistent visual language across the site
+ *
+ * HOW TO USE:
+ * In your component's <style> block:
+ *   @use '../styles/mixins' as *;
+ *   .my-card { @include card-base(2em); }
+ */
+
 @use 'variables' as *;
 
 // ============================================
 // RESPONSIVE BREAKPOINTS
+// WHY: Consistent breakpoints across all components.
+// Mobile-first: styles apply to mobile, then override for larger screens.
 // ============================================
 @mixin mobile {
   @media (max-width: #{$breakpoint-mobile}) {
@@ -154,5 +172,123 @@
     transform: translateY(-2px);
     filter: brightness(0.9);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  }
+}
+
+// ============================================
+// CONTENT SECTION
+// WHY: Most pages have an intro section with markdown content. This ensures
+// consistent typography (18px, 1.8 line-height) across all prose sections.
+// The $centered param handles pages that center their intro vs left-align.
+// ============================================
+@mixin content-section($centered: false, $max-width: 800px) {
+  max-width: $max-width;
+  margin: 0 auto;
+  @if $centered {
+    text-align: center;
+  }
+
+  :global(p) {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 1.5em;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// ============================================
+// ICON CIRCLE
+// For circular icon containers (activities, benefits, etc.)
+// ============================================
+@mixin icon-circle($size: 70px, $icon-size: 1.75rem, $bg-color: $color-accent) {
+  width: $size;
+  height: $size;
+  background: $bg-color;
+  border-radius: $border-radius-circle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1em;
+
+  i {
+    font-size: $icon-size;
+    color: white;
+  }
+}
+
+// ============================================
+// FORM PLACEHOLDER
+// WHY: Contact, Donate, and Membership pages all have identical form
+// placeholders. Dashed border signals "content coming here" to developers.
+// ============================================
+@mixin form-placeholder($bg-color: $color-light-tan) {
+  max-width: 600px;
+  margin: 2em auto 0;
+  padding: 3em 2em;
+  background: $bg-color;
+  border: 2px dashed rgba($color-text-dark, 0.2);
+  border-radius: $border-radius-card;
+  text-align: center;
+
+  .placeholder-text {
+    font-size: 1.125rem;
+    color: rgba($color-text-dark, 0.6);
+    margin-bottom: 0.5em;
+  }
+
+  .placeholder-note {
+    font-size: 0.875rem;
+    color: rgba($color-text-dark, 0.4);
+    font-family: monospace;
+    margin: 0;
+  }
+}
+
+// ============================================
+// CARD BASE
+// WHY: 7+ components use identical card styling. Centralizing here means
+// one place to change the shadow/radius/padding for consistency.
+// ============================================
+@mixin card-base($padding: 1.5em) {
+  background: white;
+  padding: $padding;
+  border-radius: $border-radius-card;
+  // WHY 10px offset shadow: Creates depth without looking like it's floating.
+  // 0.08 opacity is visible but subtle - doesn't compete with content.
+  box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+}
+
+// WHY SEPARATE FROM card-base:
+// Not all cards should have hover effects. Static info cards (ContactCard,
+// PrincipleCard) don't need hover states, but clickable cards (ResourceCard,
+// PricingCard) do. Splitting lets components opt-in to hover behavior.
+@mixin card-hover {
+  transition:
+    transform $transition-fast,
+    box-shadow $transition-fast;
+
+  &:hover {
+    transform: translateY(-5px);
+    // Slightly darker shadow on hover reinforces the "lifting" effect
+    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.12);
+  }
+}
+
+// ============================================
+// CTA SECTION DARK
+// For dark call-to-action sections
+// ============================================
+@mixin cta-section-dark {
+  .cta-text {
+    color: rgba(white, 0.9);
+    font-size: 1.125rem;
+    margin-bottom: 1.5em;
+  }
+
+  h2 {
+    color: white;
   }
 }

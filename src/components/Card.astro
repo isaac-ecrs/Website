@@ -1,10 +1,32 @@
 ---
+/**
+ * Base Card Component
+ *
+ * WHY THIS PATTERN (Pseudo-element Overlay Technique):
+ * Cards need to be fully clickable while allowing internal links (venue website,
+ * map directions) to remain separately clickable. We solve this by:
+ *
+ * 1. The main link's ::after pseudo-element covers the entire card (z-index: 1)
+ * 2. Internal links get z-index: 2 to sit above the overlay
+ * 3. Focus states are handled by the parent card element, not the link
+ *
+ * This approach beats wrapping everything in <a> because:
+ * - Screen readers announce it as a single link (not every element)
+ * - Internal links remain independently clickable and focusable
+ * - Hover/focus states apply to the whole card visually
+ *
+ * SLOTS:
+ * - media: Optional image/video content (left side in horizontal, top in vertical)
+ * - content: Main card content (title, description, metadata)
+ * - cta: Call-to-action text that becomes the clickable link
+ */
 interface Props {
   href: string; // Required - cards are always clickable
   variant?: 'vertical' | 'horizontal'; // Layout direction (default: vertical)
   isPast?: boolean; // For dimmed styling (events only)
   hasMedia?: boolean; // Whether the card has media (for horizontal layout)
   class?: string; // Additional classes
+  'data-reveal'?: string; // Animation direction for scroll reveal
 }
 
 const {
@@ -13,11 +35,13 @@ const {
   isPast = false,
   hasMedia = false,
   class: additionalClass = '',
+  'data-reveal': dataReveal,
 } = Astro.props;
 ---
 
 <article
   class={`card card--${variant} ${isPast ? 'card--past' : ''} ${hasMedia ? 'card--has-media' : 'card--no-media'} ${additionalClass}`}
+  data-reveal={dataReveal}
 >
   <slot name="media" />
   <slot name="content" />

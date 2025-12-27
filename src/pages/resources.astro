@@ -1,0 +1,134 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ResourceCard from '../components/ResourceCard.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+import { renderMarkdown } from '../lib/markdown';
+
+const page = await getEntry('pages', 'resources');
+if (!page || page.data.pageType !== 'resources') {
+  throw new Error('Resources page content not found');
+}
+
+const { hero, intro, sections } = page.data;
+---
+
+<BaseLayout
+  title={page.data.title}
+  description="ECRS resources - related organizations, festivals, and venues"
+>
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  {
+    intro && (
+      <section class="section section--cream">
+        <div class="container">
+          <div class="intro-content" set:html={renderMarkdown(intro)} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Resource Sections -->
+  {
+    sections.map((section, index) => (
+      <section
+        class={`section ${index % 2 === 0 ? 'section--white' : 'section--tan'}`}
+      >
+        <div class="container">
+          <h2>{section.title}</h2>
+          {section.description && (
+            <p class="section-description">{section.description}</p>
+          )}
+          {section.content && (
+            <div
+              class="section-content"
+              set:html={renderMarkdown(section.content)}
+            />
+          )}
+          {section.links && section.links.length > 0 && (
+            <div class="resources-grid">
+              {section.links.map((link) => (
+                <ResourceCard
+                  name={link.name}
+                  description={link.description}
+                  url={link.url}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+    ))
+  }
+
+  <!-- CTA Section -->
+  <section class="section section--dark">
+    <div class="container text-center">
+      <h2>Know a Great Resource?</h2>
+      <p class="cta-text">
+        Help us expand this list by suggesting organizations, festivals, or
+        venues
+      </p>
+      <a href="/contact" class="btn btn--primary">Contact Us</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+
+    :global(p) {
+      font-size: 18px;
+      line-height: 1.8;
+    }
+  }
+
+  h2 {
+    color: $color-primary;
+    margin-bottom: 0.5em;
+  }
+
+  .section-description {
+    font-size: 1.125rem;
+    color: rgba($color-text-dark, 0.8);
+    margin-bottom: 2em;
+    max-width: 700px;
+  }
+
+  .section-content {
+    max-width: 700px;
+    margin-bottom: 2em;
+
+    :global(p) {
+      font-size: 18px;
+      line-height: 1.8;
+    }
+  }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5em;
+  }
+
+  .cta-text {
+    color: rgba(white, 0.9);
+    font-size: 1.125rem;
+    margin-bottom: 1.5em;
+  }
+
+  .section--dark {
+    h2 {
+      color: white;
+    }
+  }
+</style>

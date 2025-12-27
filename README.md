@@ -5,6 +5,7 @@ Eastern Cooperative Recreation School (ECRS) website built with [Astro](https://
 ## Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ and npm
 - Git
 
@@ -69,6 +70,107 @@ public/
 └── events/              # Event images
 ```
 
+## Understanding Astro (For JavaScript Developers)
+
+If you're coming from vanilla HTML/CSS/JS or other frameworks, here are the key Astro concepts you'll encounter in this codebase.
+
+### Component Anatomy
+
+Astro components (`.astro` files) have a unique two-part structure:
+
+```astro
+---
+// This is the "frontmatter fence" - runs at BUILD time on the server
+// Import dependencies, fetch data, define variables here
+import Hero from '../components/Hero.astro';
+const title = 'Hello World';
+---
+
+<!-- This is the template - becomes static HTML -->
+<Hero title={title} />
+<p>Regular HTML with {expressions} for dynamic values</p>
+
+<style lang="scss">
+  /* Styles are automatically scoped to this component */
+</style>
+```
+
+**Why the fence?** The code between `---` runs during the build, not in the browser. This means you can import modules, call APIs, and do complex logic without shipping any of that JavaScript to users.
+
+### File-based Routing
+
+Files in `src/pages/` automatically become routes:
+
+- `src/pages/index.astro` → `/`
+- `src/pages/about.astro` → `/about`
+- `src/pages/events/index.astro` → `/events`
+- `src/pages/events/[...slug].astro` → `/events/anything` (dynamic route)
+
+### Content Collections
+
+Instead of hardcoding content in components, we store it in markdown files (`src/content/`) with type-safe schemas:
+
+```typescript
+// src/content/config.ts - defines what fields each content type has
+const eventsCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    startDate: z.coerce.date(),
+    // ... Zod validates content at build time
+  }),
+});
+```
+
+**Why?** TypeScript knows exactly what fields exist in your content. If you typo `page.data.titl`, you get an error before the site builds.
+
+### Scoped Styles
+
+Styles in `<style>` blocks are automatically scoped to that component:
+
+```astro
+<p class="intro">Hello</p>
+
+<style>
+  .intro {
+    color: blue;
+  } /* Only affects THIS component's .intro */
+</style>
+```
+
+To style content rendered from markdown (using `set:html`), wrap selectors in `:global()`:
+
+```scss
+.intro :global(p) {
+  /* Targets <p> tags inside .intro, even from markdown */
+  font-size: 18px;
+}
+```
+
+### The `set:html` Directive
+
+When rendering markdown or any HTML string, use `set:html`:
+
+```astro
+---
+import { marked } from 'marked';
+const htmlContent = marked.parse(markdownString);
+---
+
+<div set:html={htmlContent} />
+```
+
+**Why not `{htmlContent}`?** Curly braces escape HTML for security. `set:html` renders it as actual HTML.
+
+### Key Differences from Plain HTML
+
+| Plain HTML           | Astro                                        |
+| -------------------- | -------------------------------------------- |
+| `<script src="...">` | `<script>import '...';</script>` (bundled)   |
+| Global CSS           | Scoped by default                            |
+| Runtime JS           | Build-time by default                        |
+| Link with `href`     | Same, but no `.html` extension needed        |
+| Separate CSS files   | Inline `<style>` blocks (extracted at build) |
+
 ## Decap CMS
 
 ### Local Development
@@ -111,15 +213,15 @@ All content is stored as markdown files in `src/content/`:
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run dev:cms` | Start dev server + CMS proxy |
-| `npm run cms:proxy` | Start CMS proxy server only |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint and type checking |
-| `npm run format` | Format code with Prettier |
+| Command             | Description                  |
+| ------------------- | ---------------------------- |
+| `npm run dev`       | Start development server     |
+| `npm run dev:cms`   | Start dev server + CMS proxy |
+| `npm run cms:proxy` | Start CMS proxy server only  |
+| `npm run build`     | Build for production         |
+| `npm run preview`   | Preview production build     |
+| `npm run lint`      | Run ESLint and type checking |
+| `npm run format`    | Format code with Prettier    |
 
 ## Deployment
 
@@ -143,6 +245,7 @@ Create a `.env` file for local development (not committed to Git):
 ### Astro Config
 
 See `astro.config.mjs` for Astro-specific configuration including:
+
 - Netlify adapter
 - Image optimization
 - Markdown processing

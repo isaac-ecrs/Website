@@ -1,5 +1,6 @@
 ---
 title: 'ECRS Fun Day in Philly'
+eventSlug: 'fun-day-philly-2024'
 startDate: 2024-10-26T14:00:00
 endDate: 2024-10-26T20:15:00
 location:

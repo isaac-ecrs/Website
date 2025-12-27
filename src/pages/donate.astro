@@ -1,0 +1,141 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+import { renderMarkdown } from '../lib/markdown';
+
+const page = await getEntry('pages', 'donate');
+if (!page || page.data.pageType !== 'donate') {
+  throw new Error('Donate page content not found');
+}
+
+const { hero, intro, taxInfo, formPlaceholderId } = page.data;
+---
+
+<BaseLayout
+  title={page.data.title}
+  description="Donate to ECRS - support creative recreation"
+>
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
+    </div>
+  </section>
+
+  <!-- Tax Info Section -->
+  {
+    taxInfo && (
+      <section class="section section--white">
+        <div class="container">
+          <div class="tax-info">
+            <div class="tax-icon">
+              <i class="fa-solid fa-hand-holding-heart" />
+            </div>
+            <div class="tax-content" set:html={renderMarkdown(taxInfo)} />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Form Section -->
+  <section class="section section--tan">
+    <div class="container">
+      <h2 class="text-center">Make a Donation</h2>
+      <div class="form-placeholder" id={formPlaceholderId}>
+        <p class="placeholder-text">Donation form will be embedded here</p>
+        <p class="placeholder-note">Cognito Form ID: {formPlaceholderId}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Thank You Section -->
+  <section class="section section--dark">
+    <div class="container text-center">
+      <h2>Thank You!</h2>
+      <p class="thank-you-text">
+        Your generosity helps us continue building community through creative
+        recreation.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-content {
+    @include content-section(true);
+  }
+
+  h2 {
+    color: $color-primary;
+    margin-bottom: 1em;
+  }
+
+  .tax-info {
+    @include card-base(2em);
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    gap: 2em;
+    align-items: flex-start;
+
+    @include mobile {
+      flex-direction: column;
+      text-align: center;
+      gap: 1em;
+    }
+  }
+
+  .tax-icon {
+    width: 80px;
+    height: 80px;
+    background: $color-accent;
+    border-radius: $border-radius-circle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    i {
+      font-size: 2rem;
+      color: white;
+    }
+
+    @include mobile {
+      margin: 0 auto;
+    }
+  }
+
+  .tax-content {
+    :global(p) {
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .form-placeholder {
+    @include form-placeholder(white);
+  }
+
+  .section--dark {
+    @include cta-section-dark;
+
+    .thank-you-text {
+      color: rgba(white, 0.9);
+      font-size: 1.125rem;
+      margin: 0;
+    }
+  }
+</style>

@@ -1,56 +1,515 @@
 backend:
   name: git-gateway
-  branch: main
+  branch: develop
 
 # Enable editorial workflow (Draft -> In Review -> Ready -> Published)
 publish_mode: editorial_workflow
 
-# Local backend for development/testing
+# Local backend for development (ignored in production)
 local_backend: true
 
 media_folder: src/assets/images
 public_folder: /assets/images
 
 collections:
+  # Static Pages (using file-based collection for single pages)
   - name: pages
     label: Pages
-    folder: src/content/pages
-    extension: md
-    format: yaml-frontmatter
-    create: false
-    slug: '{{slug}}'
-    fields:
-      - { label: 'Title', name: 'title', widget: 'string' }
-      - label: 'Hero Section'
-        name: 'hero'
-        widget: 'object'
+    files:
+      # Home Page
+      - name: home
+        label: Home Page
+        file: src/content/pages/home.md
         fields:
-          - { label: 'Title', name: 'title', widget: 'string' }
-          - { label: 'Subtitle', name: 'subtitle', widget: 'string' }
           - {
-              label: 'Background Image',
-              name: 'backgroundImage',
+              label: 'Page Type',
+              name: 'pageType',
               widget: 'hidden',
-              default: '../../assets/images/hero-bg.jpg',
+              default: 'home',
             }
-          - { label: 'CTA Text', name: 'ctaText', widget: 'string' }
-          - { label: 'CTA Link', name: 'ctaLink', widget: 'string' }
-      - label: 'Feature Cards'
-        name: 'featureCards'
-        widget: 'list'
-        fields:
           - { label: 'Title', name: 'title', widget: 'string' }
-          - { label: 'Description', name: 'description', widget: 'text' }
-          - { label: 'Icon', name: 'icon', widget: 'hidden' }
-      - label: 'Donation CTA'
-        name: 'donationCta'
-        widget: 'object'
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Subtitle', name: 'subtitle', widget: 'text' }
+              - {
+                  label: 'CTA Text',
+                  name: 'ctaText',
+                  widget: 'string',
+                  required: false,
+                }
+              - {
+                  label: 'CTA Link',
+                  name: 'ctaLink',
+                  widget: 'string',
+                  required: false,
+                }
+          - label: 'Feature Cards'
+            name: 'featureCards'
+            widget: 'list'
+            max: 3
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - {
+                  label: 'Icon',
+                  name: 'icon',
+                  widget: 'hidden',
+                  required: false,
+                }
+          - { label: 'About Section', name: 'about', widget: 'markdown' }
+          - label: 'What We Do Section'
+            name: 'whatWeDo'
+            widget: 'object'
+            fields:
+              - { label: 'Image', name: 'image', widget: 'hidden' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - { label: 'Activities', name: 'activities', widget: 'markdown' }
+
+      # About Page
+      - name: about
+        label: About Page
+        file: src/content/pages/about.md
         fields:
+          - {
+              label: 'Page Type',
+              name: 'pageType',
+              widget: 'hidden',
+              default: 'about',
+            }
           - { label: 'Title', name: 'title', widget: 'string' }
-          - { label: 'Description', name: 'description', widget: 'text' }
-          - { label: 'Button Text', name: 'buttonText', widget: 'string' }
-          - { label: 'Button Link', name: 'buttonLink', widget: 'string' }
-      - { label: 'Body', name: 'body', widget: 'markdown' }
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Subtitle',
+                  name: 'subtitle',
+                  widget: 'text',
+                  required: false,
+                }
+          - { label: 'Introduction', name: 'intro', widget: 'markdown' }
+          - {
+              label: 'Philosophy',
+              name: 'philosophy',
+              widget: 'markdown',
+              required: false,
+            }
+          - label: 'Activities'
+            name: 'activities'
+            widget: 'list'
+            required: false
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Icon',
+                  name: 'icon',
+                  widget: 'string',
+                  required: false,
+                }
+              - { label: 'Description', name: 'description', widget: 'text' }
+          - label: 'Sub-Page Links'
+            name: 'subPages'
+            widget: 'list'
+            required: false
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - { label: 'Link', name: 'link', widget: 'string' }
+              - {
+                  label: 'Link Text',
+                  name: 'linkText',
+                  widget: 'string',
+                  required: false,
+                }
+          - {
+              label: 'CTA Text',
+              name: 'ctaText',
+              widget: 'string',
+              required: false,
+            }
+          - {
+              label: 'CTA Link',
+              name: 'ctaLink',
+              widget: 'string',
+              required: false,
+            }
+
+      # History Page
+      - name: history
+        label: History Page
+        file: src/content/pages/history.md
+        fields:
+          - {
+              label: 'Page Type',
+              name: 'pageType',
+              widget: 'hidden',
+              default: 'history',
+            }
+          - { label: 'Title', name: 'title', widget: 'string' }
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Subtitle',
+                  name: 'subtitle',
+                  widget: 'text',
+                  required: false,
+                }
+          - { label: 'Introduction', name: 'intro', widget: 'markdown' }
+          - {
+              label: 'Name Explanation',
+              name: 'nameExplanation',
+              widget: 'markdown',
+              required: false,
+            }
+          - label: 'History Sections'
+            name: 'sections'
+            widget: 'list'
+            required: false
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Content', name: 'content', widget: 'markdown' }
+              - {
+                  label: 'Image',
+                  name: 'image',
+                  widget: 'image',
+                  required: false,
+                }
+              - {
+                  label: 'Image Caption',
+                  name: 'imageCaption',
+                  widget: 'string',
+                  required: false,
+                }
+
+      # What Makes ECRS Special Page
+      - name: special
+        label: What Makes ECRS Special
+        file: src/content/pages/special.md
+        fields:
+          - {
+              label: 'Page Type',
+              name: 'pageType',
+              widget: 'hidden',
+              default: 'special',
+            }
+          - { label: 'Title', name: 'title', widget: 'string' }
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Subtitle',
+                  name: 'subtitle',
+                  widget: 'text',
+                  required: false,
+                }
+          - { label: 'Introduction', name: 'intro', widget: 'markdown' }
+          - label: 'Core Principles'
+            name: 'principles'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - {
+                  label: 'Icon',
+                  name: 'icon',
+                  widget: 'string',
+                  required: false,
+                }
+          - {
+              label: 'CTA Title',
+              name: 'ctaTitle',
+              widget: 'string',
+              required: false,
+            }
+          - {
+              label: 'CTA Text',
+              name: 'ctaText',
+              widget: 'text',
+              required: false,
+            }
+          - {
+              label: 'CTA Link',
+              name: 'ctaLink',
+              widget: 'string',
+              required: false,
+            }
+
+      # Resources Page
+      - name: resources
+        label: Resources Page
+        file: src/content/pages/resources.md
+        fields:
+          - {
+              label: 'Page Type',
+              name: 'pageType',
+              widget: 'hidden',
+              default: 'resources',
+            }
+          - { label: 'Title', name: 'title', widget: 'string' }
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Subtitle',
+                  name: 'subtitle',
+                  widget: 'text',
+                  required: false,
+                }
+          - {
+              label: 'Introduction',
+              name: 'intro',
+              widget: 'markdown',
+              required: false,
+            }
+          - label: 'Resource Sections'
+            name: 'sections'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Description',
+                  name: 'description',
+                  widget: 'text',
+                  required: false,
+                }
+              - {
+                  label: 'Content',
+                  name: 'content',
+                  widget: 'markdown',
+                  required: false,
+                }
+              - label: 'Links'
+                name: 'links'
+                widget: 'list'
+                required: false
+                fields:
+                  - { label: 'Name', name: 'name', widget: 'string' }
+                  - { label: 'URL', name: 'url', widget: 'string' }
+                  - {
+                      label: 'Description',
+                      name: 'description',
+                      widget: 'text',
+                      required: false,
+                    }
+
+      # Membership Page
+      - name: membership
+        label: Membership Page
+        file: src/content/pages/membership.md
+        fields:
+          - {
+              label: 'Page Type',
+              name: 'pageType',
+              widget: 'hidden',
+              default: 'membership',
+            }
+          - { label: 'Title', name: 'title', widget: 'string' }
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Subtitle',
+                  name: 'subtitle',
+                  widget: 'text',
+                  required: false,
+                }
+          - { label: 'Introduction', name: 'intro', widget: 'markdown' }
+          - label: 'Benefits'
+            name: 'benefits'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - {
+                  label: 'Icon',
+                  name: 'icon',
+                  widget: 'string',
+                  required: false,
+                }
+          - {
+              label: 'Pricing Intro',
+              name: 'pricingIntro',
+              widget: 'text',
+              required: false,
+            }
+          - label: 'Pricing Tiers'
+            name: 'pricingTiers'
+            widget: 'list'
+            fields:
+              - { label: 'Name', name: 'name', widget: 'string' }
+              - { label: 'Price', name: 'price', widget: 'string' }
+              - { label: 'Duration', name: 'duration', widget: 'string' }
+              - {
+                  label: 'Description',
+                  name: 'description',
+                  widget: 'text',
+                  required: false,
+                }
+              - {
+                  label: 'Highlighted',
+                  name: 'highlighted',
+                  widget: 'boolean',
+                  default: false,
+                }
+          - {
+              label: 'Form Placeholder ID',
+              name: 'formPlaceholderId',
+              widget: 'string',
+              required: false,
+            }
+          - {
+              label: 'Tagline',
+              name: 'tagline',
+              widget: 'string',
+              required: false,
+            }
+
+      # Contact Page
+      - name: contact
+        label: Contact Page
+        file: src/content/pages/contact.md
+        fields:
+          - {
+              label: 'Page Type',
+              name: 'pageType',
+              widget: 'hidden',
+              default: 'contact',
+            }
+          - { label: 'Title', name: 'title', widget: 'string' }
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Subtitle',
+                  name: 'subtitle',
+                  widget: 'text',
+                  required: false,
+                }
+          - { label: 'Introduction', name: 'intro', widget: 'markdown' }
+          - {
+              label: 'Form Placeholder ID',
+              name: 'formPlaceholderId',
+              widget: 'string',
+              required: false,
+            }
+          - {
+              label: 'Contacts Section Title',
+              name: 'contactsTitle',
+              widget: 'string',
+              required: false,
+            }
+          - label: 'Regional Contacts'
+            name: 'contacts'
+            widget: 'list'
+            fields:
+              - { label: 'Name', name: 'name', widget: 'string' }
+              - { label: 'Region', name: 'region', widget: 'string' }
+              - { label: 'Phone', name: 'phone', widget: 'string' }
+              - {
+                  label: 'Email',
+                  name: 'email',
+                  widget: 'string',
+                  required: false,
+                }
+
+      # Donate Page
+      - name: donate
+        label: Donate Page
+        file: src/content/pages/donate.md
+        fields:
+          - {
+              label: 'Page Type',
+              name: 'pageType',
+              widget: 'hidden',
+              default: 'donate',
+            }
+          - { label: 'Title', name: 'title', widget: 'string' }
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Subtitle',
+                  name: 'subtitle',
+                  widget: 'text',
+                  required: false,
+                }
+          - { label: 'Introduction', name: 'intro', widget: 'markdown' }
+          - {
+              label: 'Tax Information',
+              name: 'taxInfo',
+              widget: 'markdown',
+              required: false,
+            }
+          - {
+              label: 'Form Placeholder ID',
+              name: 'formPlaceholderId',
+              widget: 'string',
+              required: false,
+            }
+
+      # Testimonials Page
+      - name: testimonials
+        label: Testimonials Page
+        file: src/content/pages/testimonials.md
+        fields:
+          - {
+              label: 'Page Type',
+              name: 'pageType',
+              widget: 'hidden',
+              default: 'testimonials',
+            }
+          - { label: 'Title', name: 'title', widget: 'string' }
+          - label: 'Hero Section'
+            name: 'hero'
+            widget: 'object'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - {
+                  label: 'Subtitle',
+                  name: 'subtitle',
+                  widget: 'text',
+                  required: false,
+                }
+          - {
+              label: 'Introduction',
+              name: 'intro',
+              widget: 'text',
+              required: false,
+            }
+          - label: 'Testimonials'
+            name: 'testimonials'
+            widget: 'list'
+            fields:
+              - { label: 'Quote', name: 'quote', widget: 'text' }
+              - {
+                  label: 'Author Name',
+                  name: 'author',
+                  widget: 'string',
+                  required: false,
+                }
+              - {
+                  label: 'Author Role/Title',
+                  name: 'role',
+                  widget: 'string',
+                  required: false,
+                }
 
   - name: events
     label: Events
@@ -127,12 +586,22 @@ collections:
               hint: "Optional link to venue's website",
             }
       - {
-          label: 'Event Image',
-          name: 'image',
-          widget: 'string',
+          label: 'Hero Image',
+          name: 'heroImage',
+          widget: 'image',
           required: false,
-          placeholder: '/events/winter-adventure.jpg',
-          hint: 'Path to event image in /public/events/ folder',
+          media_folder: 'src/assets/images/events',
+          public_folder: '/assets/images/events',
+          hint: 'Large banner image displayed at top of event page. Recommended: 1920x600px',
+        }
+      - {
+          label: 'Body Image',
+          name: 'bodyImage',
+          widget: 'image',
+          required: false,
+          media_folder: 'src/assets/images/events',
+          public_folder: '/assets/images/events',
+          hint: 'Image displayed in venue section and content area. Recommended: 800x600px',
         }
       - {
           label: 'Cost Summary',
@@ -161,3 +630,64 @@ collections:
           widget: 'markdown',
           hint: 'Full event description with details, schedule, policies, etc. Supports markdown formatting',
         }
+
+  # Site Settings
+  - name: settings
+    label: Site Settings
+    files:
+      - name: site
+        label: Global Settings
+        file: src/content/settings/site.yml
+        fields:
+          - {
+              label: 'Organization Name',
+              name: 'organizationName',
+              widget: 'string',
+              hint: 'Full name used in copyright and other places',
+            }
+          - {
+              label: 'Tagline',
+              name: 'tagline',
+              widget: 'string',
+              hint: 'Displayed in footer and potentially elsewhere',
+            }
+          - label: 'Footer'
+            name: 'footer'
+            widget: 'object'
+            fields:
+              - {
+                  label: 'About Text',
+                  name: 'aboutText',
+                  widget: 'text',
+                  hint: 'Brief description in the footer about column',
+                }
+              - {
+                  label: 'Copyright Text',
+                  name: 'copyrightText',
+                  widget: 'string',
+                  default: 'All rights reserved.',
+                }
+              - label: 'Navigation Columns'
+                name: 'columns'
+                widget: 'list'
+                max: 2
+                fields:
+                  - { label: 'Column Title', name: 'title', widget: 'string' }
+                  - label: 'Links'
+                    name: 'links'
+                    widget: 'list'
+                    fields:
+                      - { label: 'Label', name: 'label', widget: 'string' }
+                      - { label: 'URL', name: 'href', widget: 'string' }
+              - {
+                  label: 'Contact Text',
+                  name: 'contactText',
+                  widget: 'string',
+                  hint: 'Text before the contact link',
+                }
+              - {
+                  label: 'Contact Link',
+                  name: 'contactLink',
+                  widget: 'string',
+                  default: '/contact',
+                }

@@ -1,0 +1,73 @@
+---
+interface Props {
+  region: string;
+  name: string;
+  phone: string;
+  email?: string;
+}
+
+const { region, name, phone, email } = Astro.props;
+---
+
+<article class="contact-card" data-reveal="bottom">
+  <h3>{region}</h3>
+  <p class="contact-name">{name}</p>
+  <a href={`tel:${phone.replace(/[^0-9+]/g, '')}`} class="contact-phone">
+    {phone}
+  </a>
+  {
+    email && (
+      <a href={`mailto:${email}`} class="contact-email">
+        {email}
+      </a>
+    )
+  }
+</article>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .contact-card {
+    @include card-base(1.5em);
+    text-align: center;
+
+    h3 {
+      color: $color-primary;
+      margin-bottom: 0.5em;
+      font-size: 1rem;
+    }
+  }
+
+  .contact-name {
+    color: $color-text-dark;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+  }
+
+  .contact-phone {
+    display: block;
+    color: $color-accent;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-secondary;
+    }
+  }
+
+  .contact-email {
+    display: block;
+    margin-top: 0.5em;
+    color: $color-secondary;
+    font-size: 0.875rem;
+    text-decoration: none;
+    word-break: break-all;
+    transition: color $transition-fast;
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+</style>

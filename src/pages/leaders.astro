@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import LeaderCard from '../components/LeaderCard.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+
+const leaders = await getCollection('leaders');
+
+// Sort leaders - board chair first, then alphabetically
+const sortedLeaders = leaders.sort((a, b) => {
+  if (a.data.title === 'Board Chair') return -1;
+  if (b.data.title === 'Board Chair') return 1;
+  return a.data.name.localeCompare(b.data.name);
+});
+---
+
+<BaseLayout title="Our Leaders" description="Meet the ECRS leadership team">
+  <Hero
+    title="Our Leaders"
+    subtitle="Meet the people who make ECRS happen"
+    backgroundImage={heroBg}
+    ctaText="Learn More"
+    ctaLink="#leaders"
+  />
+
+  <section class="section section--white" id="leaders">
+    <div class="container">
+      <div class="leaders-grid">
+        {
+          sortedLeaders.map((leader) => (
+            <LeaderCard leader={leader} variant="full" />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .leaders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2em;
+    margin-top: 2em;
+
+    @include mobile {
+      grid-template-columns: 1fr;
+      gap: 2em;
+    }
+  }
+</style>

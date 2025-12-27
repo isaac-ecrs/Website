@@ -1,0 +1,169 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import PricingCard from '../components/PricingCard.astro';
+import IconCard from '../components/IconCard.astro';
+import heroBg from '../assets/images/hero-bg.jpg';
+import { renderMarkdown } from '../lib/markdown';
+
+const page = await getEntry('pages', 'membership');
+if (!page || page.data.pageType !== 'membership') {
+  throw new Error('Membership page content not found');
+}
+
+const {
+  hero,
+  intro,
+  benefits,
+  pricingIntro,
+  pricingTiers,
+  formPlaceholderId,
+  tagline,
+} = page.data;
+
+// Font Awesome icons for benefits
+const benefitIcons = [
+  'fa-tag', // Member Discounts
+  'fa-check-to-slot', // Voting Rights
+  'fa-newspaper', // Newsletter
+  'fa-graduation-cap', // Training
+  'fa-users', // Community
+  'fa-heart', // Support
+];
+---
+
+<BaseLayout title={page.data.title} description="Become a member of ECRS">
+  <Hero title={hero.title} subtitle={hero.subtitle} backgroundImage={heroBg} />
+
+  <!-- Intro Section -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="section section--white">
+    <div class="container">
+      <h2 class="text-center">Membership Benefits</h2>
+      <div class="benefits-grid">
+        {
+          benefits.map((benefit, index) => (
+            <IconCard
+              title={benefit.title}
+              description={benefit.description}
+              icon={benefitIcons[index] || 'fa-star'}
+              size="small"
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section -->
+  <section class="section section--tan">
+    <div class="container">
+      <h2 class="text-center">Membership Options</h2>
+      {pricingIntro && <p class="pricing-intro">{pricingIntro}</p>}
+      <div class="pricing-grid">
+        {
+          pricingTiers.map((tier) => (
+            <PricingCard
+              name={tier.name}
+              price={tier.price}
+              duration={tier.duration}
+              description={tier.description}
+              highlighted={tier.highlighted}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Form Section -->
+  <section class="section section--white">
+    <div class="container">
+      <h2 class="text-center">Join or Renew</h2>
+      <div class="form-placeholder" id={formPlaceholderId}>
+        <p class="placeholder-text">Membership form will be embedded here</p>
+        <p class="placeholder-note">Cognito Form ID: {formPlaceholderId}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tagline Section -->
+  {
+    tagline && (
+      <section class="section section--dark">
+        <div class="container text-center">
+          <p class="tagline">{tagline}</p>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style lang="scss">
+  @use '../styles/variables' as *;
+  @use '../styles/mixins' as *;
+
+  .intro-content {
+    @include content-section(true);
+  }
+
+  h2 {
+    color: $color-primary;
+    margin-bottom: 1em;
+  }
+
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+    margin-top: 2em;
+
+    @include mobile {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5em;
+    }
+  }
+
+  .pricing-intro {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 2em;
+    color: rgba($color-text-dark, 0.8);
+    font-size: 1.125rem;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5em;
+
+    @include mobile {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1em;
+    }
+  }
+
+  .form-placeholder {
+    @include form-placeholder($color-light-tan);
+  }
+
+  .tagline {
+    font-size: 1.5rem;
+    color: white;
+    font-style: italic;
+    margin: 0;
+  }
+
+  .section--dark {
+    h2 {
+      color: white;
+    }
+  }
+</style>
