@@ -66,14 +66,7 @@ const { hero, intro, formPlaceholderId, contactsTitle, contacts } = page.data;
   @use '../styles/mixins' as *;
 
   .intro-content {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-
-    :global(p) {
-      font-size: 18px;
-      line-height: 1.8;
-    }
+    @include content-section(true);
   }
 
   h2 {
@@ -82,26 +75,7 @@ const { hero, intro, formPlaceholderId, contactsTitle, contacts } = page.data;
   }
 
   .form-placeholder {
-    max-width: 600px;
-    margin: 2em auto 0;
-    padding: 3em 2em;
-    background: $color-light-tan;
-    border: 2px dashed rgba($color-text-dark, 0.2);
-    border-radius: $border-radius-card;
-    text-align: center;
-  }
-
-  .placeholder-text {
-    font-size: 1.125rem;
-    color: rgba($color-text-dark, 0.6);
-    margin-bottom: 0.5em;
-  }
-
-  .placeholder-note {
-    font-size: 0.875rem;
-    color: rgba($color-text-dark, 0.4);
-    font-family: monospace;
-    margin: 0;
+    @include form-placeholder($color-light-tan);
   }
 
   .contacts-intro {

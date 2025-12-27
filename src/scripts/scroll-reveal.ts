@@ -52,5 +52,8 @@ if (document.readyState === 'loading') {
   initScrollReveal();
 }
 
-// Re-run on Astro page transitions (if view transitions are enabled)
+// WHY astro:page-load listener?
+// Astro's View Transitions (if enabled) swap DOM content without a full page
+// reload. New elements inserted this way wouldn't be observed without this.
+// This event fires after every navigation, ensuring new elements get animated.
 document.addEventListener('astro:page-load', initScrollReveal);

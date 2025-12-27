@@ -22,10 +22,7 @@ const { title, description, icon, size = 'large' } = Astro.props;
   @use '../styles/mixins' as *;
 
   .icon-card {
-    background: white;
-    padding: 1.5em;
-    border-radius: $border-radius-card;
-    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+    @include card-base(1.5em);
     text-align: center;
 
     h3 {

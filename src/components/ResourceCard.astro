@@ -25,23 +25,13 @@ const { name, description, url } = Astro.props;
   @use '../styles/mixins' as *;
 
   .resource-card {
+    @include card-base(1.5em);
+    @include card-hover;
     display: block;
-    background: white;
-    padding: 1.5em;
-    border-radius: $border-radius-card;
-    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
     text-decoration: none;
-    transition:
-      transform $transition-fast,
-      box-shadow $transition-fast;
 
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 10px 10px 0px rgba($color-text-dark, 0.12);
-
-      .resource-link {
-        color: $color-secondary;
-      }
+    &:hover .resource-link {
+      color: $color-secondary;
     }
 
     h3 {

@@ -1,3 +1,29 @@
+/**
+ * Content Collection Schemas
+ *
+ * WHY ZOD SCHEMAS?
+ * Zod validates content at build time. If a markdown file is missing a required
+ * field or has the wrong type, the build fails with a clear error. This catches
+ * content mistakes before they reach production.
+ *
+ * WHY DISCRIMINATED UNIONS FOR PAGES?
+ * Each page type (home, about, contact, etc.) has different content needs.
+ * Using z.discriminatedUnion() on pageType means:
+ *
+ * 1. TypeScript knows exactly which fields exist after checking pageType:
+ *    if (page.data.pageType === 'contact') {
+ *      // TS now knows page.data.contacts exists
+ *    }
+ *
+ * 2. The CMS shows only relevant fields for each page type
+ *
+ * 3. Build-time validation ensures each page type has its required fields
+ *
+ * WHY SHARED SCHEMAS (heroSchema, featureCardSchema, etc.)?
+ * Many page types share common structures. Defining these once ensures
+ * consistency and makes updates easier - change heroSchema and all pages
+ * using it get the update.
+ */
 import { defineCollection, z, reference } from 'astro:content';
 
 const leadersCollection = defineCollection({
