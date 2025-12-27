@@ -64,19 +64,23 @@ const navItems = navData?.data.items || [];
 </header>
 
 <script>
-  // WHY: Event listener on astro:page-load handles view transitions
-  // Without this, the script would only run on initial page load
-  document.addEventListener('astro:page-load', () => {
+  // WHY: Initialize mobile menu functionality
+  // Uses a setup function to avoid duplicate listeners on view transitions
+  function setupMobileMenu() {
     const menuToggle = document.querySelector('.mobile-menu-toggle');
     const mobileNav = document.getElementById('mobile-nav');
 
     if (!menuToggle || !mobileNav) return;
 
-    menuToggle.addEventListener('click', () => {
-      const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+    // Remove existing listeners by cloning (prevents duplicates on view transitions)
+    const newToggle = menuToggle.cloneNode(true);
+    menuToggle.parentNode?.replaceChild(newToggle, menuToggle);
 
-      menuToggle.setAttribute('aria-expanded', String(!isOpen));
-      menuToggle.classList.toggle('is-active');
+    newToggle.addEventListener('click', () => {
+      const isOpen = newToggle.getAttribute('aria-expanded') === 'true';
+
+      newToggle.setAttribute('aria-expanded', String(!isOpen));
+      newToggle.classList.toggle('is-active');
       mobileNav.classList.toggle('is-open');
       mobileNav.setAttribute('aria-hidden', String(isOpen));
     });
@@ -84,13 +88,23 @@ const navItems = navData?.data.items || [];
     // Close menu when clicking a link
     mobileNav.querySelectorAll('a').forEach((link) => {
       link.addEventListener('click', () => {
-        menuToggle.setAttribute('aria-expanded', 'false');
-        menuToggle.classList.remove('is-active');
+        newToggle.setAttribute('aria-expanded', 'false');
+        newToggle.classList.remove('is-active');
         mobileNav.classList.remove('is-open');
         mobileNav.setAttribute('aria-hidden', 'true');
       });
     });
-  });
+  }
+
+  // Run on initial page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupMobileMenu);
+  } else {
+    setupMobileMenu();
+  }
+
+  // WHY: Also run on astro:page-load for view transitions
+  document.addEventListener('astro:page-load', setupMobileMenu);
 </script>
 
 <style lang="scss">
@@ -115,6 +129,9 @@ const navItems = navData?.data.items || [];
       display: flex;
       justify-content: space-between;
       align-items: center;
+      // WHY: Ensure content doesn't touch screen edges on mobile
+      padding: 0 1em;
+      box-sizing: border-box;
     }
 
     .logo {
