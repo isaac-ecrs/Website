@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
-import { marked } from 'marked';
+import { renderMarkdown } from '../lib/markdown';
 
 const page = await getEntry('pages', 'donate');
 if (!page || page.data.pageType !== 'donate') {
@@ -22,7 +22,7 @@ const { hero, intro, taxInfo, formPlaceholderId } = page.data;
   <!-- Intro Section -->
   <section class="section section--cream">
     <div class="container">
-      <div class="intro-content" set:html={marked(intro)} />
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
     </div>
   </section>
 
@@ -35,7 +35,7 @@ const { hero, intro, taxInfo, formPlaceholderId } = page.data;
             <div class="tax-icon">
               <i class="fa-solid fa-hand-holding-heart" />
             </div>
-            <div class="tax-content" set:html={marked(taxInfo)} />
+            <div class="tax-content" set:html={renderMarkdown(taxInfo)} />
           </div>
         </div>
       </section>
@@ -70,19 +70,7 @@ const { hero, intro, taxInfo, formPlaceholderId } = page.data;
   @use '../styles/mixins' as *;
 
   .intro-content {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-
-    :global(p) {
-      font-size: 18px;
-      line-height: 1.8;
-      margin-bottom: 1.5em;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
+    @include content-section(true);
   }
 
   h2 {
@@ -91,12 +79,9 @@ const { hero, intro, taxInfo, formPlaceholderId } = page.data;
   }
 
   .tax-info {
+    @include card-base(2em);
     max-width: 800px;
     margin: 0 auto;
-    background: white;
-    padding: 2em;
-    border-radius: $border-radius-card;
-    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
     display: flex;
     gap: 2em;
     align-items: flex-start;
@@ -141,37 +126,16 @@ const { hero, intro, taxInfo, formPlaceholderId } = page.data;
   }
 
   .form-placeholder {
-    max-width: 600px;
-    margin: 2em auto 0;
-    padding: 3em 2em;
-    background: white;
-    border: 2px dashed rgba($color-text-dark, 0.2);
-    border-radius: $border-radius-card;
-    text-align: center;
-  }
-
-  .placeholder-text {
-    font-size: 1.125rem;
-    color: rgba($color-text-dark, 0.6);
-    margin-bottom: 0.5em;
-  }
-
-  .placeholder-note {
-    font-size: 0.875rem;
-    color: rgba($color-text-dark, 0.4);
-    font-family: monospace;
-    margin: 0;
-  }
-
-  .thank-you-text {
-    color: rgba(white, 0.9);
-    font-size: 1.125rem;
-    margin: 0;
+    @include form-placeholder(white);
   }
 
   .section--dark {
-    h2 {
-      color: white;
+    @include cta-section-dark;
+
+    .thank-you-text {
+      color: rgba(white, 0.9);
+      font-size: 1.125rem;
+      margin: 0;
     }
   }
 </style>

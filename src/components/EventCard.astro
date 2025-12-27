@@ -1,9 +1,10 @@
 ---
 import Card from './Card.astro';
-import { marked } from 'marked';
+import { renderMarkdown } from '../lib/markdown';
+import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-  event: any;
+  event: CollectionEntry<'events'>;
   isPast?: boolean;
   showImage?: boolean;
   href: string;
@@ -50,7 +51,7 @@ const isOneDay = startDate.toDateString() === endDate.toDateString();
 
 // Process shortDescription markdown if it exists
 const processedDescription = event.data.shortDescription
-  ? marked.parse(event.data.shortDescription, { async: false })
+  ? renderMarkdown(event.data.shortDescription)
   : null;
 ---
 
@@ -102,7 +103,7 @@ const processedDescription = event.data.shortDescription
         {
           hasValidAddress ? (
             <a
-              href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(location)}`}
+              href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(location)}`}
             >
               {event.data.location.address}, {event.data.location.city},{' '}
               {event.data.location.state} {event.data.location.zip}

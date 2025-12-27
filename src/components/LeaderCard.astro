@@ -1,14 +1,17 @@
 ---
+import type { CollectionEntry } from 'astro:content';
+import { renderMarkdown } from '../lib/markdown';
+
 interface Props {
-  leader: any;
+  leader: CollectionEntry<'leaders'>;
   variant?: 'full' | 'compact';
   showBio?: boolean;
 }
 
 const { leader, variant = 'full', showBio = true } = Astro.props;
 
-// Handle bio content from leader.data.bio
-const bioContent = leader.data.bio || '';
+// Handle bio content from leader.data.bio - sanitized via DOMPurify
+const bioContent = leader.data.bio ? renderMarkdown(leader.data.bio) : '';
 ---
 
 <div class={`leader-card leader-card--${variant}`} data-reveal="bottom">

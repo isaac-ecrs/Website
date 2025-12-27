@@ -83,7 +83,12 @@ const targetTimestamp = targetDate.getTime();
     }
 
     function renderFluentText(text: string) {
-      displayContainer!.innerHTML = `<span class="countdown-text">${text}</span>`;
+      // WHY: Using textContent instead of innerHTML prevents XSS and is safer
+      displayContainer!.textContent = '';
+      const span = document.createElement('span');
+      span.className = 'countdown-text';
+      span.textContent = text;
+      displayContainer!.appendChild(span);
       displayContainer!.classList.remove('countdown-units');
       displayContainer!.classList.add('countdown-fluent');
     }
@@ -91,16 +96,22 @@ const targetTimestamp = targetDate.getTime();
     function renderUnits(units: UnitConfig[]) {
       // Filter out zero values for grid display too
       const nonZero = units.filter((u) => u.value > 0);
-      displayContainer!.innerHTML = '';
+      // WHY: Using textContent = '' instead of innerHTML = '' is safer
+      displayContainer!.textContent = '';
       displayContainer!.classList.remove('countdown-fluent');
       displayContainer!.classList.add('countdown-units');
       nonZero.forEach((unit) => {
         const el = document.createElement('div');
         el.className = 'countdown-unit';
-        el.innerHTML = `
-          <span class="countdown-value">${unit.value}</span>
-          <span class="countdown-name">${unit.value === 1 ? unit.singular : unit.plural}</span>
-        `;
+        // WHY: Building DOM elements instead of innerHTML prevents potential XSS
+        const valueSpan = document.createElement('span');
+        valueSpan.className = 'countdown-value';
+        valueSpan.textContent = String(unit.value);
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'countdown-name';
+        nameSpan.textContent = unit.value === 1 ? unit.singular : unit.plural;
+        el.appendChild(valueSpan);
+        el.appendChild(nameSpan);
         displayContainer!.appendChild(el);
       });
     }

@@ -1,11 +1,11 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import FeatureCard from '../components/FeatureCard.astro';
 import EventHighlight from '../components/EventHighlight.astro';
 
-import { marked } from 'marked';
+import { renderMarkdown } from '../lib/markdown';
 
 // Import images
 import heroBg from '../assets/images/hero-bg.jpg';
@@ -16,7 +16,7 @@ import imageUpcomingEvents from '../assets/images/landing-page/upcoming-events.j
 import imageTestimonials from '../assets/images/landing-page/testimonials.jpg';
 
 // Dynamic image loader for featured events
-async function getFeaturedEventImage(event: any) {
+async function getFeaturedEventImage(event: CollectionEntry<'events'>) {
   if (!event?.data?.heroImage) return imageWhatWeDo;
 
   try {
@@ -26,7 +26,9 @@ async function getFeaturedEventImage(event: any) {
     );
     const imageModule = (await images[assetsPath]()) as any;
     return imageModule.default;
-  } catch {
+  } catch (error) {
+    // WHY: Log image load failures to help debug missing/misnamed images in production
+    console.error(`Failed to load event image: ${event.data.heroImage}`, error);
     return imageWhatWeDo;
   }
 }
@@ -98,7 +100,7 @@ const featuredEventImage = featuredEvent
   <!-- SECTION 3: About ECRS Narrative (rendered from markdown) -->
   <section class="section section--white" id="about">
     <div class="container">
-      <div class="about-content" set:html={marked(homeData.about)} />
+      <div class="about-content" set:html={renderMarkdown(homeData.about)} />
     </div>
   </section>
 
@@ -118,7 +120,7 @@ const featuredEventImage = featuredEvent
 
           <div
             class="activities-list"
-            set:html={marked(homeData.whatWeDo.activities)}
+            set:html={renderMarkdown(homeData.whatWeDo.activities)}
           />
         </div>
       </div>

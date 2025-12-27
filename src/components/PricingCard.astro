@@ -27,19 +27,9 @@ const { name, price, duration, description, highlighted = false } = Astro.props;
   @use '../styles/mixins' as *;
 
   .pricing-card {
-    background: white;
-    padding: 2em;
-    border-radius: $border-radius-card;
-    box-shadow: 10px 10px 0px rgba($color-text-dark, 0.08);
+    @include card-base(2em);
+    @include card-hover;
     text-align: center;
-    transition:
-      transform $transition-fast,
-      box-shadow $transition-fast;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 10px 10px 0px rgba($color-text-dark, 0.12);
-    }
 
     &--highlighted {
       border: 3px solid $color-accent;

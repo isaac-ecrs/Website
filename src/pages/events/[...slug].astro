@@ -252,7 +252,7 @@ const isFutureEvent = startDate > new Date();
                   <div class="venue-info-text">
                     {hasValidAddress ? (
                       <a
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURI(location)}`}
+                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(location)}`}
                       >
                         {event.data.location.address}
                         <br />
@@ -408,7 +408,7 @@ const isFutureEvent = startDate > new Date();
                                 <button
                                   class="leader-link"
                                   type="button"
-                                  onclick={`document.getElementById('${dialogId}').showModal()`}
+                                  data-dialog-target={dialogId}
                                 >
                                   {offering.leader.data.image && (
                                     <img
@@ -1244,3 +1244,18 @@ const isFutureEvent = startDate > new Date();
     flex-shrink: 0;
   }
 </style>
+
+<script>
+  // Handle leader popover dialog triggers
+  // WHY: Using event delegation instead of inline onclick handlers prevents XSS
+  // vulnerabilities from user-controlled dialog IDs in CMS content.
+  document.querySelectorAll('[data-dialog-target]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const dialogId = button.getAttribute('data-dialog-target');
+      if (dialogId) {
+        const dialog = document.getElementById(dialogId) as HTMLDialogElement;
+        dialog?.showModal();
+      }
+    });
+  });
+</script>

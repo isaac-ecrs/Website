@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import heroBg from '../assets/images/hero-bg.jpg';
-import { marked } from 'marked';
+import { renderMarkdown } from '../lib/markdown';
 
 const page = await getEntry('pages', 'history');
 if (!page || page.data.pageType !== 'history') {
@@ -22,7 +22,7 @@ const { hero, intro, nameExplanation, sections } = page.data;
   <!-- Intro Section -->
   <section class="section section--cream">
     <div class="container">
-      <div class="intro-content" set:html={marked(intro)} />
+      <div class="intro-content" set:html={renderMarkdown(intro)} />
     </div>
   </section>
 
@@ -32,7 +32,10 @@ const { hero, intro, nameExplanation, sections } = page.data;
       <section class="section section--white">
         <div class="container">
           <h2 class="text-center">What's in a Name?</h2>
-          <div class="name-explanation" set:html={marked(nameExplanation)} />
+          <div
+            class="name-explanation"
+            set:html={renderMarkdown(nameExplanation)}
+          />
         </div>
       </section>
     )
@@ -50,7 +53,7 @@ const { hero, intro, nameExplanation, sections } = page.data;
             <div class="history-section">
               <div class="history-text">
                 <h2>{section.title}</h2>
-                <div set:html={marked(section.content)} />
+                <div set:html={renderMarkdown(section.content)} />
               </div>
               {section.image && (
                 <div
