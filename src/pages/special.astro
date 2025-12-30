@@ -12,16 +12,6 @@ if (!page || page.data.pageType !== 'special') {
 
 const { hero, intro, principles, ctaTitle, ctaText, ctaLink, ctaButtonText } =
   page.data;
-
-// Font Awesome icons for principles
-const principleIcons = [
-  'fa-paintbrush', // Creating Our Own Fun
-  'fa-gem', // Intrinsic Value
-  'fa-seedling', // Process Over Product
-  'fa-users', // Community Focus
-  'fa-handshake', // Cooperative Activities
-  'fa-heart', // Experiences Over Materialism
-];
 ---
 
 <BaseLayout
@@ -42,10 +32,10 @@ const principleIcons = [
     <div class="container">
       <div class="principles-grid">
         {
-          principles.map((principle, index) => (
+          principles.map((principle) => (
             <article class="principle-card">
               <div class="principle-icon">
-                <i class={`fa-solid ${principleIcons[index] || 'fa-star'}`} />
+                <i class={`fa-solid ${principle.icon || 'fa-star'}`} />
               </div>
               <h3>{principle.title}</h3>
               <p>{principle.description}</p>

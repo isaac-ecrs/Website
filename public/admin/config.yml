@@ -54,17 +54,37 @@ collections:
               - { label: 'Title', name: 'title', widget: 'string' }
               - { label: 'Description', name: 'description', widget: 'text' }
               - {
-                  label: 'Icon',
-                  name: 'icon',
-                  widget: 'hidden',
+                  label: 'Image',
+                  name: 'image',
+                  widget: 'image',
                   required: false,
+                  hint: 'Card image (recommended: 400x300px)',
+                }
+              - {
+                  label: 'Link',
+                  name: 'link',
+                  widget: 'string',
+                  required: false,
+                  hint: 'Page to link to (e.g., /about)',
+                }
+              - {
+                  label: 'Link Text',
+                  name: 'linkText',
+                  widget: 'string',
+                  required: false,
+                  default: 'Learn More',
                 }
           - { label: 'About Section', name: 'about', widget: 'markdown' }
           - label: 'What We Do Section'
             name: 'whatWeDo'
             widget: 'object'
             fields:
-              - { label: 'Image', name: 'image', widget: 'hidden' }
+              - {
+                  label: 'Image',
+                  name: 'image',
+                  widget: 'image',
+                  hint: 'Section image (recommended: 600x400px)',
+                }
               - { label: 'Description', name: 'description', widget: 'text' }
               - { label: 'Activities', name: 'activities', widget: 'markdown' }
 
@@ -98,19 +118,85 @@ collections:
               widget: 'markdown',
               required: false,
             }
+          - label: 'Guiding Principles'
+            name: 'guidingPrinciples'
+            widget: 'list'
+            required: false
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
           - label: 'Activities'
             name: 'activities'
             widget: 'list'
             required: false
             fields:
               - { label: 'Title', name: 'title', widget: 'string' }
-              - {
-                  label: 'Icon',
-                  name: 'icon',
-                  widget: 'string',
-                  required: false,
-                }
+              - label: 'Icon'
+                name: 'icon'
+                widget: 'select'
+                required: false
+                options:
+                  - { label: '── People & Community ──', value: '' }
+                  - { label: 'Users/Group', value: 'fa-users' }
+                  - { label: 'People Group', value: 'fa-people-group' }
+                  - { label: 'Person', value: 'fa-user' }
+                  - { label: 'Children', value: 'fa-children' }
+                  - { label: 'Handshake', value: 'fa-handshake' }
+                  - { label: 'Hands Holding', value: 'fa-hands-holding' }
+                  - { label: 'Heart', value: 'fa-heart' }
+                  - { label: 'Hand Holding Heart', value: 'fa-hand-holding-heart' }
+                  - { label: '── Arts & Activities ──', value: '' }
+                  - { label: 'Music', value: 'fa-music' }
+                  - { label: 'Guitar', value: 'fa-guitar' }
+                  - { label: 'Drum', value: 'fa-drum' }
+                  - { label: 'Masks (Theater)', value: 'fa-masks-theater' }
+                  - { label: 'Palette (Art)', value: 'fa-palette' }
+                  - { label: 'Paintbrush', value: 'fa-paintbrush' }
+                  - { label: 'Shoe Prints (Dance)', value: 'fa-shoe-prints' }
+                  - { label: 'Icons (Crafts)', value: 'fa-icons' }
+                  - { label: 'Scissors', value: 'fa-scissors' }
+                  - { label: '── Nature & Outdoors ──', value: '' }
+                  - { label: 'Tree', value: 'fa-tree' }
+                  - { label: 'Leaf', value: 'fa-leaf' }
+                  - { label: 'Seedling', value: 'fa-seedling' }
+                  - { label: 'Sun', value: 'fa-sun' }
+                  - { label: 'Mountain Sun', value: 'fa-mountain-sun' }
+                  - { label: 'Campground', value: 'fa-campground' }
+                  - { label: 'Fire', value: 'fa-fire' }
+                  - { label: '── Learning & Growth ──', value: '' }
+                  - { label: 'Book Open', value: 'fa-book-open' }
+                  - { label: 'Graduation Cap', value: 'fa-graduation-cap' }
+                  - { label: 'Lightbulb', value: 'fa-lightbulb' }
+                  - { label: 'Brain', value: 'fa-brain' }
+                  - { label: 'Puzzle Piece', value: 'fa-puzzle-piece' }
+                  - { label: 'Comments', value: 'fa-comments' }
+                  - { label: '── Values & Concepts ──', value: '' }
+                  - { label: 'Star', value: 'fa-star' }
+                  - { label: 'Gem', value: 'fa-gem' }
+                  - { label: 'Award', value: 'fa-award' }
+                  - { label: 'Trophy', value: 'fa-trophy' }
+                  - { label: 'Circle Check', value: 'fa-circle-check' }
+                  - { label: 'Thumbs Up', value: 'fa-thumbs-up' }
+                  - { label: '── Objects & Misc ──', value: '' }
+                  - { label: 'Calendar', value: 'fa-calendar' }
+                  - { label: 'Clock', value: 'fa-clock' }
+                  - { label: 'Gift', value: 'fa-gift' }
+                  - { label: 'Tag', value: 'fa-tag' }
+                  - { label: 'Newspaper', value: 'fa-newspaper' }
+                  - { label: 'Envelope', value: 'fa-envelope' }
+                  - { label: 'Check to Slot (Vote)', value: 'fa-check-to-slot' }
+                  - { label: 'House', value: 'fa-house' }
               - { label: 'Description', name: 'description', widget: 'text' }
+          - label: 'Additional Offerings'
+            name: 'additionalOfferings'
+            widget: 'list'
+            required: false
+            field: { label: 'Offering', name: 'offering', widget: 'string' }
+          - label: 'Typical Annual Programming'
+            name: 'typicalProgramming'
+            widget: 'list'
+            required: false
+            field: { label: 'Program', name: 'program', widget: 'string' }
           - label: 'Sub-Page Links'
             name: 'subPages'
             widget: 'list'
@@ -118,6 +204,12 @@ collections:
             fields:
               - { label: 'Title', name: 'title', widget: 'string' }
               - { label: 'Description', name: 'description', widget: 'text' }
+              - {
+                  label: 'Image',
+                  name: 'image',
+                  widget: 'image',
+                  required: false,
+                }
               - { label: 'Link', name: 'link', widget: 'string' }
               - {
                   label: 'Link Text',
@@ -217,13 +309,62 @@ collections:
             widget: 'list'
             fields:
               - { label: 'Title', name: 'title', widget: 'string' }
+              - label: 'Icon'
+                name: 'icon'
+                widget: 'select'
+                required: false
+                options:
+                  - { label: '── People & Community ──', value: '' }
+                  - { label: 'Users/Group', value: 'fa-users' }
+                  - { label: 'People Group', value: 'fa-people-group' }
+                  - { label: 'Person', value: 'fa-user' }
+                  - { label: 'Children', value: 'fa-children' }
+                  - { label: 'Handshake', value: 'fa-handshake' }
+                  - { label: 'Hands Holding', value: 'fa-hands-holding' }
+                  - { label: 'Heart', value: 'fa-heart' }
+                  - { label: 'Hand Holding Heart', value: 'fa-hand-holding-heart' }
+                  - { label: '── Arts & Activities ──', value: '' }
+                  - { label: 'Music', value: 'fa-music' }
+                  - { label: 'Guitar', value: 'fa-guitar' }
+                  - { label: 'Drum', value: 'fa-drum' }
+                  - { label: 'Masks (Theater)', value: 'fa-masks-theater' }
+                  - { label: 'Palette (Art)', value: 'fa-palette' }
+                  - { label: 'Paintbrush', value: 'fa-paintbrush' }
+                  - { label: 'Shoe Prints (Dance)', value: 'fa-shoe-prints' }
+                  - { label: 'Icons (Crafts)', value: 'fa-icons' }
+                  - { label: 'Scissors', value: 'fa-scissors' }
+                  - { label: '── Nature & Outdoors ──', value: '' }
+                  - { label: 'Tree', value: 'fa-tree' }
+                  - { label: 'Leaf', value: 'fa-leaf' }
+                  - { label: 'Seedling', value: 'fa-seedling' }
+                  - { label: 'Sun', value: 'fa-sun' }
+                  - { label: 'Mountain Sun', value: 'fa-mountain-sun' }
+                  - { label: 'Campground', value: 'fa-campground' }
+                  - { label: 'Fire', value: 'fa-fire' }
+                  - { label: '── Learning & Growth ──', value: '' }
+                  - { label: 'Book Open', value: 'fa-book-open' }
+                  - { label: 'Graduation Cap', value: 'fa-graduation-cap' }
+                  - { label: 'Lightbulb', value: 'fa-lightbulb' }
+                  - { label: 'Brain', value: 'fa-brain' }
+                  - { label: 'Puzzle Piece', value: 'fa-puzzle-piece' }
+                  - { label: 'Comments', value: 'fa-comments' }
+                  - { label: '── Values & Concepts ──', value: '' }
+                  - { label: 'Star', value: 'fa-star' }
+                  - { label: 'Gem', value: 'fa-gem' }
+                  - { label: 'Award', value: 'fa-award' }
+                  - { label: 'Trophy', value: 'fa-trophy' }
+                  - { label: 'Circle Check', value: 'fa-circle-check' }
+                  - { label: 'Thumbs Up', value: 'fa-thumbs-up' }
+                  - { label: '── Objects & Misc ──', value: '' }
+                  - { label: 'Calendar', value: 'fa-calendar' }
+                  - { label: 'Clock', value: 'fa-clock' }
+                  - { label: 'Gift', value: 'fa-gift' }
+                  - { label: 'Tag', value: 'fa-tag' }
+                  - { label: 'Newspaper', value: 'fa-newspaper' }
+                  - { label: 'Envelope', value: 'fa-envelope' }
+                  - { label: 'Check to Slot (Vote)', value: 'fa-check-to-slot' }
+                  - { label: 'House', value: 'fa-house' }
               - { label: 'Description', name: 'description', widget: 'text' }
-              - {
-                  label: 'Icon',
-                  name: 'icon',
-                  widget: 'string',
-                  required: false,
-                }
           - {
               label: 'CTA Title',
               name: 'ctaTitle',
@@ -241,6 +382,13 @@ collections:
               name: 'ctaLink',
               widget: 'string',
               required: false,
+            }
+          - {
+              label: 'CTA Button Text',
+              name: 'ctaButtonText',
+              widget: 'string',
+              required: false,
+              default: 'Learn More',
             }
 
       # Resources Page
@@ -332,13 +480,62 @@ collections:
             widget: 'list'
             fields:
               - { label: 'Title', name: 'title', widget: 'string' }
+              - label: 'Icon'
+                name: 'icon'
+                widget: 'select'
+                required: false
+                options:
+                  - { label: '── People & Community ──', value: '' }
+                  - { label: 'Users/Group', value: 'fa-users' }
+                  - { label: 'People Group', value: 'fa-people-group' }
+                  - { label: 'Person', value: 'fa-user' }
+                  - { label: 'Children', value: 'fa-children' }
+                  - { label: 'Handshake', value: 'fa-handshake' }
+                  - { label: 'Hands Holding', value: 'fa-hands-holding' }
+                  - { label: 'Heart', value: 'fa-heart' }
+                  - { label: 'Hand Holding Heart', value: 'fa-hand-holding-heart' }
+                  - { label: '── Arts & Activities ──', value: '' }
+                  - { label: 'Music', value: 'fa-music' }
+                  - { label: 'Guitar', value: 'fa-guitar' }
+                  - { label: 'Drum', value: 'fa-drum' }
+                  - { label: 'Masks (Theater)', value: 'fa-masks-theater' }
+                  - { label: 'Palette (Art)', value: 'fa-palette' }
+                  - { label: 'Paintbrush', value: 'fa-paintbrush' }
+                  - { label: 'Shoe Prints (Dance)', value: 'fa-shoe-prints' }
+                  - { label: 'Icons (Crafts)', value: 'fa-icons' }
+                  - { label: 'Scissors', value: 'fa-scissors' }
+                  - { label: '── Nature & Outdoors ──', value: '' }
+                  - { label: 'Tree', value: 'fa-tree' }
+                  - { label: 'Leaf', value: 'fa-leaf' }
+                  - { label: 'Seedling', value: 'fa-seedling' }
+                  - { label: 'Sun', value: 'fa-sun' }
+                  - { label: 'Mountain Sun', value: 'fa-mountain-sun' }
+                  - { label: 'Campground', value: 'fa-campground' }
+                  - { label: 'Fire', value: 'fa-fire' }
+                  - { label: '── Learning & Growth ──', value: '' }
+                  - { label: 'Book Open', value: 'fa-book-open' }
+                  - { label: 'Graduation Cap', value: 'fa-graduation-cap' }
+                  - { label: 'Lightbulb', value: 'fa-lightbulb' }
+                  - { label: 'Brain', value: 'fa-brain' }
+                  - { label: 'Puzzle Piece', value: 'fa-puzzle-piece' }
+                  - { label: 'Comments', value: 'fa-comments' }
+                  - { label: '── Values & Concepts ──', value: '' }
+                  - { label: 'Star', value: 'fa-star' }
+                  - { label: 'Gem', value: 'fa-gem' }
+                  - { label: 'Award', value: 'fa-award' }
+                  - { label: 'Trophy', value: 'fa-trophy' }
+                  - { label: 'Circle Check', value: 'fa-circle-check' }
+                  - { label: 'Thumbs Up', value: 'fa-thumbs-up' }
+                  - { label: '── Objects & Misc ──', value: '' }
+                  - { label: 'Calendar', value: 'fa-calendar' }
+                  - { label: 'Clock', value: 'fa-clock' }
+                  - { label: 'Gift', value: 'fa-gift' }
+                  - { label: 'Tag', value: 'fa-tag' }
+                  - { label: 'Newspaper', value: 'fa-newspaper' }
+                  - { label: 'Envelope', value: 'fa-envelope' }
+                  - { label: 'Check to Slot (Vote)', value: 'fa-check-to-slot' }
+                  - { label: 'House', value: 'fa-house' }
               - { label: 'Description', name: 'description', widget: 'text' }
-              - {
-                  label: 'Icon',
-                  name: 'icon',
-                  widget: 'string',
-                  required: false,
-                }
           - {
               label: 'Pricing Intro',
               name: 'pricingIntro',

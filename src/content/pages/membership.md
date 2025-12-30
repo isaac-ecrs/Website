@@ -8,16 +8,22 @@ intro: |
   Membership in ECRS connects you to a vibrant community of people who believe in the power of creative recreation. Whether you're a longtime participant or just discovering us, we welcome you to join our family.
 benefits:
   - title: Member Discounts
+    icon: fa-tag
     description: Enjoy reduced registration fees at all ECRS events
   - title: Voting Rights
+    icon: fa-check-to-slot
     description: Have a voice in electing board members and organizational decisions
   - title: Newsletter Subscription
+    icon: fa-newspaper
     description: Receive Echoes, our quarterly newsletter with stories and updates
   - title: Leadership Training
+    icon: fa-graduation-cap
     description: Access recreation and leadership training opportunities
   - title: Community & Fellowship
+    icon: fa-users
     description: Connect with a warm, welcoming community of like-minded people
   - title: Support ECRS
+    icon: fa-heart
     description: Help sustain an organization that's been building community since 1940
 pricingIntro: |
   Annual dues are affordable, and lifetime membership options are available for those who want to make a long-term commitment to ECRS. Annual dues expire December 31.
