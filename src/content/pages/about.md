@@ -19,22 +19,22 @@ guidingPrinciples:
     description: We value individual development and self-expression over winning or outperforming others.
 activities:
   - title: Games
-    icon: /assets/images/icons/games.svg
+    icon: fa-people-group
     description: Cooperative, multi-generational games that bring people together
   - title: Dance
-    icon: /assets/images/icons/dance.svg
+    icon: fa-shoe-prints
     description: Folk, contra, square, and ballroom dancing for all skill levels
   - title: Singing
-    icon: /assets/images/icons/singing.svg
+    icon: fa-music
     description: Folk material and harmonizing in a supportive group setting
   - title: Dramatics
-    icon: /assets/images/icons/dramatics.svg
+    icon: fa-masks-theater
     description: Improvisation, skits, and creative expression
   - title: Crafts
-    icon: /assets/images/icons/crafts.svg
+    icon: fa-palette
     description: Weaving, puppetry, nature crafts, and more
   - title: Theory
-    icon: /assets/images/icons/theory.svg
+    icon: fa-book-open
     description: Leadership practices and program planning
 additionalOfferings:
   - Creative writing
