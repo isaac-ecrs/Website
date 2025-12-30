@@ -26,20 +26,6 @@ const {
   ctaText,
   ctaLink,
 } = page.data;
-
-// Font Awesome icon mapping for activities
-const activityIcons: Record<string, string> = {
-  Games: 'fa-people-group',
-  Dance: 'fa-shoe-prints',
-  Singing: 'fa-music',
-  Dramatics: 'fa-masks-theater',
-  Crafts: 'fa-palette',
-  Theory: 'fa-book-open',
-};
-
-function getActivityIcon(title: string): string {
-  return activityIcons[title] || 'fa-star';
-}
 ---
 
 <BaseLayout
@@ -103,7 +89,7 @@ function getActivityIcon(title: string): string {
               <IconCard
                 title={activity.title}
                 description={activity.description}
-                icon={getActivityIcon(activity.title)}
+                icon={activity.icon || 'fa-star'}
               />
             ))}
           </div>

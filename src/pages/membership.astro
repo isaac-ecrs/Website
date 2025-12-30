@@ -21,16 +21,6 @@ const {
   formPlaceholderId,
   tagline,
 } = page.data;
-
-// Font Awesome icons for benefits
-const benefitIcons = [
-  'fa-tag', // Member Discounts
-  'fa-check-to-slot', // Voting Rights
-  'fa-newspaper', // Newsletter
-  'fa-graduation-cap', // Training
-  'fa-users', // Community
-  'fa-heart', // Support
-];
 ---
 
 <BaseLayout title={page.data.title} description="Become a member of ECRS">
@@ -49,11 +39,11 @@ const benefitIcons = [
       <h2 class="text-center">Membership Benefits</h2>
       <div class="benefits-grid">
         {
-          benefits.map((benefit, index) => (
+          benefits.map((benefit) => (
             <IconCard
               title={benefit.title}
               description={benefit.description}
-              icon={benefitIcons[index] || 'fa-star'}
+              icon={benefit.icon || 'fa-star'}
               size="small"
             />
           ))

@@ -1,5 +1,5 @@
 ---
-import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import FeatureCard from '../components/FeatureCard.astro';
@@ -10,26 +10,24 @@ import { renderMarkdown } from '../lib/markdown';
 // Import images
 import heroBg from '../assets/images/hero-bg.jpg';
 import { Image } from 'astro:assets';
-import imageWhatWeDo from '../assets/images/landing-page/what-we-do.jpg';
-import imageWhatWeDoDance from '../assets/images/landing-page/what-we-do-dance.jpg';
-import imageUpcomingEvents from '../assets/images/landing-page/upcoming-events.jpg';
-import imageTestimonials from '../assets/images/landing-page/testimonials.jpg';
+import placeholderImage from '../assets/images/landing-page/what-we-do.jpg';
 
-// Dynamic image loader for featured events
-async function getFeaturedEventImage(event: CollectionEntry<'events'>) {
-  if (!event?.data?.heroImage) return imageWhatWeDo;
+// All available images for dynamic loading
+const allImages = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/images/**/*.{jpg,jpeg,png,webp,avif}',
+  { eager: true }
+);
+
+// Dynamic image loader from CMS path
+function getImageFromPath(imagePath: string | undefined): ImageMetadata {
+  if (!imagePath) return placeholderImage;
 
   try {
-    const assetsPath = event.data.heroImage.replace('/assets/', '../assets/');
-    const images = import.meta.glob(
-      '../assets/images/**/*.{jpg,jpeg,png,webp,avif}'
-    );
-    const imageModule = (await images[assetsPath]()) as any;
-    return imageModule.default;
-  } catch (error) {
-    // WHY: Log image load failures to help debug missing/misnamed images in production
-    console.error(`Failed to load event image: ${event.data.heroImage}`, error);
-    return imageWhatWeDo;
+    const assetsPath = imagePath.replace('/assets/', '../assets/');
+    const imageModule = allImages[assetsPath];
+    return imageModule?.default || placeholderImage;
+  } catch {
+    return placeholderImage;
   }
 }
 
@@ -41,6 +39,14 @@ if (!homePage || homePage.data.pageType !== 'home') {
 
 // Type assertion for TypeScript - we've verified pageType above
 const homeData = homePage.data;
+
+// Load feature card images from CMS
+const featureCardImages = homeData.featureCards.map((card) =>
+  getImageFromPath(card.image)
+);
+
+// Load whatWeDo image from CMS
+const whatWeDoImage = getImageFromPath(homeData.whatWeDo.image);
 
 // Get the next upcoming event (earliest future event)
 const now = new Date();
@@ -57,8 +63,8 @@ const featuredEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
 
 // Load featured event image
 const featuredEventImage = featuredEvent
-  ? await getFeaturedEventImage(featuredEvent)
-  : imageWhatWeDo;
+  ? getImageFromPath(featuredEvent.data.heroImage)
+  : placeholderImage;
 ---
 
 <BaseLayout title="Home" description="ECRS - Come to Play. Play to Learn">
@@ -75,24 +81,17 @@ const featuredEventImage = featuredEvent
   <section class="section section--cream">
     <div class="container">
       <div class="grid-3">
-        <FeatureCard
-          image={imageWhatWeDo}
-          title={homeData.featureCards[0].title}
-          description={homeData.featureCards[0].description}
-          link="/about"
-        />
-        <FeatureCard
-          image={imageUpcomingEvents}
-          title={homeData.featureCards[1].title}
-          description={homeData.featureCards[1].description}
-          link="/events"
-        />
-        <FeatureCard
-          image={imageTestimonials}
-          title={homeData.featureCards[2].title}
-          description={homeData.featureCards[2].description}
-          link="/testimonials"
-        />
+        {
+          homeData.featureCards.map((card, index) => (
+            <FeatureCard
+              image={featureCardImages[index]}
+              title={card.title}
+              description={card.description}
+              link={card.link || '#'}
+              linkText={card.linkText}
+            />
+          ))
+        }
       </div>
     </div>
   </section>
@@ -111,7 +110,7 @@ const featuredEventImage = featuredEvent
 
       <div class="what-we-do-content">
         <div class="what-we-do-image" data-reveal="left">
-          <Image src={imageWhatWeDoDance} alt="What We Do" />
+          <Image src={whatWeDoImage} alt="What We Do" />
         </div>
         <div class="what-we-do-text" data-reveal="right">
           <p class="section-intro">
