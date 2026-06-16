@@ -1,6 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: isaac-ecrs/Website
   branch: develop
+  # OAuth proxy Worker (sveltia-cms-auth on Cloudflare). See docs/cms-auth-setup.md.
+  base_url: https://sveltia-cms-auth.isaac-cd9.workers.dev
 
 # Enable editorial workflow (Draft -> In Review -> Ready -> Published)
 publish_mode: editorial_workflow

@@ -40,12 +40,6 @@ const { title, description = 'ECRS - Come to Play. Play to Learn' } =
     <meta name="description" content={description} />
     <title>{title} | ECRS</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <!--
-      WHY: Netlify Identity widget handles OAuth callbacks from Decap CMS login.
-      Must be on all pages since OAuth redirects to the main site, not /admin/.
-    -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
-    ></script>
   </head>
   <body>
     <TopHeader />
