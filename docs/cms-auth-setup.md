@@ -9,6 +9,12 @@ hosted (Netlify or Cloudflare Pages).
 Only **repo collaborators** on `isaac-ecrs/Website` can log in and commit, so
 add each editor (<5) as a collaborator — no separate access gate is needed.
 
+> ⚠️ **Do not merge the PR that introduces this until the steps below are done.**
+> `main` auto-deploys to production (`netlify.toml`), and `config.yml` ships a
+> `https://REPLACE-ME.workers.dev` placeholder. Merging before the Worker exists
+> and `base_url` is real will break `/admin/` login in production. Complete the
+> one-time setup, commit the real Worker URL, **then** merge.
+
 ## One-time setup
 
 ### 1. Create a GitHub OAuth App
@@ -40,6 +46,11 @@ npx wrangler secret put GITHUB_CLIENT_SECRET
 npx wrangler secret put ALLOWED_DOMAINS   # e.g. ecrs.org
 ```
 
+> Secret names are Worker-specific. The above are for `sveltia-cms-auth`;
+> Decap-specific proxies (e.g. `ironshard-decap-oauth-proxy`) use
+> `GITHUB_OAUTH_ID` / `GITHUB_OAUTH_SECRET` instead. **Follow the chosen
+> Worker's current README** if they diverge.
+
 Note the deployed Worker URL (e.g. `https://ecrs-cms-auth.<account>.workers.dev`).
 Go back to the GitHub OAuth App and make sure its callback URL matches
 `<worker-url>/callback`.
@@ -64,7 +75,10 @@ GitHub → repo → Settings → Collaborators → add each editor.
 ## Verifying
 
 1. Visit `https://ecrs.org/admin/` (or the deploy preview URL).
-2. Click **Login with GitHub** → authorize.
+2. Click **Login with GitHub** → authorize. If the popup 404s or hangs,
+   confirm the Worker's auth route matches Decap's `auth_endpoint` (defaults
+   to `auth`, which matches `sveltia-cms-auth`'s `/auth` — set it explicitly
+   in config.yml if the chosen Worker differs).
 3. Make a small edit; confirm it flows through the editorial workflow
    (Draft → In Review → Ready) as a PR against `develop`.
 
