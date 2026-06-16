@@ -369,6 +369,14 @@ const navigationCollection = defineCollection({
         label: z.string(),
         href: z.string(),
         isButton: z.boolean().default(false),
+        children: z
+          .array(
+            z.object({
+              label: z.string(),
+              href: z.string(),
+            })
+          )
+          .optional(),
       })
     ),
   }),
