@@ -1,0 +1,7 @@
+# Cloudflare Pages headers.
+# Preserves the behaviour of the old src/pages/admin/[...path].ts shim, which
+# served the Decap config with an explicit content-type and disabled caching so
+# CMS config edits take effect immediately. config.yml is now served statically.
+/admin/config.yml
+  Content-Type: text/yaml; charset=utf-8
+  Cache-Control: no-cache, no-store, must-revalidate
