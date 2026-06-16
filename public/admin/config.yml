@@ -1,6 +1,10 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: isaac-ecrs/Website
   branch: develop
+  # OAuth proxy Worker URL — replace after deploying sveltia-cms-auth to Cloudflare.
+  # See docs/cms-auth-setup.md for the deploy steps.
+  base_url: https://REPLACE-ME.workers.dev
 
 # Enable editorial workflow (Draft -> In Review -> Ready -> Published)
 publish_mode: editorial_workflow

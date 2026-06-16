@@ -65,7 +65,6 @@
   <body>
     <div id="nc-root"></div>
 
-    <script src="https://unpkg.com/netlify-identity-widget"></script>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 
     <script>
@@ -75,10 +74,6 @@
         function () {
           console.log('Window loaded');
           console.log('CMS available:', typeof window.CMS !== 'undefined');
-          console.log(
-            'netlifyIdentity available:',
-            typeof window.netlifyIdentity !== 'undefined'
-          );
 
           if (!window.CMS) {
             const errorHTML = `
@@ -87,20 +82,19 @@
               <h1>⚠️ Decap CMS Not Loaded</h1>
               <p>The admin panel couldn't load properly. Please check:</p>
               <ul>
-                <li><strong>Git Gateway enabled:</strong> Site settings → Identity → Git Gateway</li>
-                <li><strong>Netlify Identity widget:</strong> Should load above</li>
+                <li><strong>OAuth proxy reachable:</strong> the <code>base_url</code> in config.yml points at the deployed Cloudflare Worker</li>
+                <li><strong>GitHub OAuth App:</strong> callback URL matches the Worker's /callback route</li>
                 <li><strong>config.yml exists:</strong> /admin/config.yml (check in dist folder after build)</li>
                 <li><strong>Browser console:</strong> Check for CORS or loading errors</li>
               </ul>
               <div class="debug-info">
                 <strong>Debug Info:</strong><br/>
                 CMS Object: ${typeof window.CMS}<br/>
-                netlifyIdentity: ${typeof window.netlifyIdentity}<br/>
                 Current URL: <span id="current-url"></span><br/>
                 Origin: <span id="origin"></span>
               </div>
               <p style="margin-top: 2rem; font-size: 12px; color: #999;">
-                Try refreshing the page, or check that you're logged into Netlify Identity.
+                Try refreshing the page, or check that you can authorize via GitHub.
               </p>
             </div>
           </div>
