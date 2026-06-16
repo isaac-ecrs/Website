@@ -2,9 +2,8 @@ backend:
   name: github
   repo: isaac-ecrs/Website
   branch: develop
-  # OAuth proxy Worker URL — replace after deploying sveltia-cms-auth to Cloudflare.
-  # See docs/cms-auth-setup.md for the deploy steps.
-  base_url: https://REPLACE-ME.workers.dev
+  # OAuth proxy Worker (sveltia-cms-auth on Cloudflare). See docs/cms-auth-setup.md.
+  base_url: https://sveltia-cms-auth.isaac-cd9.workers.dev
 
 # Enable editorial workflow (Draft -> In Review -> Ready -> Published)
 publish_mode: editorial_workflow
