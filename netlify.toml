@@ -1,7 +1,0 @@
-[build]
-  command = "npm run build"
-  publish = "dist"
-
-# Only auto-deploy main branch
-[context.production]
-  branch = "main"
