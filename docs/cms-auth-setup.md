@@ -2,18 +2,23 @@
 
 The CMS no longer uses Netlify Identity / Git Gateway. Authentication now goes
 through a GitHub OAuth App, brokered by a small Cloudflare Worker
-([`sveltia-cms-auth`](https://github.com/sveltia/sveltia-cms-auth), which also
-supports Decap's `github` backend). This works regardless of where the site is
-hosted (Netlify or Cloudflare Pages).
+([`sveltia-cms-auth`](https://github.com/sveltia/sveltia-cms-auth) — despite the
+name it is just a generic GitHub OAuth proxy and supports Decap's `github`
+backend; we are staying on Decap CMS).
+
+The Astro rebuild is hosted on **Cloudflare Pages** at a `*.pages.dev` URL. The
+public `ecrs.org` (WordPress on Bluehost) is unrelated and untouched — the
+domain cutover is a separate, later step.
 
 Only **repo collaborators** on `isaac-ecrs/Website` can log in and commit, so
 add each editor (<5) as a collaborator — no separate access gate is needed.
 
-> ⚠️ **Do not merge the PR that introduces this until the steps below are done.**
-> `main` auto-deploys to production (`netlify.toml`), and `config.yml` ships a
-> `https://REPLACE-ME.workers.dev` placeholder. Merging before the Worker exists
-> and `base_url` is real will break `/admin/` login in production. Complete the
-> one-time setup, commit the real Worker URL, **then** merge.
+> ⚠️ **Replace the `base_url` placeholder before merging.** `config.yml` ships a
+> `https://REPLACE-ME.workers.dev` placeholder; Cloudflare Pages auto-deploys
+> `main` to the `*.pages.dev` site. Merging before the Worker exists and
+> `base_url` is real will break `/admin/` login on that staging site (not the
+> public WordPress `ecrs.org`, so low-stakes — but still do the setup, commit
+> the real Worker URL, **then** merge).
 
 ## One-time setup
 
@@ -23,7 +28,8 @@ GitHub → Settings → Developer settings → **OAuth Apps** → New OAuth App
 (this is an _OAuth App_, NOT a "GitHub App" — they are different).
 
 - **Application name:** ECRS CMS
-- **Homepage URL:** `https://ecrs.org`
+- **Homepage URL:** the `*.pages.dev` URL (cosmetic — shown on GitHub's consent
+  screen only; `https://ecrs.org` also fine)
 - **Authorization callback URL:** `https://<worker-subdomain>.workers.dev/callback`
 
 Save, then generate a **Client secret**. Keep the **Client ID** and
@@ -43,7 +49,7 @@ Then set the secrets (never commit these):
 npx wrangler secret put GITHUB_CLIENT_ID
 npx wrangler secret put GITHUB_CLIENT_SECRET
 # Restrict to this site's origin (recommended by sveltia-cms-auth):
-npx wrangler secret put ALLOWED_DOMAINS   # e.g. ecrs.org
+npx wrangler secret put ALLOWED_DOMAINS   # the *.pages.dev host serving /admin/
 ```
 
 > Secret names are Worker-specific. The above are for `sveltia-cms-auth`;
@@ -74,7 +80,7 @@ GitHub → repo → Settings → Collaborators → add each editor.
 
 ## Verifying
 
-1. Visit `https://ecrs.org/admin/` (or the deploy preview URL).
+1. Visit `https://<project>.pages.dev/admin/` (or a Cloudflare Pages preview URL).
 2. Click **Login with GitHub** → authorize. If the popup 404s or hangs,
    confirm the Worker's auth route matches Decap's `auth_endpoint` (defaults
    to `auth`, which matches `sveltia-cms-auth`'s `/auth` — set it explicitly
