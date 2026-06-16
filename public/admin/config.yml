@@ -2,7 +2,10 @@ backend:
   name: github
   repo: isaac-ecrs/Website
   branch: develop
-  # OAuth proxy Worker (sveltia-cms-auth on Cloudflare). See docs/cms-auth-setup.md.
+  # Narrow OAuth consent to public repos only (repo is public) — no access to
+  # any private repositories. See docs/cms-auth-setup.md.
+  auth_scope: public_repo
+  # OAuth proxy Worker (sveltia-cms-auth on Cloudflare).
   base_url: https://sveltia-cms-auth.isaac-cd9.workers.dev
 
 # Enable editorial workflow (Draft -> In Review -> Ready -> Published)
