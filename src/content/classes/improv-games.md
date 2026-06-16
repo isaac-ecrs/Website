@@ -1,6 +1,6 @@
 ---
 title: Improv Games
-leader: Isaac Lebwohl-Steiner
+leader: isaac-lebwohl-steiner
 descriptions:
   - year: 2025
     content:

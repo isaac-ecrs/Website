@@ -21,13 +21,28 @@ const navItems = navData?.data.items || [];
       <ul>
         {
           navItems.map((item) => (
-            <li>
+            <li class={item.children ? 'has-dropdown' : ''}>
               <a
                 href={item.href}
                 class={item.isButton ? 'btn btn--primary' : ''}
+                aria-haspopup={item.children ? 'true' : undefined}
               >
                 {item.label}
+                {item.children && (
+                  <span class="caret" aria-hidden="true">
+                    ▾
+                  </span>
+                )}
               </a>
+              {item.children && (
+                <ul class="dropdown">
+                  {item.children.map((child) => (
+                    <li>
+                      <a href={child.href}>{child.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))
         }
@@ -56,6 +71,15 @@ const navItems = navData?.data.items || [];
             <a href={item.href} class={item.isButton ? 'btn btn--primary' : ''}>
               {item.label}
             </a>
+            {item.children && (
+              <ul class="mobile-subnav">
+                {item.children.map((child) => (
+                  <li>
+                    <a href={child.href}>{child.label}</a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))
       }
@@ -177,6 +201,71 @@ const navItems = navData?.data.items || [];
           }
         }
       }
+
+      // Dropdown (e.g. About submenu)
+      .has-dropdown {
+        position: relative;
+
+        > a {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35em;
+        }
+
+        .caret {
+          font-size: 10px;
+          transition: transform $transition-fast;
+        }
+
+        .dropdown {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          display: block;
+          min-width: 220px;
+          margin: 0;
+          padding: 0.5em 0;
+          background-color: white;
+          box-shadow: $shadow-subtle;
+          border-radius: 3px;
+          gap: 0;
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(6px);
+          transition:
+            opacity $transition-fast,
+            transform $transition-fast,
+            visibility $transition-fast;
+          z-index: 1001;
+
+          li {
+            display: block;
+            width: 100%;
+          }
+
+          a {
+            display: block;
+            padding: 0.5em 1.25em;
+            white-space: nowrap;
+            text-transform: none;
+            font-size: 14px;
+          }
+        }
+
+        // WHY: focus-within keeps the menu open for keyboard/tab navigation
+        &:hover,
+        &:focus-within {
+          .dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+          }
+
+          .caret {
+            transform: rotate(180deg);
+          }
+        }
+      }
     }
   }
 
@@ -254,6 +343,22 @@ const navItems = navData?.data.items || [];
 
     li {
       padding: 0.75em 0;
+    }
+
+    // Sub-menu items (e.g. About submenu) shown indented in the drawer
+    .mobile-subnav {
+      margin-top: 0.5em;
+
+      li {
+        padding: 0.4em 0;
+      }
+
+      a {
+        text-transform: none;
+        font-weight: $font-weight-normal;
+        font-size: 14px;
+        color: rgba($color-primary, 0.85);
+      }
     }
 
     a {

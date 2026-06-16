@@ -144,7 +144,10 @@ collections:
                   - { label: 'Handshake', value: 'fa-handshake' }
                   - { label: 'Hands Holding', value: 'fa-hands-holding' }
                   - { label: 'Heart', value: 'fa-heart' }
-                  - { label: 'Hand Holding Heart', value: 'fa-hand-holding-heart' }
+                  - {
+                      label: 'Hand Holding Heart',
+                      value: 'fa-hand-holding-heart',
+                    }
                   - { label: '── Arts & Activities ──', value: '' }
                   - { label: 'Music', value: 'fa-music' }
                   - { label: 'Guitar', value: 'fa-guitar' }
@@ -322,7 +325,10 @@ collections:
                   - { label: 'Handshake', value: 'fa-handshake' }
                   - { label: 'Hands Holding', value: 'fa-hands-holding' }
                   - { label: 'Heart', value: 'fa-heart' }
-                  - { label: 'Hand Holding Heart', value: 'fa-hand-holding-heart' }
+                  - {
+                      label: 'Hand Holding Heart',
+                      value: 'fa-hand-holding-heart',
+                    }
                   - { label: '── Arts & Activities ──', value: '' }
                   - { label: 'Music', value: 'fa-music' }
                   - { label: 'Guitar', value: 'fa-guitar' }
@@ -493,7 +499,10 @@ collections:
                   - { label: 'Handshake', value: 'fa-handshake' }
                   - { label: 'Hands Holding', value: 'fa-hands-holding' }
                   - { label: 'Heart', value: 'fa-heart' }
-                  - { label: 'Hand Holding Heart', value: 'fa-hand-holding-heart' }
+                  - {
+                      label: 'Hand Holding Heart',
+                      value: 'fa-hand-holding-heart',
+                    }
                   - { label: '── Arts & Activities ──', value: '' }
                   - { label: 'Music', value: 'fa-music' }
                   - { label: 'Guitar', value: 'fa-guitar' }
