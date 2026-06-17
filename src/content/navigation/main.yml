@@ -1,31 +1,7 @@
 items:
-  - label: Home
-    href: /
+  - label: What is ECRS?
+    href: /#about
     isButton: false
-  - label: About
-    href: /about
-    isButton: false
-    children:
-      - label: Who We Are
-        href: /about
-      - label: History of ECRS
-        href: /history
-      - label: Our Leadership
-        href: /leaders
-      - label: What Makes ECRS Special?
-        href: /special
   - label: Events
     href: /events
     isButton: false
-  - label: Resources
-    href: /resources
-    isButton: false
-  - label: Become a Member
-    href: /membership
-    isButton: false
-  - label: Contact Us
-    href: /contact
-    isButton: false
-  - label: Donate
-    href: /donate
-    isButton: true

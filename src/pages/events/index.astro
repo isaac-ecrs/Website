@@ -15,13 +15,6 @@ const upcomingEvents = allEvents
       new Date(b.data.startDate).getTime()
   );
 
-const pastEvents = allEvents
-  .filter((e) => new Date(e.data.endDate) < new Date())
-  .sort(
-    (a, b) =>
-      new Date(b.data.startDate).getTime() -
-      new Date(a.data.startDate).getTime()
-  );
 
 const featuredEvent = upcomingEvents[0];
 const otherUpcomingEvents = upcomingEvents.slice(1);
@@ -206,26 +199,6 @@ const featuredDescription = featuredEvent?.data.shortDescription
     }
   </section>
 
-  {/* Past Events Section */}
-  {
-    pastEvents.length > 0 && (
-      <section class="section section--white">
-        <div class="container">
-          <h2 class="text-center">Past Events</h2>
-
-          <div class="events-grid">
-            {pastEvents.map((event) => (
-              <EventCard
-                event={event}
-                isPast={true}
-                href={`/events/${event.data.eventSlug}`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
 </BaseLayout>
 
 <style lang="scss">

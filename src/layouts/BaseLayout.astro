@@ -1,22 +1,4 @@
 ---
-/**
- * Base Layout
- *
- * This wraps all pages with common elements: header, footer, and global styles.
- *
- * WHY padding-top: 120px on <main>?
- * TopHeader + Header are position: fixed, so they overlay the page content.
- * Without padding, the first element on every page would render behind the
- * headers. 120px accounts for both headers' combined height.
- *
- * WHY Netlify Identity widget in <head>?
- * Decap CMS uses Netlify Identity for authentication. The widget must load
- * on ALL pages (not just /admin/) because:
- * 1. OAuth login redirects back to the main site after authentication
- * 2. The widget intercepts the redirect and completes the login flow
- * Without this, users would see a blank page after logging in.
- */
-import TopHeader from '../components/TopHeader.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ScrollToTop from '../components/ScrollToTop.astro';
@@ -42,10 +24,7 @@ const { title, description = 'ECRS - Come to Play. Play to Learn' } =
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   </head>
   <body>
-    <TopHeader />
     <Header />
-    <!-- WHY: Offsets content below the fixed TopHeader + Header. Uses CSS variable
-         from global.scss so this stays in sync with _variables.scss header heights. -->
     <main style="padding-top: var(--header-total-height);">
       <slot />
     </main>

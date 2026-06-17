@@ -1,193 +1,203 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
-import FeatureCard from '../components/FeatureCard.astro';
-import EventHighlight from '../components/EventHighlight.astro';
-
-import { renderMarkdown } from '../lib/markdown';
-
-// Import images
 import heroBg from '../assets/images/hero-bg.jpg';
-import { Image } from 'astro:assets';
-import placeholderImage from '../assets/images/landing-page/what-we-do.jpg';
 
-// All available images for dynamic loading
-const allImages = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/images/**/*.{jpg,jpeg,png,webp,avif}',
-  { eager: true }
-);
-
-// Dynamic image loader from CMS path
-function getImageFromPath(imagePath: string | undefined): ImageMetadata {
-  if (!imagePath) return placeholderImage;
-
-  try {
-    const assetsPath = imagePath.replace('/assets/', '../assets/');
-    const imageModule = allImages[assetsPath];
-    return imageModule?.default || placeholderImage;
-  } catch {
-    return placeholderImage;
-  }
-}
-
-// Get content from collections
-const homePage = await getEntry('pages', 'home');
-if (!homePage || homePage.data.pageType !== 'home') {
-  throw new Error('Home page content not found');
-}
-
-// Type assertion for TypeScript - we've verified pageType above
-const homeData = homePage.data;
-
-// Load feature card images from CMS
-const featureCardImages = homeData.featureCards.map((card) =>
-  getImageFromPath(card.image)
-);
-
-// Load whatWeDo image from CMS
-const whatWeDoImage = getImageFromPath(homeData.whatWeDo.image);
-
-// Get the next upcoming event (earliest future event)
-const now = new Date();
 const allEvents = await getCollection('events');
+const now = new Date();
 const upcomingEvents = allEvents
-  .filter((e) => new Date(e.data.startDate) > now)
+  .filter((e) => new Date(e.data.endDate) >= now)
   .sort(
     (a, b) =>
       new Date(a.data.startDate).getTime() -
       new Date(b.data.startDate).getTime()
   );
 
-const featuredEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
-
-// Load featured event image
-const featuredEventImage = featuredEvent
-  ? getImageFromPath(featuredEvent.data.heroImage)
-  : placeholderImage;
+function formatDateRange(start: Date, end: Date): string {
+  const sameDay = start.toDateString() === end.toDateString();
+  const opts: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+  if (sameDay) return start.toLocaleDateString('en-US', opts);
+  if (start.getFullYear() === end.getFullYear()) {
+    return `${start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} – ${end.toLocaleDateString('en-US', opts)}`;
+  }
+  return `${start.toLocaleDateString('en-US', opts)} – ${end.toLocaleDateString('en-US', opts)}`;
+}
 ---
 
-<BaseLayout title="Home" description="ECRS - Come to Play. Play to Learn">
-  <!-- SECTION 1: Hero -->
-  <Hero
-    title={homeData.hero.title}
-    subtitle={homeData.hero.subtitle}
-    backgroundImage={heroBg}
-    ctaText={homeData.hero.ctaText}
-    ctaLink={homeData.hero.ctaLink}
-  />
-
-  <!-- SECTION 2: Three Feature Cards -->
-  <section class="section section--cream">
-    <div class="container">
-      <div class="grid-3">
-        {
-          homeData.featureCards.map((card, index) => (
-            <FeatureCard
-              image={featureCardImages[index]}
-              title={card.title}
-              description={card.description}
-              link={card.link || '#'}
-              linkText={card.linkText}
-            />
-          ))
-        }
-      </div>
+<BaseLayout
+  title="Home"
+  description="ECRS — Come to Play. Play to Learn. Intergenerational folk dance, singing, games, crafts, and more since 1940."
+>
+  <!-- HERO -->
+  <section
+    class="hero"
+    style={`background-image: url(${heroBg.src})`}
+    aria-label="Hero"
+  >
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Eastern Cooperative Recreation School</p>
+      <h1 class="hero-headline">Come to Play.<br />Play to Learn.</h1>
+      <p class="hero-sub">
+        Folk dancing, singing, games, crafts, and connection — for every age,
+        since 1940.
+      </p>
+      {
+        upcomingEvents.length > 0 && (
+          <a
+            href={`/events/${upcomingEvents[0].data.eventSlug}`}
+            class="btn btn--primary"
+          >
+            Next Event: {upcomingEvents[0].data.title} →
+          </a>
+        )
+      }
     </div>
   </section>
 
-  <!-- SECTION 3: About ECRS Narrative (rendered from markdown) -->
+  <!-- WHAT IS ECRS -->
   <section class="section section--white" id="about">
-    <div class="container">
-      <div class="about-content" set:html={renderMarkdown(homeData.about)} />
-    </div>
-  </section>
-
-  <!-- SECTION 4: What We Do -->
-  <section class="section section--tan" id="programs">
-    <div class="container">
-      <h2 class="text-center">What We Do</h2>
-
-      <div class="what-we-do-content">
-        <div class="what-we-do-image" data-reveal="left">
-          <Image src={whatWeDoImage} alt="What We Do" />
-        </div>
-        <div class="what-we-do-text" data-reveal="right">
-          <p class="section-intro">
-            {homeData.whatWeDo.description}
-          </p>
-
-          <div
-            class="activities-list"
-            set:html={renderMarkdown(homeData.whatWeDo.activities)}
-          />
-        </div>
+    <div class="container about-section">
+      <div class="about-text">
+        <h2>What is ECRS?</h2>
+        <p class="about-lead">
+          ECRS is a nonprofit community where people of all ages come to play —
+          and discover that play is powerful. At our events you'll sing, dance,
+          make things with your hands, play games that actually connect people,
+          and share meals with strangers who quickly become friends.
+        </p>
+        <p>
+          We've been doing this since 1940. Our events are intergenerational by
+          design: grandparents, parents, kids, and twenty-somethings all in the
+          same room, learning from each other. No competition, no performance
+          pressure — just shared experience.
+        </p>
+      </div>
+      <div class="activities-grid">
+        <div class="activity">🕺 Folk &amp; Line Dancing</div>
+        <div class="activity">🎵 Singing &amp; Music</div>
+        <div class="activity">🎭 Informal Dramatics</div>
+        <div class="activity">🎲 Cooperative Games</div>
+        <div class="activity">✂️ Crafts</div>
+        <div class="activity">🌱 Personal Growth</div>
       </div>
     </div>
   </section>
 
-  <!-- SECTION 5: Event Highlight (Next Upcoming Event) -->
+  <!-- UPCOMING EVENTS -->
   {
-    featuredEvent &&
-      (() => {
-        const eventUrl = `/events/${featuredEvent.data.eventSlug}`;
-        return (
-          <EventHighlight
-            title={featuredEvent.data.title}
-            date={`${new Date(featuredEvent.data.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })} – ${new Date(featuredEvent.data.endDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}`}
-            description={
-              featuredEvent.data.shortDescription ||
-              'Event details coming soon.'
-            }
-            image={featuredEventImage}
-            link={eventUrl}
-          />
-        );
-      })()
+    upcomingEvents.length > 0 && (
+      <section class="section section--cream" id="events">
+        <div class="container">
+          <h2 class="events-heading">Upcoming Events</h2>
+          <div class="events-list">
+            {upcomingEvents.map((event) => {
+              const start = new Date(event.data.startDate);
+              const end = new Date(event.data.endDate);
+              const dateRange = formatDateRange(start, end);
+              return (
+                <a
+                  href={`/events/${event.data.eventSlug}`}
+                  class="event-card"
+                >
+                  <div class="event-card-meta">
+                    <span class="event-date">{dateRange}</span>
+                    <span class="event-loc">
+                      {event.data.location.venue} &bull;{' '}
+                      {event.data.location.city}, {event.data.location.state}
+                    </span>
+                  </div>
+                  <div class="event-card-body">
+                    <h3 class="event-title">{event.data.title}</h3>
+                    {event.data.shortDescription && (
+                      <p class="event-desc">{event.data.shortDescription}</p>
+                    )}
+                    <div class="event-footer">
+                      <span class="event-cost">
+                        Cost: {event.data.cost}
+                      </span>
+                      <span class="event-cta">Details &amp; Registration →</span>
+                    </div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )
   }
-
-  <!-- SECTION 6: Footer (included in BaseLayout) -->
 </BaseLayout>
 
 <style lang="scss">
   @use '../styles/variables' as *;
   @use '../styles/mixins' as *;
 
-  .about-content {
-    max-width: 800px;
-    margin: 0 auto;
+  // ---- HERO ----
+  .hero {
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding-top: var(--header-total-height);
 
-    h2 {
-      color: $color-primary;
-      margin-bottom: 1.5em;
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.52);
     }
 
-    .about-text {
-      p {
-        font-size: 18px;
-        line-height: 1.8;
-        margin-bottom: 1.5em;
-
-        &:last-child {
-          margin-bottom: 0;
-        }
-      }
+    @include mobile {
+      min-height: 80vh;
+      background-attachment: scroll;
     }
   }
 
-  .section-intro {
-    max-width: 700px;
-    margin: 0 auto 3em;
-    font-size: 18px;
-    color: rgba($color-text-dark, 0.7);
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    padding: 2em;
+    max-width: 760px;
   }
 
-  .what-we-do-content {
+  .hero-eyebrow {
+    font-size: 13px;
+    font-family: $font-heading;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    opacity: 0.8;
+    margin-bottom: 0.75em;
+  }
+
+  .hero-headline {
+    font-size: clamp(42px, 8vw, 80px);
+    font-family: $font-heading;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    line-height: 1.05;
+    margin-bottom: 0.6em;
+    color: white;
+  }
+
+  .hero-sub {
+    font-size: clamp(16px, 2.5vw, 20px);
+    opacity: 0.9;
+    margin-bottom: 2em;
+    line-height: 1.6;
+  }
+
+  // ---- ABOUT ----
+  .about-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 3em;
+    gap: 4em;
     align-items: start;
-    margin-top: 2em;
 
     @include mobile {
       grid-template-columns: 1fr;
@@ -195,43 +205,138 @@ const featuredEventImage = featuredEvent
     }
   }
 
-  .what-we-do-image {
-    img {
-      width: 100%;
-      height: auto;
-      border-radius: 3px;
-      box-shadow: $shadow-image;
-    }
-  }
-
-  .what-we-do-text {
-    .section-intro {
-      margin-bottom: 1.5em;
-    }
-  }
-
-  .activities-list {
-    :global(ul) {
-      list-style: none;
-      padding-left: 0;
+  .about-text {
+    h2 {
+      color: $color-primary;
+      margin-bottom: 0.75em;
     }
 
-    :global(li) {
+    .about-lead {
       font-size: 18px;
-      line-height: 1.8;
-      margin-bottom: 0.5em;
-      color: $color-text-dark;
-      padding-left: 1.5em;
-      position: relative;
-      list-style: none;
-
-      &::before {
-        content: '→';
-        position: absolute;
-        left: 0;
-        color: $color-accent;
-        font-weight: bold;
-      }
+      line-height: 1.75;
+      margin-bottom: 1.25em;
     }
+
+    p {
+      font-size: 16px;
+      line-height: 1.75;
+      color: rgba($color-text-dark, 0.8);
+    }
+  }
+
+  .activities-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1em;
+    align-self: center;
+
+    @include mobile {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .activity {
+    background: $color-light-cream;
+    border-radius: 6px;
+    padding: 1em 1.25em;
+    font-size: 15px;
+    font-weight: 600;
+    color: $color-text-dark;
+    border-left: 3px solid $color-accent;
+  }
+
+  // ---- EVENTS ----
+  .events-heading {
+    color: $color-primary;
+    margin-bottom: 1.5em;
+  }
+
+  .events-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5em;
+  }
+
+  .event-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba($color-text-dark, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    transition: box-shadow $transition-fast, transform $transition-fast;
+
+    &:hover {
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+  }
+
+  .event-card-meta {
+    background: $color-primary;
+    color: white;
+    padding: 0.75em 1.5em;
+    display: flex;
+    gap: 1.5em;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 13px;
+    font-family: $font-heading;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .event-date {
+    font-weight: $font-weight-bold;
+  }
+
+  .event-loc {
+    opacity: 0.85;
+  }
+
+  .event-card-body {
+    padding: 1.5em;
+  }
+
+  .event-title {
+    color: $color-text-dark;
+    font-size: 22px;
+    margin-bottom: 0.5em;
+    text-transform: none;
+  }
+
+  .event-desc {
+    color: rgba($color-text-dark, 0.75);
+    font-size: 15px;
+    line-height: 1.65;
+    margin-bottom: 1.25em;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .event-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5em;
+    font-size: 14px;
+  }
+
+  .event-cost {
+    color: $color-text-dark;
+    font-weight: 600;
+  }
+
+  .event-cta {
+    color: $color-primary;
+    font-weight: 700;
+    font-family: $font-heading;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 13px;
   }
 </style>

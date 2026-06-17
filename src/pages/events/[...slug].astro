@@ -1,1067 +1,236 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
-import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CountdownTimer from '../../components/CountdownTimer.astro';
-import LeaderPopover from '../../components/LeaderPopover.astro';
 import heroBg from '../../assets/images/hero-bg.jpg';
-
-async function loadEventImage(imagePath: string | undefined, fallback: any) {
-  if (!imagePath) return fallback;
-
-  try {
-    const assetsPath = imagePath.replace('/assets/', '../../assets/');
-    const images = import.meta.glob(
-      '../../assets/images/**/*.{jpg,jpeg,png,webp,avif}'
-    );
-    const imageModule = (await images[assetsPath]()) as any;
-    return imageModule.default;
-  } catch (error) {
-    console.warn(`Failed to load image: ${imagePath}, using fallback`, error);
-    return fallback;
-  }
-}
 
 export async function getStaticPaths() {
   const events = await getCollection('events');
-  return events.map((event) => {
-    return {
-      params: { slug: event.data.eventSlug },
-      props: { event },
-    };
-  });
+  return events.map((event) => ({
+    params: { slug: event.data.eventSlug },
+    props: { event },
+  }));
 }
 
 const { event } = Astro.props;
-const { Content } = await event.render();
 
-// Load hero and body images
-const heroImage = await loadEventImage(event.data.heroImage, heroBg);
-const bodyImageData = event.data.bodyImage
-  ? await loadEventImage(event.data.bodyImage, null)
-  : null;
-
-// Build location string for Google Maps
-const location = `${event.data.location.venue} • ${event.data.location.city}, ${event.data.location.state}`;
-
-// Check if address is valid for Google Maps
-const hasValidAddress =
-  event.data.location.address &&
-  event.data.location.address.trim().length > 0 &&
-  !event.data.location.address.toLowerCase().includes('tbd') &&
-  !event.data.location.address.toLowerCase().includes('location in');
-
-// Format dates
 const startDate = new Date(event.data.startDate);
 const endDate = new Date(event.data.endDate);
-const dateOptions: Intl.DateTimeFormatOptions = {
-  month: 'long',
-  day: 'numeric',
-  year: 'numeric',
-};
-const timeOptions: Intl.DateTimeFormatOptions = {
-  hour: 'numeric',
-  minute: '2-digit',
-};
-const formattedStartDate = startDate.toLocaleDateString('en-US', dateOptions);
-const formattedEndDate = endDate.toLocaleDateString('en-US', dateOptions);
-const formattedStartTime = startDate.toLocaleTimeString('en-US', timeOptions);
-const formattedEndTime = endDate.toLocaleTimeString('en-US', timeOptions);
 
-// Helper function to check if leader has bio for popover
-const hasLeaderBio = (leader: any) => {
-  return leader && leader.data.bio && leader.data.bio.trim().length > 0;
-};
+const dateOpts: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+const timeOpts: Intl.DateTimeFormatOptions = { hour: 'numeric', minute: '2-digit' };
 
-// Check for extended content
-const hasHighlights = event.data.highlights && event.data.highlights.length > 0;
-const hasAccommodation =
-  event.data.accommodation && event.data.accommodation.length > 0;
-const hasSchedule =
-  event.data.schedule &&
-  event.data.schedule.daily &&
-  event.data.schedule.daily.length > 0;
-const hasTuition = event.data.tuition;
-const hasClasses =
-  event.data.classPeriods && event.data.classPeriods.length > 0;
-
-// Process class periods to fetch class and leader data
-interface ClassOffering {
-  classEntry: any;
-  leader: any;
-  description: string;
-  days?: string;
-  age?: string;
-  note?: string;
-}
-
-interface ProcessedClassPeriod {
-  period: string;
-  offerings: ClassOffering[];
-}
-
-const processedClassPeriods: ProcessedClassPeriod[] = [];
-
-if (event.data.classPeriods && event.data.classPeriods.length > 0) {
-  // Get all classes to look up by title
-  const allClasses = await getCollection('classes');
-
-  for (const period of event.data.classPeriods) {
-    const offerings: ClassOffering[] = [];
-
-    for (const offering of period.offerings) {
-      // Find class by title (CMS stores title, not ID)
-      const classEntry = allClasses.find(
-        (c) => c.data.title === offering.class
-      );
-      if (!classEntry) continue;
-
-      // Get the leader ID from the reference
-      const leaderId =
-        typeof classEntry.data.leader === 'string'
-          ? classEntry.data.leader
-          : (classEntry.data.leader as any)?.id;
-      const leader = leaderId ? await getEntry('leaders', leaderId) : null;
-
-      // Find the description for the specified year, or use the most recent
-      let description = '';
-      if (offering.descriptionYear) {
-        const desc = classEntry.data.descriptions.find(
-          (d: any) => d.year === offering.descriptionYear
-        );
-        description =
-          desc?.content || classEntry.data.descriptions[0]?.content || '';
-      } else {
-        // Use the most recent description
-        const sortedDescs = [...classEntry.data.descriptions].sort(
-          (a: any, b: any) => b.year - a.year
-        );
-        description = sortedDescs[0]?.content || '';
-      }
-
-      offerings.push({
-        classEntry,
-        leader,
-        description,
-        days: offering.days,
-        age: offering.age,
-        note: offering.note,
-      });
-    }
-
-    processedClassPeriods.push({
-      period: period.period,
-      offerings,
-    });
+function formatDateRange(start: Date, end: Date): string {
+  const sameDay = start.toDateString() === end.toDateString();
+  if (sameDay) {
+    return `${start.toLocaleDateString('en-US', dateOpts)}, ${start.toLocaleTimeString('en-US', timeOpts)} – ${end.toLocaleTimeString('en-US', timeOpts)}`;
   }
+  if (start.getFullYear() === end.getFullYear()) {
+    return `${start.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} – ${end.toLocaleDateString('en-US', dateOpts)}`;
+  }
+  return `${start.toLocaleDateString('en-US', dateOpts)} – ${end.toLocaleDateString('en-US', dateOpts)}`;
 }
 
-// Check if event is in the future (for countdown)
-const isFutureEvent = startDate > new Date();
+const dateRange = formatDateRange(startDate, endDate);
+
+const loc = event.data.location;
+const hasValidAddress = loc.address && !loc.address.toLowerCase().includes('tbd');
+const mapsUrl = hasValidAddress
+  ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`${loc.address}, ${loc.city}, ${loc.state} ${loc.zip}`)}`
+  : null;
+
+const isFuture = startDate > new Date();
 ---
 
 <BaseLayout
   title={event.data.title}
   description={event.data.shortDescription || event.data.title}
 >
-  <!-- Hero Section -->
-  <section class="event-hero" style={`background-image: url(${heroImage.src})`}>
-    <div class="event-hero-content">
-      <h1 class="event-hero-title">{event.data.title}</h1>
+  <!-- HERO -->
+  <section class="event-hero" style={`background-image: url(${heroBg.src})`}>
+    <div class="event-hero-inner">
+      <h1>{event.data.title}</h1>
+      <p class="hero-date">{dateRange}</p>
     </div>
   </section>
 
-  <!-- Event Basics Bar -->
-  <section class="event-basics">
-    <div class="container">
-      <div class="basics-content">
-        <div class="basics-dates">
-          <span class="basics-label">Start:</span>
-          {formattedStartTime}, {formattedStartDate}
-          <span class="basics-separator">|</span>
-          <span class="basics-label">End:</span>
-          {formattedEndTime}, {formattedEndDate}
-        </div>
-        {
-          (hasAccommodation || hasTuition || hasClasses) && (
-            <div class="basics-links">
-              {hasClasses && <a href="#classes">Classes</a>}
-              {hasAccommodation && <a href="#accommodation">Room & Board</a>}
-              {hasTuition && <a href="#costs">Costs</a>}
-              {hasSchedule && <a href="#schedule">Schedule</a>}
-            </div>
-          )
-        }
+  <!-- KEY INFO -->
+  <section class="key-info-bar">
+    <div class="container key-info-grid">
+      <div class="info-item">
+        <span class="info-label">When</span>
+        <span class="info-value">{dateRange}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Where</span>
+        <span class="info-value">
+          {loc.website ? (
+            <a href={loc.website} target="_blank" rel="noopener">{loc.venue}</a>
+          ) : (
+            loc.venue
+          )}
+          {mapsUrl ? (
+            <a class="map-link" href={mapsUrl} target="_blank" rel="noopener">
+              {loc.address && <>{loc.address}, </>}{loc.city}, {loc.state}
+            </a>
+          ) : (
+            <span>{loc.city}, {loc.state}</span>
+          )}
+        </span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Cost</span>
+        <span class="info-value cost-value">{event.data.cost}</span>
       </div>
     </div>
   </section>
 
-  <!-- Highlights Section (What is this event?) -->
-  {
-    hasHighlights && (
-      <section class="section section--white">
-        <div class="container">
-          <h2 class="section-title">What is {event.data.title}?</h2>
-          <div class="highlights-grid">
-            {event.data.highlights &&
-              event.data.highlights.map((highlight: any) => (
-                <div class="highlight-card">
-                  {highlight.icon && (
-                    <div class="highlight-icon">
-                      <img src={highlight.icon} alt="" />
-                    </div>
-                  )}
-                  <h3>{highlight.title}</h3>
-                  <p>{highlight.description}</p>
-                </div>
-              ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  <!-- DESCRIPTION -->
+  {event.data.shortDescription && (
+    <section class="section section--white">
+      <div class="container narrow">
+        <p class="event-lead">{event.data.shortDescription}</p>
+      </div>
+    </section>
+  )}
 
-  <!-- Venue Section -->
-  {
-    event.data.venueDescription && (
-      <section class="section section--cream">
-        <div class="container">
-          <h2 class="section-title">{event.data.location.venue}</h2>
-          <div class="venue-content">
-            <div class="venue-text">
-              <p>{event.data.venueDescription}</p>
-
-              <div class="venue-info-section">
-                {event.data.location.website && (
-                  <div class="venue-info-item">
-                    <div class="venue-info-icon">
-                      <i class="fas fa-globe" aria-label="Venue website" />
-                    </div>
-                    <div class="venue-info-text">
-                      <a href={event.data.location.website}>
-                        {event.data.location.venue}
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                <div class="venue-info-item">
-                  <div class="venue-info-icon">
-                    <i class="fas fa-map-marker-alt" aria-label="Location" />
-                  </div>
-                  <div class="venue-info-text">
-                    {hasValidAddress ? (
-                      <a
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(location)}`}
-                      >
-                        {event.data.location.address}
-                        <br />
-                        {event.data.location.city}, {event.data.location.state}{' '}
-                        {event.data.location.zip}
-                      </a>
-                    ) : (
-                      <>
-                        {event.data.location.address && (
-                          <>
-                            {event.data.location.address}
-                            <br />
-                          </>
-                        )}
-                        {event.data.location.city}, {event.data.location.state}{' '}
-                        {event.data.location.zip}
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-              {event.data.venuePhone && (
-                <p class="venue-phone">
-                  <strong>Phone:</strong> {event.data.venuePhone}
-                </p>
-              )}
-            </div>
-            {bodyImageData && (
-              <div class="venue-image" data-reveal="right">
-                <Image
-                  src={bodyImageData}
-                  alt={event.data.location.venue}
-                  width={800}
-                  height={600}
-                  class="venue-img"
-                />
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Accommodation Section -->
-  {
-    hasAccommodation && (
-      <section id="accommodation" class="section section--white">
-        <div class="container">
-          <h2 class="section-title">Accommodation Options</h2>
-          {event.data.ageNotes && (
-            <p class="age-notes">{event.data.ageNotes}</p>
-          )}
-          <div class="accommodation-grid">
-            {event.data.accommodation &&
-              event.data.accommodation.map((acc: any) => (
-                <div class="accommodation-card">
-                  <h3>{acc.name}</h3>
-                  {acc.description && (
-                    <p class="acc-description">{acc.description}</p>
-                  )}
-                  <table class="rates-table">
-                    <thead>
-                      <tr>
-                        <th>Occupancy</th>
-                        <th>Adult (13+)</th>
-                        {acc.rates.some((r: any) => r.child) && (
-                          <th>Child (6-12)</th>
-                        )}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {acc.rates.map((rate: any) => (
-                        <tr>
-                          <td>{rate.occupancy}</td>
-                          <td>{rate.adult}</td>
-                          {acc.rates.some((r: any) => r.child) && (
-                            <td>{rate.child || '—'}</td>
-                          )}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Schedule Section -->
-  {
-    event.data.schedule && (
-      <section id="schedule" class="section section--cream">
-        <div class="container">
-          <h2 class="section-title">Daily Schedule</h2>
-          {event.data.schedule.checkIn && (
-            <p class="schedule-note">
-              <strong>Check-in:</strong> {event.data.schedule.checkIn}
-            </p>
-          )}
-          {event.data.schedule.checkOut && (
-            <p class="schedule-note">
-              <strong>Check-out:</strong> {event.data.schedule.checkOut}
-            </p>
-          )}
-          <div class="schedule-list">
-            {event.data.schedule.daily &&
-              event.data.schedule.daily.map((item: any) => (
-                <div class="schedule-item">
-                  <span class="schedule-time">{item.time}</span>
-                  <span class="schedule-activity">{item.activity}</span>
-                </div>
-              ))}
-          </div>
-          {event.data.schedule.notes && (
-            <p class="schedule-notes">{event.data.schedule.notes}</p>
-          )}
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Classes Section -->
-  {
-    hasClasses && (
-      <section id="classes" class="section section--white">
-        <div class="container">
-          <h2 class="section-title">Class Descriptions</h2>
-          {processedClassPeriods.map((period) => (
-            <div class="class-period">
-              <h3 class="period-title">{period.period}</h3>
-              <div class="classes-grid">
-                {period.offerings.map((offering, index) => {
-                  const dialogId = offering.leader
-                    ? `leader-${offering.leader.id}-${index}`
-                    : '';
-                  const showPopover =
-                    offering.leader && hasLeaderBio(offering.leader);
-
-                  return (
-                    <div class="class-card">
-                      <h4 class="class-title">
-                        {offering.classEntry.data.title}
-                      </h4>
-                      {offering.leader && (
-                        <>
-                          <p class="class-instructor">
-                            <strong>Leader:</strong>
-                            {showPopover ? (
-                              <>
-                                <button
-                                  class="leader-link"
-                                  type="button"
-                                  data-dialog-target={dialogId}
-                                >
-                                  {offering.leader.data.image && (
-                                    <img
-                                      src={offering.leader.data.image}
-                                      alt={offering.leader.data.name}
-                                      class="leader-thumb"
-                                    />
-                                  )}
-                                  {offering.leader.data.name}
-                                </button>
-                                <LeaderPopover
-                                  leader={offering.leader}
-                                  dialogId={dialogId}
-                                />
-                              </>
-                            ) : (
-                              <>
-                                {offering.leader.data.image && (
-                                  <img
-                                    src={offering.leader.data.image}
-                                    alt={offering.leader.data.name}
-                                    class="leader-thumb"
-                                  />
-                                )}
-                                {offering.leader.data.name}
-                              </>
-                            )}
-                          </p>
-                        </>
-                      )}
-                      {offering.days && (
-                        <p class="class-days">
-                          <strong>Days:</strong> {offering.days}
-                        </p>
-                      )}
-                      {offering.age && (
-                        <p class="class-age">
-                          <strong>Ages:</strong> {offering.age}
-                        </p>
-                      )}
-                      {offering.description && (
-                        <p class="class-description">{offering.description}</p>
-                      )}
-                      {offering.note && (
-                        <p class="class-note">{offering.note}</p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+  <!-- HIGHLIGHTS -->
+  {event.data.highlights && event.data.highlights.length > 0 && (
+    <section class="section section--cream">
+      <div class="container">
+        <h2 class="section-heading">What to Expect</h2>
+        <div class="highlights-grid">
+          {event.data.highlights.map((h: any) => (
+            <div class="highlight-card">
+              <h3>{h.title}</h3>
+              <p>{h.description}</p>
             </div>
           ))}
         </div>
-      </section>
-    )
-  }
-
-  <!-- Costs Section -->
-  {
-    event.data.tuition && (
-      <section id="costs" class="section section--accent">
-        <div class="container">
-          <h2 class="section-title section-title--light">Costs</h2>
-          <div class="costs-content">
-            <div class="tuition-box">
-              <h3>Tuition</h3>
-              <div class="tuition-rates">
-                <div class="tuition-rate">
-                  <span class="rate-amount">{event.data.tuition.adult}</span>
-                  <span class="rate-label">Adults (18+)</span>
-                </div>
-                {event.data.tuition.child && (
-                  <div class="tuition-rate">
-                    <span class="rate-amount">{event.data.tuition.child}</span>
-                    <span class="rate-label">Children (0-17)</span>
-                  </div>
-                )}
-              </div>
-              {event.data.tuition.notes &&
-                event.data.tuition.notes.length > 0 && (
-                  <ul class="tuition-notes">
-                    {event.data.tuition.notes.map((note: any) => (
-                      <li>{note}</li>
-                    ))}
-                  </ul>
-                )}
-            </div>
-            {event.data.deadlines && event.data.deadlines.length > 0 && (
-              <div class="deadlines-box">
-                <h3>Registration Deadlines</h3>
-                <ul class="deadlines-list">
-                  {event.data.deadlines.map((deadline: any) => (
-                    <li>
-                      <strong>{deadline.date}:</strong> {deadline.description}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Main Content (from markdown) -->
-  <section class="section section--white">
-    <div class="container">
-      <div class="event-content">
-        {
-          bodyImageData && (
-            <div class="content-image" data-reveal="left">
-              <Image
-                src={bodyImageData}
-                alt={event.data.title}
-                width={800}
-                height={600}
-              />
-            </div>
-          )
-        }
-        <Content />
       </div>
-    </div>
-  </section>
+    </section>
+  )}
 
-  <!-- Policies Section -->
-  {
-    event.data.policies && event.data.policies.length > 0 && (
-      <section class="section section--cream">
-        <div class="container">
-          <h2 class="section-title">Policies</h2>
-          <div class="policies-grid">
-            {event.data.policies.map((policy: any) => (
-              <div class="policy-card">
-                <h3>{policy.title}</h3>
-                <p>{policy.content}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  <!-- Registration Section -->
-  <section class="section section--dark">
-    <div class="container">
-      <div class="registration-section">
-        <h2>Ready to Join Us?</h2>
-        <p>Register for {event.data.title} today!</p>
-        <div class="registration-actions">
-          <a
-            href={`mailto:${event.data.registrationEmail}`}
-            class="btn btn--primary"
-          >
-            Register Now
+  <!-- VENUE DESCRIPTION -->
+  {event.data.venueDescription && (
+    <section class="section section--white">
+      <div class="container narrow">
+        <h2 class="section-heading">About the Venue</h2>
+        <p>{event.data.venueDescription}</p>
+        {event.data.location.website && (
+          <a href={event.data.location.website} class="venue-link" target="_blank" rel="noopener">
+            Visit venue website →
           </a>
-        </div>
-        <p class="registration-contact">
-          Questions? Email us at <a
-            href={`mailto:${event.data.registrationEmail}`}
-            >{event.data.registrationEmail}</a
-          >
-          {
-            event.data.venuePhone && (
-              <span> or call {event.data.venuePhone}</span>
-            )
-          }
-        </p>
+        )}
       </div>
+    </section>
+  )}
+
+  <!-- REGISTRATION CTA -->
+  <section class="section section--dark registration">
+    <div class="container">
+      <h2>{isFuture ? 'Join Us' : 'Interested?'}</h2>
+      <p>
+        Email us to register or ask questions about {event.data.title}.
+      </p>
+      <a
+        href={`mailto:${event.data.registrationEmail}`}
+        class="btn btn--primary"
+      >
+        {isFuture ? 'Register by Email' : 'Get in Touch'}
+      </a>
+      <p class="reg-email">
+        <a href={`mailto:${event.data.registrationEmail}`}>
+          {event.data.registrationEmail}
+        </a>
+      </p>
     </div>
   </section>
-
-  <!-- Floating Countdown Timer (for future events) -->
-  {
-    isFutureEvent && (
-      <CountdownTimer targetDate={startDate} eventTitle={event.data.title} />
-    )
-  }
 </BaseLayout>
 
 <style lang="scss">
   @use '../../styles/variables' as *;
   @use '../../styles/mixins' as *;
 
-  // Hero Section
+  // ---- HERO ----
   .event-hero {
-    @include parallax-bg();
-    min-height: 350px;
+    @include parallax-bg(0.55);
+    min-height: 50vh;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    text-align: center;
+    padding: 3em 1em;
+    padding-top: calc(var(--header-total-height) + 3em);
 
     @include mobile {
-      min-height: 280px;
-      margin-top: 70px;
-    }
-
-    .event-hero-content {
-      position: relative;
-      z-index: 2;
-      color: white;
-      padding: 2em;
-    }
-
-    .event-hero-title {
-      font-size: 53px;
-      font-weight: $font-weight-bold;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin: 0;
-      color: white;
-
-      @include mobile {
-        font-size: 32px;
-      }
+      background-attachment: scroll;
+      min-height: 40vh;
     }
   }
 
-  // Event Basics Bar
-  .event-basics {
-    background: $color-light-cream;
-    padding: 1.25em 0;
-    border-bottom: 1px solid rgba($color-text-dark, 0.1);
-
-    .basics-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1em;
-
-      @include mobile {
-        flex-direction: column;
-        text-align: center;
-      }
-    }
-
-    .basics-dates {
-      font-size: 15px;
-      color: $color-text-dark;
-
-      .basics-label {
-        font-weight: $font-weight-bold;
-        color: $color-primary;
-      }
-
-      .basics-separator {
-        margin: 0 0.75em;
-        color: rgba($color-text-dark, 0.3);
-      }
-
-      @include mobile {
-        .basics-separator {
-          display: block;
-          visibility: hidden;
-          height: 0.5em;
-        }
-      }
-    }
-
-    .basics-links {
-      display: flex;
-      gap: 1.5em;
-
-      a {
-        color: $color-secondary;
-        text-decoration: none;
-        font-weight: $font-weight-bold;
-        font-size: 14px;
-        text-transform: uppercase;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-  }
-
-  // Section Titles
-  .section-title {
-    font-size: 32px;
-    color: $color-primary;
+  .event-hero-inner {
+    position: relative;
+    z-index: 2;
     text-align: center;
-    margin-bottom: 1.5em;
-    text-transform: uppercase;
-    font-weight: $font-weight-bold;
-
-    &--light {
-      color: white;
-    }
-
-    @include mobile {
-      font-size: 26px;
-    }
-  }
-
-  // Highlights Grid
-  .highlights-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2em;
-  }
-
-  .highlight-card {
-    text-align: center;
-    padding: 1.5em;
-
-    .highlight-icon {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 1em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      img {
-        max-width: 100%;
-        max-height: 100%;
-      }
-    }
-
-    h3 {
-      color: $color-primary;
-      font-size: 20px;
-      margin-bottom: 0.75em;
-      text-transform: uppercase;
-    }
-
-    p {
-      color: $color-text-dark;
-      line-height: $line-height-body;
-      margin: 0;
-    }
-  }
-
-  // Venue Section
-  .venue-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3em;
-    align-items: center;
-
-    @include mobile {
-      grid-template-columns: 1fr;
-    }
-
-    .venue-text {
-      p {
-        line-height: $line-height-body;
-        margin-bottom: 1em;
-        color: $color-text-dark;
-      }
-
-      .venue-address,
-      .venue-phone {
-        font-size: 15px;
-      }
-
-      .venue-info-section {
-        margin-top: 2em;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5em;
-      }
-
-      .venue-info-item {
-        display: flex;
-        gap: 1em;
-        align-items: flex-start;
-
-        .venue-info-icon {
-          flex-shrink: 0;
-          font-size: 24px;
-          color: $color-primary;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 36px;
-          height: 36px;
-        }
-
-        .venue-info-text {
-          font-size: 15px;
-          color: $color-text-dark;
-          line-height: 1.6;
-
-          a {
-            color: $color-secondary;
-            text-decoration: none;
-
-            &:hover {
-              text-decoration: underline;
-            }
-          }
-        }
-      }
-    }
-
-    .venue-image {
-      img {
-        width: 100%;
-        height: auto;
-        border-radius: 3px;
-        box-shadow: $shadow-image;
-      }
-    }
-  }
-
-  // Accommodation Section
-  .age-notes {
-    text-align: center;
-    font-size: 14px;
-    color: $color-text-dark;
-    margin-bottom: 2em;
-    font-style: italic;
-  }
-
-  .accommodation-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2em;
-  }
-
-  .accommodation-card {
-    background: $color-light-cream;
-    padding: 1.5em;
-    border-radius: 3px;
-
-    h3 {
-      color: $color-primary;
-      font-size: 22px;
-      margin-bottom: 0.5em;
-      text-transform: uppercase;
-    }
-
-    .acc-description {
-      font-size: 14px;
-      color: $color-text-dark;
-      margin-bottom: 1em;
-      line-height: $line-height-body;
-    }
-  }
-
-  .rates-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-
-    th,
-    td {
-      padding: 0.75em;
-      text-align: left;
-      border-bottom: 1px solid rgba($color-text-dark, 0.1);
-    }
-
-    th {
-      background: $color-primary;
-      color: white;
-      font-weight: $font-weight-bold;
-      text-transform: uppercase;
-      font-size: 12px;
-    }
-
-    td {
-      color: $color-text-dark;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tr:nth-child(even) td {
-      background: rgba($color-text-dark, 0.03);
-    }
-  }
-
-  // Schedule Section
-  .schedule-note {
-    text-align: center;
-    margin-bottom: 0.5em;
-    color: $color-text-dark;
-  }
-
-  .schedule-list {
-    max-width: 600px;
-    margin: 2em auto 0;
-  }
-
-  .schedule-item {
-    display: flex;
-    padding: 0.75em 0;
-    border-bottom: 1px solid rgba($color-text-dark, 0.1);
-
-    &:last-child {
-      border-bottom: none;
-    }
-  }
-
-  .schedule-time {
-    font-weight: $font-weight-bold;
-    color: $color-primary;
-    min-width: 120px;
-  }
-
-  .schedule-activity {
-    color: $color-text-dark;
-  }
-
-  .schedule-notes {
-    text-align: center;
-    font-size: 14px;
-    color: $color-text-dark;
-    margin-top: 2em;
-    font-style: italic;
-  }
-
-  // Costs Section (Accent background)
-  .section--accent {
-    background: $color-accent;
     color: white;
+    max-width: 800px;
+
+    h1 {
+      font-size: clamp(32px, 6vw, 60px);
+      color: white;
+      text-transform: uppercase;
+      margin-bottom: 0.4em;
+    }
   }
 
-  .costs-content {
+  .hero-date {
+    font-size: 16px;
+    opacity: 0.85;
+    letter-spacing: 0.5px;
+  }
+
+  // ---- KEY INFO BAR ----
+  .key-info-bar {
+    background: $color-primary;
+    color: white;
+    padding: 1.75em 0;
+  }
+
+  .key-info-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3em;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5em;
 
     @include mobile {
       grid-template-columns: 1fr;
+      gap: 1.25em;
     }
   }
 
-  .tuition-box,
-  .deadlines-box {
-    background: rgba(white, 0.15);
-    padding: 2em;
-    border-radius: 3px;
-
-    h3 {
-      color: white;
-      font-size: 22px;
-      margin-bottom: 1em;
-      text-transform: uppercase;
-    }
-  }
-
-  .tuition-rates {
-    display: flex;
-    gap: 2em;
-    margin-bottom: 1.5em;
-
-    @include mobile {
-      flex-direction: column;
-      gap: 1em;
-    }
-  }
-
-  .tuition-rate {
+  .info-item {
     display: flex;
     flex-direction: column;
-
-    .rate-amount {
-      font-size: 28px;
-      font-weight: $font-weight-bold;
-    }
-
-    .rate-label {
-      font-size: 14px;
-      opacity: 0.9;
-    }
+    gap: 0.3em;
   }
 
-  .tuition-notes {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-size: 14px;
-
-    li {
-      padding: 0.5em 0;
-      border-top: 1px solid rgba(white, 0.2);
-
-      &:first-child {
-        border-top: none;
-      }
-    }
+  .info-label {
+    font-family: $font-heading;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    font-weight: $font-weight-bold;
   }
 
-  .deadlines-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-
-    li {
-      padding: 0.75em 0;
-      border-bottom: 1px solid rgba(white, 0.2);
-      font-size: 15px;
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      strong {
-        display: block;
-        margin-bottom: 0.25em;
-      }
-    }
-  }
-
-  // Main Content
-  .event-content {
-    max-width: 800px;
-    margin: 0 auto;
-
-    h2 {
-      color: $color-primary;
-      font-size: 28px;
-      margin: 2em 0 1em;
-      text-transform: uppercase;
-
-      &:first-child {
-        margin-top: 0;
-      }
-    }
-
-    h3 {
-      color: $color-primary;
-      font-size: 22px;
-      margin: 1.5em 0 0.75em;
-    }
-
-    p {
-      line-height: $line-height-body;
-      margin-bottom: 1em;
-      color: $color-text-dark;
-    }
-
-    ul,
-    ol {
-      margin-left: 1.5em;
-      margin-bottom: 1em;
-
-      li {
-        margin-bottom: 0.5em;
-        line-height: $line-height-body;
-      }
-    }
+  .info-value {
+    font-size: 15px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
 
     a {
-      color: $color-secondary;
+      color: $color-accent;
+      text-decoration: none;
 
       &:hover {
         text-decoration: underline;
@@ -1069,193 +238,111 @@ const isFutureEvent = startDate > new Date();
     }
   }
 
-  // Policies Section
-  .policies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2em;
+  .cost-value {
+    font-size: 17px;
+    font-weight: 700;
+    color: $color-accent;
   }
 
-  .policy-card {
+  .map-link {
+    font-size: 13px;
+    opacity: 0.85;
+    color: white !important;
+    text-decoration: underline !important;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // ---- CONTENT ----
+  .narrow {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .event-lead {
+    font-size: 18px;
+    line-height: 1.75;
+    color: $color-text-dark;
+  }
+
+  .section-heading {
+    color: $color-primary;
+    margin-bottom: 1.25em;
+    font-size: 26px;
+  }
+
+  // ---- HIGHLIGHTS ----
+  .highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5em;
+  }
+
+  .highlight-card {
     background: white;
+    border-radius: 6px;
     padding: 1.5em;
-    border-radius: 3px;
-    box-shadow: $shadow-subtle;
+    border-top: 3px solid $color-accent;
 
     h3 {
+      font-size: 16px;
       color: $color-primary;
-      font-size: 18px;
-      margin-bottom: 0.75em;
+      margin-bottom: 0.5em;
       text-transform: uppercase;
     }
 
     p {
       font-size: 14px;
-      line-height: $line-height-body;
+      line-height: 1.65;
       color: $color-text-dark;
       margin: 0;
     }
   }
 
-  // Registration Section
+  // ---- VENUE ----
+  .venue-link {
+    display: inline-block;
+    margin-top: 1em;
+    color: $color-secondary;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // ---- REGISTRATION ----
   .section--dark {
     background: $color-dark-brown;
     color: white;
   }
 
-  .registration-section {
+  .registration {
     text-align: center;
-    padding: 2em 0;
 
     h2 {
-      font-size: 32px;
-      margin-bottom: 0.5em;
       color: white;
-      text-transform: uppercase;
+      margin-bottom: 0.5em;
     }
 
     > p {
-      font-size: 18px;
+      opacity: 0.85;
       margin-bottom: 1.5em;
-      opacity: 0.9;
+      font-size: 17px;
     }
 
-    .registration-actions {
-      margin-bottom: 1.5em;
-    }
-
-    .registration-contact {
-      font-size: 15px;
-      opacity: 0.8;
+    .reg-email {
+      margin-top: 1em;
+      font-size: 14px;
+      opacity: 0.7;
 
       a {
         color: $color-accent;
-
-        &:hover {
-          text-decoration: underline;
-        }
       }
     }
-  }
-
-  // Classes Section
-  .class-period {
-    margin-bottom: 3em;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  .period-title {
-    color: $color-primary;
-    font-size: 24px;
-    text-transform: uppercase;
-    margin-bottom: 1.25em;
-    padding-bottom: 0.5em;
-    border-bottom: 2px solid $color-accent;
-  }
-
-  .classes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5em;
-  }
-
-  .class-card {
-    background: $color-light-cream;
-    padding: 1.5em;
-    border-radius: 3px;
-    border-left: 4px solid $color-primary;
-
-    .class-title {
-      color: $color-primary;
-      font-size: 18px;
-      margin-bottom: 0.75em;
-      line-height: 1.3;
-    }
-
-    .class-instructor,
-    .class-days,
-    .class-age {
-      font-size: 14px;
-      margin-bottom: 0.5em;
-      color: $color-text-dark;
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-
-      strong {
-        color: $color-primary;
-      }
-    }
-
-    .class-description {
-      font-size: 14px;
-      line-height: $line-height-body;
-      color: $color-text-dark;
-      margin-top: 1em;
-      margin-bottom: 0;
-    }
-
-    .class-note {
-      font-size: 13px;
-      font-style: italic;
-      color: $color-accent;
-      margin-top: 0.75em;
-      margin-bottom: 0;
-      padding-top: 0.75em;
-      border-top: 1px solid rgba($color-text-dark, 0.1);
-    }
-  }
-
-  // Leader Link Button
-  .leader-link {
-    background: none;
-    border: none;
-    color: $color-secondary;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-    font-size: inherit;
-    font-family: inherit;
-    transition: color $transition-fast;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5em;
-
-    &:hover {
-      color: $color-accent;
-    }
-
-    &:focus-visible {
-      outline: 2px solid $color-accent;
-      outline-offset: 2px;
-    }
-  }
-
-  // Leader Thumbnail Image
-  .leader-thumb {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid $color-secondary;
-    flex-shrink: 0;
   }
 </style>
-
-<script>
-  // Handle leader popover dialog triggers
-  // WHY: Using event delegation instead of inline onclick handlers prevents XSS
-  // vulnerabilities from user-controlled dialog IDs in CMS content.
-  document.querySelectorAll('[data-dialog-target]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const dialogId = button.getAttribute('data-dialog-target');
-      if (dialogId) {
-        const dialog = document.getElementById(dialogId) as HTMLDialogElement;
-        dialog?.showModal();
-      }
-    });
-  });
-</script>
