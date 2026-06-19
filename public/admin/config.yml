@@ -1,15 +1,19 @@
 # -------------------------------------------------------
 # Decap CMS Configuration for ECRS
-# Backend: GitHub OAuth (to be wired in during deployment)
+# Backend: GitHub OAuth via Sveltia CMS Auth Worker (Cloudflare)
 # Hosting: Cloudflare Pages
 # -------------------------------------------------------
 
 backend:
   name: github
-  repo: YOUR_GITHUB_ORG/YOUR_REPO_NAME   # TODO: replace with actual repo
+  repo: isaac-ecrs/Website
   branch: main
-  # Uncomment and set base_url to your GitHub OAuth Worker URL at deploy time:
-  # base_url: https://your-oauth-worker.workers.dev
+  auth_scope: public_repo
+  base_url: https://sveltia-cms-auth.isaac-cd9.workers.dev
+
+publish_mode: editorial_workflow
+
+local_backend: true
 
 media_folder: 'src/assets/images/uploads'
 public_folder: '/images/uploads'
