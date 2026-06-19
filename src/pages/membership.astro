@@ -1,0 +1,104 @@
+---
+import CognitoForm from '~/components/widgets/CognitoForm.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+import Layout from '~/layouts/PageLayout.astro';
+
+const metadata = {
+  title: 'Become a Member',
+  description:
+    'Join the Eastern Cooperative Recreation School and enjoy members-only discounts, voting rights, our newsletter ECHOES, and more.',
+};
+---
+
+<Layout metadata={metadata}>
+
+  <HeroText
+    tagline="Join Us"
+    title="Become a Member of ECRS"
+  />
+
+  <Features2
+    title="Why become a member?"
+    columns={2}
+    items={[
+      {
+        title: 'Members-only discounts at events',
+        description: 'Save on registration fees at ECRS events throughout the year.',
+        icon: 'tabler:ticket',
+      },
+      {
+        title: 'Steer the direction of ECRS',
+        description:
+          'Vote on Board members and issues, and/or become a Board member yourself.',
+        icon: 'tabler:users',
+      },
+      {
+        title: 'Free subscription to ECHOES',
+        description: 'Receive our newsletter and stay connected with the ECRS community.',
+        icon: 'tabler:mail',
+      },
+      {
+        title: 'Recreation and leadership training',
+        description: 'Access workshops and resources to grow your skills and confidence.',
+        icon: 'tabler:school',
+      },
+      {
+        title: 'Share in the ECRS magic and fun!',
+        description: 'Be part of a warm, welcoming community built on creativity and cooperation.',
+        icon: 'tabler:sparkles',
+      },
+      {
+        title: 'Support the organization you love',
+        description: 'Your membership directly sustains ECRS and makes everything possible.',
+        icon: 'tabler:heart',
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-orange-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features2>
+
+  <!-- Pricing -->
+  <section class="py-12 px-4 max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold text-center mb-4 text-default">Annual Membership</h2>
+    <p class="text-center text-muted mb-10 max-w-2xl mx-auto">
+      Annual membership dues are only $25 for the first person in the household, and $15 for any other person over 16 living in the household. If there is a lifetime member in a household, the annual dues are also only $15 for any other person 16 or older living in the household. You can also purchase a lifetime membership, which is $400 for an individual or $650 for a couple. Dues expire on December 31 of the year they are paid, regardless of when the payment is made.
+    </p>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+      <div class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-800 p-6">
+        <h3 class="font-semibold text-lg mb-1 text-default">Lifetime Member</h3>
+        <p class="text-muted text-sm mb-4">Single</p>
+        <p class="text-4xl font-bold text-primary">$400</p>
+      </div>
+      <div class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-800 p-6">
+        <h3 class="font-semibold text-lg mb-1 text-default">Lifetime Member</h3>
+        <p class="text-muted text-sm mb-4">Couple</p>
+        <p class="text-4xl font-bold text-primary">$650</p>
+      </div>
+      <div class="rounded-xl border-2 border-primary bg-orange-50 dark:bg-slate-700 p-6">
+        <h3 class="font-semibold text-lg mb-1 text-default">Annual Member</h3>
+        <p class="text-muted text-sm mb-4">Single</p>
+        <p class="text-4xl font-bold text-primary">$25</p>
+      </div>
+      <div class="rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-800 p-6">
+        <h3 class="font-semibold text-lg mb-1 text-default">Annual Member</h3>
+        <p class="text-muted text-sm mb-4">Additional household member</p>
+        <p class="text-4xl font-bold text-primary">$15</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cognito Forms embed -->
+  <section class="py-8 px-4 max-w-3xl mx-auto">
+    <h2 class="text-2xl font-bold text-center mb-6 text-default">Choose a membership and complete the form below</h2>
+    <p class="text-center text-muted mb-4">
+      If you are unable to pay online, please contact our membership secretary at
+      <a href="mailto:membership@ecrs.org" class="text-link">membership@ecrs.org</a> directly to make arrangements.
+    </p>
+  </section>
+  <CognitoForm formId="16" height="1400" />
+
+</Layout>
+

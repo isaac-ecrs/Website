@@ -1,0 +1,149 @@
+# -------------------------------------------------------
+# Decap CMS Configuration for ECRS
+# Backend: GitHub OAuth (to be wired in during deployment)
+# Hosting: Cloudflare Pages
+# -------------------------------------------------------
+
+backend:
+  name: github
+  repo: YOUR_GITHUB_ORG/YOUR_REPO_NAME   # TODO: replace with actual repo
+  branch: main
+  # Uncomment and set base_url to your GitHub OAuth Worker URL at deploy time:
+  # base_url: https://your-oauth-worker.workers.dev
+
+media_folder: 'src/assets/images/uploads'
+public_folder: '/images/uploads'
+
+# -------------------------------------------------------
+# Collections
+# -------------------------------------------------------
+collections:
+
+  # --- EVENTS (folder collection — one file per event) ---
+  - name: 'event'
+    label: 'Events'
+    label_singular: 'Event'
+    folder: 'src/data/events'
+    create: true
+    slug: '{{year}}-{{fields.title}}'
+    fields:
+      - { label: 'Title', name: 'title', widget: 'string' }
+      - { label: 'Event Date', name: 'date', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false }
+      - { label: 'End Date', name: 'endDate', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false, required: false }
+      - { label: 'Start Time', name: 'startTime', widget: 'string', required: false, hint: 'e.g. 5:00 PM' }
+      - { label: 'End Time', name: 'endTime', widget: 'string', required: false, hint: 'e.g. 3:00 PM' }
+      - { label: 'Location Name', name: 'location', widget: 'string', hint: 'e.g. Camp Onas' }
+      - { label: 'Full Address', name: 'address', widget: 'string', required: false }
+      - { label: 'Short Description (excerpt)', name: 'excerpt', widget: 'string', required: false }
+      - { label: 'Full Description', name: 'description', widget: 'markdown', required: false }
+      - { label: 'Event Image', name: 'image', widget: 'image', required: false }
+      - { label: 'Registration URL', name: 'registrationUrl', widget: 'string', required: false }
+      - { label: 'Registration Email', name: 'registrationEmail', widget: 'string', required: false }
+      - { label: 'Registration Deadline', name: 'registrationDeadline', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false, required: false }
+      - { label: 'Status', name: 'status', widget: 'select', options: ['upcoming', 'past'], default: 'upcoming' }
+      - { label: 'Feature on Homepage?', name: 'isFeatured', widget: 'boolean', default: false, hint: 'Only one event should be featured at a time.' }
+      - label: 'Pricing Tiers'
+        name: 'pricing'
+        widget: 'list'
+        required: false
+        fields:
+          - { label: 'Age Range', name: 'ageRange', widget: 'string', hint: 'e.g. 16+' }
+          - { label: 'Full Weekend Price', name: 'fullWeekend', widget: 'string', required: false }
+          - { label: 'Note', name: 'note', widget: 'string', required: false }
+      - label: 'Tags'
+        name: 'tags'
+        widget: 'list'
+        required: false
+        field: { label: 'Tag', name: 'tag', widget: 'string' }
+
+  # --- FILE COLLECTIONS (single-instance pages & global settings) ---
+  - name: 'settings'
+    label: 'Site Settings'
+    files:
+
+      - label: 'Global Site Settings'
+        name: 'site'
+        file: 'src/data/settings/site.json'
+        fields:
+          - { label: 'Site Name', name: 'name', widget: 'string', default: 'ECRS' }
+          - { label: 'Tagline', name: 'tagline', widget: 'string' }
+          - { label: 'Mission Statement', name: 'mission', widget: 'text' }
+          - { label: 'Copyright Text', name: 'copyright', widget: 'string' }
+          - label: 'Social Links'
+            name: 'socialLinks'
+            widget: 'list'
+            fields:
+              - { label: 'Platform', name: 'platform', widget: 'string', hint: 'e.g. Facebook' }
+              - { label: 'URL', name: 'url', widget: 'string' }
+              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:brand-facebook' }
+
+      - label: 'Navigation'
+        name: 'navigation'
+        file: 'src/data/settings/navigation.json'
+        fields:
+          - label: 'Header Links'
+            name: 'links'
+            widget: 'list'
+            fields:
+              - { label: 'Label', name: 'text', widget: 'string' }
+              - { label: 'URL', name: 'href', widget: 'string' }
+          - label: 'Header CTA Button'
+            name: 'cta'
+            widget: 'object'
+            fields:
+              - { label: 'Button Text', name: 'text', widget: 'string' }
+              - { label: 'Button URL', name: 'href', widget: 'string' }
+
+      - label: 'Landing Page'
+        name: 'landing'
+        file: 'src/data/settings/landing.md'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string', hint: 'Small text above the main headline' }
+          - { label: 'Hero Headline', name: 'heroTitle', widget: 'string' }
+          - { label: 'Hero Subtitle', name: 'heroSubtitle', widget: 'text' }
+          - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
+          - { label: 'Hero Image Alt Text', name: 'heroImageAlt', widget: 'string', required: false }
+          - { label: '"Who We Are" Heading', name: 'aboutTitle', widget: 'string' }
+          - { label: '"Who We Are" Body', name: 'aboutBody', widget: 'markdown' }
+          - { label: '"Who We Are" Image', name: 'aboutImage', widget: 'image', required: false }
+          - label: 'Value Pillars (Features section)'
+            name: 'pillars'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:music' }
+          - label: 'Key Stats'
+            name: 'stats'
+            widget: 'list'
+            required: false
+            fields:
+              - { label: 'Amount', name: 'amount', widget: 'string', hint: 'e.g. 75+' }
+              - { label: 'Label', name: 'title', widget: 'string', hint: 'e.g. Years of Community' }
+
+      - label: 'Donation Page'
+        name: 'donation'
+        file: 'src/data/settings/donation.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Intro Text', name: 'introText', widget: 'text' }
+          - { label: 'Cognito Form ID', name: 'cognitoFormId', widget: 'string', hint: 'The number at the end of the Cognito Forms embed URL (e.g. 17)' }
+          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '600', hint: 'Adjust if the form is taller or shorter than the default' }
+
+      - label: 'Footer'
+        name: 'footer'
+        file: 'src/data/settings/footer.json'
+        fields:
+          - { label: 'Footer Note / Copyright', name: 'footNote', widget: 'string' }
+          - label: 'Footer Link Columns'
+            name: 'columns'
+            widget: 'list'
+            fields:
+              - { label: 'Column Title', name: 'title', widget: 'string' }
+              - label: 'Links'
+                name: 'links'
+                widget: 'list'
+                fields:
+                  - { label: 'Label', name: 'text', widget: 'string' }
+                  - { label: 'URL', name: 'href', widget: 'string' }

@@ -1,0 +1,13 @@
+{
+  "links": [
+    { "text": "Home", "href": "/" },
+    { "text": "Events", "href": "/events" },
+    { "text": "About", "href": "/about" },
+    { "text": "Contact Us", "href": "/contact" },
+    { "text": "Donate", "href": "/donate" }
+  ],
+  "cta": {
+    "text": "See Events",
+    "href": "/events"
+  }
+}

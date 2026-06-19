@@ -1,0 +1,26 @@
+{
+  "footNote": "Copyright © ECRS · All rights reserved.",
+  "columns": [
+    {
+      "title": "Organization",
+      "links": [
+        { "text": "About ECRS", "href": "/about" }
+      ]
+    },
+    {
+      "title": "Participate",
+      "links": [
+        { "text": "Events", "href": "/events" },
+        { "text": "Become a Member", "href": "/membership" }
+      ]
+    },
+    {
+      "title": "Connect",
+      "links": [
+        { "text": "Contact Us", "href": "/contact" },
+        { "text": "Donate", "href": "https://www.ecrs.org/donate/" },
+        { "text": "Facebook", "href": "https://www.facebook.com/yay4ecrs" }
+      ]
+    }
+  ]
+}

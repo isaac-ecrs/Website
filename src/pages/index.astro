@@ -1,0 +1,229 @@
+---
+import { readdirSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { getCollection, getEntry } from 'astro:content';
+import Layout from '~/layouts/PageLayout.astro';
+import VideoHero from '~/components/widgets/VideoHero.astro';
+import Features from '~/components/widgets/Features.astro';
+import Content from '~/components/widgets/Content.astro';
+import Stats from '~/components/widgets/Stats.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+
+// --- Hero videos: discover all .webm files in public/videos/ at build time ---
+const videoDir = join(process.cwd(), 'public/videos');
+const heroVideos = readdirSync(videoDir)
+  .filter((f) => f.endsWith('.webm'))
+  .sort()
+  .map((f) => {
+    const base = f.replace('.webm', '');
+    const posterFile = `${base}-poster.jpg`;
+    return {
+      webm: `/videos/${f}`,
+      mp4: `/videos/${f.replace('.webm', '.mp4')}`,
+      poster: existsSync(join(videoDir, posterFile)) ? `/videos/${posterFile}` : undefined,
+    };
+  });
+
+// --- Data fetching ---
+const landingEntry = await getEntry('landingSettings', 'landing');
+const landing = landingEntry?.data;
+
+const allEvents = await getCollection('event');
+const now = new Date();
+const upcomingAll = allEvents
+  .filter((e) => (e.data.endDate ?? e.data.date) >= now)
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+
+const featuredEvent = upcomingAll[0];
+const upcomingEvents = upcomingAll.slice(1, 4);
+
+function formatEventDate(event: (typeof allEvents)[0]['data']) {
+  const opts: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' };
+  const start = event.date.toLocaleDateString('en-US', opts);
+  if (!event.endDate) return start;
+  // Same month — collapse: "June 12–14, 2026"
+  const startMonth = event.date.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
+  const endMonth = event.endDate.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
+  const startYear = event.date.toLocaleDateString('en-US', { year: 'numeric', timeZone: 'UTC' });
+  const endYear = event.endDate.toLocaleDateString('en-US', { year: 'numeric', timeZone: 'UTC' });
+  if (startMonth === endMonth && startYear === endYear) {
+    const d1 = event.date.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' });
+    const d2 = event.endDate.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' });
+    return `${startMonth} ${d1}–${d2}, ${startYear}`;
+  }
+  return `${start} – ${event.endDate.toLocaleDateString('en-US', opts)}`;
+}
+
+const featuredDateStr = featuredEvent ? formatEventDate(featuredEvent.data) : '';
+
+const metadata = {
+  title: 'ECRS — Come to Play. Play to Learn.',
+  ignoreTitleTemplate: true,
+  description: landing?.heroSubtitle ?? 'An intergenerational organization providing creative and engaging activities that are fun, develop leadership and build community.',
+};
+---
+
+<Layout metadata={metadata}>
+
+
+  <!-- ============================================================
+       HERO — full-bleed cycling video background
+       ============================================================ -->
+  <VideoHero
+    videos={heroVideos}
+    title={landing?.heroTitle ?? 'Come to Play. Play to Learn.'}
+    subtitle={landing?.heroSubtitle ?? 'An intergenerational community for people of all ages — music, dance, games, crafts, and friendship.'}
+    badge={featuredEvent ? `Next Event · ${featuredDateStr}` : undefined}
+    eventCard={featuredEvent ? {
+      label: 'Upcoming Event',
+      title: featuredEvent.data.title,
+      date: featuredDateStr,
+      location: featuredEvent.data.location,
+      deadline: featuredEvent.data.registrationDeadline
+        ? `Register by ${featuredEvent.data.registrationDeadline.toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })}`
+        : undefined,
+      image: featuredEvent.data.image,
+      dateISO: featuredEvent.data.date.toISOString(),
+      hasRegistration: !!(featuredEvent.data.registrationUrl || featuredEvent.data.cognitoFormId),
+    } : undefined}
+    eventHref={featuredEvent ? `/events/${featuredEvent.id}` : undefined}
+    primaryCta={featuredEvent ? undefined : { text: 'See Upcoming Events', href: '/events' }}
+    secondaryCta={featuredEvent
+      ? { text: 'All Events', href: '/events' }
+      : { text: 'Who We Are', href: '#who-we-are' }}
+  />
+
+  <!-- ============================================================
+       WHO WE ARE
+       ============================================================ -->
+  <Content
+    id="who-we-are"
+    title={landing?.aboutTitle ?? 'Who We Are'}
+    image={{
+      src: landing?.aboutImage ?? '/images/ecrs-line-dance.jpg',
+      alt: 'ECRS community members line dancing together',
+    }}
+    callToAction={{
+      variant: 'secondary',
+      text: 'Learn more about ECRS',
+      href: '/about',
+    }}
+  >
+    <Fragment slot="content">
+      {landing?.aboutBody ?? 'ECRS has been building intergenerational community for over 75 years through the arts and play.'}
+    </Fragment>
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-orange-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Content>
+
+  <!-- ============================================================
+       VALUE PILLARS
+       ============================================================ -->
+  <Features
+    id="what-we-do"
+    title="Why ECRS?"
+    subtitle="For over 75 years, ECRS has brought people of all ages together through creative, joyful community experiences."
+    columns={2}
+    items={
+      landing?.pillars ?? [
+        {
+          title: 'Intergenerational',
+          description: 'Events welcome everyone from toddlers to elders. When generations play together, community is built.',
+          icon: 'tabler:users-group',
+        },
+        {
+          title: 'Creative Arts',
+          description: 'Singing, dancing, dramatics, and crafts — no experience needed. We learn by doing, together.',
+          icon: 'tabler:music',
+        },
+        {
+          title: 'Play & Games',
+          description: 'Cooperative games and outdoor activities that bring out the joy in every participant.',
+          icon: 'tabler:confetti',
+        },
+        {
+          title: 'Build Community',
+          description: 'Over 75 years of creating lasting friendships across generations, backgrounds, and geographies.',
+          icon: 'tabler:heart-handshake',
+        },
+      ]
+    }
+  />
+
+  <!-- ============================================================
+       KEY STATS
+       ============================================================ -->
+  {landing?.stats && landing.stats.length > 0 && (
+    <Stats
+      stats={landing.stats}
+    >
+      <Fragment slot="bg">
+        <div class="absolute inset-0 bg-pink-50 dark:bg-transparent"></div>
+      </Fragment>
+    </Stats>
+  )}
+
+  <!-- ============================================================
+       MORE UPCOMING EVENTS
+       ============================================================ -->
+  {upcomingEvents.length > 0 && (
+    <div class="py-16 md:py-20 px-4 max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <p class="text-base font-bold uppercase tracking-widest text-primary mb-2">Join Us</p>
+        <h2 class="font-heading text-4xl md:text-5xl font-bold text-heading">More Upcoming Events</h2>
+      </div>
+      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
+        {upcomingEvents.map((event: (typeof upcomingEvents)[0]) => (
+          <li>
+            <a
+              href={`/events/${event.id}`}
+              class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+              aria-label={`${event.data.title} — ${formatEventDate(event.data)}`}
+            >
+              {event.data.image && (
+                <img
+                  src={event.data.image}
+                  alt={event.data.title}
+                  width="600"
+                  height="300"
+                  class="w-full h-44 object-cover"
+                  loading="lazy"
+                />
+              )}
+              <div class="flex flex-col flex-1 p-5">
+                <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">{formatEventDate(event.data)}</p>
+                <h3 class="font-heading text-xl font-bold text-heading group-hover:text-primary transition-colors">{event.data.title}</h3>
+                <p class="text-sm text-muted mt-1 mb-3">{event.data.location}</p>
+                {event.data.excerpt && <p class="text-sm text-default line-clamp-3 flex-1">{event.data.excerpt}</p>}
+                <span class="mt-4 text-sm font-semibold text-primary group-hover:underline">
+                  {(event.data.registrationUrl || event.data.cognitoFormId) ? 'Register Now →' : 'Learn More →'}
+                </span>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="text-center mt-10">
+        <a href="/events" class="btn btn-secondary">View all events</a>
+      </div>
+    </div>
+  )}
+
+  <!-- ============================================================
+       GET INVOLVED CTA
+       ============================================================ -->
+  <CallToAction
+    title="Ready to join the community?"
+    subtitle="All events are open to people of all ages and all levels of experience. Newcomers always receive 50% off their first event."
+    actions={[
+      { variant: 'primary', text: 'See Upcoming Events', href: '/events' },
+      { text: 'Contact Us', href: '/contact' },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-primary/5 dark:bg-transparent"></div>
+    </Fragment>
+  </CallToAction>
+
+</Layout>

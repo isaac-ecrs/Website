@@ -1,0 +1,452 @@
+---
+interface VideoSource {
+  webm: string;
+  mp4: string;
+  poster?: string;
+}
+
+export interface Props {
+  videos: VideoSource[];
+  title: string;
+  subtitle?: string;
+  /** Small badge above the headline — e.g. "Next Event · June 12–14". Links to eventHref if provided. */
+  badge?: string;
+  /** Frosted-glass info card rendered below the subtitle. Links to eventHref if provided. */
+  eventCard?: {
+    label: string;
+    title: string;
+    date: string;
+    dateISO?: string;
+    location: string;
+    deadline?: string;
+    image?: string;
+    hasRegistration?: boolean;
+  };
+  /** URL the badge and event card link to */
+  eventHref?: string;
+  primaryCta?: { text: string; href: string };
+  secondaryCta?: { text: string; href: string };
+}
+
+const { videos, title, subtitle, badge, eventCard, eventHref, primaryCta, secondaryCta } = Astro.props;
+
+const titleLines = title.split('. ').map((part, i, arr) => i < arr.length - 1 ? part + '.' : part);
+
+function countdownUnits(dateISO: string): { value: string; label: string }[] {
+  const diff = new Date(dateISO).getTime() - Date.now();
+  if (diff <= 0) return [];
+  const totalDays = Math.floor(diff / 86_400_000);
+  const hours     = Math.floor((diff % 86_400_000) / 3_600_000);
+  const minutes   = Math.floor((diff % 3_600_000)  / 60_000);
+  const seconds   = Math.floor((diff % 60_000)     / 1_000);
+  if (totalDays >= 365) {
+    const y = Math.floor(totalDays / 365);
+    const m = Math.floor((totalDays % 365) / 30);
+    return [{ value: String(y), label: y === 1 ? 'year' : 'years' }, { value: String(m), label: 'mo' }];
+  }
+  if (totalDays >= 30) {
+    const mo = Math.floor(totalDays / 30);
+    return [{ value: String(mo), label: mo === 1 ? 'month' : 'months' }, { value: String(totalDays % 30), label: 'days' }];
+  }
+  if (totalDays >= 1) {
+    return [{ value: String(totalDays), label: totalDays === 1 ? 'day' : 'days' }, { value: String(hours), label: 'hrs' }];
+  }
+  return [
+    { value: String(hours).padStart(2, '0'),   label: 'hrs' },
+    { value: String(minutes).padStart(2, '0'), label: 'min' },
+    { value: String(seconds).padStart(2, '0'), label: 'sec' },
+  ];
+}
+
+const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : [];
+---
+
+<!-- min-height so content is never clipped — section grows on small screens instead of creating an inner scroll trap -->
+<section
+  data-video-hero
+  class="relative not-prose overflow-hidden"
+  style="min-height: max(600px, 100svh);"
+  aria-label={title}
+>
+  <!-- Video backgrounds (only first is visible initially) -->
+  <div class="absolute inset-0" aria-hidden="true">
+    {videos.map((v, i) => (
+      <video
+        data-hero-video
+        class:list={[
+          'absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms]',
+          { 'opacity-0': i > 0 },
+        ]}
+        muted
+        playsinline
+        preload={i === 0 ? 'metadata' : 'none'}
+        poster={v.poster}
+      >
+        <source src={v.webm} type="video/webm" />
+        <source src={v.mp4} type="video/mp4" />
+      </video>
+    ))}
+
+    <!-- Gradient overlay: enough opacity at all stops to guarantee readable white text over any video frame -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/55 to-black/80"></div>
+  </div>
+
+  <!-- Content — padding handles the header offset; JS also sets paddingTop -->
+  <div data-video-hero-content class="relative z-10 flex items-center text-white px-6 sm:px-8 lg:px-12 py-20 min-h-[max(600px,100svh)]">
+    <div class="w-full max-w-7xl mx-auto">
+
+      {eventCard ? (
+        /* Two-column: text left, event card right */
+        <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+          <!-- Left: tagline + subtitle + CTA -->
+          <div class="text-center lg:text-left">
+            {badge && (
+              eventHref ? (
+                <a href={eventHref} class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-primary backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg hover:bg-secondary transition-colors">
+                  <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true"></span>
+                  {badge}
+                </a>
+              ) : (
+                <div class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-primary backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
+                  <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true"></span>
+                  {badge}
+                </div>
+              )
+            )}
+
+            <h1 class="font-hero text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-bold leading-tight text-white drop-shadow-lg mb-4">
+              {titleLines.map(line => <span class="block">{line}</span>)}
+            </h1>
+
+            {subtitle && (
+              <p class="text-lg sm:text-xl text-white max-w-xl leading-relaxed mb-8 drop-shadow-md mx-auto lg:mx-0">
+                {subtitle}
+              </p>
+            )}
+
+            {(primaryCta || secondaryCta) && (
+              <div class="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-3">
+                {primaryCta && (
+                  <a href={primaryCta.href} class="btn btn-primary text-base shadow-xl">
+                    {primaryCta.text}
+                  </a>
+                )}
+                {secondaryCta && (
+                  <a href={secondaryCta.href} class="btn border-white/50 text-white hover:bg-white/15 hover:border-white transition-colors">
+                    {secondaryCta.text}
+                  </a>
+                )}
+              </div>
+            )}
+          </div>
+
+          <!-- Right: large event card -->
+          {eventHref ? (
+            <a
+              href={eventHref}
+              class="group flex flex-col bg-black/50 hover:bg-black/65 backdrop-blur-md rounded-3xl border border-white/25 hover:border-white/50 overflow-hidden transition-all w-full"
+            >
+              {eventCard.image && (
+                <img src={eventCard.image} alt={eventCard.title} width="600" height="280" class="w-full h-44 object-cover" loading="eager" />
+              )}
+              <div class="flex items-start gap-6 p-8 lg:p-10">
+                <!-- Text -->
+                <div class="flex-1 min-w-0">
+                  <p class="text-xs font-bold uppercase tracking-widest text-white/90 mb-3">{eventCard.label}</p>
+                  <p class="font-heading text-2xl lg:text-3xl font-bold text-white leading-snug mb-2 group-hover:underline">{eventCard.title}</p>
+                  <p class="text-white/90 text-base lg:text-lg mt-1">{eventCard.date}</p>
+                  {eventCard.location && (
+                    <p class="text-white/85 text-sm mt-1 flex items-center gap-1.5">
+                      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+                      {eventCard.location}
+                    </p>
+                  )}
+                  {eventCard.deadline && (
+                    <p class="text-amber-300 text-sm font-semibold mt-4 flex items-center gap-1.5">
+                      <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                      {eventCard.deadline}
+                    </p>
+                  )}
+                </div>
+                <!-- Countdown + register -->
+                <div class="shrink-0 flex flex-col items-center gap-5 border-l border-white/20 pl-6">
+                  <!-- Countdown: SSR-rendered for no-JS, script keeps it live -->
+                  {ssrCountdown.length > 0 && (
+                    <div data-countdown={eventCard.dateISO}>
+                      <div class="flex gap-4 items-start">
+                        {ssrCountdown.map(u => (
+                          <div class="text-center">
+                            <span class="font-mono text-3xl font-bold text-white leading-none">{u.value}</span>
+                            <span class="block text-xs text-white/70 uppercase tracking-widest mt-1">{u.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary group-hover:bg-secondary text-white text-sm font-bold uppercase tracking-wide transition-colors shadow-lg whitespace-nowrap">
+                    {eventCard.hasRegistration ? 'Register Now' : 'Learn More'}
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </span>
+                </div>
+              </div>
+            </a>
+          ) : (
+            <div class="flex flex-col bg-black/50 backdrop-blur-md rounded-3xl border border-white/25 overflow-hidden w-full">
+              {eventCard.image && (
+                <img src={eventCard.image} alt={eventCard.title} width="600" height="280" class="w-full h-44 object-cover" loading="eager" />
+              )}
+              <div class="flex flex-col p-8 lg:p-10">
+                <div class="flex items-start gap-6">
+                  <div class="flex-1 min-w-0">
+                    <p class="text-xs font-bold uppercase tracking-widest text-white/90 mb-3">{eventCard.label}</p>
+                    <p class="font-heading text-2xl lg:text-3xl font-bold text-white leading-snug mb-2">{eventCard.title}</p>
+                    <p class="text-white/90 text-base lg:text-lg mt-1">{eventCard.date}</p>
+                    {eventCard.location && (
+                      <p class="text-white/85 text-sm mt-1">{eventCard.location}</p>
+                    )}
+                    {eventCard.deadline && (
+                      <p class="text-amber-300 text-sm font-semibold mt-4">{eventCard.deadline}</p>
+                    )}
+                  </div>
+                  {eventCard.dateISO && (
+                    <div data-countdown={eventCard.dateISO} class="shrink-0 border-l border-white/20 pl-6"></div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        /* No event card — single column, centered */
+        <div class="max-w-3xl mx-auto text-center">
+          {badge && (
+            <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-primary backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
+              <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true"></span>
+              {badge}
+            </div>
+          )}
+
+          <h1 class="font-hero text-5xl sm:text-6xl md:text-7xl font-bold leading-tight text-white drop-shadow-lg mb-4">
+            {titleLines.map(line => <span class="block">{line}</span>)}
+          </h1>
+
+          {subtitle && (
+            <p class="text-lg sm:text-xl text-white max-w-2xl mx-auto leading-relaxed mb-8 drop-shadow-md">
+              {subtitle}
+            </p>
+          )}
+
+          {(primaryCta || secondaryCta) && (
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+              {primaryCta && (
+                <a href={primaryCta.href} class="btn btn-primary text-base shadow-xl">
+                  {primaryCta.text}
+                </a>
+              )}
+              {secondaryCta && (
+                <a href={secondaryCta.href} class="btn border-white/50 text-white hover:bg-white/15 hover:border-white transition-colors">
+                  {secondaryCta.text}
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  </div>
+
+  <!-- Scroll cue — hidden on small screens where the section may be taller than the viewport -->
+  <div
+    class="hidden sm:block absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 animate-bounce"
+    aria-hidden="true"
+  >
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12l7 7 7-7"/>
+    </svg>
+  </div>
+
+  <!-- Video pause/play toggle — WCAG 2.2.2 requirement for autoplaying motion -->
+  <button
+    data-video-toggle
+    type="button"
+    class="absolute bottom-8 right-6 sm:right-8 z-20 flex items-center justify-center w-9 h-9 rounded-full bg-black/40 hover:bg-black/65 border border-white/30 text-white/80 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+    aria-label="Pause background video"
+  >
+    <!-- Pause icon (shown while playing) -->
+    <svg data-icon-pause class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>
+    </svg>
+    <!-- Play icon (shown while paused) -->
+    <svg data-icon-play class="w-4 h-4 hidden" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8 5v14l11-7z"/>
+    </svg>
+  </button>
+</section>
+
+<style is:global>
+  /* Solid header background over the video — matches the scrolled state */
+  body:has([data-video-hero]) #header:not(.scroll) > div:first-child {
+    background-color: var(--aw-color-bg-page);
+    box-shadow: 0 0.375rem 1.5rem 0 rgb(140 152 164 / 13%);
+  }
+</style>
+
+<script>
+  function initVideoHero() {
+    const header = document.querySelector<HTMLElement>('#header');
+    const section = document.querySelector<HTMLElement>('[data-video-hero]');
+    const content = document.querySelector<HTMLElement>('[data-video-hero-content]');
+
+    if (!section) return;
+
+    if (header) {
+      const h = header.getBoundingClientRect().height;
+      section.style.marginTop = `-${h}px`;
+      if (content) content.style.paddingTop = `${h + 32}px`;
+    }
+
+    const videos = [...document.querySelectorAll<HTMLVideoElement>('[data-hero-video]')];
+    const toggleBtn = document.querySelector<HTMLButtonElement>('[data-video-toggle]');
+    const pauseIcon = toggleBtn?.querySelector<SVGElement>('[data-icon-pause]');
+    const playIcon = toggleBtn?.querySelector<SVGElement>('[data-icon-play]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let isPlaying = false;
+
+    function setPaused(paused: boolean) {
+      isPlaying = !paused;
+      videos.forEach(v => paused ? v.pause() : v.play().catch(() => {}));
+      if (toggleBtn) {
+        toggleBtn.setAttribute('aria-label', paused ? 'Play background video' : 'Pause background video');
+      }
+      if (pauseIcon) pauseIcon.classList.toggle('hidden', paused);
+      if (playIcon) playIcon.classList.toggle('hidden', !paused);
+      // Hide button when no motion to toggle
+      if (toggleBtn) toggleBtn.style.display = reducedMotion ? 'none' : '';
+    }
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => setPaused(isPlaying));
+    }
+
+    if (!reducedMotion) {
+      if (videos.length > 1) {
+        let current = 0;
+        let transitioning = false;
+        let queued: number | null = null;
+
+        function crossfadeTo(nextIndex: number) {
+          if (nextIndex === current) return;
+          if (transitioning) {
+            queued = nextIndex;
+            return;
+          }
+          transitioning = true;
+
+          const prev = videos[current];
+          const next = videos[nextIndex];
+
+          videos[(nextIndex + 1) % videos.length].preload = 'auto';
+
+          next.currentTime = 0;
+          next.play().catch(() => {});
+          next.style.opacity = '1';
+          prev.style.opacity = '0';
+
+          setTimeout(() => {
+            prev.pause();
+            prev.currentTime = 0;
+            current = nextIndex;
+            transitioning = false;
+            if (queued !== null) {
+              const q = queued;
+              queued = null;
+              crossfadeTo(q);
+            }
+          }, 1300);
+        }
+
+        videos.forEach((video, i) => {
+          video.addEventListener('ended', () => { if (isPlaying) crossfadeTo((i + 1) % videos.length); });
+        });
+
+        if (videos[1]) videos[1].preload = 'auto';
+        videos[0]?.play().catch(() => {});
+        isPlaying = true;
+      } else if (videos.length === 1) {
+        videos[0].loop = true;
+        videos[0].play().catch(() => {});
+        isPlaying = true;
+      }
+    } else {
+      // Hide toggle when motion is already suppressed
+      if (toggleBtn) toggleBtn.style.display = 'none';
+    }
+
+    // Sync icon state to initial isPlaying value
+    if (pauseIcon) pauseIcon.classList.toggle('hidden', !isPlaying);
+    if (playIcon) playIcon.classList.toggle('hidden', isPlaying);
+  }
+
+  function initCountdown() {
+    const el = document.querySelector<HTMLElement>('[data-countdown]');
+    if (!el) return;
+
+    const target = new Date(el.dataset.countdown!).getTime();
+
+    function unit(value: number | string, label: string) {
+      return `<div class="text-center">
+        <span class="font-mono text-3xl font-bold text-white leading-none">${value}</span>
+        <span class="block text-xs text-white/70 uppercase tracking-widest mt-1">${label}</span>
+      </div>`;
+    }
+
+    function render(diff: number) {
+      const totalDays  = Math.floor(diff / 86_400_000);
+      const hours      = Math.floor((diff % 86_400_000) / 3_600_000);
+      const minutes    = Math.floor((diff % 3_600_000)  / 60_000);
+      const seconds    = Math.floor((diff % 60_000)     / 1_000);
+
+      let units: string[];
+
+      if (totalDays >= 365) {
+        const years  = Math.floor(totalDays / 365);
+        const months = Math.floor((totalDays % 365) / 30);
+        units = [unit(years, years === 1 ? 'year' : 'years'), unit(months, 'mo')];
+      } else if (totalDays >= 30) {
+        const months = Math.floor(totalDays / 30);
+        const days   = totalDays % 30;
+        units = [unit(months, months === 1 ? 'month' : 'months'), unit(days, 'days')];
+      } else if (totalDays >= 1) {
+        units = [unit(totalDays, totalDays === 1 ? 'day' : 'days'), unit(hours, 'hrs')];
+      } else {
+        units = [
+          unit(String(hours).padStart(2, '0'), 'hrs'),
+          unit(String(minutes).padStart(2, '0'), 'min'),
+          unit(String(seconds).padStart(2, '0'), 'sec'),
+        ];
+      }
+
+      el!.innerHTML = `<div class="flex gap-4 items-start">${units.join('')}</div>`;
+    }
+
+    let intervalId: ReturnType<typeof setInterval>;
+
+    function tick() {
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        el!.hidden = true;
+        clearInterval(intervalId);
+        return;
+      }
+      render(diff);
+    }
+
+    tick();
+    intervalId = setInterval(tick, 1000);
+    document.addEventListener('astro:before-preparation', () => clearInterval(intervalId), { once: true });
+  }
+
+  document.addEventListener('astro:page-load', () => { initVideoHero(); initCountdown(); });
+</script>

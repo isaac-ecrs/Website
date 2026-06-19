@@ -1,0 +1,13 @@
+{
+  "name": "ECRS",
+  "tagline": "Come to Play. Play to Learn.",
+  "mission": "An intergenerational organization providing creative and engaging activities that are fun, develop leadership and build community.",
+  "copyright": "Copyright © ECRS · All rights reserved.",
+  "socialLinks": [
+    {
+      "platform": "Facebook",
+      "url": "https://www.facebook.com/yay4ecrs",
+      "icon": "tabler:brand-facebook"
+    }
+  ]
+}
