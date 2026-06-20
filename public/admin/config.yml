@@ -22,7 +22,6 @@ public_folder: '/images/uploads'
 # Collections
 # -------------------------------------------------------
 collections:
-
   # --- EVENTS (folder collection — one file per event) ---
   - name: 'event'
     label: 'Events'
@@ -33,7 +32,14 @@ collections:
     fields:
       - { label: 'Title', name: 'title', widget: 'string' }
       - { label: 'Event Date', name: 'date', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false }
-      - { label: 'End Date', name: 'endDate', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false, required: false }
+      - {
+          label: 'End Date',
+          name: 'endDate',
+          widget: 'datetime',
+          date_format: 'YYYY-MM-DD',
+          time_format: false,
+          required: false,
+        }
       - { label: 'Start Time', name: 'startTime', widget: 'string', required: false, hint: 'e.g. 5:00 PM' }
       - { label: 'End Time', name: 'endTime', widget: 'string', required: false, hint: 'e.g. 3:00 PM' }
       - { label: 'Location Name', name: 'location', widget: 'string', hint: 'e.g. Camp Onas' }
@@ -43,9 +49,22 @@ collections:
       - { label: 'Event Image', name: 'image', widget: 'image', required: false }
       - { label: 'Registration URL', name: 'registrationUrl', widget: 'string', required: false }
       - { label: 'Registration Email', name: 'registrationEmail', widget: 'string', required: false }
-      - { label: 'Registration Deadline', name: 'registrationDeadline', widget: 'datetime', date_format: 'YYYY-MM-DD', time_format: false, required: false }
+      - {
+          label: 'Registration Deadline',
+          name: 'registrationDeadline',
+          widget: 'datetime',
+          date_format: 'YYYY-MM-DD',
+          time_format: false,
+          required: false,
+        }
       - { label: 'Status', name: 'status', widget: 'select', options: ['upcoming', 'past'], default: 'upcoming' }
-      - { label: 'Feature on Homepage?', name: 'isFeatured', widget: 'boolean', default: false, hint: 'Only one event should be featured at a time.' }
+      - {
+          label: 'Feature on Homepage?',
+          name: 'isFeatured',
+          widget: 'boolean',
+          default: false,
+          hint: 'Only one event should be featured at a time.',
+        }
       - label: 'Pricing Tiers'
         name: 'pricing'
         widget: 'list'
@@ -64,7 +83,6 @@ collections:
   - name: 'settings'
     label: 'Site Settings'
     files:
-
       - label: 'Global Site Settings'
         name: 'site'
         file: 'src/data/settings/site.json'
@@ -132,8 +150,19 @@ collections:
           - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
           - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
           - { label: 'Intro Text', name: 'introText', widget: 'text' }
-          - { label: 'Cognito Form ID', name: 'cognitoFormId', widget: 'string', hint: 'The number at the end of the Cognito Forms embed URL (e.g. 17)' }
-          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '600', hint: 'Adjust if the form is taller or shorter than the default' }
+          - {
+              label: 'Cognito Form ID',
+              name: 'cognitoFormId',
+              widget: 'string',
+              hint: 'The number at the end of the Cognito Forms embed URL (e.g. 17)',
+            }
+          - {
+              label: 'Form Height (px)',
+              name: 'cognitoFormHeight',
+              widget: 'string',
+              default: '600',
+              hint: 'Adjust if the form is taller or shorter than the default',
+            }
 
       - label: 'Footer'
         name: 'footer'

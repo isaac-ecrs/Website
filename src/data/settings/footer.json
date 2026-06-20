@@ -3,9 +3,7 @@
   "columns": [
     {
       "title": "Organization",
-      "links": [
-        { "text": "About ECRS", "href": "/about" }
-      ]
+      "links": [{ "text": "About ECRS", "href": "/about" }]
     },
     {
       "title": "Participate",

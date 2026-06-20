@@ -1,4 +1,4 @@
-import { getPermalink, getAsset } from './utils/permalinks';
+import { getPermalink } from './utils/permalinks';
 import navData from './data/settings/navigation.json';
 import footerData from './data/settings/footer.json';
 import siteData from './data/settings/site.json';

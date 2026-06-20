@@ -25,7 +25,10 @@ export const GET: APIRoute = ({ props }) => {
   nextDay.setUTCDate(nextDay.getUTCDate() + 1);
 
   const esc = (s: string) =>
-    s.replace(/\\/g, '\\\\').replace(/[,;]/g, (c) => `\\${c}`).replace(/\n/g, '\\n');
+    s
+      .replace(/\\/g, '\\\\')
+      .replace(/[,;]/g, (c) => `\\${c}`)
+      .replace(/\n/g, '\\n');
 
   const location = [data.location, data.address].filter(Boolean).join(', ');
   const dtstamp = new Date().toISOString().replace(/[-:.]/g, '').slice(0, 15) + 'Z';
@@ -46,7 +49,9 @@ export const GET: APIRoute = ({ props }) => {
     (data.excerpt || data.description) && `DESCRIPTION:${esc(data.excerpt ?? data.description ?? '')}`,
     'END:VEVENT',
     'END:VCALENDAR',
-  ].filter(Boolean).join('\r\n');
+  ]
+    .filter(Boolean)
+    .join('\r\n');
 
   return new Response(lines, {
     headers: {

@@ -37,7 +37,6 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-
   <HeroText
     tagline="Come to Play. Play to Learn."
     title="ECRS Events"
@@ -48,94 +47,111 @@ const metadata = {
        UPCOMING EVENTS
        ============================================================ -->
   <section class="py-12 md:py-16 px-4 max-w-7xl mx-auto" aria-labelledby="upcoming-heading">
-    <h2 id="upcoming-heading" class="font-heading text-3xl md:text-4xl font-bold text-heading mb-8">
-      Upcoming Events
-    </h2>
+    <h2 id="upcoming-heading" class="font-heading text-3xl md:text-4xl font-bold text-heading mb-8">Upcoming Events</h2>
 
-    {upcoming.length === 0 ? (
-      <p class="text-muted text-lg">No upcoming events are scheduled right now. Check back soon!</p>
-    ) : (
-      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
-        {upcoming.map((event: (typeof upcoming)[0]) => (
-          <li>
-            <a
-              href={`/events/${event.id}`}
-              class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              aria-label={`${event.data.title} — ${formatDate(event.data)}`}
-            >
-              {event.data.image ? (
-                <img
-                  src={event.data.image}
-                  alt={event.data.title}
-                  width="600"
-                  height="300"
-                  class="w-full h-44 object-cover"
-                  loading="lazy"
-                />
-              ) : (
-                <div class="w-full h-44 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center" aria-hidden="true">
-                  <span class="font-heading text-4xl font-bold text-primary/40">ECRS</span>
-                </div>
-              )}
-              <div class="flex flex-col flex-1 p-5">
-                <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">{formatDate(event.data)}</p>
-                <h3 class="font-heading text-xl font-bold text-heading group-hover:text-primary transition-colors">{event.data.title}</h3>
-                <p class="text-sm text-muted mt-1 mb-3">{event.data.location}</p>
-                {event.data.excerpt && <p class="text-sm text-default line-clamp-3 flex-1">{event.data.excerpt}</p>}
-                {event.data.registrationDeadline && (
-                  <p class="text-xs text-secondary font-semibold mt-3">
-                    Register by {event.data.registrationDeadline.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
-                  </p>
+    {
+      upcoming.length === 0 ? (
+        <p class="text-muted text-lg">No upcoming events are scheduled right now. Check back soon!</p>
+      ) : (
+        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
+          {upcoming.map((event: (typeof upcoming)[0]) => (
+            <li>
+              <a
+                href={`/events/${event.id}`}
+                class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                aria-label={`${event.data.title} — ${formatDate(event.data)}`}
+              >
+                {event.data.image ? (
+                  <img
+                    src={event.data.image}
+                    alt={event.data.title}
+                    width="600"
+                    height="300"
+                    class="w-full h-44 object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    class="w-full h-44 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center"
+                    aria-hidden="true"
+                  >
+                    <span class="font-heading text-4xl font-bold text-primary/40">ECRS</span>
+                  </div>
                 )}
-                <span class="mt-4 text-sm font-semibold text-primary group-hover:underline">
-                  {(event.data.registrationUrl || event.data.cognitoFormId) ? 'Register Now →' : 'Learn More →'}
-                </span>
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
-    )}
+                <div class="flex flex-col flex-1 p-5">
+                  <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">{formatDate(event.data)}</p>
+                  <h3 class="font-heading text-xl font-bold text-heading group-hover:text-primary transition-colors">
+                    {event.data.title}
+                  </h3>
+                  <p class="text-sm text-muted mt-1 mb-3">{event.data.location}</p>
+                  {event.data.excerpt && <p class="text-sm text-default line-clamp-3 flex-1">{event.data.excerpt}</p>}
+                  {event.data.registrationDeadline && (
+                    <p class="text-xs text-secondary font-semibold mt-3">
+                      Register by{' '}
+                      {event.data.registrationDeadline.toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric',
+                        timeZone: 'UTC',
+                      })}
+                    </p>
+                  )}
+                  <span class="mt-4 text-sm font-semibold text-primary group-hover:underline">
+                    {event.data.registrationUrl || event.data.cognitoFormId ? 'Register Now →' : 'Learn More →'}
+                  </span>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
   </section>
 
   <!-- ============================================================
        PAST EVENTS
        ============================================================ -->
-  {past.length > 0 && (
-    <section class="py-12 md:py-16 px-4 max-w-7xl mx-auto border-t border-gray-200 dark:border-gray-700" aria-labelledby="past-heading">
-      <h2 id="past-heading" class="font-heading text-3xl md:text-4xl font-bold text-heading mb-8 text-muted">
-        Past Events
-      </h2>
-      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
-        {past.map((event: (typeof past)[0]) => (
-          <li>
-            <a
-              href={`/events/${event.id}`}
-              class="group flex flex-col h-full rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden opacity-75 hover:opacity-100 hover:border-muted/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              aria-label={`${event.data.title} — ${formatDate(event.data)} (past event)`}
-            >
-              {event.data.image ? (
-                <img
-                  src={event.data.image}
-                  alt={event.data.title}
-                  width="600"
-                  height="220"
-                  class="w-full h-36 object-cover grayscale"
-                  loading="lazy"
-                />
-              ) : (
-                <div class="w-full h-36 bg-gray-100 dark:bg-gray-800" aria-hidden="true"></div>
-              )}
-              <div class="flex flex-col flex-1 p-4">
-                <p class="text-xs font-bold uppercase tracking-widest text-muted mb-1">{formatDate(event.data)}</p>
-                <h3 class="font-heading text-lg font-bold text-heading group-hover:text-primary transition-colors">{event.data.title}</h3>
-                <p class="text-sm text-muted mt-1">{event.data.location}</p>
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </section>
-  )}
-
+  {
+    past.length > 0 && (
+      <section
+        class="py-12 md:py-16 px-4 max-w-7xl mx-auto border-t border-gray-200 dark:border-gray-700"
+        aria-labelledby="past-heading"
+      >
+        <h2 id="past-heading" class="font-heading text-3xl md:text-4xl font-bold text-heading mb-8 text-muted">
+          Past Events
+        </h2>
+        <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
+          {past.map((event: (typeof past)[0]) => (
+            <li>
+              <a
+                href={`/events/${event.id}`}
+                class="group flex flex-col h-full rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden opacity-75 hover:opacity-100 hover:border-muted/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                aria-label={`${event.data.title} — ${formatDate(event.data)} (past event)`}
+              >
+                {event.data.image ? (
+                  <img
+                    src={event.data.image}
+                    alt={event.data.title}
+                    width="600"
+                    height="220"
+                    class="w-full h-36 object-cover grayscale"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div class="w-full h-36 bg-gray-100 dark:bg-gray-800" aria-hidden="true" />
+                )}
+                <div class="flex flex-col flex-1 p-4">
+                  <p class="text-xs font-bold uppercase tracking-widest text-muted mb-1">{formatDate(event.data)}</p>
+                  <h3 class="font-heading text-lg font-bold text-heading group-hover:text-primary transition-colors">
+                    {event.data.title}
+                  </h3>
+                  <p class="text-sm text-muted mt-1">{event.data.location}</p>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
 </Layout>
