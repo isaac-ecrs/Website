@@ -1,0 +1,94 @@
+---
+interface Props {
+  title: string;
+  date: string;
+  location: string;
+  href: string;
+  image?: string;
+  excerpt?: string;
+  registrationDeadline?: Date;
+  hasRegistration?: boolean;
+  variant?: 'upcoming' | 'past';
+}
+
+const {
+  title,
+  date,
+  location,
+  href,
+  image,
+  excerpt,
+  registrationDeadline,
+  hasRegistration = false,
+  variant = 'upcoming',
+} = Astro.props;
+
+const isPast = variant === 'past';
+---
+
+<a
+  href={href}
+  class:list={[
+    'group flex flex-col h-full overflow-hidden transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
+    isPast
+      ? 'rounded-xl border border-gray-200 dark:border-gray-700 opacity-75 hover:opacity-100 hover:border-muted/40'
+      : 'rounded-2xl border border-gray-200 dark:border-gray-700 hover:shadow-lg hover:border-primary/40',
+  ]}
+  aria-label={`${title} — ${date}${isPast ? ' (past event)' : ''}`}
+>
+  {
+    image ? (
+      <img
+        src={image}
+        alt={title}
+        width="600"
+        height={isPast ? 220 : 300}
+        class:list={['w-full object-cover', isPast ? 'h-36 grayscale' : 'h-44']}
+        loading="lazy"
+      />
+    ) : isPast ? (
+      <div class="w-full h-36 bg-gray-100 dark:bg-gray-800" aria-hidden="true" />
+    ) : (
+      <div
+        class="w-full h-44 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center"
+        aria-hidden="true"
+      >
+        <span class="font-heading text-4xl font-bold text-primary/40">ECRS</span>
+      </div>
+    )
+  }
+
+  <div class:list={['flex flex-col flex-1', isPast ? 'p-4' : 'p-5']}>
+    <p class:list={['text-xs font-bold uppercase tracking-widest mb-1', isPast ? 'text-muted' : 'text-primary']}>
+      {date}
+    </p>
+    <h3 class:list={['font-heading font-bold text-heading group-hover:text-primary transition-colors', isPast ? 'text-lg' : 'text-xl']}>
+      {title}
+    </h3>
+    <p class="text-sm text-muted mt-1">{location}</p>
+
+    {!isPast && excerpt && <p class="text-sm text-default line-clamp-3 flex-1 mt-2">{excerpt}</p>}
+
+    {
+      !isPast && registrationDeadline && (
+        <p class="text-xs text-secondary font-semibold mt-3">
+          Register by{' '}
+          {registrationDeadline.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+            timeZone: 'UTC',
+          })}
+        </p>
+      )
+    }
+
+    {
+      !isPast && (
+        <span class="mt-4 text-sm font-semibold text-primary group-hover:underline">
+          {hasRegistration ? 'Register Now →' : 'Learn More →'}
+        </span>
+      )
+    }
+  </div>
+</a>

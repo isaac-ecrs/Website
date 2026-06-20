@@ -1,0 +1,45 @@
+{
+  "heroTagline": "Connecting, Creating and Playing",
+  "heroTitle": "What Makes ECRS Special?",
+  "introText": "At ECRS we do all of those things, and more. We gather together, and every time, no matter how long it has been, it is like coming home to a warm and welcoming family. We eat together, we make music, crafts, drama. In particular:",
+  "introImage": "/images/ecrs-2000s-history.jpg",
+  "introImageAlt": "ECRS community members at an event in the 2000s",
+  "pillars": [
+    {
+      "title": "We create our own fun",
+      "description": "This sounds simple enough, but too often we get a different message from our society. Many people think having a good time only means consuming some form of costly packaged entertainment. Fortunately, ECRS offers an alternative. To have a good (sometimes great!) time, we believe, all you need is a group of people to put their hearts and minds together to come up with some games, songs, skits, crafts, dances, etc. You'd be amazed at the enjoyment, laughter, and creativity that emerges!",
+      "icon": "tabler:confetti"
+    },
+    {
+      "title": "Fun and creativity are good for their own sake",
+      "description": "We see value in fun and creative expression simply because they enrich our lives, bring joy, and help connect us with others. Generally, we avoid contests, competitions and performances unless they're done in the spirit of fun or sharing.",
+      "icon": "tabler:heart"
+    },
+    {
+      "title": "Process, not product",
+      "description": "ECRS focuses on personal growth and the quality of experience. While we certainly appreciate a well-performed dramatic scene or a stunning collage, we're more interested in asking, \"How was that for you? What could have made it better, more fun, engaging, challenging?\"",
+      "icon": "tabler:growth"
+    },
+    {
+      "title": "Focus on people and community",
+      "description": "From playful to profound, ECRS stands for genuine, quality human interaction — in fact, it's one of the main reasons we engage in recreation. Unfortunately, we live in an increasingly technological age where face-to-face contact and caring communities have become endangered species. ECRS provides an opportunity to form and nurture these healthy connections.",
+      "icon": "tabler:users"
+    },
+    {
+      "title": "Cooperation is key",
+      "description": "All around us we see people set off against each other, one gaining at the other's expense. ECRS helps us experience another way. Through cooperative activities, we explore the joys, benefits and challenges of working, playing, and creating together for the common good. We respect, include and show kindness to all individuals, regardless of age, race, sexual preference, competence, or social status. And in a culture that too often rewards only the \"winners,\" ECRS claims \"We're all winners.\"",
+      "icon": "tabler:friends"
+    },
+    {
+      "title": "Quality experiences, not more things",
+      "description": "There's a bumper sticker that reads, \"The guy who dies with the most toys wins.\" And there's another that whispers, \"The best things in life are not things.\" It's a tough job to counter the materialist, consumerist culture that promotes the illusion that happiness is to be found in things. ECRS whispers along with the second sticker and helps you feel its wisdom.",
+      "icon": "tabler:sparkles"
+    }
+  ],
+  "ctaTitle": "Come experience it yourself",
+  "ctaSubtitle": "Take action to support our organization to continuously bring you creative and joyous events to nourish your body, mind, and soul.",
+  "ctaPrimaryText": "See Upcoming Events",
+  "ctaPrimaryHref": "/events",
+  "ctaSecondaryText": "Donate",
+  "ctaSecondaryHref": "/donate"
+}
