@@ -15,8 +15,8 @@ publish_mode: editorial_workflow
 
 local_backend: true
 
-media_folder: 'src/assets/images/uploads'
-public_folder: '/images/uploads'
+media_folder: 'public/images'
+public_folder: '/images'
 
 # -------------------------------------------------------
 # Collections
