@@ -48,7 +48,6 @@ collections:
       - { label: 'Full Description', name: 'description', widget: 'markdown', required: false }
       - { label: 'Event Image', name: 'image', widget: 'image', required: false }
       - { label: 'Registration URL', name: 'registrationUrl', widget: 'string', required: false }
-      - { label: 'Registration Email', name: 'registrationEmail', widget: 'string', required: false }
       - {
           label: 'Registration Deadline',
           name: 'registrationDeadline',
@@ -56,14 +55,6 @@ collections:
           date_format: 'YYYY-MM-DD',
           time_format: false,
           required: false,
-        }
-      - { label: 'Status', name: 'status', widget: 'select', options: ['upcoming', 'past'], default: 'upcoming' }
-      - {
-          label: 'Feature on Homepage?',
-          name: 'isFeatured',
-          widget: 'boolean',
-          default: false,
-          hint: 'Only one event should be featured at a time.',
         }
       - label: 'Pricing Tiers'
         name: 'pricing'
@@ -87,10 +78,6 @@ collections:
         name: 'site'
         file: 'src/data/settings/site.json'
         fields:
-          - { label: 'Site Name', name: 'name', widget: 'string', default: 'ECRS' }
-          - { label: 'Tagline', name: 'tagline', widget: 'string' }
-          - { label: 'Mission Statement', name: 'mission', widget: 'text' }
-          - { label: 'Copyright Text', name: 'copyright', widget: 'string' }
           - { label: 'Event Page CTA Title', name: 'eventCtaTitle', widget: 'string' }
           - { label: 'Event Page CTA Subtitle', name: 'eventCtaSubtitle', widget: 'text' }
           - label: 'Social Links'
@@ -122,11 +109,8 @@ collections:
         name: 'landing'
         file: 'src/data/settings/landing.md'
         fields:
-          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string', hint: 'Small text above the main headline' }
           - { label: 'Hero Headline', name: 'heroTitle', widget: 'string' }
           - { label: 'Hero Subtitle', name: 'heroSubtitle', widget: 'text' }
-          - { label: 'Hero Image', name: 'heroImage', widget: 'image', required: false }
-          - { label: 'Hero Image Alt Text', name: 'heroImageAlt', widget: 'string', required: false }
           - { label: '"Who We Are" Heading', name: 'aboutTitle', widget: 'string' }
           - { label: '"Who We Are" Body', name: 'aboutBody', widget: 'markdown' }
           - { label: '"Who We Are" Image', name: 'aboutImage', widget: 'image', required: false }
@@ -137,14 +121,6 @@ collections:
               - { label: 'Title', name: 'title', widget: 'string' }
               - { label: 'Description', name: 'description', widget: 'text' }
               - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:music' }
-          - label: 'Key Stats'
-            name: 'stats'
-            widget: 'list'
-            required: false
-            fields:
-              - { label: 'Amount', name: 'amount', widget: 'string', hint: 'e.g. 75+' }
-              - { label: 'Label', name: 'title', widget: 'string', hint: 'e.g. Years of Community' }
-
       - label: 'Donation Page'
         name: 'donation'
         file: 'src/data/settings/donation.json'
