@@ -369,7 +369,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
     header: HTMLElement,
     section: HTMLElement,
     content: HTMLElement | null,
-    badge: HTMLElement | null,
+    badge: HTMLElement | null
   ) {
     const h = header.getBoundingClientRect().height;
     section.style.marginTop = `-${h}px`;
