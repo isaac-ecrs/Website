@@ -82,6 +82,7 @@ const landingSettingsCollection = defineCollection({
         title: z.string(),
         description: z.string(),
         icon: z.string(),
+        classes: z.object({ icon: z.string() }).optional(),
       })
     ),
     stats: z

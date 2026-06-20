@@ -35,14 +35,14 @@ const columnsClass =
   {
     items.length > 0 && (
       <div class:list={['grid mx-auto gap-8 md:gap-y-12', columnsClass]}>
-        {items.map(({ title: itemTitle, description, icon, callToAction }) => (
+        {items.map(({ title: itemTitle, description, icon, classes: itemClasses, callToAction }) => (
           <div class="intersect-once motion-safe:md:opacity-0 motion-safe:md:intersect:animate-fade">
             <div class="flex flex-row max-w-md">
               {(icon || defaultIcon) && (
                 <div class="flex justify-center">
                   <Icon
                     name={icon || defaultIcon}
-                    class="w-7 h-7 mr-2 rtl:mr-0 rtl:ml-2 text-white bg-primary rounded-full md:w-12 md:h-12 md:p-3 p-2 mr-4 rtl:ml-4 rtl:mr-0"
+                    class:list={['w-7 h-7 mr-2 rtl:mr-0 rtl:ml-2 text-white rounded-full md:w-12 md:h-12 md:p-3 p-2 mr-4 rtl:ml-4 rtl:mr-0', itemClasses?.icon ?? 'bg-primary']}
                   />
                 </div>
               )}

@@ -112,6 +112,43 @@ const metadata = {
   />
 
   <!-- ============================================================
+       WHAT TO EXPECT
+       ============================================================ -->
+  <Features
+    id="what-to-expect"
+    title="What to Expect"
+    subtitle="Events range from single days to a five-day Winter Adventure, and the shape of the day is always the same."
+    columns={3}
+    items={[
+      {
+        title: 'Daytime Classes',
+        description:
+          'An ever-changing menu of optional workshops: dance, drama, crafts, music, and personal growth. Participate at your own level of interest, ability, and comfort.',
+        icon: 'tabler:palette',
+        classes: { icon: 'bg-[#01aced]' },
+      },
+      {
+        title: 'Shared Meals & Downtime',
+        description:
+          "Meals are family-style and built for connection. Between sessions there's space to relax, wander, or start a spontaneous game.",
+        icon: 'tabler:friends',
+        classes: { icon: 'bg-[#41b03b]' },
+      },
+      {
+        title: 'Evening Merriment',
+        description:
+          'Nights come alive with folk dancing, singing, informal dramatics, and cooperative games. No experience required. Just show up and play.',
+        icon: 'tabler:moon-stars',
+        classes: { icon: 'bg-[#f48612]' },
+      },
+    ]}
+  >
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-gray-50 dark:bg-transparent"></div>
+    </Fragment>
+  </Features>
+
+  <!-- ============================================================
        WHO WE ARE
        ============================================================ -->
   <Content
@@ -134,7 +171,7 @@ const metadata = {
       }
     </Fragment>
     <Fragment slot="bg">
-      <div class="absolute inset-0 bg-orange-50 dark:bg-transparent"></div>
+      <div class="absolute inset-0 bg-gray-50 dark:bg-transparent"></div>
     </Fragment>
   </Content>
 
