@@ -59,38 +59,39 @@ const featuredDateStr = featuredEvent ? formatEventDate(featuredEvent.data) : ''
 const metadata = {
   title: 'ECRS — Come to Play. Play to Learn.',
   ignoreTitleTemplate: true,
-  description: landing?.heroSubtitle ?? 'An intergenerational organization providing creative and engaging activities that are fun, develop leadership and build community.',
+  description:
+    landing?.heroSubtitle ??
+    'An intergenerational organization providing creative and engaging activities that are fun, develop leadership and build community.',
 };
 ---
 
 <Layout metadata={metadata}>
-
-
   <!-- ============================================================
        HERO — full-bleed cycling video background
        ============================================================ -->
   <VideoHero
     videos={heroVideos}
     title={landing?.heroTitle ?? 'Come to Play. Play to Learn.'}
-    subtitle={landing?.heroSubtitle ?? 'An intergenerational community for people of all ages — music, dance, games, crafts, and friendship.'}
+    subtitle={landing?.heroSubtitle ??
+      'An intergenerational community for people of all ages — music, dance, games, crafts, and friendship.'}
     badge={featuredEvent ? `Next Event · ${featuredDateStr}` : undefined}
-    eventCard={featuredEvent ? {
-      label: 'Upcoming Event',
-      title: featuredEvent.data.title,
-      date: featuredDateStr,
-      location: featuredEvent.data.location,
-      deadline: featuredEvent.data.registrationDeadline
-        ? `Register by ${featuredEvent.data.registrationDeadline.toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })}`
-        : undefined,
-      image: featuredEvent.data.image,
-      dateISO: featuredEvent.data.date.toISOString(),
-      hasRegistration: !!(featuredEvent.data.registrationUrl || featuredEvent.data.cognitoFormId),
-    } : undefined}
+    eventCard={featuredEvent
+      ? {
+          label: 'Upcoming Event',
+          title: featuredEvent.data.title,
+          date: featuredDateStr,
+          location: featuredEvent.data.location,
+          deadline: featuredEvent.data.registrationDeadline
+            ? `Register by ${featuredEvent.data.registrationDeadline.toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })}`
+            : undefined,
+          image: featuredEvent.data.image,
+          dateISO: featuredEvent.data.date.toISOString(),
+          hasRegistration: !!(featuredEvent.data.registrationUrl || featuredEvent.data.cognitoFormId),
+        }
+      : undefined}
     eventHref={featuredEvent ? `/events/${featuredEvent.id}` : undefined}
     primaryCta={featuredEvent ? undefined : { text: 'See Upcoming Events', href: '/events' }}
-    secondaryCta={featuredEvent
-      ? { text: 'All Events', href: '/events' }
-      : { text: 'Who We Are', href: '#who-we-are' }}
+    secondaryCta={featuredEvent ? { text: 'All Events', href: '/events' } : { text: 'Who We Are', href: '#who-we-are' }}
   />
 
   <!-- ============================================================
@@ -110,7 +111,10 @@ const metadata = {
     }}
   >
     <Fragment slot="content">
-      {landing?.aboutBody ?? 'ECRS has been building intergenerational community for over 75 years through the arts and play.'}
+      {
+        landing?.aboutBody ??
+          'ECRS has been building intergenerational community for over 75 years through the arts and play.'
+      }
     </Fragment>
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-orange-50 dark:bg-transparent"></div>
@@ -125,90 +129,97 @@ const metadata = {
     title="Why ECRS?"
     subtitle="For over 75 years, ECRS has brought people of all ages together through creative, joyful community experiences."
     columns={2}
-    items={
-      landing?.pillars ?? [
-        {
-          title: 'Intergenerational',
-          description: 'Events welcome everyone from toddlers to elders. When generations play together, community is built.',
-          icon: 'tabler:users-group',
-        },
-        {
-          title: 'Creative Arts',
-          description: 'Singing, dancing, dramatics, and crafts — no experience needed. We learn by doing, together.',
-          icon: 'tabler:music',
-        },
-        {
-          title: 'Play & Games',
-          description: 'Cooperative games and outdoor activities that bring out the joy in every participant.',
-          icon: 'tabler:confetti',
-        },
-        {
-          title: 'Build Community',
-          description: 'Over 75 years of creating lasting friendships across generations, backgrounds, and geographies.',
-          icon: 'tabler:heart-handshake',
-        },
-      ]
-    }
+    items={landing?.pillars ?? [
+      {
+        title: 'Intergenerational',
+        description:
+          'Events welcome everyone from toddlers to elders. When generations play together, community is built.',
+        icon: 'tabler:users-group',
+      },
+      {
+        title: 'Creative Arts',
+        description: 'Singing, dancing, dramatics, and crafts — no experience needed. We learn by doing, together.',
+        icon: 'tabler:music',
+      },
+      {
+        title: 'Play & Games',
+        description: 'Cooperative games and outdoor activities that bring out the joy in every participant.',
+        icon: 'tabler:confetti',
+      },
+      {
+        title: 'Build Community',
+        description: 'Over 75 years of creating lasting friendships across generations, backgrounds, and geographies.',
+        icon: 'tabler:heart-handshake',
+      },
+    ]}
   />
 
   <!-- ============================================================
        KEY STATS
        ============================================================ -->
-  {landing?.stats && landing.stats.length > 0 && (
-    <Stats
-      stats={landing.stats}
-    >
-      <Fragment slot="bg">
-        <div class="absolute inset-0 bg-pink-50 dark:bg-transparent"></div>
-      </Fragment>
-    </Stats>
-  )}
+  {
+    landing?.stats && landing.stats.length > 0 && (
+      <Stats stats={landing.stats}>
+        <Fragment slot="bg">
+          <div class="absolute inset-0 bg-pink-50 dark:bg-transparent" />
+        </Fragment>
+      </Stats>
+    )
+  }
 
   <!-- ============================================================
        MORE UPCOMING EVENTS
        ============================================================ -->
-  {upcomingEvents.length > 0 && (
-    <div class="py-16 md:py-20 px-4 max-w-7xl mx-auto">
-      <div class="text-center mb-12">
-        <p class="text-base font-bold uppercase tracking-widest text-primary mb-2">Join Us</p>
-        <h2 class="font-heading text-4xl md:text-5xl font-bold text-heading">More Upcoming Events</h2>
+  {
+    upcomingEvents.length > 0 && (
+      <div class="py-16 md:py-20 px-4 max-w-7xl mx-auto">
+        <div class="text-center mb-12">
+          <p class="text-base font-bold uppercase tracking-widest text-primary mb-2">Join Us</p>
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-heading">More Upcoming Events</h2>
+        </div>
+        <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
+          {upcomingEvents.map((event: (typeof upcomingEvents)[0]) => (
+            <li>
+              <a
+                href={`/events/${event.id}`}
+                class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                aria-label={`${event.data.title} — ${formatEventDate(event.data)}`}
+              >
+                {event.data.image && (
+                  <img
+                    src={event.data.image}
+                    alt={event.data.title}
+                    width="600"
+                    height="300"
+                    class="w-full h-44 object-cover"
+                    loading="lazy"
+                  />
+                )}
+                <div class="flex flex-col flex-1 p-5">
+                  <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">
+                    {formatEventDate(event.data)}
+                  </p>
+                  <h3 class="font-heading text-xl font-bold text-heading group-hover:text-primary transition-colors">
+                    {event.data.title}
+                  </h3>
+                  <p class="text-sm text-muted mt-1 mb-3">{event.data.location}</p>
+                  {event.data.excerpt && <p class="text-sm text-default line-clamp-3 flex-1">{event.data.excerpt}</p>}
+                  <span class="mt-4 text-sm font-semibold text-primary group-hover:underline">
+                    {event.data.registrationUrl || event.data.cognitoFormId ? 'Register Now →' : 'Learn More →'}
+                  </span>
+                </div>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <div class="text-center mt-10">
+          <a href="/events" class="btn btn-secondary">
+            View all events
+          </a>
+        </div>
       </div>
-      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
-        {upcomingEvents.map((event: (typeof upcomingEvents)[0]) => (
-          <li>
-            <a
-              href={`/events/${event.id}`}
-              class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              aria-label={`${event.data.title} — ${formatEventDate(event.data)}`}
-            >
-              {event.data.image && (
-                <img
-                  src={event.data.image}
-                  alt={event.data.title}
-                  width="600"
-                  height="300"
-                  class="w-full h-44 object-cover"
-                  loading="lazy"
-                />
-              )}
-              <div class="flex flex-col flex-1 p-5">
-                <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">{formatEventDate(event.data)}</p>
-                <h3 class="font-heading text-xl font-bold text-heading group-hover:text-primary transition-colors">{event.data.title}</h3>
-                <p class="text-sm text-muted mt-1 mb-3">{event.data.location}</p>
-                {event.data.excerpt && <p class="text-sm text-default line-clamp-3 flex-1">{event.data.excerpt}</p>}
-                <span class="mt-4 text-sm font-semibold text-primary group-hover:underline">
-                  {(event.data.registrationUrl || event.data.cognitoFormId) ? 'Register Now →' : 'Learn More →'}
-                </span>
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
-      <div class="text-center mt-10">
-        <a href="/events" class="btn btn-secondary">View all events</a>
-      </div>
-    </div>
-  )}
+    )
+  }
 
   <!-- ============================================================
        GET INVOLVED CTA
@@ -225,5 +236,4 @@ const metadata = {
       <div class="absolute inset-0 bg-primary/5 dark:bg-transparent"></div>
     </Fragment>
   </CallToAction>
-
 </Layout>
