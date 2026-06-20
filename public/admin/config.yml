@@ -91,12 +91,14 @@ collections:
           - { label: 'Tagline', name: 'tagline', widget: 'string' }
           - { label: 'Mission Statement', name: 'mission', widget: 'text' }
           - { label: 'Copyright Text', name: 'copyright', widget: 'string' }
+          - { label: 'Event Page CTA Title', name: 'eventCtaTitle', widget: 'string' }
+          - { label: 'Event Page CTA Subtitle', name: 'eventCtaSubtitle', widget: 'text' }
           - label: 'Social Links'
             name: 'socialLinks'
             widget: 'list'
             fields:
               - { label: 'Platform', name: 'platform', widget: 'string', hint: 'e.g. Facebook' }
-              - { label: 'URL', name: 'url', widget: 'string' }
+              - { label: 'URL', name: 'url', widget: 'string', hint: 'Leave blank to hide the icon' }
               - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:brand-facebook' }
 
       - label: 'Navigation'
@@ -163,6 +165,87 @@ collections:
               default: '600',
               hint: 'Adjust if the form is taller or shorter than the default',
             }
+
+      - label: 'About Page'
+        name: 'about'
+        file: 'src/data/settings/about.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Intro Text', name: 'introText', widget: 'text' }
+          - { label: 'Intro Image', name: 'introImage', widget: 'image' }
+          - { label: 'Intro Image Alt Text', name: 'introImageAlt', widget: 'string' }
+          - label: 'Pillars'
+            name: 'pillars'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:heart' }
+          - { label: 'CTA Title', name: 'ctaTitle', widget: 'string' }
+          - { label: 'CTA Subtitle', name: 'ctaSubtitle', widget: 'text' }
+          - { label: 'CTA Primary Button Text', name: 'ctaPrimaryText', widget: 'string' }
+          - { label: 'CTA Primary Button URL', name: 'ctaPrimaryHref', widget: 'string' }
+          - { label: 'CTA Secondary Button Text', name: 'ctaSecondaryText', widget: 'string' }
+          - { label: 'CTA Secondary Button URL', name: 'ctaSecondaryHref', widget: 'string' }
+
+      - label: 'Contact Page'
+        name: 'contact'
+        file: 'src/data/settings/contact.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Intro Text', name: 'introText', widget: 'text' }
+          - {
+              label: 'Cognito Form ID',
+              name: 'cognitoFormId',
+              widget: 'string',
+              hint: 'Number from the Cognito Forms embed URL',
+            }
+          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '600' }
+
+      - label: 'Membership Page'
+        name: 'membership'
+        file: 'src/data/settings/membership.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Benefits Section Title', name: 'benefitsTitle', widget: 'string' }
+          - label: 'Benefits'
+            name: 'benefits'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:ticket' }
+          - { label: 'Pricing Section Title', name: 'pricingTitle', widget: 'string' }
+          - { label: 'Pricing Intro Text', name: 'pricingIntro', widget: 'text' }
+          - label: 'Pricing Tiers'
+            name: 'pricingTiers'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Subtitle', name: 'subtitle', widget: 'string' }
+              - { label: 'Price', name: 'price', widget: 'string', hint: 'e.g. $25' }
+              - { label: 'Featured (highlighted)', name: 'featured', widget: 'boolean', default: false }
+          - { label: 'Form Section Heading', name: 'formHeading', widget: 'string' }
+          - { label: 'Form Note', name: 'formNote', widget: 'text' }
+          - { label: 'Form Note Email', name: 'formNoteEmail', widget: 'string' }
+          - {
+              label: 'Cognito Form ID',
+              name: 'cognitoFormId',
+              widget: 'string',
+              hint: 'Number from the Cognito Forms embed URL',
+            }
+          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '1400' }
+
+      - label: 'Events List Page'
+        name: 'events-list'
+        file: 'src/data/settings/events-list.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Hero Subtitle', name: 'heroSubtitle', widget: 'text' }
 
       - label: 'Footer'
         name: 'footer'

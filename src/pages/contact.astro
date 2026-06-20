@@ -2,19 +2,20 @@
 import CognitoForm from '~/components/widgets/CognitoForm.astro';
 import HeroText from '~/components/widgets/HeroText.astro';
 import Layout from '~/layouts/PageLayout.astro';
+import contactSettings from '~/data/settings/contact.json';
 
 const metadata = {
-  title: 'Contact Us',
-  description: 'Have questions about ECRS? Reach out to us using the form below.',
+  title: contactSettings.heroTitle,
+  description: contactSettings.introText,
 };
 ---
 
 <Layout metadata={metadata}>
-  <HeroText tagline="Get in Touch" title="Contact Us" />
+  <HeroText tagline={contactSettings.heroTagline} title={contactSettings.heroTitle} />
 
   <section class="py-8 px-4 max-w-3xl mx-auto">
-    <p class="text-center text-muted">Do you have questions about ECRS? Feel free to submit one in the form below.</p>
+    <p class="text-center text-muted">{contactSettings.introText}</p>
   </section>
 
-  <CognitoForm formId="4" height="586" />
+  <CognitoForm formId={contactSettings.cognitoFormId} height={contactSettings.cognitoFormHeight} />
 </Layout>

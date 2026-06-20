@@ -1,0 +1,50 @@
+{
+  "heroTagline": "Join Us",
+  "heroTitle": "Become a Member of ECRS",
+  "benefitsTitle": "Why become a member?",
+  "benefits": [
+    {
+      "title": "Members-only discounts at events",
+      "description": "Save on registration fees at ECRS events throughout the year.",
+      "icon": "tabler:ticket"
+    },
+    {
+      "title": "Steer the direction of ECRS",
+      "description": "Vote on Board members and issues, and/or become a Board member yourself.",
+      "icon": "tabler:users"
+    },
+    {
+      "title": "Free subscription to ECHOES",
+      "description": "Receive our newsletter and stay connected with the ECRS community.",
+      "icon": "tabler:mail"
+    },
+    {
+      "title": "Recreation and leadership training",
+      "description": "Access workshops and resources to grow your skills and confidence.",
+      "icon": "tabler:school"
+    },
+    {
+      "title": "Share in the ECRS magic and fun!",
+      "description": "Be part of a warm, welcoming community built on creativity and cooperation.",
+      "icon": "tabler:sparkles"
+    },
+    {
+      "title": "Support the organization you love",
+      "description": "Your membership directly sustains ECRS and makes everything possible.",
+      "icon": "tabler:heart"
+    }
+  ],
+  "pricingTitle": "Annual Membership",
+  "pricingIntro": "Annual membership dues are only $25 for the first person in the household, and $15 for any other person over 16 living in the household. If there is a lifetime member in a household, the annual dues are also only $15 for any other person 16 or older living in the household. You can also purchase a lifetime membership, which is $400 for an individual or $650 for a couple. Dues expire on December 31 of the year they are paid, regardless of when the payment is made.",
+  "pricingTiers": [
+    { "title": "Lifetime Member", "subtitle": "Single", "price": "$400", "featured": false },
+    { "title": "Lifetime Member", "subtitle": "Couple", "price": "$650", "featured": false },
+    { "title": "Annual Member", "subtitle": "Single", "price": "$25", "featured": true },
+    { "title": "Annual Member", "subtitle": "Additional household member", "price": "$15", "featured": false }
+  ],
+  "formHeading": "Choose a membership and complete the form below",
+  "formNote": "If you are unable to pay online, please contact our membership secretary directly to make arrangements.",
+  "formNoteEmail": "membership@ecrs.org",
+  "cognitoFormId": "16",
+  "cognitoFormHeight": "1400"
+}
