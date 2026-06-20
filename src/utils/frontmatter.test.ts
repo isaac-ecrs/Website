@@ -14,7 +14,8 @@ type MockRoot = {
 };
 
 describe('responsiveTablesRehypePlugin', () => {
-  const plugin = responsiveTablesRehypePlugin();
+  // RehypePlugin return type includes void/undefined; cast to a plain callable.
+  const plugin = responsiveTablesRehypePlugin() as (tree: unknown) => void;
 
   it('does nothing when tree has no children', () => {
     const tree = { type: 'root' } as MockRoot & { children: undefined };
@@ -26,7 +27,7 @@ describe('responsiveTablesRehypePlugin', () => {
   it('does not wrap non-table elements', () => {
     const p: MockElement = { type: 'element', tagName: 'p', properties: {}, children: [] };
     const tree: MockRoot = { type: 'root', children: [p] };
-    plugin(tree as Parameters<ReturnType<typeof responsiveTablesRehypePlugin>>[0]);
+    plugin(tree);
     expect(tree.children).toHaveLength(1);
     expect(tree.children[0].tagName).toBe('p');
   });
@@ -34,7 +35,7 @@ describe('responsiveTablesRehypePlugin', () => {
   it('wraps a table in a scrollable div', () => {
     const table: MockElement = { type: 'element', tagName: 'table', properties: {}, children: [] };
     const tree: MockRoot = { type: 'root', children: [table] };
-    plugin(tree as Parameters<ReturnType<typeof responsiveTablesRehypePlugin>>[0]);
+    plugin(tree);
     expect(tree.children).toHaveLength(1);
     const wrapper = tree.children[0];
     expect(wrapper.tagName).toBe('div');
@@ -48,7 +49,7 @@ describe('responsiveTablesRehypePlugin', () => {
     const table1: MockElement = { type: 'element', tagName: 'table', properties: {}, children: [] };
     const table2: MockElement = { type: 'element', tagName: 'table', properties: {}, children: [] };
     const tree: MockRoot = { type: 'root', children: [table1, table2] };
-    plugin(tree as Parameters<ReturnType<typeof responsiveTablesRehypePlugin>>[0]);
+    plugin(tree);
     expect(tree.children).toHaveLength(2);
     expect(tree.children[0].tagName).toBe('div');
     expect(tree.children[1].tagName).toBe('table');
@@ -58,7 +59,7 @@ describe('responsiveTablesRehypePlugin', () => {
     const p: MockElement = { type: 'element', tagName: 'p', properties: {}, children: [] };
     const table: MockElement = { type: 'element', tagName: 'table', properties: {}, children: [] };
     const tree: MockRoot = { type: 'root', children: [p, table] };
-    plugin(tree as Parameters<ReturnType<typeof responsiveTablesRehypePlugin>>[0]);
+    plugin(tree);
     expect(tree.children).toHaveLength(2);
     expect(tree.children[0].tagName).toBe('p');
     expect(tree.children[1].tagName).toBe('div');

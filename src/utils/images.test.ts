@@ -74,8 +74,8 @@ describe('adaptOpenGraphImages', () => {
     expect(result.images?.[0]?.url).toBe('https://ecrs.org/optimized/image.jpg');
   });
 
-  it('returns an empty url entry when the image url is absent', async () => {
-    const og = { images: [{}] };
+  it('returns an empty url entry when the image url is an empty string', async () => {
+    const og = { images: [{ url: '' }] };
     const result = await adaptOpenGraphImages(og, SITE);
     expect(result.images?.[0]?.url).toBe('');
   });
