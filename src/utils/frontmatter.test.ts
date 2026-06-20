@@ -14,12 +14,12 @@ type MockRoot = {
 };
 
 describe('responsiveTablesRehypePlugin', () => {
-  // RehypePlugin return type includes void/undefined; cast to a plain callable.
-  const plugin = responsiveTablesRehypePlugin() as (tree: unknown) => void;
+  // RehypePlugin is typed as a unified Processor method, so calling it standalone
+  // requires casting the function itself to drop the `this: Processor` constraint.
+  const plugin = (responsiveTablesRehypePlugin as unknown as () => (tree: unknown) => void)();
 
   it('does nothing when tree has no children', () => {
     const tree = { type: 'root' } as MockRoot & { children: undefined };
-    // @ts-expect-error testing missing children
     plugin(tree);
     expect(tree).toEqual({ type: 'root' });
   });
@@ -68,8 +68,9 @@ describe('responsiveTablesRehypePlugin', () => {
 });
 
 describe('readingTimeRemarkPlugin', () => {
-  // RemarkPlugin can return void | Transformer | undefined; cast to a callable.
-  const plugin = readingTimeRemarkPlugin() as (tree: unknown, file: unknown) => void;
+  // RemarkPlugin is typed as a unified Processor method; cast the function itself
+  // to drop the `this: Processor` constraint before calling.
+  const plugin = (readingTimeRemarkPlugin as unknown as () => (tree: unknown, file: unknown) => void)();
 
   it('sets readingTime on frontmatter as a positive integer', () => {
     const tree = {
