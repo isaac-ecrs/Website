@@ -62,7 +62,12 @@ const isPast = variant === 'past';
     <p class:list={['text-xs font-bold uppercase tracking-widest mb-1', isPast ? 'text-muted' : 'text-primary']}>
       {date}
     </p>
-    <h3 class:list={['font-heading font-bold text-heading group-hover:text-primary transition-colors', isPast ? 'text-lg' : 'text-xl']}>
+    <h3
+      class:list={[
+        'font-heading font-bold text-heading group-hover:text-primary transition-colors',
+        isPast ? 'text-lg' : 'text-xl',
+      ]}
+    >
       {title}
     </h3>
     <p class="text-sm text-muted mt-1">{location}</p>

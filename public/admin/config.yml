@@ -196,7 +196,12 @@ collections:
           - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
           - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
           - { label: 'Intro Text', name: 'introText', widget: 'text' }
-          - { label: 'Cognito Form ID', name: 'cognitoFormId', widget: 'string', hint: 'Number from the Cognito Forms embed URL' }
+          - {
+              label: 'Cognito Form ID',
+              name: 'cognitoFormId',
+              widget: 'string',
+              hint: 'Number from the Cognito Forms embed URL',
+            }
           - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '600' }
 
       - label: 'Membership Page'
@@ -226,7 +231,12 @@ collections:
           - { label: 'Form Section Heading', name: 'formHeading', widget: 'string' }
           - { label: 'Form Note', name: 'formNote', widget: 'text' }
           - { label: 'Form Note Email', name: 'formNoteEmail', widget: 'string' }
-          - { label: 'Cognito Form ID', name: 'cognitoFormId', widget: 'string', hint: 'Number from the Cognito Forms embed URL' }
+          - {
+              label: 'Cognito Form ID',
+              name: 'cognitoFormId',
+              widget: 'string',
+              hint: 'Number from the Cognito Forms embed URL',
+            }
           - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '1400' }
 
       - label: 'Events List Page'
