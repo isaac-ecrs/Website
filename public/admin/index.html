@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>Content Manager - ECRS</title>
-    <link rel="stylesheet" href="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.css" />
     <style>
       html,
       body {
@@ -61,7 +60,7 @@
   <body>
     <div id="nc-root"></div>
 
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
 
     <script>
       window.addEventListener(
@@ -74,7 +73,7 @@
             const errorHTML = `
           <div class="error-page">
             <div class="error-box">
-              <h1>⚠️ Decap CMS Not Loaded</h1>
+              <h1>⚠️ Sveltia CMS Not Loaded</h1>
               <p>The admin panel couldn't load properly. Please check:</p>
               <ul>
                 <li><strong>OAuth proxy reachable:</strong> the <code>base_url</code> in config.yml points at the deployed Cloudflare Worker</li>
