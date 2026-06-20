@@ -2,20 +2,134 @@
 import { ANALYTICS } from 'astrowind:config';
 
 const id = ANALYTICS?.vendors?.googleAnalytics?.id ? String(ANALYTICS.vendors.googleAnalytics.id) : '';
-const partytown = !!ANALYTICS?.vendors?.googleAnalytics?.partytown;
-const scriptType = partytown ? 'text/partytown' : undefined;
 ---
 
-{id && <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${id}`} type={scriptType} />}
+<script define:vars={{ GA_ID: id }}>
+  (function () {
+    if (!GA_ID) return;
 
-<script is:inline id="ga-init" data-id={id} type={id ? scriptType : undefined}>
-  if (document.getElementById('ga-init').dataset.id) {
-    var d = document.getElementById('ga-init').dataset.id;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () {
-      dataLayer.push(arguments);
-    };
-    window.gtag('js', new Date());
-    window.gtag('config', d);
-  }
+    var STORAGE_KEY = 'ecrs-ga-consent';
+    var loaded = false;
+
+    // Never load GA in local development.
+    var host = location.hostname;
+    var isLocal = host === 'localhost' || host === '127.0.0.1' || host === '';
+
+    function getStored() {
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch {
+        return null;
+      }
+    }
+    function setStored(v) {
+      try {
+        localStorage.setItem(STORAGE_KEY, v);
+      } catch {
+        /* localStorage may be unavailable (private mode) */
+      }
+    }
+
+    function loadGA() {
+      if (isLocal || loaded) return;
+      loaded = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      // page_view is sent manually so it also fires on View Transition navigations.
+      window.gtag('config', GA_ID, { send_page_view: false });
+      sendPageView();
+    }
+
+    function sendPageView() {
+      if (!loaded || !window.gtag) return;
+      window.gtag('event', 'page_view', {
+        page_location: location.href,
+        page_path: location.pathname + location.search,
+        page_title: document.title,
+      });
+    }
+
+    // Gated unless the edge explicitly marked this request as US ("false").
+    function consentRequired() {
+      return document.documentElement.getAttribute('data-consent-region') !== 'false';
+    }
+
+    function banner() {
+      return document.getElementById('consent-banner');
+    }
+    function showBanner() {
+      var b = banner();
+      if (b) b.hidden = false;
+    }
+    function hideBanner() {
+      var b = banner();
+      if (b) b.hidden = true;
+    }
+
+    function grant() {
+      setStored('granted');
+      window['ga-disable-' + GA_ID] = false;
+      hideBanner();
+      loadGA();
+    }
+    function deny() {
+      setStored('denied');
+      // Stops GA immediately, even if it was already loaded this session.
+      window['ga-disable-' + GA_ID] = true;
+      hideBanner();
+    }
+
+    // Exposed for any external trigger (e.g. the footer "Cookie settings" link).
+    window.__ecrsConsent = { grant: grant, deny: deny, show: showBanner };
+
+    // Decide what to do on each page render.
+    function apply() {
+      var stored = getStored();
+      if (!consentRequired()) {
+        // US: load immediately unless the visitor previously opted out.
+        if (stored !== 'denied') loadGA();
+        return;
+      }
+      // Gated region.
+      if (stored === 'granted') {
+        loadGA();
+        hideBanner();
+      } else if (stored === 'denied') {
+        hideBanner();
+      } else {
+        showBanner();
+      }
+    }
+
+    // Banner buttons (delegated so it survives View Transition DOM swaps).
+    document.addEventListener('click', function (e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-consent-accept]')) {
+        e.preventDefault();
+        grant();
+      } else if (t.closest('[data-consent-decline]')) {
+        e.preventDefault();
+        deny();
+      } else if (t.closest('[data-consent-manage]')) {
+        // Footer "Cookie settings" — reopen the banner to change the choice.
+        e.preventDefault();
+        showBanner();
+      }
+    });
+
+    // Run on initial load and after each View Transition navigation.
+    document.addEventListener('astro:page-load', function () {
+      apply();
+      sendPageView();
+    });
+    apply();
+  })();
 </script>

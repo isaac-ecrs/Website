@@ -19,10 +19,7 @@ export const footerData_ = {
       href: link.href.startsWith('http') ? link.href : getPermalink(link.href),
     })),
   })),
-  secondaryLinks: [
-    { text: 'Terms', href: getPermalink('/terms') },
-    { text: 'Privacy Policy', href: getPermalink('/privacy') },
-  ],
+  secondaryLinks: [{ text: 'Privacy Policy', href: getPermalink('/privacy') }],
   socialLinks: siteData.socialLinks.map((s) => ({
     ariaLabel: s.platform,
     icon: s.icon,

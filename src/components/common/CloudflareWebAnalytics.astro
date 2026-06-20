@@ -1,0 +1,20 @@
+---
+import { ANALYTICS } from 'astrowind:config';
+
+// Cloudflare Web Analytics — privacy-first RUM (page views + Core Web Vitals).
+// Cookieless and PII-free, so it loads unconditionally with no consent banner.
+const token = ANALYTICS?.vendors?.cloudflareWebAnalytics?.token
+  ? String(ANALYTICS.vendors.cloudflareWebAnalytics.token)
+  : '';
+---
+
+{
+  token && (
+    <script
+      is:inline
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon={JSON.stringify({ token })}
+    />
+  )
+}

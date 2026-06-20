@@ -75,6 +75,9 @@ export interface AnalyticsConfig {
       id?: string;
       partytown?: boolean;
     };
+    cloudflareWebAnalytics?: {
+      token?: string;
+    };
   };
 }
 
@@ -186,6 +189,9 @@ const getAnalytics = (config: Config) => {
       googleAnalytics: {
         id: undefined,
         partytown: true,
+      },
+      cloudflareWebAnalytics: {
+        token: undefined,
       },
     },
   };

@@ -14,13 +14,21 @@ pillars:
   - title: 'Intergenerational'
     description: 'Fun-filled events for folks of all ages — building community across generations for more than 75 years.'
     icon: 'tabler:users-group'
+    classes:
+      icon: 'bg-[#01aced]'
   - title: 'Creative Arts'
     description: 'Singing, dancing, informal dramatics, and crafts that emphasize enjoyment, creativity, and personal growth.'
     icon: 'tabler:music'
+    classes:
+      icon: 'bg-[#41b03b]'
   - title: 'Play & Games'
     description: 'Fun activities – both active and relaxing – including cooperative games and personal development.'
     icon: 'tabler:confetti'
+    classes:
+      icon: 'bg-[#f48612]'
   - title: 'Build Community'
     description: 'Develop leadership and build community for the whole family through play and the arts.'
     icon: 'tabler:heart-handshake'
+    classes:
+      icon: 'bg-[#01aced]'
 ---
