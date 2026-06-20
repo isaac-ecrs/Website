@@ -4,7 +4,7 @@ vi.mock('astro:content', () => ({
   getCollection: vi.fn(),
 }));
 
-import { GET } from './[id].ics';
+import { GET } from '../pages/events/[id].ics';
 
 const makeEvent = (
   overrides: Partial<{
@@ -34,22 +34,20 @@ const makeEvent = (
   };
 };
 
-const callGet = async (event: ReturnType<typeof makeEvent>): Promise<string> => {
+const callGet = async (event: ReturnType<typeof makeEvent>): Promise<string> =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const response = GET({ props: { event } } as any);
-  return response instanceof Promise ? (await response).text() : response.text();
-};
+  (await GET({ props: { event } } as any)).text();
 
 describe('GET /events/[id].ics', () => {
-  it('returns text/calendar content-type', () => {
+  it('returns text/calendar content-type', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response = GET({ props: { event: makeEvent() } } as any);
+    const response = await GET({ props: { event: makeEvent() } } as any);
     expect(response.headers.get('Content-Type')).toBe('text/calendar;charset=utf-8');
   });
 
-  it('sets Content-Disposition with the event id', () => {
+  it('sets Content-Disposition with the event id', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response = GET({ props: { event: makeEvent() } } as any);
+    const response = await GET({ props: { event: makeEvent() } } as any);
     expect(response.headers.get('Content-Disposition')).toBe('attachment; filename="annual-gala-2024.ics"');
   });
 

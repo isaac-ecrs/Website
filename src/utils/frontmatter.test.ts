@@ -67,7 +67,8 @@ describe('responsiveTablesRehypePlugin', () => {
 });
 
 describe('readingTimeRemarkPlugin', () => {
-  const plugin = readingTimeRemarkPlugin();
+  // RemarkPlugin can return void | Transformer | undefined; cast to a callable.
+  const plugin = readingTimeRemarkPlugin() as (tree: unknown, file: unknown) => void;
 
   it('sets readingTime on frontmatter as a positive integer', () => {
     const tree = {
@@ -75,10 +76,7 @@ describe('readingTimeRemarkPlugin', () => {
       children: [{ type: 'paragraph', children: [{ type: 'text', value: 'Hello world. '.repeat(200) }] }],
     };
     const file = { data: { astro: { frontmatter: {} as Record<string, unknown> } } };
-    plugin(
-      tree as Parameters<ReturnType<typeof readingTimeRemarkPlugin>>[0],
-      file as Parameters<ReturnType<typeof readingTimeRemarkPlugin>>[1]
-    );
+    plugin(tree, file);
     expect(typeof file.data.astro.frontmatter.readingTime).toBe('number');
     expect(file.data.astro.frontmatter.readingTime).toBeGreaterThan(0);
   });
@@ -86,11 +84,6 @@ describe('readingTimeRemarkPlugin', () => {
   it('does not throw when frontmatter is absent', () => {
     const tree = { type: 'root', children: [] };
     const file = { data: {} };
-    expect(() =>
-      plugin(
-        tree as Parameters<ReturnType<typeof readingTimeRemarkPlugin>>[0],
-        file as Parameters<ReturnType<typeof readingTimeRemarkPlugin>>[1]
-      )
-    ).not.toThrow();
+    expect(() => plugin(tree, file)).not.toThrow();
   });
 });
