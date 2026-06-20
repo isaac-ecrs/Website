@@ -1,0 +1,27 @@
+---
+// Cookie-consent banner. Hidden by default; the consent script in
+// Analytics.astro reveals it only for gated regions (everywhere except the US)
+// when no prior choice is stored. Accept/Decline are wired via delegated
+// listeners on the [data-consent-accept] / [data-consent-decline] hooks.
+---
+
+<div
+  id="consent-banner"
+  hidden
+  role="region"
+  aria-label="Cookie consent"
+  class="fixed inset-x-0 bottom-0 z-50 p-4 sm:p-5"
+>
+  <div
+    class="mx-auto flex max-w-3xl flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-xl sm:flex-row sm:items-center sm:gap-5 sm:p-6 dark:border-gray-700 dark:bg-gray-900"
+  >
+    <p class="flex-1 text-sm text-default">
+      ECRS uses privacy-friendly analytics to understand how our community uses the site. May we use analytics cookies?
+      You can change your choice anytime. <a href="/privacy" class="text-link underline">Privacy Policy</a>.
+    </p>
+    <div class="flex shrink-0 gap-3">
+      <button type="button" data-consent-decline class="btn btn-secondary px-4 py-2 text-sm"> No thanks </button>
+      <button type="button" data-consent-accept class="btn btn-primary px-4 py-2 text-sm"> Accept </button>
+    </div>
+  </div>
+</div>

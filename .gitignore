@@ -25,3 +25,5 @@ public/videos/*.mov
 pnpm-lock.yaml
 
 .astro
+# Local video source masters (not deployed)
+video-sources/

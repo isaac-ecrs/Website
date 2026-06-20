@@ -31,7 +31,7 @@ i18n:
 
 apps:
   blog:
-    isEnabled: true
+    isEnabled: false
     postsPerPage: 6
 
     post:
@@ -64,7 +64,11 @@ apps:
 analytics:
   vendors:
     googleAnalytics:
-      id: null # or "G-XXXXXXXXXX"
+      id: 'G-RE9RDKP35W' # GA4 — gated by geo-targeted consent banner (CA/EU/UK only)
+    cloudflareWebAnalytics:
+      # Cloudflare Web Analytics (RUM): page views + Core Web Vitals, cookieless.
+      # Public beacon token (safe to commit). Site: website-alc.pages.dev → ecrs.org.
+      token: 'bc16aa201885457a92df26bf855df104'
 
 ui:
   theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"

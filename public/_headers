@@ -1,2 +1,25 @@
+# Cloudflare Pages headers — https://developers.cloudflare.com/pages/configuration/headers/
+
+# Security headers on every response
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
+
+# Astro's content-hashed assets — safe to cache forever
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Fonts rarely change but are not content-hashed — long cache, still revalidatable
+/fonts/*
+  Cache-Control: public, max-age=2592000
+
+# CMS-editable media (not content-hashed): cache a day, serve stale up to a week
+# while revalidating, so swapping an image under the same filename refreshes.
+/images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/videos/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800

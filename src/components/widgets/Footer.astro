@@ -49,6 +49,14 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
               </>
             ))
           }
+          {secondaryLinks.length > 0 ? ' · ' : ''}
+          <button
+            type="button"
+            data-consent-manage
+            class="text-muted hover:text-gray-700 dark:text-gray-400 hover:underline transition duration-150 ease-in-out cursor-pointer"
+          >
+            Cookie settings
+          </button>
         </div>
       </div>
       {
