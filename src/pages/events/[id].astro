@@ -22,7 +22,9 @@ const { event } = Astro.props;
 const { data } = event;
 
 const allLeaders = await getCollection('leader');
-const leaderMap = new Map(allLeaders.map((l) => [l.id, l.data]));
+const leaderMap = new Map<string, CollectionEntry<'leader'>['data']>(allLeaders.map((l) => [l.id, l.data]));
+
+const linkedLeaderIds = [...new Set((data.classes ?? []).map((c) => c.leaderId).filter((id): id is string => !!id))];
 
 const UTC: Intl.DateTimeFormatOptions = { timeZone: 'UTC' };
 
@@ -540,21 +542,33 @@ const jsonLd = {
                                 const record = cls.leaderId ? leaderMap.get(cls.leaderId) : null;
                                 const name = record?.name ?? cls.leader;
                                 const photo = record?.photo;
-                                return name ? (
-                                  <span class="inline-flex items-center gap-1.5 text-sm text-muted">
-                                    —
-                                    {photo && (
-                                      <img
-                                        src={photo}
-                                        alt={name}
-                                        width="20"
-                                        height="20"
-                                        class="w-5 h-5 rounded-full object-cover inline"
-                                      />
-                                    )}
-                                    {name}
-                                  </span>
-                                ) : null;
+                                if (!name) return null;
+                                if (record) {
+                                  return (
+                                    <span class="inline-flex items-center gap-1.5 text-sm text-muted">
+                                      —
+                                      {photo && (
+                                        <img
+                                          src={photo}
+                                          alt={name}
+                                          width="20"
+                                          height="20"
+                                          class="w-5 h-5 rounded-full object-cover"
+                                        />
+                                      )}
+                                      <button
+                                        type="button"
+                                        popovertarget={`leader-${cls.leaderId}`}
+                                        class="underline decoration-dotted underline-offset-2 cursor-pointer hover:text-primary transition-colors"
+                                      >
+                                        {name}
+                                      </button>
+                                    </span>
+                                  );
+                                }
+                                return (
+                                  <span class="inline-flex items-center gap-1.5 text-sm text-muted">— {name}</span>
+                                );
                               })()}
                               {cls.ageRange && (
                                 <span class="text-xs font-semibold text-muted border border-muted/30 rounded-full px-2 py-0.5">
@@ -697,6 +711,72 @@ const jsonLd = {
           <div class="absolute inset-0 bg-primary/5 dark:bg-transparent" />
         </Fragment>
       </CallToAction>
+    )
+  }
+
+  <!-- ── Leader popovers ── -->
+  {
+    linkedLeaderIds.map((id) => {
+      const leader = leaderMap.get(id);
+      if (!leader) return null;
+      return (
+        <div
+          id={`leader-${id}`}
+          popover="auto"
+          class="m-0 p-0 border-0 bg-transparent shadow-none [&::backdrop]:bg-black/20"
+        >
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl p-4 w-64 max-w-[calc(100vw-2rem)]">
+            <div class="flex items-center gap-3 mb-2">
+              {leader.photo && (
+                <img
+                  src={leader.photo}
+                  alt={leader.name}
+                  width="48"
+                  height="48"
+                  class="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                />
+              )}
+              <div class="min-w-0">
+                <p class="font-semibold text-heading leading-snug">{leader.name}</p>
+                {leader.title && <p class="text-xs text-muted leading-snug">{leader.title}</p>}
+              </div>
+            </div>
+            {leader.bio && <p class="text-sm text-muted line-clamp-4">{leader.bio}</p>}
+          </div>
+        </div>
+      );
+    })
+  }
+
+  {
+    linkedLeaderIds.length > 0 && (
+      <script>
+        {`
+        document.querySelectorAll('[popovertarget]').forEach((btn) => {
+          const pop = document.getElementById(btn.getAttribute('popovertarget'));
+          if (!pop) return;
+          btn.addEventListener('click', () => {
+            if (pop.matches(':popover-open')) return;
+            const rect = btn.getBoundingClientRect();
+            const card = pop.querySelector('div');
+            pop.showPopover();
+            const cardW = card.offsetWidth;
+            const cardH = card.offsetHeight;
+            const margin = 8;
+            let left = rect.left + window.scrollX;
+            let top = rect.bottom + window.scrollY + margin;
+            if (left + cardW > window.innerWidth - margin) left = window.innerWidth - cardW - margin;
+            if (left < margin) left = margin;
+            if (top + cardH > window.scrollY + window.innerHeight - margin) {
+              top = rect.top + window.scrollY - cardH - margin;
+            }
+            pop.style.position = 'absolute';
+            pop.style.left = left + 'px';
+            pop.style.top = top + 'px';
+          });
+        });
+      `}
+      </script>
     )
   }
 </Layout>
