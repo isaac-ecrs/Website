@@ -27,7 +27,9 @@ export default defineConfig({
   output: 'static',
 
   integrations: [
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.includes('/events/e2e-'),
+    }),
     mdx(),
     icon({
       include: {

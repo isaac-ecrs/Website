@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '~/layouts/PageLayout.astro';
+import PersonCard from '~/components/ui/PersonCard.astro';
+import rawPeopleData from '~/data/pages/people.json';
+
+interface PeoplePerson {
+  name: string;
+  title?: string | null;
+  photo?: string | null;
+  bio?: string | null;
+}
+interface PeopleCategory {
+  label: string;
+  people: PeoplePerson[];
+}
+interface PeoplePageData {
+  title: string;
+  categories: PeopleCategory[];
+}
+
+const peoplePageData = rawPeopleData as PeoplePageData;
+
+const leaders = await getCollection('leader');
+leaders.sort((a, b) => a.data.name.localeCompare(b.data.name, undefined, { sensitivity: 'base' }));
+
+const metadata = {
+  title: peoplePageData.title,
+};
+---
+
+<Layout metadata={metadata}>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16">
+    <h1 class="font-heading text-4xl md:text-5xl font-bold text-heading mb-12">
+      {peoplePageData.title}
+    </h1>
+
+    <!-- ── Program Leaders (auto from leader records) ── -->
+    {
+      leaders.length > 0 && (
+        <section class="mb-16" aria-labelledby="leaders-heading">
+          <h2
+            id="leaders-heading"
+            class="font-heading text-2xl font-bold text-heading mb-8 pb-2 border-b border-gray-200 dark:border-gray-700"
+          >
+            Leaders
+          </h2>
+          <ul class="grid sm:grid-cols-2 gap-8 list-none p-0 m-0">
+            {leaders.map((leader) => (
+              <li id={`leader-${leader.id}`} class="scroll-mt-24">
+                <PersonCard
+                  name={leader.data.name}
+                  title={leader.data.title}
+                  photo={leader.data.photo}
+                  bio={leader.data.bio}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <!-- ── Editor-defined sections ── -->
+    {
+      (peoplePageData.categories ?? []).map((cat) =>
+        cat.people && cat.people.length > 0 ? (
+          <section class="mb-16" aria-labelledby={`section-${cat.label.toLowerCase().replace(/\s+/g, '-')}`}>
+            <h2
+              id={`section-${cat.label.toLowerCase().replace(/\s+/g, '-')}`}
+              class="font-heading text-2xl font-bold text-heading mb-8 pb-2 border-b border-gray-200 dark:border-gray-700"
+            >
+              {cat.label}
+            </h2>
+            <ul class="grid sm:grid-cols-2 gap-8 list-none p-0 m-0">
+              {cat.people.map((person) => (
+                <li>
+                  <PersonCard
+                    name={person.name}
+                    title={person.title ?? undefined}
+                    photo={person.photo ?? undefined}
+                    bio={person.bio ?? undefined}
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null
+      )
+    }
+  </div>
+</Layout>

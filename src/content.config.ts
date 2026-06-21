@@ -2,6 +2,11 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
+const emptyToUndefined = (v: unknown) => (v === '' || v == null ? undefined : v);
+const optionalDate = z.preprocess(emptyToUndefined, z.date().optional());
+const optionalString = z.preprocess(emptyToUndefined, z.string().optional());
+const optionalEmail = z.preprocess(emptyToUndefined, z.string().email().optional());
+
 const metadataDefinition = () =>
   z
     .object({
@@ -102,31 +107,107 @@ const pricingTierSchema = z.object({
   note: z.string().optional(),
 });
 
+const accommodationTierSchema = z.object({
+  label: z.string(),
+  amount: z.string(),
+});
+
+const accommodationSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  tiers: z.array(accommodationTierSchema),
+});
+
+const tuitionTierSchema = z.object({
+  label: z.string().optional(),
+  amount: z.string(),
+  note: z.string().optional(),
+});
+
+const leaderCollection = defineCollection({
+  loader: glob({ pattern: '*.md', base: 'src/data/leaders' }),
+  schema: z.object({
+    name: z.string(),
+    title: z.string().optional(),
+    photo: z.string().optional(),
+    bio: z.string().optional(),
+  }),
+});
+
 const eventCollection = defineCollection({
   loader: glob({ pattern: ['*.md', '*.mdx'], base: 'src/data/events' }),
   schema: z.object({
     title: z.string(),
     date: z.date(),
-    endDate: z.date().optional(),
+    endDate: optionalDate,
     startTime: z.string().optional(),
     endTime: z.string().optional(),
     location: z.string(),
     address: z.string().optional(),
+    phone: z.string().optional(),
+    accessibilityNote: z.string().optional(),
     excerpt: z.string().optional(),
     description: z.string().optional(),
     image: z.string().optional(),
-    registrationUrl: z.string().optional(),
-    registrationEmail: z.string().email().optional(),
-    registrationDeadline: z.date().optional(),
+
+    // Registration
+    registrationUrl: optionalString,
+    registrationEmail: optionalEmail,
+    registrationDeadline: optionalDate,
+    earlyBirdDeadline: optionalDate,
+    earlyBirdFeeNote: z.string().optional(),
     cognitoFormId: z.string().optional(),
     cognitoFormHeight: z.string().optional(),
-    pricing: z.array(pricingTierSchema).optional(),
+
+    // Pricing — three tiers of complexity (mutually exclusive, pick one)
+    fee: z.string().optional(), // simple: "Free / $25 adults"
+    tuitionLabel: optionalString, // override heading; defaults to "Tuition"
+    tuition: z.array(tuitionTierSchema).optional(), // mid/full: tuition rows
+    accommodations: z.array(accommodationSchema).optional(), // full: residential room & board
+    pricing: z.array(pricingTierSchema).optional(), // legacy — kept for back-compat
+
+    // Logistics
+    mealsIncluded: z.string().optional(),
+    mealsNote: z.string().optional(),
+
+    // Policies (shown when toggled on; text editable per event)
+    showCancellationPolicy: z.boolean().optional(),
+    cancellationCutoffDate: optionalDate,
+    cancellationPolicy: z.string().optional(),
+    showHealthPolicy: z.boolean().optional(),
+    healthPolicy: z.string().optional(),
+
+    // Classes / program
+    classes: z
+      .array(
+        z.object({
+          name: z.string(),
+          leaderId: z.string().optional(),
+          leader: z.string().optional(),
+          ageRange: z.string().optional(),
+          period: z.string().optional(),
+          days: z.string().optional(),
+          limitedCapacity: z.boolean().optional(),
+          description: z.string().optional(),
+          callout: z.string().optional(),
+        })
+      )
+      .optional(),
+
+    // Additional info
+    newcomerNote: z.string().optional(),
+    financialAidNote: z.string().optional(),
+
     tags: z.array(z.string()).optional(),
+
+    // Internal — draft events build pages but are excluded from listings/sitemap
+    draft: z.boolean().optional(),
   }),
 });
 
 export const collections = {
   post: postCollection,
   event: eventCollection,
+  leader: leaderCollection,
   landingSettings: landingSettingsCollection,
 };

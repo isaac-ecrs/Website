@@ -4,6 +4,8 @@ import Layout from '~/layouts/PageLayout.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import CognitoForm from '~/components/widgets/CognitoForm.astro';
 import siteSettings from '~/data/settings/site.json';
+import { groupClassesByPeriod } from '~/utils/classes';
+import { computeEventSections } from '~/utils/eventSections';
 
 export async function getStaticPaths() {
   const events = await getCollection('event');
@@ -19,6 +21,11 @@ interface Props {
 
 const { event } = Astro.props;
 const { data } = event;
+
+const allLeaders = await getCollection('leader');
+const leaderMap = new Map<string, CollectionEntry<'leader'>['data']>(allLeaders.map((l) => [l.id, l.data]));
+
+const linkedLeaderIds = [...new Set((data.classes ?? []).map((c) => c.leaderId).filter((id): id is string => !!id))];
 
 const UTC: Intl.DateTimeFormatOptions = { timeZone: 'UTC' };
 
@@ -42,12 +49,14 @@ function formatDateRange(data: Props['event']['data']) {
   return `${start} – ${data.endDate.toLocaleDateString('en-US', opts)}`;
 }
 
-const now = new Date();
-const isPast = (data.endDate ?? data.date) < now;
+const { isPast, pricingRows, jumpLinks, showJumpNav, cancellationCutoff } = computeEventSections(data, new Date());
 
 type PricingTier = NonNullable<typeof data.pricing>[0];
-const pricingRows: PricingTier[] = (data.pricing ?? []).filter((p) => p.ageRange);
 const pricingNotes: PricingTier[] = (data.pricing ?? []).filter((p) => p.note);
+
+function formatCutoff(d: Date) {
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+}
 const eventTags: string[] = data.tags ?? [];
 
 const metadata = {
@@ -125,7 +134,7 @@ const jsonLd = {
           <li aria-hidden="true" class="text-muted/50">›</li>
           <li><a href="/events" class="hover:text-primary transition-colors">Events</a></li>
           <li aria-hidden="true" class="text-muted/50">›</li>
-          <li aria-current="page" class="text-default truncate max-w-[200px]">{data.title}</li>
+          <li aria-current="page" class="text-default min-w-0 truncate">{data.title}</li>
         </ol>
       </nav>
 
@@ -170,7 +179,7 @@ const jsonLd = {
       </div>
 
       <!-- Event meta -->
-      <dl class="grid sm:grid-cols-2 gap-4 mb-8">
+      <div class="grid sm:grid-cols-2 gap-4 mb-8">
         <a
           href={`/events/${event.id}.ics`}
           class="flex gap-3 items-start rounded-xl p-2 -m-2 hover:bg-primary/5 transition-colors group"
@@ -190,15 +199,15 @@ const jsonLd = {
             >
           </span>
           <div>
-            <dt class="text-xs font-bold uppercase tracking-widest text-muted">Date</dt>
-            <dd class="text-default font-semibold group-hover:underline">{formatDateRange(data)}</dd>
+            <p class="text-xs font-bold uppercase tracking-widest text-muted">Date</p>
+            <p class="text-default font-semibold group-hover:underline">{formatDateRange(data)}</p>
             {
               (data.startTime || data.endTime) && (
-                <dd class="text-sm text-muted">
+                <p class="text-sm text-muted">
                   {data.startTime && `Starts ${data.startTime}`}
                   {data.startTime && data.endTime && ' · '}
                   {data.endTime && `Ends ${data.endTime}`}
-                </dd>
+                </p>
               )
             }
           </div>
@@ -224,11 +233,42 @@ const jsonLd = {
             >
           </span>
           <div>
-            <dt class="text-xs font-bold uppercase tracking-widest text-muted">Location</dt>
-            <dd class="text-default font-semibold group-hover:underline">{data.location}</dd>
-            {data.address && <dd class="text-sm text-muted">{data.address}</dd>}
+            <p class="text-xs font-bold uppercase tracking-widest text-muted">Location</p>
+            <p class="text-default font-semibold group-hover:underline">{data.location}</p>
+            {data.address && <p class="text-sm text-muted">{data.address}</p>}
+            {data.phone && <p class="text-sm text-muted">{data.phone}</p>}
           </div>
         </a>
+
+        {
+          data.earlyBirdDeadline && !isPast && (
+            <div class="flex gap-3 items-start">
+              <span class="text-secondary mt-0.5 flex-shrink-0" aria-hidden="true">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <>
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </>
+                </svg>
+              </span>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-muted">Early-bird deadline</p>
+                <p class="text-secondary font-semibold">{formatDate(data.earlyBirdDeadline)}</p>
+                {data.earlyBirdFeeNote && <p class="text-sm text-muted">{data.earlyBirdFeeNote}</p>}
+              </div>
+            </div>
+          )
+        }
 
         {
           data.registrationDeadline && !isPast && (
@@ -251,26 +291,53 @@ const jsonLd = {
                 </svg>
               </span>
               <div>
-                <dt class="text-xs font-bold uppercase tracking-widest text-muted">Register by</dt>
-                <dd class="text-secondary font-semibold">{formatDate(data.registrationDeadline)}</dd>
+                <p class="text-xs font-bold uppercase tracking-widest text-muted">Register by</p>
+                <p class="text-secondary font-semibold">{formatDate(data.registrationDeadline)}</p>
               </div>
             </div>
           )
         }
-      </dl>
+        {
+          data.accessibilityNote && (
+            <div class="flex gap-3 items-start">
+              <span class="text-primary mt-0.5 flex-shrink-0" aria-hidden="true">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <>
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 8v4m0 4h.01" />
+                  </>
+                </svg>
+              </span>
+              <div>
+                <p class="text-xs font-bold uppercase tracking-widest text-muted">Accessibility</p>
+                <p class="text-default text-sm">{data.accessibilityNote}</p>
+              </div>
+            </div>
+          )
+        }
+      </div>
 
       <!-- Action buttons -->
       <div class="flex flex-wrap gap-4 mb-10">
         {
-          !isPast && data.registrationUrl && (
-            <a href={data.registrationUrl} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+          !isPast && data.cognitoFormId && (
+            <a href="#registration" class="btn btn-primary">
               Register Now
             </a>
           )
         }
         {
-          !isPast && data.cognitoFormId && !data.registrationUrl && (
-            <a href="#registration" class="btn btn-primary">
+          !isPast && !data.cognitoFormId && data.registrationUrl && (
+            <a href={data.registrationUrl} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
               Register Now
             </a>
           )
@@ -285,6 +352,22 @@ const jsonLd = {
         <a href="/events" class="btn btn-secondary">← All Events</a>
       </div>
 
+      <!-- Jump nav -->
+      {
+        showJumpNav && (
+          <nav aria-label="Jump to section" class="flex flex-wrap gap-2 mb-8">
+            {jumpLinks.map((link) => (
+              <a
+                href={link.href}
+                class="text-sm font-semibold text-primary border border-primary/30 rounded-full px-3 py-1 hover:bg-primary/5 transition-colors"
+              >
+                {link.label} ↓
+              </a>
+            ))}
+          </nav>
+        )
+      }
+
       <!-- Description -->
       {
         data.description && (
@@ -294,9 +377,119 @@ const jsonLd = {
         )
       }
 
-      <!-- Pricing table -->
+      <!-- ── Simple fee ── -->
       {
-        data.pricing && data.pricing.length > 0 && (
+        data.fee && (
+          <div id="costs" class="mt-10 scroll-mt-24">
+            <h2 class="font-heading text-2xl font-bold text-heading mb-3">Cost</h2>
+            <p class="text-lg text-default">{data.fee}</p>
+          </div>
+        )
+      }
+
+      <!-- ── Tuition ── -->
+      {
+        data.tuition && data.tuition.length > 0 && (
+          <div id={!data.fee ? 'costs' : undefined} class={!data.fee ? 'mt-10 scroll-mt-24' : 'mt-10'}>
+            <h2 class="font-heading text-2xl font-bold text-heading mb-4">{data.tuitionLabel ?? 'Tuition'}</h2>
+            {data.tuition.length === 1 ? (
+              <div class="inline-flex flex-col gap-0.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-6 py-4">
+                <span class="text-2xl font-bold text-heading">{data.tuition[0].amount}</span>
+                {data.tuition[0].label && <span class="text-sm text-muted">{data.tuition[0].label}</span>}
+                {data.tuition[0].note && <span class="text-xs text-muted italic mt-1">{data.tuition[0].note}</span>}
+              </div>
+            ) : (
+              (() => {
+                const hasLabels = data.tuition!.some((t) => t.label);
+                return (
+                  <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                    <table class="w-full text-sm">
+                      <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-800">
+                          {hasLabels && (
+                            <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                              Category
+                            </th>
+                          )}
+                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                            Amount
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.tuition!.map((tier, i) => (
+                          <tr
+                            class:list={[
+                              'border-t border-gray-200 dark:border-gray-700',
+                              { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 },
+                            ]}
+                          >
+                            {hasLabels && (
+                              <td class="px-4 py-3">
+                                {tier.label && <span>{tier.label}</span>}
+                                {tier.note && <span class="block text-xs text-muted italic mt-0.5">{tier.note}</span>}
+                              </td>
+                            )}
+                            <td class="px-4 py-3 font-semibold">{tier.amount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              })()
+            )}
+          </div>
+        )
+      }
+
+      <!-- ── Accommodations (room & board) ── -->
+      {
+        data.accommodations && data.accommodations.length > 0 && (
+          <div class="mt-10">
+            <h2 class="font-heading text-2xl font-bold text-heading mb-6">Room &amp; Board</h2>
+            <div class="space-y-8">
+              {data.accommodations.map((accom) => (
+                <div>
+                  <h3 class="font-heading text-lg font-bold text-heading mb-1">{accom.name}</h3>
+                  {accom.description && <p class="text-sm text-muted mb-3">{accom.description}</p>}
+                  <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                    <table class="w-full text-sm">
+                      <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-800">
+                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                            Occupancy
+                          </th>
+                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                            Per Person
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {accom.tiers.map((tier, i) => (
+                          <tr
+                            class:list={[
+                              'border-t border-gray-200 dark:border-gray-700',
+                              { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 },
+                            ]}
+                          >
+                            <td class="px-4 py-3">{tier.label}</td>
+                            <td class="px-4 py-3 font-semibold">{tier.amount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      <!-- ── Legacy pricing table (back-compat) ── -->
+      {
+        pricingRows.length > 0 && (
           <div class="mt-10">
             <h2 class="font-heading text-2xl font-bold text-heading mb-4">Pricing</h2>
             <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
@@ -333,6 +526,151 @@ const jsonLd = {
         )
       }
 
+      <!-- ── Meals ── -->
+      {
+        (data.mealsIncluded || data.mealsNote) && (
+          <div class="mt-10">
+            <h2 class="font-heading text-2xl font-bold text-heading mb-3">Meals</h2>
+            {data.mealsIncluded && <p class="text-default font-semibold">{data.mealsIncluded}</p>}
+            {data.mealsNote && <p class="text-sm text-muted mt-1">{data.mealsNote}</p>}
+          </div>
+        )
+      }
+
+      <!-- ── Classes / program ── -->
+      {
+        data.classes &&
+          data.classes.length > 0 &&
+          (() => {
+            const groups = groupClassesByPeriod(data.classes!);
+            const isFlat = groups.size === 1 && groups.has('');
+            const isMultiDay = !!data.endDate;
+            return (
+              <div id="classes" class="mt-10 scroll-mt-24">
+                <h2 class="font-heading text-2xl font-bold text-heading mb-6">Classes</h2>
+                <div class="space-y-8">
+                  {[...groups.entries()].map(([period, classes]) => (
+                    <div>
+                      {!isFlat && period && (
+                        <h3 class="font-heading text-base font-bold uppercase tracking-widest text-muted mb-3">
+                          {period}
+                        </h3>
+                      )}
+                      <ul class="space-y-3 list-none p-0 m-0">
+                        {classes.map((cls) => (
+                          <li class="rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3">
+                            <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                              <span class="font-semibold text-heading">{cls.name}</span>
+                              {(() => {
+                                const record = cls.leaderId ? leaderMap.get(cls.leaderId) : null;
+                                const name = record?.name ?? cls.leader;
+                                const photo = record?.photo;
+                                if (!name) return null;
+                                if (record) {
+                                  return (
+                                    <span class="inline-flex items-center gap-1.5 text-sm text-muted">
+                                      —
+                                      {photo && (
+                                        <img
+                                          src={photo}
+                                          alt={name}
+                                          width="20"
+                                          height="20"
+                                          class="w-5 h-5 rounded-full object-cover"
+                                        />
+                                      )}
+                                      <button
+                                        type="button"
+                                        data-popover-target={`leader-${cls.leaderId}`}
+                                        aria-controls={`leader-${cls.leaderId}`}
+                                        aria-expanded="false"
+                                        class="underline decoration-dotted underline-offset-2 cursor-pointer hover:text-primary transition-colors"
+                                      >
+                                        {name}
+                                      </button>
+                                    </span>
+                                  );
+                                }
+                                return (
+                                  <span class="inline-flex items-center gap-1.5 text-sm text-muted">— {name}</span>
+                                );
+                              })()}
+                              {cls.ageRange && (
+                                <span class="text-xs font-semibold text-muted border border-muted/30 rounded-full px-2 py-0.5">
+                                  {cls.ageRange}
+                                </span>
+                              )}
+                              {isMultiDay && cls.days && <span class="text-xs text-muted">{cls.days}</span>}
+                              {cls.limitedCapacity && (
+                                <span class="text-xs font-semibold text-amber-600 dark:text-amber-400 border border-amber-300 dark:border-amber-600 rounded-full px-2 py-0.5">
+                                  Limited capacity
+                                </span>
+                              )}
+                            </div>
+                            {cls.description && <p class="text-sm text-muted mt-1">{cls.description}</p>}
+                            {cls.callout && <p class="text-sm font-semibold text-primary mt-1">{cls.callout}</p>}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()
+      }
+
+      <!-- ── Newcomer / financial aid / leader profiles ── -->
+      {
+        (data.newcomerNote || data.financialAidNote) && (
+          <div class="mt-10 flex flex-col gap-3">
+            {data.newcomerNote && (
+              <p class="text-sm text-default bg-primary/5 rounded-xl px-4 py-3">
+                <span class="font-semibold">New to ECRS?</span> {data.newcomerNote}
+              </p>
+            )}
+            {data.financialAidNote && (
+              <p class="text-sm text-default bg-accent/5 rounded-xl px-4 py-3">
+                <span class="font-semibold">Financial assistance:</span> {data.financialAidNote}
+              </p>
+            )}
+            <p class="text-sm text-default">
+              <a href="/our-people" class="text-primary hover:underline font-semibold">
+                View leader &amp; staff profiles →
+              </a>
+            </p>
+          </div>
+        )
+      }
+
+      <!-- ── Policies ── -->
+      {
+        (data.showCancellationPolicy || data.showHealthPolicy) && (
+          <div class="mt-10 space-y-6">
+            <h2 class="font-heading text-2xl font-bold text-heading">Policies</h2>
+
+            {data.showCancellationPolicy && data.cancellationPolicy && (
+              <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+                <h3 class="font-heading text-base font-bold text-heading mb-1">Cancellation</h3>
+                {cancellationCutoff && (
+                  <p class="text-sm font-semibold text-secondary mb-2">
+                    Refund cutoff: {formatCutoff(cancellationCutoff)}
+                  </p>
+                )}
+                <p class="text-sm text-muted whitespace-pre-line">{data.cancellationPolicy}</p>
+              </div>
+            )}
+
+            {data.showHealthPolicy && data.healthPolicy && (
+              <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+                <h3 class="font-heading text-base font-bold text-heading mb-2">Health</h3>
+                <p class="text-sm text-muted whitespace-pre-line">{data.healthPolicy}</p>
+              </div>
+            )}
+          </div>
+        )
+      }
+
       <!-- Tags -->
       {
         eventTags.length > 0 && (
@@ -353,7 +691,7 @@ const jsonLd = {
        ============================================================ -->
   {
     !isPast && data.cognitoFormId && (
-      <div id="registration">
+      <div id="registration" class="scroll-mt-24">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-4 pb-2">
           <h2 class="font-heading text-2xl font-bold text-heading">Register</h2>
         </div>
@@ -393,9 +731,96 @@ const jsonLd = {
       </CallToAction>
     )
   }
+
+  <!-- ── Leader popovers ── -->
+  {
+    linkedLeaderIds.map((id) => {
+      const leader = leaderMap.get(id);
+      if (!leader) return null;
+      return (
+        <div
+          id={`leader-${id}`}
+          popover="auto"
+          class="m-0 p-0 border-0 bg-transparent shadow-none [&::backdrop]:bg-black/20"
+        >
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl p-4 w-64 max-w-[calc(100vw-2rem)]">
+            <div class="flex items-center gap-3 mb-2">
+              {leader.photo && (
+                <img
+                  src={leader.photo}
+                  alt={leader.name}
+                  width="48"
+                  height="48"
+                  class="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                />
+              )}
+              <div class="min-w-0">
+                <p class="font-semibold text-gray-900 dark:text-white leading-snug">{leader.name}</p>
+                {leader.title && <p class="text-xs text-gray-500 dark:text-gray-400 leading-snug">{leader.title}</p>}
+              </div>
+            </div>
+            {leader.bio && <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-6 mb-3">{leader.bio}</p>}
+            <a href={`/our-people#leader-${id}`} class="text-xs font-semibold text-primary hover:underline">
+              View full profile →
+            </a>
+          </div>
+        </div>
+      );
+    })
+  }
 </Layout>
 
 <script>
+  function initLeaderPopovers() {
+    document.querySelectorAll<HTMLButtonElement>('[data-popover-target]').forEach((btn) => {
+      const pop = document.getElementById(btn.dataset.popoverTarget!);
+      if (!pop) return;
+      let hideTimer: ReturnType<typeof setTimeout>;
+
+      function position() {
+        const rect = btn.getBoundingClientRect();
+        const card = pop!.querySelector('div')!;
+        const margin = 8;
+        let left = rect.left;
+        let top = rect.bottom + margin;
+        if (left + card.offsetWidth > window.innerWidth - margin) left = window.innerWidth - card.offsetWidth - margin;
+        if (left < margin) left = margin;
+        if (top + card.offsetHeight > window.innerHeight - margin) top = rect.top - card.offsetHeight - margin;
+        pop!.style.position = 'fixed';
+        pop!.style.left = left + 'px';
+        pop!.style.top = top + 'px';
+      }
+
+      function show() {
+        clearTimeout(hideTimer);
+        if (!pop!.matches(':popover-open')) {
+          pop!.showPopover();
+          position();
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      }
+
+      function hide() {
+        hideTimer = setTimeout(() => {
+          if (pop!.matches(':popover-open')) {
+            pop!.hidePopover();
+            btn.setAttribute('aria-expanded', 'false');
+          }
+        }, 120);
+      }
+
+      btn.addEventListener('mouseenter', show);
+      btn.addEventListener('mouseleave', hide);
+      // Click always shows; outside-click auto-dismisses via popover="auto"
+      btn.addEventListener('click', () => show());
+      pop.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+      pop.addEventListener('mouseleave', hide);
+    });
+  }
+
+  initLeaderPopovers();
+  document.addEventListener('astro:page-load', initLeaderPopovers);
+
   const shareBtn = document.getElementById('share-btn') as HTMLButtonElement | null;
   if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
