@@ -181,6 +181,40 @@ collections:
         required: false
         default: 'In the week before the event, please mask when in crowded indoor spaces and monitor your health. If you are sick, we ask that you not come.'
 
+      # ── Classes / Program ─────────────────────────────────────────
+      - label: 'Classes'
+        name: 'classes'
+        widget: 'list'
+        required: false
+        hint: 'Classes are grouped by period in the order they are entered.'
+        fields:
+          - { label: 'Class Name', name: 'name', widget: 'string' }
+          - { label: 'Instructor', name: 'instructor', widget: 'string', required: false }
+          - { label: 'Age Range', name: 'ageRange', widget: 'string', required: false, hint: 'e.g. 12+, All ages' }
+          - {
+              label: 'Period',
+              name: 'period',
+              widget: 'string',
+              required: false,
+              hint: 'Used as a section heading, e.g. "Morning – First Period". Leave blank for a flat list.',
+            }
+          - {
+              label: 'Days',
+              name: 'days',
+              widget: 'string',
+              required: false,
+              hint: 'Multi-day events only, e.g. "Days 1–2" or "All 4 days".',
+            }
+          - { label: 'Limited Capacity', name: 'limitedCapacity', widget: 'boolean', required: false, default: false }
+          - {
+              label: 'Advance Registration Required',
+              name: 'advanceRegistration',
+              widget: 'boolean',
+              required: false,
+              default: false,
+            }
+          - { label: 'Description', name: 'description', widget: 'text', required: false }
+
       # ── Additional Info ───────────────────────────────────────────
       - {
           label: 'Newcomer Note',

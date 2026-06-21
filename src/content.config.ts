@@ -161,6 +161,22 @@ const eventCollection = defineCollection({
     showHealthPolicy: z.boolean().optional(),
     healthPolicy: z.string().optional(),
 
+    // Classes / program
+    classes: z
+      .array(
+        z.object({
+          name: z.string(),
+          instructor: z.string().optional(),
+          ageRange: z.string().optional(),
+          period: z.string().optional(),
+          days: z.string().optional(),
+          limitedCapacity: z.boolean().optional(),
+          advanceRegistration: z.boolean().optional(),
+          description: z.string().optional(),
+        })
+      )
+      .optional(),
+
     // Additional info
     newcomerNote: z.string().optional(),
     financialAidNote: z.string().optional(),
