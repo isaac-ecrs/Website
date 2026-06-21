@@ -22,6 +22,30 @@ public_folder: '/images'
 # Collections
 # -------------------------------------------------------
 collections:
+  # --- PAGES (files collection — one entry per singleton page) ---
+  - name: 'pages'
+    label: 'Pages'
+    files:
+      - name: 'people'
+        label: 'Our People'
+        file: 'src/data/pages/people.json'
+        fields:
+          - { label: 'Page Title', name: 'title', widget: 'string', default: 'Our People' }
+          - label: 'Sections'
+            name: 'categories'
+            widget: 'list'
+            hint: 'Add sections like "Board of Directors", "Volunteers", etc. Leaders are shown automatically above these.'
+            fields:
+              - { label: 'Section Title', name: 'label', widget: 'string' }
+              - label: 'People'
+                name: 'people'
+                widget: 'list'
+                fields:
+                  - { label: 'Name', name: 'name', widget: 'string' }
+                  - { label: 'Title / Role', name: 'title', widget: 'string', required: false }
+                  - { label: 'Photo', name: 'photo', widget: 'image', required: false }
+                  - { label: 'Bio', name: 'bio', widget: 'text', required: false }
+
   # --- LEADERS (folder collection — one file per person) ---
   - name: 'leader'
     label: 'Leaders & Instructors'
