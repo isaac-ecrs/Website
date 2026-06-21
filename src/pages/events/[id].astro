@@ -748,53 +748,50 @@ const jsonLd = {
     })
   }
 
-  {
-    linkedLeaderIds.length > 0 && (
-      <script>
-        {`
-        document.querySelectorAll('[popovertarget]').forEach((btn) => {
-          const pop = document.getElementById(btn.getAttribute('popovertarget'));
-          if (!pop) return;
-          let hideTimer;
-
-          function position() {
-            const rect = btn.getBoundingClientRect();
-            const card = pop.querySelector('div');
-            const cardW = card.offsetWidth;
-            const cardH = card.offsetHeight;
-            const margin = 8;
-            let left = rect.left;
-            let top = rect.bottom + margin;
-            if (left + cardW > window.innerWidth - margin) left = window.innerWidth - cardW - margin;
-            if (left < margin) left = margin;
-            if (top + cardH > window.innerHeight - margin) top = rect.top - cardH - margin;
-            pop.style.position = 'fixed';
-            pop.style.left = left + 'px';
-            pop.style.top = top + 'px';
-          }
-
-          function show() {
-            clearTimeout(hideTimer);
-            if (!pop.matches(':popover-open')) { pop.showPopover(); position(); }
-          }
-
-          function hide() {
-            hideTimer = setTimeout(() => { if (pop.matches(':popover-open')) pop.hidePopover(); }, 120);
-          }
-
-          btn.addEventListener('mouseenter', show);
-          btn.addEventListener('mouseleave', hide);
-          btn.addEventListener('click', () => { pop.matches(':popover-open') ? pop.hidePopover() : show(); });
-          pop.addEventListener('mouseenter', () => clearTimeout(hideTimer));
-          pop.addEventListener('mouseleave', hide);
-        });
-      `}
-      </script>
-    )
   }
 </Layout>
 
 <script>
+  document.querySelectorAll<HTMLButtonElement>('[popovertarget]').forEach((btn) => {
+    const pop = document.getElementById(btn.getAttribute('popovertarget')!);
+    if (!pop) return;
+    let hideTimer: ReturnType<typeof setTimeout>;
+
+    function position() {
+      const rect = btn.getBoundingClientRect();
+      const card = pop!.querySelector('div')!;
+      const margin = 8;
+      let left = rect.left;
+      let top = rect.bottom + margin;
+      if (left + card.offsetWidth > window.innerWidth - margin) left = window.innerWidth - card.offsetWidth - margin;
+      if (left < margin) left = margin;
+      if (top + card.offsetHeight > window.innerHeight - margin) top = rect.top - card.offsetHeight - margin;
+      pop!.style.position = 'fixed';
+      pop!.style.left = left + 'px';
+      pop!.style.top = top + 'px';
+    }
+
+    function show() {
+      clearTimeout(hideTimer);
+      if (!pop!.matches(':popover-open')) {
+        pop!.showPopover();
+        position();
+      }
+    }
+
+    function hide() {
+      hideTimer = setTimeout(() => {
+        if (pop!.matches(':popover-open')) pop!.hidePopover();
+      }, 120);
+    }
+
+    btn.addEventListener('mouseenter', show);
+    btn.addEventListener('mouseleave', hide);
+    btn.addEventListener('click', () => (pop!.matches(':popover-open') ? pop!.hidePopover() : show()));
+    pop.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+    pop.addEventListener('mouseleave', hide);
+  });
+
   const shareBtn = document.getElementById('share-btn') as HTMLButtonElement | null;
   if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
