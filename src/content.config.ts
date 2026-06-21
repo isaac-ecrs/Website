@@ -2,6 +2,11 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
+const emptyToUndefined = (v: unknown) => (v === '' || v == null ? undefined : v);
+const optionalDate = z.preprocess(emptyToUndefined, z.date().optional());
+const optionalString = z.preprocess(emptyToUndefined, z.string().optional());
+const optionalEmail = z.preprocess(emptyToUndefined, z.string().email().optional());
+
 const metadataDefinition = () =>
   z
     .object({
@@ -114,7 +119,7 @@ const accommodationSchema = z.object({
 });
 
 const tuitionTierSchema = z.object({
-  label: z.string(),
+  label: z.string().optional(),
   amount: z.string(),
   note: z.string().optional(),
 });
@@ -134,7 +139,7 @@ const eventCollection = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.date(),
-    endDate: z.date().optional(),
+    endDate: optionalDate,
     startTime: z.string().optional(),
     endTime: z.string().optional(),
     location: z.string(),
@@ -146,16 +151,17 @@ const eventCollection = defineCollection({
     image: z.string().optional(),
 
     // Registration
-    registrationUrl: z.string().optional(),
-    registrationEmail: z.string().email().optional(),
-    registrationDeadline: z.date().optional(),
-    earlyBirdDeadline: z.date().optional(),
+    registrationUrl: optionalString,
+    registrationEmail: optionalEmail,
+    registrationDeadline: optionalDate,
+    earlyBirdDeadline: optionalDate,
     earlyBirdFeeNote: z.string().optional(),
     cognitoFormId: z.string().optional(),
     cognitoFormHeight: z.string().optional(),
 
     // Pricing — three tiers of complexity (mutually exclusive, pick one)
     fee: z.string().optional(), // simple: "Free / $25 adults"
+    tuitionLabel: optionalString, // override heading; defaults to "Tuition"
     tuition: z.array(tuitionTierSchema).optional(), // mid/full: tuition rows
     accommodations: z.array(accommodationSchema).optional(), // full: residential room & board
     pricing: z.array(pricingTierSchema).optional(), // legacy — kept for back-compat
@@ -166,7 +172,7 @@ const eventCollection = defineCollection({
 
     // Policies (shown when toggled on; text editable per event)
     showCancellationPolicy: z.boolean().optional(),
-    cancellationCutoffDate: z.date().optional(),
+    cancellationCutoffDate: optionalDate,
     cancellationPolicy: z.string().optional(),
     showHealthPolicy: z.boolean().optional(),
     healthPolicy: z.string().optional(),
@@ -191,7 +197,6 @@ const eventCollection = defineCollection({
     // Additional info
     newcomerNote: z.string().optional(),
     financialAidNote: z.string().optional(),
-    leaderProfilesUrl: z.string().optional(),
 
     tags: z.array(z.string()).optional(),
   }),

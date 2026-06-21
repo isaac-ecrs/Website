@@ -347,15 +347,15 @@ const jsonLd = {
       <!-- Action buttons -->
       <div class="flex flex-wrap gap-4 mb-10">
         {
-          !isPast && data.registrationUrl && (
-            <a href={data.registrationUrl} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+          !isPast && data.cognitoFormId && (
+            <a href="#registration" class="btn btn-primary">
               Register Now
             </a>
           )
         }
         {
-          !isPast && data.cognitoFormId && !data.registrationUrl && (
-            <a href="#registration" class="btn btn-primary">
+          !isPast && !data.cognitoFormId && data.registrationUrl && (
+            <a href={data.registrationUrl} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
               Register Now
             </a>
           )
@@ -409,39 +409,52 @@ const jsonLd = {
       {
         data.tuition && data.tuition.length > 0 && (
           <div id={!data.fee ? 'costs' : undefined} class={!data.fee ? 'mt-10 scroll-mt-24' : 'mt-10'}>
-            <h2 class="font-heading text-2xl font-bold text-heading mb-4">Tuition</h2>
-            <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
-              <table class="w-full text-sm">
-                <thead>
-                  <tr class="bg-gray-50 dark:bg-gray-800">
-                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
-                      Category
-                    </th>
-                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
-                      Amount
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.tuition.map((tier, i) => (
-                    <tr
-                      class:list={[
-                        'border-t border-gray-200 dark:border-gray-700',
-                        { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 },
-                      ]}
-                    >
-                      <td class="px-4 py-3">{tier.label}</td>
-                      <td class="px-4 py-3 font-semibold">{tier.amount}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            {data.tuition
-              .filter((t) => t.note)
-              .map((t) => (
-                <p class="text-sm text-muted mt-2 italic">{t.note}</p>
-              ))}
+            <h2 class="font-heading text-2xl font-bold text-heading mb-4">{data.tuitionLabel ?? 'Tuition'}</h2>
+            {data.tuition.length === 1 ? (
+              <div class="inline-flex flex-col gap-0.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-6 py-4">
+                <span class="text-2xl font-bold text-heading">{data.tuition[0].amount}</span>
+                {data.tuition[0].label && <span class="text-sm text-muted">{data.tuition[0].label}</span>}
+                {data.tuition[0].note && <span class="text-xs text-muted italic mt-1">{data.tuition[0].note}</span>}
+              </div>
+            ) : (() => {
+                const hasLabels = data.tuition!.some((t) => t.label);
+                return (
+                  <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                    <table class="w-full text-sm">
+                      <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-800">
+                          {hasLabels && (
+                            <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                              Category
+                            </th>
+                          )}
+                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                            Amount
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {data.tuition!.map((tier, i) => (
+                          <tr
+                            class:list={[
+                              'border-t border-gray-200 dark:border-gray-700',
+                              { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 },
+                            ]}
+                          >
+                            {hasLabels && (
+                              <td class="px-4 py-3">
+                                {tier.label && <span>{tier.label}</span>}
+                                {tier.note && <span class="block text-xs text-muted italic mt-0.5">{tier.note}</span>}
+                              </td>
+                            )}
+                            <td class="px-4 py-3 font-semibold">{tier.amount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              })()}
           </div>
         )
       }
@@ -623,7 +636,7 @@ const jsonLd = {
 
       <!-- ── Newcomer / financial aid / leader profiles ── -->
       {
-        (data.newcomerNote || data.financialAidNote || data.leaderProfilesUrl) && (
+        (data.newcomerNote || data.financialAidNote) && (
           <div class="mt-10 flex flex-col gap-3">
             {data.newcomerNote && (
               <p class="text-sm text-default bg-primary/5 rounded-xl px-4 py-3">
@@ -635,18 +648,11 @@ const jsonLd = {
                 <span class="font-semibold">Financial assistance:</span> {data.financialAidNote}
               </p>
             )}
-            {data.leaderProfilesUrl && (
-              <p class="text-sm text-default">
-                <a
-                  href={data.leaderProfilesUrl}
-                  class="text-primary hover:underline font-semibold"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View leader &amp; staff profiles →
-                </a>
-              </p>
-            )}
+            <p class="text-sm text-default">
+              <a href="/our-people" class="text-primary hover:underline font-semibold">
+                View leader &amp; staff profiles →
+              </a>
+            </p>
           </div>
         )
       }

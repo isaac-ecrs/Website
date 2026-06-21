@@ -150,13 +150,14 @@ collections:
           required: false,
           hint: 'For day events with a single price, e.g. "Free / $25 adults". Leave blank for multi-tier pricing below.',
         }
+      - { label: 'Tuition Section Heading', name: 'tuitionLabel', widget: 'string', required: false, hint: 'Defaults to "Tuition" if left blank' }
       - label: 'Tuition'
         name: 'tuition'
         widget: 'list'
         required: false
         hint: 'Tuition rows (separate from room & board)'
         fields:
-          - { label: 'Label', name: 'label', widget: 'string', hint: 'e.g. Ages 18+' }
+          - { label: 'Label', name: 'label', widget: 'string', required: false, hint: 'e.g. Ages 18+' }
           - { label: 'Amount', name: 'amount', widget: 'string', hint: 'e.g. $110' }
           - { label: 'Note', name: 'note', widget: 'string', required: false }
       - label: 'Accommodations'
@@ -285,7 +286,6 @@ collections:
           hint: 'e.g. Newcomers receive free tuition',
         }
       - { label: 'Financial Aid Note', name: 'financialAidNote', widget: 'string', required: false }
-      - { label: 'Leader Profiles URL', name: 'leaderProfilesUrl', widget: 'string', required: false }
 
       - label: 'Tags'
         name: 'tags'
