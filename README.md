@@ -7,16 +7,16 @@ Website for the Eastern Cooperative Recreation School (ECRS). Built with [Astro]
 
 ## Commands
 
-| Command           | Action                                        |
-| :---------------- | :-------------------------------------------- |
-| `npm install`     | Install dependencies                          |
-| `npm run dev`     | Start dev server at `localhost:4321`          |
-| `npm run build`   | Build production site to `./dist/`            |
-| `npm run preview` | Preview production build locally              |
-| `npm run check`   | Type-check and lint                           |
-| `npm run fix`     | Auto-fix lint and formatting issues           |
-| `npm test`        | Run unit tests (Vitest)                       |
-| `npm run test:e2e`| Run E2E tests (Playwright)                   |
+| Command            | Action                               |
+| :----------------- | :----------------------------------- |
+| `npm install`      | Install dependencies                 |
+| `npm run dev`      | Start dev server at `localhost:4321` |
+| `npm run build`    | Build production site to `./dist/`   |
+| `npm run preview`  | Preview production build locally     |
+| `npm run check`    | Type-check and lint                  |
+| `npm run fix`      | Auto-fix lint and formatting issues  |
+| `npm test`         | Run unit tests (Vitest)              |
+| `npm run test:e2e` | Run E2E tests (Playwright)           |
 
 ## CMS
 
