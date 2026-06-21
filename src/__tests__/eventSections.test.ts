@@ -90,9 +90,9 @@ describe('hasCosts', () => {
   });
 
   it('is true with legacy pricing rows that have an ageRange', () => {
-    expect(
-      computeEventSections(base({ pricing: [{ ageRange: '18+', fullWeekend: '$110' }] }), NOW).hasCosts
-    ).toBe(true);
+    expect(computeEventSections(base({ pricing: [{ ageRange: '18+', fullWeekend: '$110' }] }), NOW).hasCosts).toBe(
+      true
+    );
   });
 
   it('is false when pricing rows have no ageRange (note-only rows)', () => {
@@ -170,17 +170,12 @@ describe('showJumpNav', () => {
   });
 
   it('is true when 2 sections are present', () => {
-    expect(
-      computeEventSections(base({ fee: '$25', classes: [{ name: 'Dance' }] }), NOW).showJumpNav
-    ).toBe(true);
+    expect(computeEventSections(base({ fee: '$25', classes: [{ name: 'Dance' }] }), NOW).showJumpNav).toBe(true);
   });
 
   it('is true when all 3 sections are present', () => {
     expect(
-      computeEventSections(
-        base({ fee: '$25', classes: [{ name: 'Dance' }], cognitoFormId: '42' }),
-        NOW
-      ).showJumpNav
+      computeEventSections(base({ fee: '$25', classes: [{ name: 'Dance' }], cognitoFormId: '42' }), NOW).showJumpNav
     ).toBe(true);
   });
 });
@@ -197,15 +192,13 @@ describe('tuitionDisplay', () => {
   });
 
   it('is "card" for a single tuition tier', () => {
-    expect(
-      computeEventSections(base({ tuition: [{ amount: '$110' }] }), NOW).tuitionDisplay
-    ).toBe('card');
+    expect(computeEventSections(base({ tuition: [{ amount: '$110' }] }), NOW).tuitionDisplay).toBe('card');
   });
 
   it('is "table" for two or more tuition tiers', () => {
-    expect(
-      computeEventSections(base({ tuition: [{ amount: '$110' }, { amount: 'Free' }] }), NOW).tuitionDisplay
-    ).toBe('table');
+    expect(computeEventSections(base({ tuition: [{ amount: '$110' }, { amount: 'Free' }] }), NOW).tuitionDisplay).toBe(
+      'table'
+    );
   });
 });
 
@@ -219,18 +212,12 @@ describe('tuitionHasLabels', () => {
   });
 
   it('is true when at least one table tier has a label', () => {
-    const r = computeEventSections(
-      base({ tuition: [{ label: 'Adults', amount: '$110' }, { amount: 'Free' }] }),
-      NOW
-    );
+    const r = computeEventSections(base({ tuition: [{ label: 'Adults', amount: '$110' }, { amount: 'Free' }] }), NOW);
     expect(r.tuitionHasLabels).toBe(true);
   });
 
   it('is false when no table tiers have labels', () => {
-    const r = computeEventSections(
-      base({ tuition: [{ amount: '$110' }, { amount: 'Free' }] }),
-      NOW
-    );
+    const r = computeEventSections(base({ tuition: [{ amount: '$110' }, { amount: 'Free' }] }), NOW);
     expect(r.tuitionHasLabels).toBe(false);
   });
 });
@@ -267,10 +254,7 @@ describe('pricingRows', () => {
   it('filters out pricing entries that have no ageRange', () => {
     const r = computeEventSections(
       base({
-        pricing: [
-          { ageRange: '18+', fullWeekend: '$110' },
-          { note: 'All prices include meals' },
-        ],
+        pricing: [{ ageRange: '18+', fullWeekend: '$110' }, { note: 'All prices include meals' }],
       }),
       NOW
     );

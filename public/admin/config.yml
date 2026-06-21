@@ -150,7 +150,13 @@ collections:
           required: false,
           hint: 'For day events with a single price, e.g. "Free / $25 adults". Leave blank for multi-tier pricing below.',
         }
-      - { label: 'Tuition Section Heading', name: 'tuitionLabel', widget: 'string', required: false, hint: 'Defaults to "Tuition" if left blank' }
+      - {
+          label: 'Tuition Section Heading',
+          name: 'tuitionLabel',
+          widget: 'string',
+          required: false,
+          hint: 'Defaults to "Tuition" if left blank',
+        }
       - label: 'Tuition'
         name: 'tuition'
         widget: 'list'

@@ -49,8 +49,7 @@ function formatDateRange(data: Props['event']['data']) {
   return `${start} – ${data.endDate.toLocaleDateString('en-US', opts)}`;
 }
 
-const { isPast, pricingRows, jumpLinks, showJumpNav, cancellationCutoff } =
-  computeEventSections(data, new Date());
+const { isPast, pricingRows, jumpLinks, showJumpNav, cancellationCutoff } = computeEventSections(data, new Date());
 
 type PricingTier = NonNullable<typeof data.pricing>[0];
 const pricingNotes: PricingTier[] = (data.pricing ?? []).filter((p) => p.note);
@@ -399,7 +398,8 @@ const jsonLd = {
                 {data.tuition[0].label && <span class="text-sm text-muted">{data.tuition[0].label}</span>}
                 {data.tuition[0].note && <span class="text-xs text-muted italic mt-1">{data.tuition[0].note}</span>}
               </div>
-            ) : (() => {
+            ) : (
+              (() => {
                 const hasLabels = data.tuition!.some((t) => t.label);
                 return (
                   <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
@@ -437,7 +437,8 @@ const jsonLd = {
                     </table>
                   </div>
                 );
-              })()}
+              })()
+            )}
           </div>
         )
       }
@@ -766,8 +767,6 @@ const jsonLd = {
         </div>
       );
     })
-  }
-
   }
 </Layout>
 

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page, type TestInfo } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 /**
@@ -24,7 +24,7 @@ type AxeViolation = {
   nodes: { html: string; failureSummary?: string }[];
 };
 
-function reportViolations(violations: AxeViolation[], testInfo: Parameters<Parameters<typeof test>[2]>[1]) {
+function reportViolations(violations: AxeViolation[], testInfo: TestInfo) {
   if (violations.length === 0) return;
   const lines = violations.map(
     (v) =>
@@ -34,11 +34,7 @@ function reportViolations(violations: AxeViolation[], testInfo: Parameters<Param
   testInfo.annotations.push({ type: 'accessibility', description: lines.join('\n\n') });
 }
 
-async function audit(
-  page: Parameters<Parameters<typeof test>[2]>[0],
-  testInfo: Parameters<Parameters<typeof test>[2]>[1],
-  url: string
-) {
+async function audit(page: Page, testInfo: TestInfo, url: string) {
   // Disable motion so animation-driven opacity (motion-safe:opacity-0) doesn't
   // cause axe to capture elements mid-fade and report false contrast failures.
   await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -67,7 +63,11 @@ async function audit(
     critical,
     `${critical.length} critical/serious axe violations on ${url}:\n` +
       critical
-        .map((v) => `  [${v.impact}] ${v.id}: ${v.description}\n` + v.nodes.map((n) => `    → ${n.html.slice(0, 200)}`).join('\n'))
+        .map(
+          (v) =>
+            `  [${v.impact}] ${v.id}: ${v.description}\n` +
+            v.nodes.map((n) => `    → ${n.html.slice(0, 200)}`).join('\n')
+        )
         .join('\n')
   ).toHaveLength(0);
 }

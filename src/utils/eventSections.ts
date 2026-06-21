@@ -39,7 +39,7 @@ export function computeEventSections(data: EventSectionsInput, now = new Date())
   const pricingRows = (data.pricing ?? []).filter((p) => p.ageRange);
 
   const hasCosts = !!(data.fee || data.tuition?.length || data.accommodations?.length || pricingRows.length);
-  const hasClasses = !!(data.classes?.length);
+  const hasClasses = !!data.classes?.length;
   const hasEmbeddedForm = !isPast && !!data.cognitoFormId;
 
   const jumpLinks: JumpLink[] = [
@@ -62,7 +62,7 @@ export function computeEventSections(data: EventSectionsInput, now = new Date())
   else if (tuitionCount > 1) tuitionDisplay = 'table';
 
   // Only meaningful when display === 'table'
-  const tuitionHasLabels = tuitionDisplay === 'table' && !!(data.tuition?.some((t) => t.label));
+  const tuitionHasLabels = tuitionDisplay === 'table' && !!data.tuition?.some((t) => t.label);
 
   const cancellationCutoff: Date | null =
     data.cancellationCutoffDate ??
