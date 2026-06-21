@@ -171,8 +171,8 @@ const eventCollection = defineCollection({
           period: z.string().optional(),
           days: z.string().optional(),
           limitedCapacity: z.boolean().optional(),
-          advanceRegistration: z.boolean().optional(),
           description: z.string().optional(),
+          callout: z.string().optional(),
         })
       )
       .optional(),

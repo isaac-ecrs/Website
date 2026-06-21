@@ -73,7 +73,7 @@ classes:
     period: Morning – First Period
     days: All 3 days
     limitedCapacity: true
-    advanceRegistration: true
+    callout: 'Sign up at registration — fills fast.'
   - name: Sketch 101
     instructor: Allie Cliffe
     ageRange: '12+'

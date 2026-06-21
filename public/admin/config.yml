@@ -206,14 +206,14 @@ collections:
               hint: 'Multi-day events only, e.g. "Days 1–2" or "All 4 days".',
             }
           - { label: 'Limited Capacity', name: 'limitedCapacity', widget: 'boolean', required: false, default: false }
-          - {
-              label: 'Advance Registration Required',
-              name: 'advanceRegistration',
-              widget: 'boolean',
-              required: false,
-              default: false,
-            }
           - { label: 'Description', name: 'description', widget: 'text', required: false }
+          - {
+              label: 'Callout',
+              name: 'callout',
+              widget: 'string',
+              required: false,
+              hint: 'Emphasized note shown below the description, e.g. "Open to children 8+ with a participating adult."',
+            }
 
       # ── Additional Info ───────────────────────────────────────────
       - {

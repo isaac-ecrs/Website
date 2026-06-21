@@ -5,8 +5,8 @@ export type EventClass = {
   period?: string;
   days?: string;
   limitedCapacity?: boolean;
-  advanceRegistration?: boolean;
   description?: string;
+  callout?: string;
 };
 
 /**

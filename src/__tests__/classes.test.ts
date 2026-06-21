@@ -61,8 +61,8 @@ describe('groupClassesByPeriod', () => {
       period: 'Morning',
       days: 'Days 1–2',
       limitedCapacity: true,
-      advanceRegistration: false,
       description: 'Gentle movement class.',
+      callout: 'Register early — fills fast.',
     };
     const groups = groupClassesByPeriod([cls]);
     expect(groups.get('Morning')![0]).toEqual(cls);
