@@ -52,9 +52,9 @@ mealsIncluded: 'Dinner July 15 through breakfast July 17'
 mealsNote: 'Vegetarian and gluten-free options available; please specify at registration.'
 showCancellationPolicy: true
 cancellationCutoffDate: 2026-06-24
-cancellationPolicy: "Before the cutoff date shown below, Room & Board fees are refundable; tuition is non-refundable. After that date, no refunds can be issued, as we have already made financial commitments to the facility. If you must cancel due to a communicable illness, please contact us immediately — you will receive a 50% refund of your total registration."
+cancellationPolicy: 'Before the cutoff date shown below, Room & Board fees are refundable; tuition is non-refundable. After that date, no refunds can be issued, as we have already made financial commitments to the facility. If you must cancel due to a communicable illness, please contact us immediately — you will receive a 50% refund of your total registration.'
 showHealthPolicy: true
-healthPolicy: "In the week before the event, please mask when in crowded indoor spaces and monitor your health. If you are sick, we ask that you not come."
+healthPolicy: 'In the week before the event, please mask when in crowded indoor spaces and monitor your health. If you are sick, we ask that you not come.'
 newcomerNote: 'Newcomers receive free tuition on their first ECRS event.'
 financialAidNote: 'Scholarship assistance is available. Contact registration@ecrs.org.'
 leaderProfilesUrl: 'https://www.ecrs.org/our-leadership/test-leader-profiles/'

@@ -145,10 +145,10 @@ const eventCollection = defineCollection({
     cognitoFormHeight: z.string().optional(),
 
     // Pricing — three tiers of complexity (mutually exclusive, pick one)
-    fee: z.string().optional(),                              // simple: "Free / $25 adults"
-    tuition: z.array(tuitionTierSchema).optional(),          // mid/full: tuition rows
+    fee: z.string().optional(), // simple: "Free / $25 adults"
+    tuition: z.array(tuitionTierSchema).optional(), // mid/full: tuition rows
     accommodations: z.array(accommodationSchema).optional(), // full: residential room & board
-    pricing: z.array(pricingTierSchema).optional(),          // legacy — kept for back-compat
+    pricing: z.array(pricingTierSchema).optional(), // legacy — kept for back-compat
 
     // Logistics
     mealsIncluded: z.string().optional(),

@@ -246,8 +246,21 @@ const jsonLd = {
           data.earlyBirdDeadline && !isPast && (
             <div class="flex gap-3 items-start">
               <span class="text-secondary mt-0.5 flex-shrink-0" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <>
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </>
                 </svg>
               </span>
               <div>
@@ -290,8 +303,20 @@ const jsonLd = {
           data.accessibilityNote && (
             <div class="flex gap-3 items-start">
               <span class="text-primary mt-0.5 flex-shrink-0" aria-hidden="true">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <>
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 8v4m0 4h.01" />
+                  </>
                 </svg>
               </span>
               <div>
@@ -357,13 +382,22 @@ const jsonLd = {
               <table class="w-full text-sm">
                 <thead>
                   <tr class="bg-gray-50 dark:bg-gray-800">
-                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Category</th>
-                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Amount</th>
+                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                      Category
+                    </th>
+                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                      Amount
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {data.tuition.map((tier, i) => (
-                    <tr class:list={['border-t border-gray-200 dark:border-gray-700', { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 }]}>
+                    <tr
+                      class:list={[
+                        'border-t border-gray-200 dark:border-gray-700',
+                        { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 },
+                      ]}
+                    >
                       <td class="px-4 py-3">{tier.label}</td>
                       <td class="px-4 py-3 font-semibold">{tier.amount}</td>
                     </tr>
@@ -371,9 +405,11 @@ const jsonLd = {
                 </tbody>
               </table>
             </div>
-            {data.tuition.filter((t) => t.note).map((t) => (
-              <p class="text-sm text-muted mt-2 italic">{t.note}</p>
-            ))}
+            {data.tuition
+              .filter((t) => t.note)
+              .map((t) => (
+                <p class="text-sm text-muted mt-2 italic">{t.note}</p>
+              ))}
           </div>
         )
       }
@@ -392,13 +428,22 @@ const jsonLd = {
                     <table class="w-full text-sm">
                       <thead>
                         <tr class="bg-gray-50 dark:bg-gray-800">
-                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Occupancy</th>
-                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Per Person</th>
+                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                            Occupancy
+                          </th>
+                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                            Per Person
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {accom.tiers.map((tier, i) => (
-                          <tr class:list={['border-t border-gray-200 dark:border-gray-700', { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 }]}>
+                          <tr
+                            class:list={[
+                              'border-t border-gray-200 dark:border-gray-700',
+                              { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 },
+                            ]}
+                          >
                             <td class="px-4 py-3">{tier.label}</td>
                             <td class="px-4 py-3 font-semibold">{tier.amount}</td>
                           </tr>
@@ -422,13 +467,22 @@ const jsonLd = {
               <table class="w-full text-sm">
                 <thead>
                   <tr class="bg-gray-50 dark:bg-gray-800">
-                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Age Range</th>
-                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Full Weekend</th>
+                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                      Age Range
+                    </th>
+                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
+                      Full Weekend
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {pricingRows.map((tier, i) => (
-                    <tr class:list={['border-t border-gray-200 dark:border-gray-700', { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 }]}>
+                    <tr
+                      class:list={[
+                        'border-t border-gray-200 dark:border-gray-700',
+                        { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 },
+                      ]}
+                    >
                       <td class="px-4 py-3">{tier.ageRange}</td>
                       <td class="px-4 py-3 font-semibold">{tier.fullWeekend ?? '—'}</td>
                     </tr>
@@ -470,7 +524,12 @@ const jsonLd = {
             )}
             {data.leaderProfilesUrl && (
               <p class="text-sm text-default">
-                <a href={data.leaderProfilesUrl} class="text-primary hover:underline font-semibold" target="_blank" rel="noopener noreferrer">
+                <a
+                  href={data.leaderProfilesUrl}
+                  class="text-primary hover:underline font-semibold"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   View leader &amp; staff profiles →
                 </a>
               </p>
