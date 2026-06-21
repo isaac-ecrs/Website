@@ -5,7 +5,7 @@ import HeroText from '~/components/widgets/HeroText.astro';
 import EventCard from '~/components/widgets/EventCard.astro';
 import eventsListSettings from '~/data/settings/events-list.json';
 
-const allEvents = await getCollection('event');
+const allEvents = await getCollection('event', ({ data }) => !data.draft);
 const now = new Date();
 
 const upcoming = allEvents

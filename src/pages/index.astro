@@ -29,7 +29,7 @@ const heroVideos = readdirSync(videoDir)
 const landingEntry = await getEntry('landingSettings', 'landing');
 const landing = landingEntry?.data;
 
-const allEvents = await getCollection('event');
+const allEvents = await getCollection('event', ({ data }) => !data.draft);
 const now = new Date();
 const upcomingAll = allEvents
   .filter((e) => (e.data.endDate ?? e.data.date) >= now)

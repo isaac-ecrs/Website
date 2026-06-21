@@ -199,6 +199,9 @@ const eventCollection = defineCollection({
     financialAidNote: z.string().optional(),
 
     tags: z.array(z.string()).optional(),
+
+    // Internal — draft events build pages but are excluded from listings/sitemap
+    draft: z.boolean().optional(),
   }),
 });
 
