@@ -102,6 +102,23 @@ const pricingTierSchema = z.object({
   note: z.string().optional(),
 });
 
+const accommodationTierSchema = z.object({
+  label: z.string(),
+  amount: z.string(),
+});
+
+const accommodationSchema = z.object({
+  name: z.string(),
+  description: z.string().optional(),
+  tiers: z.array(accommodationTierSchema),
+});
+
+const tuitionTierSchema = z.object({
+  label: z.string(),
+  amount: z.string(),
+  note: z.string().optional(),
+});
+
 const eventCollection = defineCollection({
   loader: glob({ pattern: ['*.md', '*.mdx'], base: 'src/data/events' }),
   schema: z.object({
@@ -112,15 +129,43 @@ const eventCollection = defineCollection({
     endTime: z.string().optional(),
     location: z.string(),
     address: z.string().optional(),
+    phone: z.string().optional(),
+    accessibilityNote: z.string().optional(),
     excerpt: z.string().optional(),
     description: z.string().optional(),
     image: z.string().optional(),
+
+    // Registration
     registrationUrl: z.string().optional(),
     registrationEmail: z.string().email().optional(),
     registrationDeadline: z.date().optional(),
+    earlyBirdDeadline: z.date().optional(),
+    earlyBirdFeeNote: z.string().optional(),
     cognitoFormId: z.string().optional(),
     cognitoFormHeight: z.string().optional(),
-    pricing: z.array(pricingTierSchema).optional(),
+
+    // Pricing — three tiers of complexity (mutually exclusive, pick one)
+    fee: z.string().optional(),                              // simple: "Free / $25 adults"
+    tuition: z.array(tuitionTierSchema).optional(),          // mid/full: tuition rows
+    accommodations: z.array(accommodationSchema).optional(), // full: residential room & board
+    pricing: z.array(pricingTierSchema).optional(),          // legacy — kept for back-compat
+
+    // Logistics
+    mealsIncluded: z.string().optional(),
+    mealsNote: z.string().optional(),
+
+    // Policies (shown when toggled on; text editable per event)
+    showCancellationPolicy: z.boolean().optional(),
+    cancellationCutoffDate: z.date().optional(),
+    cancellationPolicy: z.string().optional(),
+    showHealthPolicy: z.boolean().optional(),
+    healthPolicy: z.string().optional(),
+
+    // Additional info
+    newcomerNote: z.string().optional(),
+    financialAidNote: z.string().optional(),
+    leaderProfilesUrl: z.string().optional(),
+
     tags: z.array(z.string()).optional(),
   }),
 });

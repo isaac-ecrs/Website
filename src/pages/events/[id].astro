@@ -48,6 +48,17 @@ const isPast = (data.endDate ?? data.date) < now;
 type PricingTier = NonNullable<typeof data.pricing>[0];
 const pricingRows: PricingTier[] = (data.pricing ?? []).filter((p) => p.ageRange);
 const pricingNotes: PricingTier[] = (data.pricing ?? []).filter((p) => p.note);
+
+// Cancellation cutoff: explicit field, else 3 weeks before start date
+const cancellationCutoff: Date | null =
+  data.cancellationCutoffDate ??
+  (data.showCancellationPolicy
+    ? new Date(Date.UTC(data.date.getUTCFullYear(), data.date.getUTCMonth(), data.date.getUTCDate() - 21))
+    : null);
+
+function formatCutoff(d: Date) {
+  return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+}
 const eventTags: string[] = data.tags ?? [];
 
 const metadata = {
@@ -125,7 +136,7 @@ const jsonLd = {
           <li aria-hidden="true" class="text-muted/50">›</li>
           <li><a href="/events" class="hover:text-primary transition-colors">Events</a></li>
           <li aria-hidden="true" class="text-muted/50">›</li>
-          <li aria-current="page" class="text-default truncate max-w-[200px]">{data.title}</li>
+          <li aria-current="page" class="text-default min-w-0 truncate">{data.title}</li>
         </ol>
       </nav>
 
@@ -227,8 +238,26 @@ const jsonLd = {
             <dt class="text-xs font-bold uppercase tracking-widest text-muted">Location</dt>
             <dd class="text-default font-semibold group-hover:underline">{data.location}</dd>
             {data.address && <dd class="text-sm text-muted">{data.address}</dd>}
+            {data.phone && <dd class="text-sm text-muted">{data.phone}</dd>}
           </div>
         </a>
+
+        {
+          data.earlyBirdDeadline && !isPast && (
+            <div class="flex gap-3 items-start">
+              <span class="text-secondary mt-0.5 flex-shrink-0" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+                </svg>
+              </span>
+              <div>
+                <dt class="text-xs font-bold uppercase tracking-widest text-muted">Early-bird deadline</dt>
+                <dd class="text-secondary font-semibold">{formatDate(data.earlyBirdDeadline)}</dd>
+                {data.earlyBirdFeeNote && <dd class="text-sm text-muted">{data.earlyBirdFeeNote}</dd>}
+              </div>
+            </div>
+          )
+        }
 
         {
           data.registrationDeadline && !isPast && (
@@ -253,6 +282,21 @@ const jsonLd = {
               <div>
                 <dt class="text-xs font-bold uppercase tracking-widest text-muted">Register by</dt>
                 <dd class="text-secondary font-semibold">{formatDate(data.registrationDeadline)}</dd>
+              </div>
+            </div>
+          )
+        }
+        {
+          data.accessibilityNote && (
+            <div class="flex gap-3 items-start">
+              <span class="text-primary mt-0.5 flex-shrink-0" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
+                </svg>
+              </span>
+              <div>
+                <dt class="text-xs font-bold uppercase tracking-widest text-muted">Accessibility</dt>
+                <dd class="text-default text-sm">{data.accessibilityNote}</dd>
               </div>
             </div>
           )
@@ -294,31 +338,97 @@ const jsonLd = {
         )
       }
 
-      <!-- Pricing table -->
+      <!-- ── Simple fee ── -->
       {
-        data.pricing && data.pricing.length > 0 && (
+        data.fee && (
+          <div class="mt-10">
+            <h2 class="font-heading text-2xl font-bold text-heading mb-3">Cost</h2>
+            <p class="text-lg text-default">{data.fee}</p>
+          </div>
+        )
+      }
+
+      <!-- ── Tuition ── -->
+      {
+        data.tuition && data.tuition.length > 0 && (
+          <div class="mt-10">
+            <h2 class="font-heading text-2xl font-bold text-heading mb-4">Tuition</h2>
+            <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-gray-50 dark:bg-gray-800">
+                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Category</th>
+                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.tuition.map((tier, i) => (
+                    <tr class:list={['border-t border-gray-200 dark:border-gray-700', { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 }]}>
+                      <td class="px-4 py-3">{tier.label}</td>
+                      <td class="px-4 py-3 font-semibold">{tier.amount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {data.tuition.filter((t) => t.note).map((t) => (
+              <p class="text-sm text-muted mt-2 italic">{t.note}</p>
+            ))}
+          </div>
+        )
+      }
+
+      <!-- ── Accommodations (room & board) ── -->
+      {
+        data.accommodations && data.accommodations.length > 0 && (
+          <div class="mt-10">
+            <h2 class="font-heading text-2xl font-bold text-heading mb-6">Room &amp; Board</h2>
+            <div class="space-y-8">
+              {data.accommodations.map((accom) => (
+                <div>
+                  <h3 class="font-heading text-lg font-bold text-heading mb-1">{accom.name}</h3>
+                  {accom.description && <p class="text-sm text-muted mb-3">{accom.description}</p>}
+                  <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
+                    <table class="w-full text-sm">
+                      <thead>
+                        <tr class="bg-gray-50 dark:bg-gray-800">
+                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Occupancy</th>
+                          <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Per Person</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {accom.tiers.map((tier, i) => (
+                          <tr class:list={['border-t border-gray-200 dark:border-gray-700', { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 }]}>
+                            <td class="px-4 py-3">{tier.label}</td>
+                            <td class="px-4 py-3 font-semibold">{tier.amount}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )
+      }
+
+      <!-- ── Legacy pricing table (back-compat) ── -->
+      {
+        pricingRows.length > 0 && (
           <div class="mt-10">
             <h2 class="font-heading text-2xl font-bold text-heading mb-4">Pricing</h2>
             <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700">
               <table class="w-full text-sm">
                 <thead>
                   <tr class="bg-gray-50 dark:bg-gray-800">
-                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
-                      Age Range
-                    </th>
-                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">
-                      Full Weekend
-                    </th>
+                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Age Range</th>
+                    <th scope="col" class="text-left px-4 py-3 font-semibold text-heading">Full Weekend</th>
                   </tr>
                 </thead>
                 <tbody>
                   {pricingRows.map((tier, i) => (
-                    <tr
-                      class:list={[
-                        'border-t border-gray-200 dark:border-gray-700',
-                        { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 },
-                      ]}
-                    >
+                    <tr class:list={['border-t border-gray-200 dark:border-gray-700', { 'bg-gray-50 dark:bg-gray-900': i % 2 === 0 }]}>
                       <td class="px-4 py-3">{tier.ageRange}</td>
                       <td class="px-4 py-3 font-semibold">{tier.fullWeekend ?? '—'}</td>
                     </tr>
@@ -329,6 +439,70 @@ const jsonLd = {
             {pricingNotes.map((p) => (
               <p class="text-sm text-muted mt-3 italic">{p.note}</p>
             ))}
+          </div>
+        )
+      }
+
+      <!-- ── Meals ── -->
+      {
+        (data.mealsIncluded || data.mealsNote) && (
+          <div class="mt-10">
+            <h2 class="font-heading text-2xl font-bold text-heading mb-3">Meals</h2>
+            {data.mealsIncluded && <p class="text-default font-semibold">{data.mealsIncluded}</p>}
+            {data.mealsNote && <p class="text-sm text-muted mt-1">{data.mealsNote}</p>}
+          </div>
+        )
+      }
+
+      <!-- ── Newcomer / financial aid / leader profiles ── -->
+      {
+        (data.newcomerNote || data.financialAidNote || data.leaderProfilesUrl) && (
+          <div class="mt-10 flex flex-col gap-3">
+            {data.newcomerNote && (
+              <p class="text-sm text-default bg-primary/5 rounded-xl px-4 py-3">
+                <span class="font-semibold">New to ECRS?</span> {data.newcomerNote}
+              </p>
+            )}
+            {data.financialAidNote && (
+              <p class="text-sm text-default bg-accent/5 rounded-xl px-4 py-3">
+                <span class="font-semibold">Financial assistance:</span> {data.financialAidNote}
+              </p>
+            )}
+            {data.leaderProfilesUrl && (
+              <p class="text-sm text-default">
+                <a href={data.leaderProfilesUrl} class="text-primary hover:underline font-semibold" target="_blank" rel="noopener noreferrer">
+                  View leader &amp; staff profiles →
+                </a>
+              </p>
+            )}
+          </div>
+        )
+      }
+
+      <!-- ── Policies ── -->
+      {
+        (data.showCancellationPolicy || data.showHealthPolicy) && (
+          <div class="mt-10 space-y-6">
+            <h2 class="font-heading text-2xl font-bold text-heading">Policies</h2>
+
+            {data.showCancellationPolicy && data.cancellationPolicy && (
+              <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+                <h3 class="font-heading text-base font-bold text-heading mb-1">Cancellation</h3>
+                {cancellationCutoff && (
+                  <p class="text-sm font-semibold text-secondary mb-2">
+                    Refund cutoff: {formatCutoff(cancellationCutoff)}
+                  </p>
+                )}
+                <p class="text-sm text-muted whitespace-pre-line">{data.cancellationPolicy}</p>
+              </div>
+            )}
+
+            {data.showHealthPolicy && data.healthPolicy && (
+              <div class="rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+                <h3 class="font-heading text-base font-bold text-heading mb-2">Health</h3>
+                <p class="text-sm text-muted whitespace-pre-line">{data.healthPolicy}</p>
+              </div>
+            )}
           </div>
         )
       }

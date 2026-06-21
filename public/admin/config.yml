@@ -47,7 +47,12 @@ collections:
       - { label: 'Short Description (excerpt)', name: 'excerpt', widget: 'string', required: false }
       - { label: 'Full Description', name: 'description', widget: 'markdown', required: false }
       - { label: 'Event Image', name: 'image', widget: 'image', required: false }
+      - { label: 'Phone', name: 'phone', widget: 'string', required: false, hint: 'Venue phone number' }
+      - { label: 'Accessibility Note', name: 'accessibilityNote', widget: 'string', required: false, hint: 'e.g. Venue is wheelchair accessible' }
+
+      # ── Registration ──────────────────────────────────────────────
       - { label: 'Registration URL', name: 'registrationUrl', widget: 'string', required: false }
+      - { label: 'Registration Email', name: 'registrationEmail', widget: 'string', required: false }
       - {
           label: 'Registration Deadline',
           name: 'registrationDeadline',
@@ -56,14 +61,76 @@ collections:
           time_format: false,
           required: false,
         }
-      - label: 'Pricing Tiers'
-        name: 'pricing'
+      - {
+          label: 'Early-Bird Deadline',
+          name: 'earlyBirdDeadline',
+          widget: 'datetime',
+          date_format: 'YYYY-MM-DD',
+          time_format: false,
+          required: false,
+        }
+      - { label: 'Early-Bird Fee Note', name: 'earlyBirdFeeNote', widget: 'string', required: false, hint: 'e.g. $50/adult, $25/child late fee applies after this date' }
+      - { label: 'Cognito Form ID', name: 'cognitoFormId', widget: 'string', required: false, hint: 'Number at the end of the Cognito Forms embed URL (e.g. 17)' }
+      - { label: 'Cognito Form Height (px)', name: 'cognitoFormHeight', widget: 'string', required: false, default: '800', hint: 'Adjust if the form is taller or shorter than the default' }
+
+      # ── Pricing ───────────────────────────────────────────────────
+      - { label: 'Simple Fee', name: 'fee', widget: 'string', required: false, hint: 'For day events with a single price, e.g. "Free / $25 adults". Leave blank for multi-tier pricing below.' }
+      - label: 'Tuition'
+        name: 'tuition'
         widget: 'list'
         required: false
+        hint: 'Tuition rows (separate from room & board)'
         fields:
-          - { label: 'Age Range', name: 'ageRange', widget: 'string', hint: 'e.g. 16+' }
-          - { label: 'Full Weekend Price', name: 'fullWeekend', widget: 'string', required: false }
+          - { label: 'Label', name: 'label', widget: 'string', hint: 'e.g. Ages 18+' }
+          - { label: 'Amount', name: 'amount', widget: 'string', hint: 'e.g. $110' }
           - { label: 'Note', name: 'note', widget: 'string', required: false }
+      - label: 'Accommodations'
+        name: 'accommodations'
+        widget: 'list'
+        required: false
+        hint: 'Room & board options for residential events'
+        fields:
+          - { label: 'Name', name: 'name', widget: 'string', hint: 'e.g. Main Lodge' }
+          - { label: 'Description', name: 'description', widget: 'string', required: false, hint: 'e.g. Dorm-style, shared bath, bring linens' }
+          - label: 'Pricing Tiers'
+            name: 'tiers'
+            widget: 'list'
+            fields:
+              - { label: 'Label', name: 'label', widget: 'string', hint: 'e.g. Adults, 2/room' }
+              - { label: 'Amount', name: 'amount', widget: 'string', hint: 'e.g. $430' }
+
+      # ── Logistics ─────────────────────────────────────────────────
+      - { label: 'Meals Included', name: 'mealsIncluded', widget: 'string', required: false, hint: 'e.g. Dinner Dec 27 through breakfast Jan 1' }
+      - { label: 'Meals Note', name: 'mealsNote', widget: 'string', required: false, hint: 'Dietary accommodations, beverage info, etc.' }
+
+      # ── Policies ──────────────────────────────────────────────────
+      - { label: 'Show Cancellation Policy', name: 'showCancellationPolicy', widget: 'boolean', required: false, default: false }
+      - {
+          label: 'Cancellation Cutoff Date',
+          name: 'cancellationCutoffDate',
+          widget: 'datetime',
+          date_format: 'YYYY-MM-DD',
+          time_format: false,
+          required: false,
+          hint: 'Refunds available before this date. Typically the 1st of the event start month.',
+        }
+      - label: 'Cancellation Policy'
+        name: 'cancellationPolicy'
+        widget: 'text'
+        required: false
+        default: "Before the cutoff date shown below, Room & Board fees are refundable; tuition is non-refundable. After that date, no refunds can be issued, as we have already made financial commitments to the facility. If you must cancel due to a communicable illness, please contact us immediately — you will receive a 50% refund of your total registration."
+      - { label: 'Show Health Policy', name: 'showHealthPolicy', widget: 'boolean', required: false, default: false }
+      - label: 'Health Policy'
+        name: 'healthPolicy'
+        widget: 'text'
+        required: false
+        default: "In the week before the event, please mask when in crowded indoor spaces and monitor your health. If you are sick, we ask that you not come."
+
+      # ── Additional Info ───────────────────────────────────────────
+      - { label: 'Newcomer Note', name: 'newcomerNote', widget: 'string', required: false, hint: 'e.g. Newcomers receive free tuition' }
+      - { label: 'Financial Aid Note', name: 'financialAidNote', widget: 'string', required: false }
+      - { label: 'Leader Profiles URL', name: 'leaderProfilesUrl', widget: 'string', required: false }
+
       - label: 'Tags'
         name: 'tags'
         widget: 'list'
