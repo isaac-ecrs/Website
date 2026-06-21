@@ -227,7 +227,9 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
                         <div class="flex gap-4 items-start">
                           {ssrCountdown.map((u) => (
                             <div class="text-center">
-                              <span class="font-mono text-2xl sm:text-3xl font-bold text-white leading-none">{u.value}</span>
+                              <span class="font-mono text-2xl sm:text-3xl font-bold text-white leading-none">
+                                {u.value}
+                              </span>
                               <span class="block text-xs text-white/70 uppercase tracking-widest mt-1">{u.label}</span>
                             </div>
                           ))}
