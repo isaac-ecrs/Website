@@ -63,25 +63,27 @@ showHealthPolicy: true
 healthPolicy: In the week before the event, please mask when in crowded indoor spaces and monitor your health. If you are sick, we ask that you not come.
 classes:
   - name: International Folk Dance
-    instructor: Patricia Williams
-    ageRange: '12+'
+    leaderId: patricia-williams
+    ageRange: 12+
     period: Morning – First Period
     days: All 3 days
+    description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta tristique quam, in euismod massa sollicitudin sit amet. Vivamus id finibus metus, vitae finibus urna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae nisi sem. Curabitur placerat massa quis velit fermentum gravida. Suspendisse consectetur arcu ac euismod cursus. Ut ut libero vel velit imperdiet sagittis a ut nulla.
   - name: Leadership Playground
-    instructor: Kim Neubauer
-    ageRange: '15+'
+    leader: Kim Neubauer
+    ageRange: 15+
     period: Morning – First Period
     days: All 3 days
     limitedCapacity: true
-    callout: 'Sign up at registration — fills fast.'
+    description: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam porta tristique quam, in euismod massa sollicitudin sit amet. Vivamus id finibus metus, vitae finibus urna. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae nisi sem. Curabitur placerat massa quis velit fermentum gravida. Suspendisse consectetur arcu ac euismod cursus. Ut ut libero vel velit imperdiet sagittis a ut nulla.
+    callout: Sign up at registration — fills fast.
   - name: Sketch 101
-    instructor: Allie Cliffe
-    ageRange: '12+'
+    leader: Allie Cliffe
+    ageRange: 12+
     period: Morning – Second Period
     days: Days 1–2
     description: Learn to draw from observation. No experience needed.
   - name: Yoga
-    instructor: Jane Doe
+    leader: Jane Doe
     ageRange: All ages
     period: Morning – Second Period
     days: Day 3
@@ -89,7 +91,7 @@ classes:
     period: Afternoon
     days: All 3 days
   - name: Contra Dance
-    instructor: Band TBA
+    leader: Band TBA
     period: Evening
     days: All 3 days
 newcomerNote: Newcomers receive free tuition on their first ECRS event.

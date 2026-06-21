@@ -22,6 +22,25 @@ public_folder: '/images'
 # Collections
 # -------------------------------------------------------
 collections:
+  # --- LEADERS (folder collection — one file per person) ---
+  - name: 'leader'
+    label: 'Leaders & Instructors'
+    label_singular: 'Leader'
+    folder: 'src/data/leaders'
+    create: true
+    slug: '{{fields.name | slugify}}'
+    fields:
+      - { label: 'Name', name: 'name', widget: 'string' }
+      - {
+          label: 'Title / Specialty',
+          name: 'title',
+          widget: 'string',
+          required: false,
+          hint: 'e.g. Folk Dance Instructor, Musician',
+        }
+      - { label: 'Photo', name: 'photo', widget: 'image', required: false }
+      - { label: 'Bio', name: 'bio', widget: 'text', required: false }
+
   # --- EVENTS (folder collection — one file per event) ---
   - name: 'event'
     label: 'Events'
@@ -189,7 +208,24 @@ collections:
         hint: 'Classes are grouped by period in the order they are entered.'
         fields:
           - { label: 'Class Name', name: 'name', widget: 'string' }
-          - { label: 'Instructor', name: 'instructor', widget: 'string', required: false }
+          - {
+              label: 'Leader (from Leader Records)',
+              name: 'leaderId',
+              widget: 'relation',
+              collection: 'leader',
+              search_fields: ['name'],
+              value_field: '{{slug}}',
+              display_fields: ['name'],
+              required: false,
+              hint: 'Link to a leader record for photo and bio. If no record exists yet, use the free-text field below.',
+            }
+          - {
+              label: 'Leader (free text)',
+              name: 'leader',
+              widget: 'string',
+              required: false,
+              hint: 'Used when no leader record is linked.',
+            }
           - { label: 'Age Range', name: 'ageRange', widget: 'string', required: false, hint: 'e.g. 12+, All ages' }
           - {
               label: 'Period',

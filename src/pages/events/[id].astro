@@ -21,6 +21,9 @@ interface Props {
 const { event } = Astro.props;
 const { data } = event;
 
+const allLeaders = await getCollection('leader');
+const leaderMap = new Map(allLeaders.map((l) => [l.id, l.data]));
+
 const UTC: Intl.DateTimeFormatOptions = { timeZone: 'UTC' };
 
 function formatDate(d: Date) {
@@ -533,7 +536,26 @@ const jsonLd = {
                           <li class="rounded-xl border border-gray-200 dark:border-gray-700 px-4 py-3">
                             <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                               <span class="font-semibold text-heading">{cls.name}</span>
-                              {cls.instructor && <span class="text-sm text-muted">— {cls.instructor}</span>}
+                              {(() => {
+                                const record = cls.leaderId ? leaderMap.get(cls.leaderId) : null;
+                                const name = record?.name ?? cls.leader;
+                                const photo = record?.photo;
+                                return name ? (
+                                  <span class="inline-flex items-center gap-1.5 text-sm text-muted">
+                                    —
+                                    {photo && (
+                                      <img
+                                        src={photo}
+                                        alt={name}
+                                        width="20"
+                                        height="20"
+                                        class="w-5 h-5 rounded-full object-cover inline"
+                                      />
+                                    )}
+                                    {name}
+                                  </span>
+                                ) : null;
+                              })()}
                               {cls.ageRange && (
                                 <span class="text-xs font-semibold text-muted border border-muted/30 rounded-full px-2 py-0.5">
                                   {cls.ageRange}

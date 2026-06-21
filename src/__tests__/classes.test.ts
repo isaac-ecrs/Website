@@ -56,7 +56,7 @@ describe('groupClassesByPeriod', () => {
   it('passes through all class fields unchanged', () => {
     const cls = {
       name: 'Yoga',
-      instructor: 'Jane',
+      leader: 'Jane',
       ageRange: '12+',
       period: 'Morning',
       days: 'Days 1–2',

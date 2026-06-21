@@ -119,6 +119,16 @@ const tuitionTierSchema = z.object({
   note: z.string().optional(),
 });
 
+const leaderCollection = defineCollection({
+  loader: glob({ pattern: '*.md', base: 'src/data/leaders' }),
+  schema: z.object({
+    name: z.string(),
+    title: z.string().optional(),
+    photo: z.string().optional(),
+    bio: z.string().optional(),
+  }),
+});
+
 const eventCollection = defineCollection({
   loader: glob({ pattern: ['*.md', '*.mdx'], base: 'src/data/events' }),
   schema: z.object({
@@ -166,7 +176,8 @@ const eventCollection = defineCollection({
       .array(
         z.object({
           name: z.string(),
-          instructor: z.string().optional(),
+          leaderId: z.string().optional(),
+          leader: z.string().optional(),
           ageRange: z.string().optional(),
           period: z.string().optional(),
           days: z.string().optional(),
@@ -189,5 +200,6 @@ const eventCollection = defineCollection({
 export const collections = {
   post: postCollection,
   event: eventCollection,
+  leader: leaderCollection,
   landingSettings: landingSettingsCollection,
 };

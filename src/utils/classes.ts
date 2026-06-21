@@ -1,6 +1,7 @@
 export type EventClass = {
   name: string;
-  instructor?: string;
+  leaderId?: string;
+  leader?: string;
   ageRange?: string;
   period?: string;
   days?: string;
