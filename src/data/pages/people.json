@@ -1,4 +1,53 @@
 {
   "title": "Our People",
-  "categories": []
+  "categories": [
+    {
+      "label": "Board of Directors",
+      "people": [
+        {
+          "name": "Isaac Lebwohl-Steiner",
+          "title": "Board Chair",
+          "photo": "/images/Isaac-2025_cropped.jpg",
+          "bio": "Lifelong ECRS attendee. Leads improv, cooperative games, and theater activities. Emphasizes community connection and play."
+        },
+        {
+          "name": "Catherine Woods",
+          "title": "Board Member",
+          "photo": "/images/Catherine-W_headshot-300x294.jpeg",
+          "bio": "Daughter of long-time members, leads crafts and dance classes. Works as an urban farmer in Chicago with her partner Alice."
+        },
+        {
+          "name": "Fern Lox",
+          "title": "Board Member",
+          "photo": "/images/Phlox-headshot.jpg",
+          "bio": "ECRS member for 25+ years. Retired from K-12 education career as teacher, staff developer, and administrator."
+        },
+        {
+          "name": "Judi Powers",
+          "title": "Board Member",
+          "photo": "/images/Judi-Marko-2025-scaled.jpg",
+          "bio": "10+ year member. Blue belt in NIA and certified Moving to Heal instructor. Licensed Adirondack guide living in the mountains."
+        }
+      ]
+    },
+    {
+      "label": "Programming & Staffing Committee",
+      "people": [
+        { "name": "Hugh Abrams-Helde", "title": null, "photo": null, "bio": null },
+        { "name": "Gabby Frisone", "title": null, "photo": null, "bio": null },
+        { "name": "Jack Marquess", "title": null, "photo": null, "bio": null },
+        { "name": "Bonnie Ostrofsky", "title": null, "photo": null, "bio": null },
+        { "name": "Sharon Underberg", "title": null, "photo": null, "bio": null },
+        { "name": "Karen Wisnia", "title": null, "photo": null, "bio": null }
+      ]
+    },
+    {
+      "label": "Leadership, Recruitment & Development Committee",
+      "people": [
+        { "name": "Helen Fox", "title": null, "photo": null, "bio": null },
+        { "name": "David Geron-Neubauer", "title": null, "photo": null, "bio": null },
+        { "name": "Camden Elliott-Williams", "title": null, "photo": null, "bio": null }
+      ]
+    }
+  ]
 }
