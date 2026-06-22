@@ -553,6 +553,19 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
     document.addEventListener('astro:before-preparation', () => clearInterval(intervalId), { once: true });
   }
 
+  // Apply the header offset immediately when this module executes (deferred scripts run
+  // after HTML is parsed but before first paint). This prevents a CLS from the late
+  // astro:page-load event, which waits for window.load (including the hero video).
+  {
+    const header = document.querySelector<HTMLElement>('#header');
+    const section = document.querySelector<HTMLElement>('[data-video-hero]');
+    if (header && section) {
+      const content = section.querySelector<HTMLElement>('[data-video-hero-content]');
+      const badge = section.querySelector<HTMLElement>('[data-hero-badge]');
+      applyHeaderOffset(header, section, content, badge);
+    }
+  }
+
   document.addEventListener('astro:page-load', () => {
     initVideoHero();
     initCountdown();
