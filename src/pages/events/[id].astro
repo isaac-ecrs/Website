@@ -59,6 +59,10 @@ function formatCutoff(d: Date) {
 }
 const eventTags: string[] = data.tags ?? [];
 
+// Keep draft events and e2e test fixtures out of the search index, mirroring
+// the sitemap (astro.config.ts) and listing exclusions.
+const noIndex = data.draft === true || event.id.startsWith('e2e-');
+
 const metadata = {
   title: data.title,
   description: data.excerpt ?? `${data.title} — ${formatDateRange(data)} at ${data.location}`,
@@ -100,7 +104,7 @@ const jsonLd = {
 };
 ---
 
-<Layout metadata={metadata}>
+<Layout metadata={metadata} noIndex={noIndex}>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </Fragment>
