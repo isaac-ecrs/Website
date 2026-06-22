@@ -9,7 +9,7 @@ const token = ANALYTICS?.vendors?.cloudflareWebAnalytics?.token
 ---
 
 {
-  token && (
+  token && import.meta.env.PROD && (
     <script
       is:inline
       defer
