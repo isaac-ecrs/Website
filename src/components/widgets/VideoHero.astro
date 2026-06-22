@@ -366,6 +366,26 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
   </button>
 </section>
 
+<!--
+  Inline script: runs synchronously after CSS loads but before first paint.
+  Applying the header offset here (rather than in the deferred module below)
+  prevents the CLS that occurs when a deferred script fires after first paint.
+-->
+<script is:inline>
+  (function () {
+    const header = document.getElementById('header');
+    const section = document.querySelector('[data-video-hero]');
+    if (!header || !section) return;
+    const h = header.getBoundingClientRect().height;
+    if (!h) return;
+    section.style.marginTop = '-' + h + 'px';
+    const content = section.querySelector('[data-video-hero-content]');
+    if (content) content.style.paddingTop = h + 32 + 'px';
+    const badge = section.querySelector('[data-hero-badge]');
+    if (badge) badge.style.top = h + 12 + 'px';
+  })();
+</script>
+
 <style is:global>
   /* Solid header background over the video — matches the scrolled state */
   body:has([data-video-hero]) #header:not(.scroll) > div:first-child {
@@ -551,19 +571,6 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
     tick();
     const intervalId = setInterval(tick, 1000);
     document.addEventListener('astro:before-preparation', () => clearInterval(intervalId), { once: true });
-  }
-
-  // Apply the header offset immediately when this module executes (deferred scripts run
-  // after HTML is parsed but before first paint). This prevents a CLS from the late
-  // astro:page-load event, which waits for window.load (including the hero video).
-  {
-    const header = document.querySelector<HTMLElement>('#header');
-    const section = document.querySelector<HTMLElement>('[data-video-hero]');
-    if (header && section) {
-      const content = section.querySelector<HTMLElement>('[data-video-hero-content]');
-      const badge = section.querySelector<HTMLElement>('[data-hero-badge]');
-      applyHeaderOffset(header, section, content, badge);
-    }
   }
 
   document.addEventListener('astro:page-load', () => {
