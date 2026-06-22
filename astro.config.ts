@@ -11,6 +11,7 @@ import mdx from '@astrojs/mdx';
 import partytown from '@astrojs/partytown';
 import icon from 'astro-icon';
 import compress from 'astro-compress';
+import pagefind from 'astro-pagefind';
 import type { AstroIntegration } from 'astro';
 
 import astrowind from './vendor/integration';
@@ -66,6 +67,10 @@ export default defineConfig({
       SVG: false,
       Logger: 1,
     }),
+
+    // Indexes the built HTML in dist/ after the build (and serves the index in
+    // dev/preview). Placed after compress so it indexes the final output.
+    pagefind(),
 
     astrowind({
       config: './src/config.yaml',
