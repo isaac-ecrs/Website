@@ -6,6 +6,7 @@ import Layout from '~/layouts/PageLayout.astro';
 import VideoHero from '~/components/widgets/VideoHero.astro';
 import Features from '~/components/widgets/Features.astro';
 import Content from '~/components/widgets/Content.astro';
+import Image from '~/components/common/Image.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import siteData from '~/data/settings/site.json';
@@ -155,7 +156,7 @@ const metadata = {
     id="who-we-are"
     title={landing?.aboutTitle ?? 'Who We Are'}
     image={{
-      src: landing?.aboutImage ?? '/images/ecrs-line-dance.jpg',
+      src: landing?.aboutImage ?? '~/assets/images/ecrs-line-dance.jpg',
       alt: 'ECRS community members line dancing together',
     }}
     callToAction={{
@@ -240,11 +241,14 @@ const metadata = {
                 aria-label={`${event.data.title} — ${formatEventDate(event.data)}`}
               >
                 {event.data.image && (
-                  <img
+                  <Image
                     src={event.data.image}
                     alt={event.data.title}
-                    width="600"
-                    height="300"
+                    width={600}
+                    height={300}
+                    widths={[400, 600, 800]}
+                    sizes="(max-width: 768px) 100vw, 400px"
+                    layout="cover"
                     class="w-full h-44 object-cover"
                     loading="lazy"
                   />

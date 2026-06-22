@@ -25,5 +25,12 @@ public/videos/*.mov
 pnpm-lock.yaml
 
 .astro
+
 # Local video source masters (not deployed)
 video-sources/
+
+# Netlify CLI state
+.netlify/
+
+# Performance audit reports (keep only SUMMARY.md if desired)
+perf-audit/

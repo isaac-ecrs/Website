@@ -22,15 +22,34 @@ const loadLocalImages = () => {
  * Accepts:
  *   - `null` / `undefined`         → returned as-is
  *   - `ImageMetadata`              → returned as-is (already imported)
- *   - `"http(s)://…"` or `"/path"` → returned as-is (external or public/)
+ *   - `"http(s)://…"`              → returned as-is (remote CDN URL)
+ *   - `"/images/…"`                → remapped to `~/assets/images/…` and resolved via the
+ *                                    glob. Falls back to the raw string if the file was not
+ *                                    copied to src/assets/ (e.g. during `npm run dev`).
+ *                                    The prebuild script (scripts/copy-public-images.mjs)
+ *                                    ensures the file is present for production builds.
  *   - `"~/assets/images/…"`        → resolved to its ImageMetadata via the glob
  */
 export const findImage = async (
   imagePath?: string | ImageMetadata | null
 ): Promise<string | ImageMetadata | undefined | null> => {
   if (typeof imagePath !== 'string') return imagePath;
-  if (imagePath.startsWith('http://') || imagePath.startsWith('https://') || imagePath.startsWith('/'))
-    return imagePath;
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) return imagePath;
+
+  // CMS-written paths (/images/…) → try to resolve via src/assets/ glob so Sharp can
+  // optimize them. Falls back to the raw string if not present (dev server, SVGs, logos).
+  if (imagePath.startsWith('/images/')) {
+    const remapped = imagePath.replace('/images/', '~/assets/images/');
+    const images = loadLocalImages();
+    const key = remapped.replace('~/', '/src/');
+    const loader = images[key];
+    if (typeof loader === 'function') {
+      return ((await loader()) as { default: ImageMetadata }).default;
+    }
+    return imagePath; // not in src/assets/ yet — serve raw (dev mode / logos / SVGs)
+  }
+
+  if (imagePath.startsWith('/')) return imagePath;
   if (!imagePath.startsWith('~/assets/images')) return imagePath;
 
   const images = loadLocalImages();

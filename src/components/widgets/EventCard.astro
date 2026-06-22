@@ -1,4 +1,6 @@
 ---
+import Image from '~/components/common/Image.astro';
+
 interface Props {
   title: string;
   date: string;
@@ -38,11 +40,14 @@ const isPast = variant === 'past';
 >
   {
     image ? (
-      <img
+      <Image
         src={image}
         alt={title}
-        width="600"
+        width={600}
         height={isPast ? 220 : 300}
+        widths={[400, 600, 800]}
+        sizes="(max-width: 768px) 100vw, 400px"
+        layout="cover"
         class:list={['w-full object-cover', isPast ? 'h-36 grayscale' : 'h-44']}
         loading="lazy"
       />

@@ -1,4 +1,6 @@
 ---
+import Image from '~/components/common/Image.astro';
+
 interface Props {
   name: string;
   title?: string;
@@ -12,11 +14,14 @@ const { name, title, photo, bio } = Astro.props;
 <div class="flex gap-4">
   {
     photo ? (
-      <img
+      <Image
         src={photo}
         alt={name}
-        width="72"
-        height="72"
+        width={72}
+        height={72}
+        widths={[72, 144]}
+        sizes="72px"
+        layout="cover"
         class="w-18 h-18 rounded-full object-cover flex-shrink-0 mt-1"
       />
     ) : (
