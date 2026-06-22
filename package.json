@@ -23,7 +23,8 @@
     "lighthouse": "astro build && astro preview --port 4321 & sleep 3 && lhci autorun && kill %1",
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix .",
-    "fix:prettier": "prettier -w ."
+    "fix:prettier": "prettier -w .",
+    "prebuild": "node scripts/copy-public-images.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",

@@ -9,7 +9,7 @@ address: '338 Plush Mill Road, Wallingford, PA 19086'
 excerpt: 'A weekend of ECRS fun and community at a new location! Daytime classes to spark your curiosity.'
 description: |
   A weekend of ECRS fun and community at a new location! Daytime classes to spark your curiosity.
-image: '/images/sites/pendle-hill.jpg'
+image: '~/assets/images/sites/pendle-hill.jpg'
 registrationEmail: 'registration@ecrs.org'
 tags:
   - weekend

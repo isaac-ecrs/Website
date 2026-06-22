@@ -9,7 +9,7 @@ address: '609 Geigel Hill Road, Ottsville, PA 18942'
 excerpt: "Our Camping Weekend is ECRS's most affordable residential event – where newcomers and longtime members gather under the stars for a weekend of pure play."
 description: |
   Our Camping Weekend is ECRS's most affordable residential event – where newcomers and longtime members gather under the stars for a weekend of pure play.
-image: '/images/sites/camp-onas.jpg'
+image: '~/assets/images/sites/camp-onas.jpg'
 registrationUrl: 'https://www.ecrs.org/event/onas2026/'
 registrationEmail: 'registration@ecrs.org'
 registrationDeadline: 2026-06-05

@@ -1,4 +1,6 @@
 ---
+import Image from '~/components/common/Image.astro';
+
 interface VideoSource {
   webm: string;
   mp4: string;
@@ -92,7 +94,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           preload={i === 0 ? 'metadata' : 'none'}
           poster={v.poster}
         >
-          <source src={v.webm} type="video/webm" />
+          <source src={v.webm} type='video/webm; codecs="av01.0.08M.08"' />
           <source src={v.mp4} type="video/mp4" />
         </video>
       ))
@@ -173,11 +175,14 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
                 class="group flex flex-col bg-black/50 hover:bg-black/65 backdrop-blur-md rounded-3xl border border-white/25 hover:border-white/50 overflow-hidden transition-all w-full"
               >
                 {eventCard.image && (
-                  <img
+                  <Image
                     src={eventCard.image}
                     alt={eventCard.title}
-                    width="600"
-                    height="280"
+                    width={600}
+                    height={280}
+                    widths={[400, 600, 800]}
+                    sizes="(max-width: 1024px) 100vw, 600px"
+                    layout="cover"
                     class="w-full h-44 object-cover"
                     loading="eager"
                   />
@@ -255,11 +260,14 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
             ) : (
               <div class="flex flex-col bg-black/50 backdrop-blur-md rounded-3xl border border-white/25 overflow-hidden w-full">
                 {eventCard.image && (
-                  <img
+                  <Image
                     src={eventCard.image}
                     alt={eventCard.title}
-                    width="600"
-                    height="280"
+                    width={600}
+                    height={280}
+                    widths={[400, 600, 800]}
+                    sizes="(max-width: 1024px) 100vw, 600px"
+                    layout="cover"
                     class="w-full h-44 object-cover"
                     loading="eager"
                   />
@@ -459,7 +467,18 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           });
         });
 
-        if (videos[1]) videos[1].preload = 'auto';
+        // Defer preloading subsequent videos until 5 seconds remain in the current
+        // clip — enough runway even on slow mobile, without an upfront 2 MB download.
+        const preloadNext = (afterIndex: number) => {
+          const next = videos[(afterIndex + 1) % videos.length];
+          if (next && next.preload !== 'auto') next.preload = 'auto';
+        };
+        videos[0]?.addEventListener('timeupdate', function onProgress(this: HTMLVideoElement) {
+          if (this.duration && this.duration - this.currentTime <= 5) {
+            preloadNext(0);
+            this.removeEventListener('timeupdate', onProgress);
+          }
+        });
         videos[0]?.play().catch(() => {});
         isPlaying = true;
       } else if (videos.length === 1) {
