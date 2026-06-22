@@ -1,14 +1,15 @@
 {
-  "name": "ECRS",
-  "tagline": "Come to Play. Play to Learn.",
-  "mission": "An intergenerational organization providing creative and engaging activities that are fun, develop leadership and build community.",
-  "copyright": "Copyright © ECRS · All rights reserved.",
   "eventCtaTitle": "Ready to join us?",
   "eventCtaSubtitle": "All ECRS events are open to all ages and experience levels. Newcomers always receive 50% off their first event.",
   "socialLinks": [
-    { "platform": "Facebook", "url": "https://www.facebook.com/yay4ecrs", "icon": "tabler:brand-facebook" },
-    { "platform": "Instagram", "url": "https://www.instagram.com/_ecrs", "icon": "tabler:brand-instagram" },
-    { "platform": "Twitter", "url": "", "icon": "tabler:brand-twitter" },
-    { "platform": "Meetup", "url": "", "icon": "tabler:brand-meetup" }
-  ]
+    {
+      "platform": "Facebook",
+      "url": "https://www.facebook.com/yay4ecrs",
+      "icon": "tabler:brand-facebook"
+    }
+  ],
+  "copyright": "Copyright © ECRS · All rights reserved.",
+  "mission": "An intergenerational organization providing creative and engaging activities that are fun, develop leadership and build community.",
+  "tagline": "Come to Play. Play to Learn.",
+  "name": "ECRS"
 }
