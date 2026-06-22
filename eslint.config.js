@@ -1,4 +1,6 @@
-import astroEslintParser from 'astro-eslint-parser';
+// astro-eslint-parser v2 ships named exports only (no default), so import the
+// namespace and use it as the parser object (it exposes parseForESLint).
+import * as astroEslintParser from 'astro-eslint-parser';
 import eslintPluginAstro from 'eslint-plugin-astro';
 import globals from 'globals';
 import js from '@eslint/js';

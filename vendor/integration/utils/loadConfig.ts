@@ -1,5 +1,6 @@
 import fs from 'node:fs';
-import yaml from 'js-yaml';
+// js-yaml v5 ships named exports only (no default).
+import * as yaml from 'js-yaml';
 
 const loadConfig = async (configPathOrData: string | object) => {
   if (typeof configPathOrData === 'string') {

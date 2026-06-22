@@ -2,7 +2,7 @@ import { defineConfig } from 'vitest/config';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import yaml from 'js-yaml';
+import * as yaml from 'js-yaml'; // v5 ships named exports only (no default)
 import configBuilder from './vendor/integration/utils/configBuilder';
 import type { Config } from './vendor/integration/utils/configBuilder';
 
