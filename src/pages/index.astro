@@ -123,9 +123,9 @@ const metadata = {
           hasRegistration: !!(featuredEvent.data.registrationUrl || featuredEvent.data.cognitoFormId),
         }
       : undefined}
-    eventHref={featuredEvent ? `/events/${featuredEvent.id}` : undefined}
-    primaryCta={featuredEvent ? undefined : { text: 'See Upcoming Events', href: '/events' }}
-    secondaryCta={featuredEvent ? { text: 'All Events', href: '/events' } : { text: 'Who We Are', href: '#who-we-are' }}
+    eventHref={featuredEvent ? `/events/${featuredEvent.id}/` : undefined}
+    primaryCta={featuredEvent ? undefined : { text: 'See Upcoming Events', href: '/events/' }}
+    secondaryCta={featuredEvent ? { text: 'All Events', href: '/events/' } : { text: 'Who We Are', href: '#who-we-are' }}
   />
 
   <!-- ============================================================
@@ -178,7 +178,7 @@ const metadata = {
     callToAction={{
       variant: 'secondary',
       text: 'Learn more about ECRS',
-      href: '/about',
+      href: '/about/',
     }}
   >
     <Fragment slot="content">
@@ -252,7 +252,7 @@ const metadata = {
           {upcomingEvents.map((event: (typeof upcomingEvents)[0]) => (
             <li>
               <a
-                href={`/events/${event.id}`}
+                href={`/events/${event.id}/`}
                 class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 aria-label={`${event.data.title} — ${formatEventDate(event.data)}`}
               >
@@ -287,7 +287,7 @@ const metadata = {
           ))}
         </ul>
         <div class="text-center mt-10">
-          <a href="/events" class="btn btn-secondary">
+          <a href="/events/" class="btn btn-secondary">
             View all events
           </a>
         </div>
@@ -302,8 +302,8 @@ const metadata = {
     title="Ready to join the community?"
     subtitle="All events are open to people of all ages and all levels of experience. Newcomers always receive 50% off their first event."
     actions={[
-      { variant: 'primary', text: 'See Upcoming Events', href: '/events' },
-      { text: 'Contact Us', href: '/contact' },
+      { variant: 'primary', text: 'See Upcoming Events', href: '/events/' },
+      { text: 'Contact Us', href: '/contact/' },
     ]}
   >
     <Fragment slot="bg">
