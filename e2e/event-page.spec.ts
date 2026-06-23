@@ -20,7 +20,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('past event', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/events/2026-fun-day-in-philly');
+    await page.goto('/events/2026-fun-day-in-philly/');
   });
 
   test('shows "Past Event" badge', async ({ page }) => {
@@ -36,7 +36,7 @@ test.describe('past event', () => {
   });
 
   test('has a working ICS download link', async ({ page }) => {
-    const response = await page.request.get('/events/2026-fun-day-in-philly.ics');
+    const response = await page.request.get('/events/2026-fun-day-in-philly.ics/');
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('text/calendar');
   });
@@ -52,7 +52,7 @@ test.describe('past event', () => {
 
 test.describe('future event without registration options', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/events/2026-fall-fun-day');
+    await page.goto('/events/2026-fall-fun-day/');
   });
 
   test('does not show "Past Event" badge', async ({ page }) => {
@@ -74,21 +74,21 @@ test.describe('future event without registration options', () => {
 
 test.describe('events listing page', () => {
   test('loads and shows at least one event card', async ({ page }) => {
-    await page.goto('/events');
+    await page.goto('/events/');
     await expect(page.getByRole('main')).toBeVisible();
     const eventLinks = page.getByRole('link').filter({ hasText: /fun day|weekend|adventure/i });
     await expect(eventLinks.first()).toBeVisible();
   });
 
   test('does not show the e2e fixture event (draft: true)', async ({ page }) => {
-    await page.goto('/events');
+    await page.goto('/events/');
     await expect(page.getByText('E2E Test Fixture')).not.toBeVisible();
   });
 });
 
 test.describe('e2e fixture event (draft)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/events/e2e-popover-fixture');
+    await page.goto('/events/e2e-popover-fixture/');
   });
 
   test('page loads and shows title', async ({ page }) => {
@@ -130,7 +130,7 @@ test.describe('e2e fixture event (draft)', () => {
 
 test.describe('leader popover', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/events/e2e-popover-fixture');
+    await page.goto('/events/e2e-popover-fixture/');
   });
 
   test('leader name is a clickable button in the class listing', async ({ page }) => {
