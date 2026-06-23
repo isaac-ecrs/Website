@@ -36,8 +36,9 @@
         { "name": "Hugh Abrams-Helde", "title": null, "photo": null, "bio": null },
         { "name": "Gabby Frisone", "title": null, "photo": null, "bio": null },
         { "name": "Jack Marquess", "title": null, "photo": null, "bio": null },
-        { "name": "Bonnie Ostrofsky", "title": null, "photo": null, "bio": null },
-        { "name": "Sharon Underberg", "title": null, "photo": null, "bio": null },
+        { "name": "Bonnie Ostrofsky", "title": "Co-Chair", "photo": null, "bio": null },
+        { "name": "Judi Powers", "title": "Board Liaison", "photo": null, "bio": null },
+        { "name": "Sharon Underberg", "title": "Co-Chair", "photo": null, "bio": null },
         { "name": "Karen Wisnia", "title": null, "photo": null, "bio": null }
       ]
     },
@@ -45,8 +46,10 @@
       "label": "Leadership, Recruitment & Development Committee",
       "people": [
         { "name": "Helen Fox", "title": null, "photo": null, "bio": null },
-        { "name": "David Geron-Neubauer", "title": null, "photo": null, "bio": null },
-        { "name": "Camden Elliott-Williams", "title": null, "photo": null, "bio": null }
+        { "name": "Isaac Lebwohl-Steiner", "title": "Board Liaison", "photo": null, "bio": null },
+        { "name": "David Geron-Neubauer", "title": "Board Liaison", "photo": null, "bio": null },
+        { "name": "Camden Elliott-Williams", "title": null, "photo": null, "bio": null },
+        { "name": "Karen Wisnia", "title": "Programming Liaison", "photo": null, "bio": null }
       ]
     }
   ]
