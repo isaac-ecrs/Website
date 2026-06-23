@@ -55,11 +55,17 @@ import '@fontsource/oswald/700.css';
   }
 
   /* ── Cognito Forms overrides ────────────────────────────────────────────
-     Font and color only — no sizing, padding, or layout changes.
+     Font, color, and button shape — no input sizing, padding, or layout changes.
   */
 
-  /* Font */
+  /* Font — set at root so it cascades; belt-and-suspenders on elements that
+     set their own font-family explicitly (Element UI does this). */
+  .cog-cognito {
+    font-family: var(--aw-font-sans) !important;
+    font-size: 1rem !important;
+  }
   .cog-cognito .cog-label,
+  .cog-cognito .el-form-item__label,
   .cog-cognito .el-input__inner,
   .cog-cognito .el-textarea__inner,
   .cog-cognito .el-radio__label,
@@ -70,20 +76,54 @@ import '@fontsource/oswald/700.css';
   .cog-cognito .cog-content,
   .cog-cognito .cog-button--submit {
     font-family: var(--aw-font-sans) !important;
+    font-size: 1rem !important;
   }
 
-  /* Submit button color */
-  .cog-cognito .cog-button--submit,
-  .cog-cognito .cog-button--submit * {
+  /* Submit button — pill shape + ECRS pink, matching site's btn-primary */
+  .cog-cognito .cog-button--submit {
+    border-radius: 9999px !important;
+    font-weight: 600 !important;
+    padding: 0.875rem 1.5rem !important;
     background-color: rgb(189 15 93) !important;
     border-color: rgb(189 15 93) !important;
     color: #fff !important;
   }
-  .cog-cognito .cog-button--submit:hover,
-  .cog-cognito .cog-button--submit:hover * {
+  .cog-cognito .cog-button--submit:hover {
     background-color: rgb(148 84 5) !important;
     border-color: rgb(148 84 5) !important;
-    color: #fff !important;
+  }
+
+  /* Radio buttons — larger touch target, vertically centered label */
+  .cog-cognito .el-radio {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.375rem !important;
+  }
+  .cog-cognito .el-radio__input {
+    flex-shrink: 0 !important;
+  }
+  .cog-cognito .el-radio__inner {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+  .cog-cognito .el-radio__inner::after {
+    width: 0.5rem !important;
+    height: 0.5rem !important;
+    background-color: #fff !important;
+  }
+  .cog-cognito .el-radio__label {
+    line-height: 1.25rem !important;
+    padding-left: 0 !important;
+  }
+  .cog-cognito .el-radio__label .el-input__inner {
+    cursor: text !important;
+  }
+  .cog-cognito .el-radio.is-checked .el-radio__inner {
+    border-color: rgb(189 15 93) !important;
+    background-color: rgb(189 15 93) !important;
+  }
+  .cog-cognito .el-radio__inner::after {
+    display: none !important;
   }
 
   /* Focus ring */
