@@ -11,6 +11,7 @@ import Metadata from '~/components/common/Metadata.astro';
 import SiteVerification from '~/components/common/SiteVerification.astro';
 import Analytics from '~/components/common/Analytics.astro';
 import CloudflareWebAnalytics from '~/components/common/CloudflareWebAnalytics.astro';
+import MetaPixel from '~/components/common/MetaPixel.astro';
 import ConsentBanner from '~/components/common/ConsentBanner.astro';
 import BasicScripts from '~/components/common/BasicScripts.astro';
 
@@ -38,6 +39,7 @@ const { language, textDirection } = I18N;
     <SiteVerification />
     <Analytics />
     <CloudflareWebAnalytics />
+    <MetaPixel />
 
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="preload" href="/fonts/rusty-hooks.woff2" as="font" type="font/woff2" crossorigin />

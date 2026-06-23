@@ -1,0 +1,93 @@
+---
+import { ANALYTICS } from 'astrowind:config';
+
+const id = ANALYTICS?.vendors?.metaPixel?.id ? String(ANALYTICS.vendors.metaPixel.id) : '';
+---
+
+<script define:vars={{ META_PIXEL_ID: id }}>
+  (function () {
+    if (!META_PIXEL_ID) return;
+
+    const STORAGE_KEY = 'ecrs-ga-consent'; // shared with GA4 — one banner, one decision
+    let loaded = false;
+
+    const host = location.hostname;
+    const isLocal = host === 'localhost' || host === '127.0.0.1' || host === '';
+
+    function getStored() {
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch {
+        return null;
+      }
+    }
+
+    function loadPixel() {
+      if (isLocal || loaded) return;
+      loaded = true;
+
+      if (!window.fbq) {
+        const fbq = (...args) => {
+          if (fbq.callMethod) {
+            fbq.callMethod(...args);
+          } else {
+            fbq.queue.push(args);
+          }
+        };
+        window.fbq = fbq;
+        window._fbq = fbq;
+        fbq.push = fbq;
+        fbq.loaded = true;
+        fbq.version = '2.0';
+        fbq.queue = [];
+      }
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      document.head.appendChild(script);
+
+      window.fbq('init', META_PIXEL_ID);
+      window.fbq('track', 'PageView');
+    }
+
+    function consentRequired() {
+      return document.documentElement.getAttribute('data-consent-region') !== 'false';
+    }
+
+    function apply() {
+      const stored = getStored();
+      if (!consentRequired()) {
+        loadPixel();
+        return;
+      }
+      if (stored === 'granted') {
+        loadPixel();
+      }
+      // denied or pending — do nothing (ConsentBanner is handled by Analytics.astro)
+    }
+
+    // Re-run after each View Transition navigation to fire PageView on new pages.
+    document.addEventListener('astro:page-load', () => {
+      if (loaded && window.fbq) {
+        window.fbq('track', 'PageView');
+      } else {
+        apply();
+      }
+    });
+
+    // Listen for consent grant/deny from Analytics.astro's shared handler.
+    document.addEventListener('click', (e) => {
+      const t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('[data-consent-accept]')) {
+        // Small delay so Analytics.astro's grant() runs first and sets localStorage.
+        setTimeout(apply, 50);
+      } else if (t.closest('[data-consent-decline]')) {
+        loaded = false; // nothing to do — pixel never loaded
+      }
+    });
+
+    apply();
+  })();
+</script>

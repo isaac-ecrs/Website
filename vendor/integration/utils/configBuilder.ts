@@ -78,6 +78,9 @@ export interface AnalyticsConfig {
     cloudflareWebAnalytics?: {
       token?: string;
     };
+    metaPixel?: {
+      id?: string;
+    };
   };
 }
 
@@ -192,6 +195,9 @@ const getAnalytics = (config: Config) => {
       },
       cloudflareWebAnalytics: {
         token: undefined,
+      },
+      metaPixel: {
+        id: undefined,
       },
     },
   };

@@ -69,6 +69,10 @@ analytics:
       # Cloudflare Web Analytics (RUM): page views + Core Web Vitals, cookieless.
       # Public beacon token (safe to commit). Site: website-alc.pages.dev → ecrs.org.
       token: 'bc16aa201885457a92df26bf855df104'
+    metaPixel:
+      # Meta Pixel — fill in the Pixel ID from Meta Business Suite > Events Manager.
+      # Leave blank to disable. Consent-gated in CA/EU/UK (same banner as GA4).
+      id: ''
 
 ui:
   theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"

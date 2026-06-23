@@ -3,7 +3,7 @@ title: 'Privacy Policy'
 layout: '~/layouts/MarkdownLayout.astro'
 ---
 
-_Last updated: June 19, 2026_
+_Last updated: June 22, 2026_
 
 The Eastern Cooperative Recreation School ("ECRS," "we," "us," or "our") respects your privacy. This policy explains what information we collect when you visit [ecrs.org](https://ecrs.org) or register for our events and programs, how we use it, and the choices you have.
 
@@ -23,15 +23,16 @@ When you visit the site, we collect limited technical and usage information to u
 
 ## Analytics and Cookies
 
-We use two analytics tools:
+We use three analytics tools:
 
 - **Cloudflare Web Analytics** — privacy-first and **cookieless**. It measures aggregate page views and performance (such as page-load times) without using cookies, without tracking you across sites, and without collecting personal information. It runs on every visit.
 - **Google Analytics 4 (GA4)** — helps us understand how people navigate the site. GA4 uses cookies.
+- **Meta Pixel** — allows us to measure whether visitors who clicked one of our ads on Facebook or Instagram went on to register for an event or make a donation. Meta Pixel uses cookies and shares conversion data with Meta Platforms, Inc. Meta's use of that data is governed by [Meta's Privacy Policy](https://www.facebook.com/privacy/policy/).
 
-We treat Google Analytics differently depending on where you are:
+We treat Google Analytics and the Meta Pixel differently depending on where you are:
 
-- **Outside the United States** (including Canada, the United Kingdom, and the European Economic Area), we show a consent banner and **do not enable Google Analytics unless you choose "Accept."** If you decline, GA4 is not loaded.
-- **Within the United States**, Google Analytics is enabled by default. You can opt out at any time using the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout) or your browser's cookie controls.
+- **Outside the United States** (including Canada, the United Kingdom, and the European Economic Area), we show a consent banner and **do not enable Google Analytics or the Meta Pixel unless you choose "Accept."** If you decline, neither tool is loaded.
+- **Within the United States**, both tools are enabled by default. You can opt out of Google Analytics at any time using the [Google Analytics Opt-out Browser Add-on](https://tools.google.com/dlpage/gaoptout), and you can opt out of Meta's ad tracking through [Meta's Ad Preferences](https://www.facebook.com/ads/preferences/) or your browser's cookie controls.
 
 Your consent choice is stored in your browser's local storage so we don't ask again. You can clear it at any time by clearing your browser's site data for ecrs.org.
 
@@ -49,7 +50,7 @@ We use the information we collect to:
 
 We do not sell your personal information. We share it only with:
 
-- **Service providers** that help us operate — currently Cognito Forms (forms), PayPal and Zeffy (payments and donations), Google (analytics), and Cloudflare (website hosting and analytics) — who may process information on our behalf;
+- **Service providers** that help us operate — currently Cognito Forms (forms), PayPal and Zeffy (payments and donations), Google (analytics and advertising), Meta (advertising measurement), and Cloudflare (website hosting and analytics) — who may process information on our behalf;
 - **Authorities**, if required by law or to protect the rights and safety of our community.
 
 ## Data Retention
