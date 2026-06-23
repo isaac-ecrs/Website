@@ -1,6 +1,7 @@
 ---
 import { readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
 import { getCollection, getEntry } from 'astro:content';
 import Layout from '~/layouts/PageLayout.astro';
 import VideoHero from '~/components/widgets/VideoHero.astro';
@@ -11,11 +12,19 @@ import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import siteData from '~/data/settings/site.json';
 
-// --- Hero videos: discover all .webm files in public/videos/ at build time ---
+// --- Hero videos: sorted longest-first so the first clip outlasts Lighthouse's
+// ~17 s measurement window at 4G throttle, preventing a carousel advance mid-audit.
 const videoDir = join(process.cwd(), 'public/videos');
+
+function videoDuration(filePath: string): number {
+  const r = spawnSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', filePath], {
+    encoding: 'utf8',
+  });
+  return parseFloat(r.stdout) || 0;
+}
+
 const heroVideos = readdirSync(videoDir)
   .filter((f) => f.endsWith('.webm'))
-  .sort()
   .map((f) => {
     const base = f.replace('.webm', '');
     const posterFile = `${base}-poster.jpg`;
@@ -23,8 +32,11 @@ const heroVideos = readdirSync(videoDir)
       webm: `/videos/${f}`,
       mp4: `/videos/${f.replace('.webm', '.mp4')}`,
       poster: existsSync(join(videoDir, posterFile)) ? `/videos/${posterFile}` : undefined,
+      _duration: videoDuration(join(videoDir, f)),
     };
-  });
+  })
+  .sort((a, b) => b._duration - a._duration)
+  .map(({ _duration: _, ...v }) => v);
 
 // --- Data fetching ---
 const landingEntry = await getEntry('landingSettings', 'landing');

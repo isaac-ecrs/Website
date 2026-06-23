@@ -12,9 +12,9 @@
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Fonts rarely change but are not content-hashed — long cache, still revalidatable
+# Fonts rarely change but are not content-hashed — 1 year cache (rename file to bust)
 /fonts/*
-  Cache-Control: public, max-age=2592000
+  Cache-Control: public, max-age=31536000
 
 # CMS-editable media (not content-hashed): cache a day, serve stale up to a week
 # while revalidating, so swapping an image under the same filename refreshes.
