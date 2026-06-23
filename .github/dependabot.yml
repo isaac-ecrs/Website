@@ -6,6 +6,13 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 5
+    ignore:
+      # Major Astro releases often outpace the ecosystem (e.g. astro-embed peer deps).
+      # Review and handle major Astro upgrades manually.
+      - dependency-name: "astro"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@astrojs/*"
+        update-types: ["version-update:semver-major"]
     groups:
       astro:
         patterns:
