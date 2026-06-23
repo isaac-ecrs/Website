@@ -16,9 +16,7 @@ const distDir = new URL('../dist', import.meta.url).pathname;
 
 async function findHtmlFiles(dir) {
   const entries = await readdir(dir, { withFileTypes: true, recursive: true });
-  return entries
-    .filter((e) => e.isFile() && e.name.endsWith('.html'))
-    .map((e) => join(e.parentPath, e.name));
+  return entries.filter((e) => e.isFile() && e.name.endsWith('.html')).map((e) => join(e.parentPath, e.name));
 }
 
 // Cache Promises so each URL is fetched exactly once even with parallel files.
@@ -26,14 +24,13 @@ const hashCache = new Map();
 
 function fetchSri(url) {
   if (hashCache.has(url)) return hashCache.get(url);
-  const promise = fetch(url)
-    .then(async (res) => {
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const bytes = Buffer.from(await res.arrayBuffer());
-      const sri = `sha384-${createHash('sha384').update(bytes).digest('base64')}`;
-      console.log(`  ${url}\n    → ${sri}`);
-      return sri;
-    });
+  const promise = fetch(url).then(async (res) => {
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const bytes = Buffer.from(await res.arrayBuffer());
+    const sri = `sha384-${createHash('sha384').update(bytes).digest('base64')}`;
+    console.log(`  ${url}\n    → ${sri}`);
+    return sri;
+  });
   hashCache.set(url, promise);
   return promise;
 }
