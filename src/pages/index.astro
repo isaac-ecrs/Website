@@ -28,11 +28,17 @@ const heroVideos = readdirSync(videoDir)
   .sort((a, b) => videoDuration(join(videoDir, b)) - videoDuration(join(videoDir, a)))
   .map((f) => {
     const base = f.replace('.webm', '');
-    const posterFile = `${base}-poster.jpg`;
+    const webpPoster = `${base}-poster.webp`;
+    const jpgPoster = `${base}-poster.jpg`;
+    const poster = existsSync(join(videoDir, webpPoster))
+      ? `/videos/${webpPoster}`
+      : existsSync(join(videoDir, jpgPoster))
+        ? `/videos/${jpgPoster}`
+        : undefined;
     return {
       webm: `/videos/${f}`,
       mp4: `/videos/${f.replace('.webm', '.mp4')}`,
-      poster: existsSync(join(videoDir, posterFile)) ? `/videos/${posterFile}` : undefined,
+      poster,
     };
   });
 
