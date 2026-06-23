@@ -35,6 +35,10 @@ function fetchSri(url) {
   return promise;
 }
 
+// Hosts whose scripts update silently without versioned URLs — SRI would
+// break on every CDN push, so we skip them.
+const SRI_SKIP_HOSTS = new Set(['static.cloudflareinsights.com']);
+
 // Matches any opening <script ...> tag so we can inspect its attributes.
 const SCRIPT_TAG_RE = /<script\b([^>]*)>/gi;
 
@@ -48,7 +52,9 @@ async function processFile(filePath) {
     const attrs = match[1];
     if (attrs.includes('integrity=')) continue;
     const src = attrs.match(/\bsrc="(https:\/\/[^"]+)"/)?.[1];
-    if (src) pending.push({ match, src });
+    if (!src) continue;
+    if (SRI_SKIP_HOSTS.has(new URL(src).hostname)) continue;
+    pending.push({ match, src });
   }
   if (pending.length === 0) return;
 
