@@ -124,7 +124,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center relative">
             <div class="text-center lg:text-left">
               {badge && (
-                <div class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-primary dark:bg-[#bd0f5d] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
+                <div class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-accent dark:bg-[#007099] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
                   <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true" />
                   {badge}
                 </div>
@@ -169,7 +169,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
                 {eventCard.image && (
                   <Image
                     src={eventCard.image}
-                    alt={eventCard.title}
+                    alt=""
                     width={600}
                     height={280}
                     widths={[400, 600, 800]}
@@ -254,7 +254,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
                 {eventCard.image && (
                   <Image
                     src={eventCard.image}
-                    alt={eventCard.title}
+                    alt=""
                     width={600}
                     height={280}
                     widths={[400, 600, 800]}
@@ -289,7 +289,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           /* No event card — single column, centered */
           <div class="max-w-3xl mx-auto text-center">
             {badge && (
-              <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-primary dark:bg-[#bd0f5d] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
+              <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-accent dark:bg-[#007099] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
                 <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true" />
                 {badge}
               </div>
