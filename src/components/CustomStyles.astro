@@ -53,4 +53,69 @@ import '@fontsource/oswald/700.css';
       color: rgb(253 208 227);
     }
   }
+
+  /* ── Cognito Forms overrides ────────────────────────────────────────────
+     Font and color only — no sizing, padding, or layout changes.
+  */
+
+  /* Font */
+  .cog-cognito .cog-label,
+  .cog-cognito .el-input__inner,
+  .cog-cognito .el-textarea__inner,
+  .cog-cognito .el-radio__label,
+  .cog-cognito .el-checkbox__label,
+  .cog-cognito .cog-choice__value,
+  .cog-cognito .cog-helptext,
+  .cog-cognito .cog-html,
+  .cog-cognito .cog-content,
+  .cog-cognito .cog-button--submit {
+    font-family: var(--aw-font-sans) !important;
+  }
+
+  /* Submit button color */
+  .cog-cognito .cog-button--submit,
+  .cog-cognito .cog-button--submit * {
+    background-color: rgb(189 15 93) !important;
+    border-color: rgb(189 15 93) !important;
+    color: #fff !important;
+  }
+  .cog-cognito .cog-button--submit:hover,
+  .cog-cognito .cog-button--submit:hover * {
+    background-color: rgb(148 84 5) !important;
+    border-color: rgb(148 84 5) !important;
+    color: #fff !important;
+  }
+
+  /* Focus ring */
+  .cog-cognito .el-input__inner:focus,
+  .cog-cognito .el-textarea__inner:focus {
+    border-color: rgb(189 15 93) !important;
+    box-shadow: 0 0 0 2px rgb(189 15 93 / 25%) !important;
+  }
+
+  /* Dark mode */
+  html.dark .cog-cognito {
+    background-color: var(--aw-color-bg-page) !important;
+  }
+  html.dark .cog-cognito .cog-label,
+  html.dark .cog-cognito .el-radio__label,
+  html.dark .cog-cognito .el-checkbox__label,
+  html.dark .cog-cognito .cog-choice__value {
+    color: var(--aw-color-text-default) !important;
+  }
+  html.dark .cog-cognito .el-input__inner,
+  html.dark .cog-cognito .el-textarea__inner {
+    background-color: rgb(40 36 37) !important;
+    color: var(--aw-color-text-default) !important;
+    border-color: rgb(80 72 74) !important;
+  }
+  html.dark .cog-cognito .el-radio__inner,
+  html.dark .cog-cognito .el-checkbox__inner {
+    background-color: rgb(40 36 37) !important;
+    border-color: rgb(80 72 74) !important;
+  }
+  html.dark .cog-cognito .cog-helptext,
+  html.dark .cog-cognito .cog-html {
+    color: var(--aw-color-text-muted) !important;
+  }
 </style>

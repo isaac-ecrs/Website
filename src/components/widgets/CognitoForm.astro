@@ -1,17 +1,41 @@
 ---
 interface Props {
   formId: string;
-  height?: string;
   title?: string;
 }
 
-const { formId, height = '600', title = 'Registration form' } = Astro.props;
-const src = `https://www.cognitoforms.com/f/tdXs_w0YA0KlSRyaghpLKw/${formId}`;
+const { formId } = Astro.props;
 ---
 
-<div class="ecrs-cognito-form" style="background-color: #fff7ed; padding: 2rem 1rem;">
-  <div style="max-width: 48rem; margin: 0 auto;">
-    <iframe src={src} allow="payment" style="border:0;width:100%;" height={height} title={title}></iframe>
-    <script is:inline src="https://www.cognitoforms.com/f/iframe.js"></script>
-  </div>
-</div>
+<section class="cognito-section">
+  <div class="cognito-container" data-cognito-form={formId}></div>
+</section>
+
+<script is:inline data-astro-rerun>
+  (function () {
+    // Tear down stale Cognito globals so seamless.js re-runs identically to a hard refresh.
+    delete window.Cognito;
+    delete window.Vue;
+    delete window.cfWebpackJsonp;
+
+    document.querySelectorAll('[data-cognito-form]').forEach(function (container) {
+      container.innerHTML = '';
+      var s = document.createElement('script');
+      s.src = 'https://www.cognitoforms.com/f/seamless.js';
+      s.dataset.key = 'tdXs_w0YA0KlSRyaghpLKw';
+      s.dataset.form = container.dataset.cognitoForm;
+      container.appendChild(s);
+    });
+  })();
+</script>
+
+<style>
+  .cognito-section {
+    padding: 3rem 1rem;
+    background-color: var(--aw-color-bg-page);
+  }
+  .cognito-container {
+    max-width: 48rem;
+    margin: 0 auto;
+  }
+</style>

@@ -45,6 +45,5 @@
   "formHeading": "Choose a membership and complete the form below",
   "formNote": "If you are unable to pay online, please contact our membership secretary directly to make arrangements.",
   "formNoteEmail": "membership@ecrs.org",
-  "cognitoFormId": "16",
-  "cognitoFormHeight": "1400"
+  "cognitoFormId": "16"
 }
