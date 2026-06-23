@@ -1,0 +1,20 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+import CognitoForm from '~/components/widgets/CognitoForm.astro';
+
+const metadata = {
+  title: 'Form Prototype',
+  description: 'Seamless embed prototype for Cognito Forms.',
+};
+---
+
+<Layout metadata={metadata}>
+  <HeroText tagline="Prototype" title="Seamless Form Embed" />
+
+  <section class="py-8 px-4 max-w-3xl mx-auto">
+    <p class="text-center text-muted">Testing Cognito Forms seamless embed (auto-resizing, no fixed height).</p>
+  </section>
+
+  <CognitoForm formId="24" />
+</Layout>
