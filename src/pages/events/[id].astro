@@ -154,7 +154,7 @@ const jsonLd = {
         <ol class="flex items-center gap-2 text-sm text-muted list-none p-0 m-0">
           <li><a href="/" class="hover:text-primary transition-colors">Home</a></li>
           <li aria-hidden="true" class="text-muted/50">›</li>
-          <li><a href="/events/" class="hover:text-primary transition-colors">Events</a></li>
+          <li><a href="/events" class="hover:text-primary transition-colors">Events</a></li>
           <li aria-hidden="true" class="text-muted/50">›</li>
           <li aria-current="page" class="text-default min-w-0 truncate">{data.title}</li>
         </ol>
@@ -371,7 +371,7 @@ const jsonLd = {
             </a>
           )
         }
-        <a href="/events/" class="btn btn-secondary">← All Events</a>
+        <a href="/events" class="btn btn-secondary">← All Events</a>
       </div>
 
       <!-- Jump nav -->
@@ -737,16 +737,16 @@ const jsonLd = {
           data.registrationUrl
             ? [
                 { variant: 'primary', text: 'Register Now', href: data.registrationUrl, target: '_blank' },
-                { text: 'Contact Us', href: '/contact/' },
+                { text: 'Contact Us', href: '/contact' },
               ]
             : data.cognitoFormId
               ? [
                   { variant: 'primary', text: 'Register Now', href: '#registration' },
-                  { text: 'Contact Us', href: '/contact/' },
+                  { text: 'Contact Us', href: '/contact' },
                 ]
               : [
-                  { variant: 'primary', text: 'Contact Us', href: '/contact/' },
-                  { text: 'All Events', href: '/events/' },
+                  { variant: 'primary', text: 'Contact Us', href: '/contact' },
+                  { text: 'All Events', href: '/events' },
                 ]
         }
       >

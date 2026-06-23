@@ -8,11 +8,11 @@ aboutTitle: 'Who We Are'
 aboutBody: |
   Want to play like a kid? Dance the cha-cha or a folk favorite? Foster close human relationships? Develop leadership skills? We offer fun activities – both active and relaxing – that emphasize enjoyment, creativity, cooperation and personal growth.
 
-  ECRS is a warm and welcoming community for folks of all ages. An ECRS event is an experience not to be missed! We have been building community with fun-filled, intergenerational events for more than 75 years.
+  ECRS is a warm and welcoming community for folks of all ages. An ECRS event is an experience not to be missed! We have been building community with fun-filled, intergenerational events for more than 85 years.
 aboutImage: '~/assets/images/ecrs-line-dance.jpg'
 pillars:
   - title: 'Intergenerational'
-    description: 'Fun-filled events for folks of all ages — building community across generations for more than 75 years.'
+    description: 'Fun-filled events for folks of all ages — building community across generations for more than 85 years.'
     icon: 'tabler:users-group'
     classes:
       icon: 'bg-[#01aced]'
