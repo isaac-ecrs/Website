@@ -11,7 +11,7 @@ import {
 } from './permalinks';
 
 // Config loaded from src/config.yaml via vitest.config.ts virtual module:
-//   SITE.site = 'https://ecrs.org', SITE.base = '/', SITE.trailingSlash = false
+//   SITE.site = 'https://ecrs.org', SITE.base = '/', SITE.trailingSlash = true
 //   BLOG_BASE = 'blog', CATEGORY_BASE = 'category', TAG_BASE = 'tag'
 //   POST_PERMALINK_PATTERN = '%slug%' (from permalink '/%slug%')
 
@@ -54,11 +54,11 @@ describe('cleanSlug', () => {
 
 describe('getCanonical', () => {
   it('returns absolute URL for a relative path', () => {
-    expect(getCanonical('foo')).toBe('https://ecrs.org/foo');
+    expect(getCanonical('foo')).toBe('https://ecrs.org/foo/');
   });
 
-  it('strips trailing slash when trailingSlash is false', () => {
-    expect(getCanonical('foo/')).toBe('https://ecrs.org/foo');
+  it('adds trailing slash when trailingSlash is true', () => {
+    expect(getCanonical('foo')).toBe('https://ecrs.org/foo/');
   });
 
   it('returns site root for empty path', () => {
@@ -85,31 +85,31 @@ describe('getPermalink', () => {
   });
 
   it('generates a page permalink', () => {
-    expect(getPermalink('about')).toBe('/about');
-    expect(getPermalink('about', 'page')).toBe('/about');
+    expect(getPermalink('about')).toBe('/about/');
+    expect(getPermalink('about', 'page')).toBe('/about/');
   });
 
   it('generates a post permalink', () => {
-    expect(getPermalink('my-post', 'post')).toBe('/my-post');
+    expect(getPermalink('my-post', 'post')).toBe('/my-post/');
   });
 
   it('generates a category permalink', () => {
-    expect(getPermalink('sports', 'category')).toBe('/category/sports');
+    expect(getPermalink('sports', 'category')).toBe('/category/sports/');
   });
 
   it('generates a tag permalink', () => {
-    expect(getPermalink('typescript', 'tag')).toBe('/tag/typescript');
+    expect(getPermalink('typescript', 'tag')).toBe('/tag/typescript/');
   });
 
   it('generates a blog index permalink', () => {
-    expect(getPermalink('', 'blog')).toBe('/blog');
+    expect(getPermalink('', 'blog')).toBe('/blog/');
   });
 
   it('generates the home permalink', () => {
     expect(getPermalink('/', 'home')).toBe('/');
   });
 
-  it('generates an asset path', () => {
+  it('generates an asset path without trailing slash', () => {
     expect(getPermalink('images/logo.png', 'asset')).toBe('/images/logo.png');
   });
 });
@@ -121,8 +121,8 @@ describe('getHomePermalink', () => {
 });
 
 describe('getBlogPermalink', () => {
-  it('returns /blog', () => {
-    expect(getBlogPermalink()).toBe('/blog');
+  it('returns /blog/', () => {
+    expect(getBlogPermalink()).toBe('/blog/');
   });
 });
 
@@ -148,7 +148,7 @@ describe('applyGetPermalinks', () => {
   });
 
   it('resolves a string href to a page permalink', () => {
-    expect(applyGetPermalinks({ href: 'about' })).toEqual({ href: '/about' });
+    expect(applyGetPermalinks({ href: 'about' })).toEqual({ href: '/about/' });
   });
 
   it('resolves href with type home', () => {
@@ -156,7 +156,7 @@ describe('applyGetPermalinks', () => {
   });
 
   it('resolves href with type blog', () => {
-    expect(applyGetPermalinks({ href: { type: 'blog' } })).toEqual({ href: '/blog' });
+    expect(applyGetPermalinks({ href: { type: 'blog' } })).toEqual({ href: '/blog/' });
   });
 
   it('resolves href with type asset', () => {
@@ -165,16 +165,16 @@ describe('applyGetPermalinks', () => {
 
   it('resolves href with explicit url and type', () => {
     expect(applyGetPermalinks({ href: { type: 'tag', url: 'typescript' } })).toEqual({
-      href: '/tag/typescript',
+      href: '/tag/typescript/',
     });
   });
 
   it('recurses into arrays', () => {
-    expect(applyGetPermalinks([{ href: 'foo' }, { href: 'bar' }])).toEqual([{ href: '/foo' }, { href: '/bar' }]);
+    expect(applyGetPermalinks([{ href: 'foo' }, { href: 'bar' }])).toEqual([{ href: '/foo/' }, { href: '/bar/' }]);
   });
 
   it('recurses into nested objects', () => {
-    expect(applyGetPermalinks({ nav: { href: 'about' } })).toEqual({ nav: { href: '/about' } });
+    expect(applyGetPermalinks({ nav: { href: 'about' } })).toEqual({ nav: { href: '/about/' } });
   });
 
   it('passes through http hrefs unchanged', () => {
