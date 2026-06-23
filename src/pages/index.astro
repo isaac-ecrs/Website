@@ -25,6 +25,7 @@ function videoDuration(filePath: string): number {
 
 const heroVideos = readdirSync(videoDir)
   .filter((f) => f.endsWith('.webm'))
+  .sort((a, b) => videoDuration(join(videoDir, b)) - videoDuration(join(videoDir, a)))
   .map((f) => {
     const base = f.replace('.webm', '');
     const posterFile = `${base}-poster.jpg`;
@@ -32,11 +33,8 @@ const heroVideos = readdirSync(videoDir)
       webm: `/videos/${f}`,
       mp4: `/videos/${f.replace('.webm', '.mp4')}`,
       poster: existsSync(join(videoDir, posterFile)) ? `/videos/${posterFile}` : undefined,
-      _duration: videoDuration(join(videoDir, f)),
     };
-  })
-  .sort((a, b) => b._duration - a._duration)
-  .map(({ _duration: _, ...v }) => v);
+  });
 
 // --- Data fetching ---
 const landingEntry = await getEntry('landingSettings', 'landing');
