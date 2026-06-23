@@ -20,7 +20,7 @@ const { formId } = Astro.props;
 
     document.querySelectorAll('[data-cognito-form]').forEach(function (container) {
       container.innerHTML = '';
-      var s = document.createElement('script');
+      const s = document.createElement('script');
       s.src = 'https://www.cognitoforms.com/f/seamless.js';
       s.dataset.key = 'tdXs_w0YA0KlSRyaghpLKw';
       s.dataset.form = container.dataset.cognitoForm;
