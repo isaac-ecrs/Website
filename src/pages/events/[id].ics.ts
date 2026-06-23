@@ -30,28 +30,41 @@ export const GET: APIRoute = ({ props }) => {
       .replace(/[,;]/g, (c) => `\\${c}`)
       .replace(/\n/g, '\\n');
 
+  // RFC 5545 §3.1: fold lines longer than 75 octets with CRLF + leading space.
+  const fold = (line: string): string => {
+    const out: string[] = [];
+    while (line.length > 75) {
+      out.push(line.slice(0, 75));
+      line = ' ' + line.slice(75);
+    }
+    out.push(line);
+    return out.join('\r\n');
+  };
+
   const location = [data.location, data.address].filter(Boolean).join(', ');
   const dtstamp = new Date().toISOString().replace(/[-:.]/g, '').slice(0, 15) + 'Z';
 
-  const lines = [
-    'BEGIN:VCALENDAR',
-    'VERSION:2.0',
-    'PRODID:-//ECRS//ECRS Events//EN',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
-    'BEGIN:VEVENT',
-    `UID:${id}@ecrs.org`,
-    `DTSTAMP:${dtstamp}`,
-    `DTSTART;VALUE=DATE:${fmtDate(data.date)}`,
-    `DTEND;VALUE=DATE:${fmtDate(nextDay)}`,
-    `SUMMARY:${esc(data.title)}`,
-    location && `LOCATION:${esc(location)}`,
-    (data.excerpt || data.description) && `DESCRIPTION:${esc(data.excerpt ?? data.description ?? '')}`,
-    'END:VEVENT',
-    'END:VCALENDAR',
-  ]
-    .filter(Boolean)
-    .join('\r\n');
+  const lines =
+    [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//ECRS//ECRS Events//EN',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      `UID:${id}@ecrs.org`,
+      `DTSTAMP:${dtstamp}`,
+      `DTSTART;VALUE=DATE:${fmtDate(data.date)}`,
+      `DTEND;VALUE=DATE:${fmtDate(nextDay)}`,
+      `SUMMARY:${esc(data.title)}`,
+      location && `LOCATION:${esc(location)}`,
+      (data.excerpt || data.description) && `DESCRIPTION:${esc(data.excerpt ?? data.description ?? '')}`,
+      'END:VEVENT',
+      'END:VCALENDAR',
+    ]
+      .filter(Boolean)
+      .map(fold)
+      .join('\r\n') + '\r\n';
 
   return new Response(lines, {
     headers: {

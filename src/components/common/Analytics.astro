@@ -78,12 +78,14 @@ const id = ANALYTICS?.vendors?.googleAnalytics?.id ? String(ANALYTICS.vendors.go
       window['ga-disable-' + GA_ID] = false;
       hideBanner();
       loadGA();
+      window.dispatchEvent(new CustomEvent('ecrs:consent-granted'));
     }
     function deny() {
       setStored('denied');
       // Stops GA immediately, even if it was already loaded this session.
       window['ga-disable-' + GA_ID] = true;
       hideBanner();
+      window.dispatchEvent(new CustomEvent('ecrs:consent-denied'));
     }
 
     // Exposed for any external trigger (e.g. the footer "Cookie settings" link).
@@ -126,9 +128,15 @@ const id = ANALYTICS?.vendors?.googleAnalytics?.id ? String(ANALYTICS.vendors.go
     });
 
     // Run on initial load and after each View Transition navigation.
+    // astro:page-load fires on initial load too, so skip sendPageView() on the
+    // first event — loadGA() inside apply() already sends it on initial render.
+    var initialPageLoadHandled = false;
     document.addEventListener('astro:page-load', function () {
       apply();
-      sendPageView();
+      if (initialPageLoadHandled) {
+        sendPageView();
+      }
+      initialPageLoadHandled = true;
     });
     apply();
   })();

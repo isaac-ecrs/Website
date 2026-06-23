@@ -64,11 +64,13 @@ export function computeEventSections(data: EventSectionsInput, now = new Date())
   // Only meaningful when display === 'table'
   const tuitionHasLabels = tuitionDisplay === 'table' && !!data.tuition?.some((t) => t.label);
 
-  const cancellationCutoff: Date | null =
-    data.cancellationCutoffDate ??
-    (data.showCancellationPolicy
-      ? new Date(Date.UTC(data.date.getUTCFullYear(), data.date.getUTCMonth(), data.date.getUTCDate() - 21))
-      : null);
+  let cancellationCutoff: Date | null = null;
+  if (data.cancellationCutoffDate) {
+    cancellationCutoff = data.cancellationCutoffDate;
+  } else if (data.showCancellationPolicy) {
+    cancellationCutoff = new Date(data.date);
+    cancellationCutoff.setUTCDate(cancellationCutoff.getUTCDate() - 21);
+  }
 
   return {
     isPast,

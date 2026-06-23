@@ -43,16 +43,16 @@ describe('responsiveTablesRehypePlugin', () => {
     expect(wrapper.children?.[0]).toBe(table);
   });
 
-  it('wraps the first of two consecutive tables (documents i++ skip behavior)', () => {
-    // The plugin increments i after wrapping, so two back-to-back tables result in
-    // only the first being wrapped — the i++ causes the loop to skip the second.
+  it('wraps both of two consecutive tables', () => {
     const table1: MockElement = { type: 'element', tagName: 'table', properties: {}, children: [] };
     const table2: MockElement = { type: 'element', tagName: 'table', properties: {}, children: [] };
     const tree: MockRoot = { type: 'root', children: [table1, table2] };
     plugin(tree);
     expect(tree.children).toHaveLength(2);
     expect(tree.children[0].tagName).toBe('div');
-    expect(tree.children[1].tagName).toBe('table');
+    expect(tree.children[0].children?.[0]).toBe(table1);
+    expect(tree.children[1].tagName).toBe('div');
+    expect(tree.children[1].children?.[0]).toBe(table2);
   });
 
   it('leaves non-table siblings untouched while wrapping tables', () => {

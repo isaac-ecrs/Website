@@ -6,7 +6,9 @@ import EventCard from '~/components/widgets/EventCard.astro';
 import eventsListSettings from '~/data/settings/events-list.json';
 
 const allEvents = await getCollection('event', ({ data }) => !data.draft);
-const now = new Date();
+// en-CA produces YYYY-MM-DD output (the only locale that does), which lets us
+// concatenate directly into a valid ISO string. The timezone is what matters here.
+const now = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) + 'T00:00:00Z');
 
 const upcoming = allEvents
   .filter((e) => (e.data.endDate ?? e.data.date) >= now)

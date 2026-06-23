@@ -69,7 +69,7 @@ const OG_HEIGHT = 626;
  */
 export const adaptOpenGraphImages = async (
   openGraph: MetaDataOpenGraph = {},
-  astroSite: URL | undefined = new URL('')
+  astroSite: URL | undefined = undefined
 ): Promise<MetaDataOpenGraph> => {
   if (!openGraph?.images?.length) return openGraph;
 
@@ -89,7 +89,7 @@ export const adaptOpenGraphImages = async (
       });
 
       return {
-        url: String(new URL(optimized.src, astroSite)),
+        url: astroSite ? String(new URL(optimized.src, astroSite)) : optimized.src,
         width: Number(optimized.attributes.width) || OG_WIDTH,
         height: Number(optimized.attributes.height) || OG_HEIGHT,
       };

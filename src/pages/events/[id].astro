@@ -32,6 +32,15 @@ const linkedLeaderIds = [...new Set((data.classes ?? []).map((c) => c.leaderId).
 
 const UTC: Intl.DateTimeFormatOptions = { timeZone: 'UTC' };
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function formatDate(d: Date) {
   return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', ...UTC });
 }
@@ -52,7 +61,10 @@ function formatDateRange(data: Props['event']['data']) {
   return `${start} – ${data.endDate.toLocaleDateString('en-US', opts)}`;
 }
 
-const { isPast, pricingRows, jumpLinks, showJumpNav, cancellationCutoff } = computeEventSections(data, new Date());
+// en-CA produces YYYY-MM-DD output (the only locale that does), which lets us
+// concatenate directly into a valid ISO string. The timezone is what matters here.
+const nowET = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) + 'T00:00:00Z');
+const { isPast, pricingRows, jumpLinks, showJumpNav, cancellationCutoff } = computeEventSections(data, nowET);
 
 type PricingTier = NonNullable<typeof data.pricing>[0];
 const pricingNotes: PricingTier[] = (data.pricing ?? []).filter((p) => p.note);
@@ -90,7 +102,7 @@ const jsonLd = {
   name: data.title,
   startDate: data.date.toISOString(),
   endDate: data.endDate?.toISOString() ?? data.date.toISOString(),
-  eventStatus: isPast ? 'https://schema.org/EventScheduled' : 'https://schema.org/EventScheduled',
+  eventStatus: isPast ? 'https://schema.org/EventPast' : 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   location: {
     '@type': 'Place',
@@ -394,7 +406,7 @@ const jsonLd = {
       {
         data.description && (
           <div class="prose prose-lg dark:prose-invert max-w-none">
-            <Fragment set:html={data.description.replace(/\n/g, '<br>')} />
+            <Fragment set:html={escapeHtml(data.description).replace(/\n/g, '<br>')} />
           </div>
         )
       }
