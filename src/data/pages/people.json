@@ -11,10 +11,10 @@
           "bio": "Isaac has been coming to ECRS his entire life and currently serves as Board Chair. He leads improv, cooperative and theater games, Small Scenes, and other ways to play at ECRS events. He has served on various committees over the years. He invites you to join him at ECRS for the same reason he leads here: to connect with a caring community and play – just because we can."
         },
         {
-          "name": "Catherine Woods",
+          "name": "Raine Woods",
           "title": "Board Member",
           "photo": "~/assets/images/Catherine-W_headshot-300x294.jpeg",
-          "bio": "Catherine Woods is the daughter of long-time ECRS love-birds Steve & Martha Woods, and a member from childhood. As an adult, she has regularly led crafts and dance classes and is always looking for an opportunity to goof around. Outside of camp, she spends her time working as an urban farmer in Chicago, IL, where she lives with her partner Alice."
+          "bio": "Raine Woods is the child of long-time ECRS love-birds Steve & Martha Woods, and a member from childhood. As an adult, they have regularly led crafts and dance classes and is always looking for an opportunity to goof around. Outside of camp, they spend their time working as an urban farmer in Chicago, IL, where they  live with their  partner Alice."
         },
         {
           "name": "Fern Lox",
@@ -33,23 +33,83 @@
     {
       "label": "Programming & Staffing Committee",
       "people": [
-        { "name": "Hugh Abrams-Helde", "title": null, "photo": null, "bio": null },
-        { "name": "Gabby Frisone", "title": null, "photo": null, "bio": null },
-        { "name": "Jack Marquess", "title": null, "photo": null, "bio": null },
-        { "name": "Bonnie Ostrofsky", "title": "Co-Chair", "photo": null, "bio": null },
-        { "name": "Judi Powers", "title": "Board Liaison", "photo": null, "bio": null },
-        { "name": "Sharon Underberg", "title": "Co-Chair", "photo": null, "bio": null },
-        { "name": "Karen Wisnia", "title": null, "photo": null, "bio": null }
+        {
+          "name": "Hugh Abrams-Helde",
+          "title": null,
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "Gabby Frisone",
+          "title": null,
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "Jack Marquess",
+          "title": null,
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "Bonnie Ostrofsky",
+          "title": "Co-Chair",
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "Judi Powers",
+          "title": "Board Liaison",
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "Sharon Underberg",
+          "title": "Co-Chair",
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "Karen Wisnia",
+          "title": null,
+          "photo": null,
+          "bio": null
+        }
       ]
     },
     {
       "label": "Leadership, Recruitment & Development Committee",
       "people": [
-        { "name": "Helen Fox", "title": null, "photo": null, "bio": null },
-        { "name": "Isaac Lebwohl-Steiner", "title": "Board Liaison", "photo": null, "bio": null },
-        { "name": "David Geron-Neubauer", "title": "Board Liaison", "photo": null, "bio": null },
-        { "name": "Camden Elliott-Williams", "title": null, "photo": null, "bio": null },
-        { "name": "Karen Wisnia", "title": "Programming Liaison", "photo": null, "bio": null }
+        {
+          "name": "Helen Fox",
+          "title": null,
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "Isaac Lebwohl-Steiner",
+          "title": "Board Liaison",
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "David Geron-Neubauer",
+          "title": "Board Liaison",
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "Camden Elliott-Williams",
+          "title": null,
+          "photo": null,
+          "bio": null
+        },
+        {
+          "name": "Karen Wisnia",
+          "title": "Programming Liaison",
+          "photo": null,
+          "bio": null
+        }
       ]
     }
   ]
