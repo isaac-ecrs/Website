@@ -125,7 +125,9 @@ const metadata = {
       : undefined}
     eventHref={featuredEvent ? `/events/${featuredEvent.id}/` : undefined}
     primaryCta={featuredEvent ? undefined : { text: 'See Upcoming Events', href: '/events/' }}
-    secondaryCta={featuredEvent ? { text: 'All Events', href: '/events/' } : { text: 'Who We Are', href: '#who-we-are' }}
+    secondaryCta={featuredEvent
+      ? { text: 'All Events', href: '/events/' }
+      : { text: 'Who We Are', href: '#who-we-are' }}
   />
 
   <!-- ============================================================
