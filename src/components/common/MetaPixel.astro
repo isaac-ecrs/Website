@@ -58,33 +58,29 @@ const id = ANALYTICS?.vendors?.metaPixel?.id ? String(ANALYTICS.vendors.metaPixe
     function apply() {
       const stored = getStored();
       if (!consentRequired()) {
-        loadPixel();
+        if (stored !== 'denied') loadPixel();
         return;
       }
-      if (stored === 'granted') {
-        loadPixel();
-      }
-      // denied or pending — do nothing (ConsentBanner is handled by Analytics.astro)
+      if (stored === 'granted') loadPixel();
     }
 
+    // Listen for deterministic consent events dispatched by Analytics.astro.
+    // This replaces the setTimeout race that existed in the click-handler approach.
+    window.addEventListener('ecrs:consent-granted', () => loadPixel());
+    // On deny the pixel was never loaded — nothing to undo.
+
     // Re-run after each View Transition navigation to fire PageView on new pages.
+    // Skip the first astro:page-load since apply() below handles the initial render.
+    let initialPageLoadHandled = false;
     document.addEventListener('astro:page-load', () => {
+      if (!initialPageLoadHandled) {
+        initialPageLoadHandled = true;
+        return;
+      }
       if (loaded && window.fbq) {
         window.fbq('track', 'PageView');
       } else {
         apply();
-      }
-    });
-
-    // Listen for consent grant/deny from Analytics.astro's shared handler.
-    document.addEventListener('click', (e) => {
-      const t = e.target;
-      if (!t || !t.closest) return;
-      if (t.closest('[data-consent-accept]')) {
-        // Small delay so Analytics.astro's grant() runs first and sets localStorage.
-        setTimeout(apply, 50);
-      } else if (t.closest('[data-consent-decline]')) {
-        loaded = false; // nothing to do — pixel never loaded
       }
     });
 

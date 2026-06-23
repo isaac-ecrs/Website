@@ -50,9 +50,6 @@ describe('findImage', () => {
 const SITE = new URL('https://ecrs.org');
 
 describe('adaptOpenGraphImages', () => {
-  // Note: the default `astroSite = new URL('')` throws in Node, so all calls
-  // must pass an explicit second argument even when astroSite is not used.
-
   it('returns the original object when images array is empty', async () => {
     const og = { type: 'website' as const, images: [] };
     expect(await adaptOpenGraphImages(og, SITE)).toBe(og);
@@ -72,6 +69,12 @@ describe('adaptOpenGraphImages', () => {
     const og = { images: [{ url: 'https://example.com/img.jpg' }] };
     const result = await adaptOpenGraphImages(og, SITE);
     expect(result.images?.[0]?.url).toBe('https://ecrs.org/optimized/image.jpg');
+  });
+
+  it('returns the raw optimized src when no astroSite is provided', async () => {
+    const og = { images: [{ url: 'https://example.com/img.jpg' }] };
+    const result = await adaptOpenGraphImages(og, undefined);
+    expect(result.images?.[0]?.url).toBe('/optimized/image.jpg');
   });
 
   it('returns an empty url entry when the image url is an empty string', async () => {
