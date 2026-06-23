@@ -62,7 +62,7 @@ export const GET: APIRoute = ({ props }) => {
       'END:VEVENT',
       'END:VCALENDAR',
     ]
-      .filter(Boolean)
+      .filter((x): x is string => !!x)
       .map(fold)
       .join('\r\n') + '\r\n';
 
