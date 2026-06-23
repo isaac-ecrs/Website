@@ -123,11 +123,9 @@ const metadata = {
           hasRegistration: !!(featuredEvent.data.registrationUrl || featuredEvent.data.cognitoFormId),
         }
       : undefined}
-    eventHref={featuredEvent ? `/events/${featuredEvent.id}/` : undefined}
-    primaryCta={featuredEvent ? undefined : { text: 'See Upcoming Events', href: '/events/' }}
-    secondaryCta={featuredEvent
-      ? { text: 'All Events', href: '/events/' }
-      : { text: 'Who We Are', href: '#who-we-are' }}
+    eventHref={featuredEvent ? `/events/${featuredEvent.id}` : undefined}
+    primaryCta={featuredEvent ? undefined : { text: 'See Upcoming Events', href: '/events' }}
+    secondaryCta={featuredEvent ? { text: 'All Events', href: '/events' } : { text: 'Who We Are', href: '#who-we-are' }}
   />
 
   <!-- ============================================================
@@ -180,13 +178,13 @@ const metadata = {
     callToAction={{
       variant: 'secondary',
       text: 'Learn more about ECRS',
-      href: '/about/',
+      href: '/about',
     }}
   >
     <Fragment slot="content">
       {
         landing?.aboutBody ??
-          'ECRS has been building intergenerational community for over 75 years through the arts and play.'
+          'ECRS has been building intergenerational community for over 85 years through the arts and play.'
       }
     </Fragment>
     <Fragment slot="bg">
@@ -200,7 +198,7 @@ const metadata = {
   <Features
     id="what-we-do"
     title="Why ECRS?"
-    subtitle="For over 75 years, ECRS has brought people of all ages together through creative, joyful community experiences."
+    subtitle="For over 85 years, ECRS has brought people of all ages together through creative, joyful community experiences."
     columns={2}
     items={landing?.pillars ?? [
       {
@@ -221,7 +219,7 @@ const metadata = {
       },
       {
         title: 'Build Community',
-        description: 'Over 75 years of creating lasting friendships across generations, backgrounds, and geographies.',
+        description: 'Over 85 years of creating lasting friendships across generations, backgrounds, and geographies.',
         icon: 'tabler:heart-handshake',
       },
     ]}
@@ -254,7 +252,7 @@ const metadata = {
           {upcomingEvents.map((event: (typeof upcomingEvents)[0]) => (
             <li>
               <a
-                href={`/events/${event.id}/`}
+                href={`/events/${event.id}`}
                 class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 aria-label={`${event.data.title} — ${formatEventDate(event.data)}`}
               >
@@ -289,7 +287,7 @@ const metadata = {
           ))}
         </ul>
         <div class="text-center mt-10">
-          <a href="/events/" class="btn btn-secondary">
+          <a href="/events" class="btn btn-secondary">
             View all events
           </a>
         </div>
@@ -304,8 +302,8 @@ const metadata = {
     title="Ready to join the community?"
     subtitle="All events are open to people of all ages and all levels of experience. Newcomers always receive 50% off their first event."
     actions={[
-      { variant: 'primary', text: 'See Upcoming Events', href: '/events/' },
-      { text: 'Contact Us', href: '/contact/' },
+      { variant: 'primary', text: 'See Upcoming Events', href: '/events' },
+      { text: 'Contact Us', href: '/contact' },
     ]}
   >
     <Fragment slot="bg">

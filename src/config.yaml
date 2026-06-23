@@ -2,7 +2,7 @@ site:
   name: ECRS
   site: 'https://ecrs.org'
   base: '/'
-  trailingSlash: true
+  trailingSlash: false
 
 # Default SEO metadata
 metadata:

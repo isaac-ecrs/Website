@@ -45,7 +45,7 @@
   "ctaTitle": "Come experience it yourself",
   "ctaSubtitle": "Take action to support our organization to continuously bring you creative and joyous events to nourish your body, mind, and soul.",
   "ctaPrimaryText": "See Upcoming Events",
-  "ctaPrimaryHref": "/events/",
+  "ctaPrimaryHref": "/events",
   "ctaSecondaryText": "Donate",
-  "ctaSecondaryHref": "/donate/"
+  "ctaSecondaryHref": "/donate"
 }
