@@ -127,13 +127,13 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
                 (eventHref ? (
                   <a
                     href={eventHref}
-                    class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-primary backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg hover:bg-secondary transition-colors"
+                    class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-primary dark:bg-[#bd0f5d] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg hover:bg-secondary transition-colors"
                   >
                     <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true" />
                     {badge}
                   </a>
                 ) : (
-                  <div class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-primary backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
+                  <div class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-primary dark:bg-[#bd0f5d] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
                     <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true" />
                     {badge}
                   </div>
@@ -242,7 +242,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
                         </div>
                       </div>
                     )}
-                    <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary group-hover:bg-secondary text-white text-sm font-bold uppercase tracking-wide transition-colors shadow-lg whitespace-nowrap">
+                    <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary dark:bg-[#bd0f5d] group-hover:bg-secondary text-white text-sm font-bold uppercase tracking-wide transition-colors shadow-lg whitespace-nowrap">
                       {eventCard.hasRegistration ? 'Register Now' : 'Learn More'}
                       <svg
                         class="w-4 h-4"
@@ -298,7 +298,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           /* No event card — single column, centered */
           <div class="max-w-3xl mx-auto text-center">
             {badge && (
-              <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-primary backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
+              <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-primary dark:bg-[#bd0f5d] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
                 <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true" />
                 {badge}
               </div>
