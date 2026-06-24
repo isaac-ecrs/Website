@@ -10,7 +10,6 @@ excerpt: 'A weekend of ECRS fun and community at a new location! Daytime classes
 description: |
   A weekend of ECRS fun and community at a new location! Daytime classes to spark your curiosity.
 image: '~/assets/images/sites/pendle-hill.jpg'
-registrationEmail: 'registration@ecrs.org'
 tags:
   - weekend
 ---

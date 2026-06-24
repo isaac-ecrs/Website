@@ -19,6 +19,7 @@ import BasicScripts from '~/components/common/BasicScripts.astro';
 import { ClientRouter } from 'astro:transitions';
 
 import type { MetaData as MetaDataType } from '~/types';
+import siteData from '~/data/settings/site.json';
 
 export interface Props {
   metadata?: MetaDataType;
@@ -53,7 +54,7 @@ const { language, textDirection } = I18N;
         url: Astro.site ? String(Astro.site) : SITE.site,
         logo: Astro.site ? String(new URL('/images/ecrs-logo.png', Astro.site)) : '/images/ecrs-logo.png',
         description: METADATA.description,
-        sameAs: ['https://twitter.com/yay4ecrs'],
+        sameAs: siteData.socialLinks.map((s) => s.url),
       })}
     />
 

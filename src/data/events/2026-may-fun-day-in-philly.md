@@ -9,7 +9,6 @@ excerpt: 'Our signature evening program with dancing, games, and singing in comm
 description: |
   Our signature evening program with dancing, games, and singing in community.
 image: '~/assets/images/sites/ethical-soceity.webp'
-registrationEmail: 'registration@ecrs.org'
 tags:
   - one-day
   - philadelphia

@@ -4,6 +4,7 @@ import satori from 'satori';
 import sharp from 'sharp';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { formatEventDateRange } from '~/utils/dates';
 
 const OG_W = 1200;
 const OG_H = 630;
@@ -296,22 +297,6 @@ async function renderEventCard(title: string, dateStr: string, location: string)
   return svgToJpeg(svg);
 }
 
-// ── Formatting helpers ────────────────────────────────────────────────────────
-
-function formatEventDate(date: Date, endDate?: Date): string {
-  const opts: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' };
-  const start = date.toLocaleDateString('en-US', opts);
-  if (!endDate) return start;
-  const sm = date.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' });
-  const em = endDate.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' });
-  const sy = date.toLocaleDateString('en-US', { year: 'numeric', timeZone: 'UTC' });
-  const ey = endDate.toLocaleDateString('en-US', { year: 'numeric', timeZone: 'UTC' });
-  const d1 = date.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' });
-  const d2 = endDate.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' });
-  if (sm === em && sy === ey) return `${sm} ${d1}–${d2}, ${sy}`;
-  return `${sm} ${d1} – ${em} ${d2}, ${sy}`;
-}
-
 // ── Astro static route ────────────────────────────────────────────────────────
 
 export async function getStaticPaths() {
@@ -327,7 +312,7 @@ export const GET: APIRoute = async ({ params, props }) => {
   } else {
     const { event } = props as { event: Awaited<ReturnType<typeof getCollection<'event'>>>[number] };
     const { data } = event;
-    img = await renderEventCard(data.title, formatEventDate(data.date, data.endDate ?? undefined), data.location);
+    img = await renderEventCard(data.title, formatEventDateRange(data.date, data.endDate, 'short'), data.location);
   }
 
   return new Response(new Uint8Array(img), {

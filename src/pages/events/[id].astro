@@ -9,6 +9,7 @@ import { findImage } from '~/utils/images';
 import siteSettings from '~/data/settings/site.json';
 import { groupClassesByPeriod } from '~/utils/classes';
 import { computeEventSections } from '~/utils/eventSections';
+import { formatEventDateRange } from '~/utils/dates';
 
 export async function getStaticPaths() {
   const events = await getCollection('event');
@@ -45,22 +46,6 @@ function formatDate(d: Date) {
   return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', ...UTC });
 }
 
-function formatDateRange(data: Props['event']['data']) {
-  const opts = { month: 'long' as const, day: 'numeric' as const, year: 'numeric' as const, ...UTC };
-  const start = data.date.toLocaleDateString('en-US', opts);
-  if (!data.endDate) return start;
-  const sm = data.date.toLocaleDateString('en-US', { month: 'long', ...UTC });
-  const em = data.endDate.toLocaleDateString('en-US', { month: 'long', ...UTC });
-  const sy = data.date.toLocaleDateString('en-US', { year: 'numeric', ...UTC });
-  const ey = data.endDate.toLocaleDateString('en-US', { year: 'numeric', ...UTC });
-  if (sm === em && sy === ey) {
-    const d1 = data.date.toLocaleDateString('en-US', { day: 'numeric', ...UTC });
-    const d2 = data.endDate.toLocaleDateString('en-US', { day: 'numeric', ...UTC });
-    return `${sm} ${d1}–${d2}, ${sy}`;
-  }
-  return `${start} – ${data.endDate.toLocaleDateString('en-US', opts)}`;
-}
-
 // en-CA produces YYYY-MM-DD output (the only locale that does), which lets us
 // concatenate directly into a valid ISO string. The timezone is what matters here.
 const nowET = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) + 'T00:00:00Z');
@@ -90,31 +75,13 @@ if (resolvedImage && typeof resolvedImage === 'object') {
   socialImageUrl = Astro.site ? new URL(resolvedImage, Astro.site).href : resolvedImage;
 }
 
-// Abbreviated month form (e.g. "Oct 18–19, 2026") used as a fallback when the
-// full-month title would exceed 60 chars.
-function shortFormatDateRange(d: typeof data): string {
-  const opts = { month: 'short' as const, day: 'numeric' as const, year: 'numeric' as const, ...UTC };
-  const start = d.date.toLocaleDateString('en-US', opts);
-  if (!d.endDate) return start;
-  const sm = d.date.toLocaleDateString('en-US', { month: 'short', ...UTC });
-  const em = d.endDate.toLocaleDateString('en-US', { month: 'short', ...UTC });
-  const sy = d.date.toLocaleDateString('en-US', { year: 'numeric', ...UTC });
-  const ey = d.endDate.toLocaleDateString('en-US', { year: 'numeric', ...UTC });
-  if (sm === em && sy === ey) {
-    const d1 = d.date.toLocaleDateString('en-US', { day: 'numeric', ...UTC });
-    const d2 = d.endDate.toLocaleDateString('en-US', { day: 'numeric', ...UTC });
-    return `${sm} ${d1}–${d2}, ${sy}`;
-  }
-  return `${start} – ${d.endDate.toLocaleDateString('en-US', opts)}`;
-}
-
-const fullEventTitle = `${data.title} · ${formatDateRange(data)} · ${data.location}`;
+const fullEventTitle = `${data.title} · ${formatEventDateRange(data.date, data.endDate)} · ${data.location}`;
 const eventTitle =
-  fullEventTitle.length <= 60 ? fullEventTitle : `${data.title} · ${shortFormatDateRange(data)} · ${data.location}`;
+  fullEventTitle.length <= 60 ? fullEventTitle : `${data.title} · ${formatEventDateRange(data.date, data.endDate, 'short')} · ${data.location}`;
 
 const metadata = {
   title: eventTitle,
-  description: data.excerpt ?? `${data.title} — ${formatDateRange(data)} at ${data.location}`,
+  description: data.excerpt ?? `${data.title} — ${formatEventDateRange(data.date, data.endDate)} at ${data.location}`,
   openGraph: { images: [{ url: `/og/${event.id}.jpg`, width: 1200, height: 630 }] },
 };
 
@@ -211,7 +178,7 @@ const jsonLd = {
           id="share-btn"
           class="mt-2 shrink-0 p-2 rounded-full text-muted hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
           data-title={data.title}
-          data-text={data.excerpt ?? `${data.title} — ${formatDateRange(data)} at ${data.location}`}
+          data-text={data.excerpt ?? `${data.title} — ${formatEventDateRange(data.date, data.endDate)} at ${data.location}`}
           aria-label="Share this event"
         >
           <svg
@@ -256,7 +223,7 @@ const jsonLd = {
           </span>
           <div>
             <p class="text-xs font-bold uppercase tracking-widest text-muted">Date</p>
-            <p class="text-default font-semibold group-hover:underline">{formatDateRange(data)}</p>
+            <p class="text-default font-semibold group-hover:underline">{formatEventDateRange(data.date, data.endDate)}</p>
             {
               (data.startTime || data.endTime) && (
                 <p class="text-sm text-muted">

@@ -12,7 +12,6 @@ image: '~/assets/images/sites/chestnut-hill.jpg'
 phone: ''
 accessibilityNote: ''
 registrationUrl: ''
-registrationEmail: registration@ecrs.org
 tags:
   - one-day
 ---

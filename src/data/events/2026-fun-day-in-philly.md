@@ -12,7 +12,6 @@ description: |
   Whether you are a longtime member or brand new to ECRS, this is the perfect way to experience what we are all about: creative, joyful community for whole families.
 image: '~/assets/images/sites/ethical-soceity.webp'
 registrationUrl: ''
-registrationEmail: 'registration@ecrs.org'
 tags:
   - one-day
   - philadelphia

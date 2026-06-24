@@ -5,7 +5,6 @@ import { glob } from 'astro/loaders';
 const emptyToUndefined = (v: unknown) => (v === '' || v == null ? undefined : v);
 const optionalDate = z.preprocess(emptyToUndefined, z.date().optional());
 const optionalString = z.preprocess(emptyToUndefined, z.string().optional());
-const optionalEmail = z.preprocess(emptyToUndefined, z.string().email().optional());
 
 const metadataDefinition = () =>
   z
@@ -152,7 +151,6 @@ const eventCollection = defineCollection({
 
     // Registration
     registrationUrl: optionalString,
-    registrationEmail: optionalEmail,
     registrationDeadline: optionalDate,
     earlyBirdDeadline: optionalDate,
     earlyBirdFeeNote: z.string().optional(),
