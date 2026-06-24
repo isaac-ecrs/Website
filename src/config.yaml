@@ -16,9 +16,9 @@ metadata:
   openGraph:
     site_name: ECRS
     images:
-      - url: '~/assets/images/default.png'
+      - url: '/og/default.jpg'
         width: 1200
-        height: 628
+        height: 630
     type: website
   twitter:
     handle: '@yay4ecrs'

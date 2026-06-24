@@ -90,10 +90,32 @@ if (resolvedImage && typeof resolvedImage === 'object') {
   socialImageUrl = Astro.site ? new URL(resolvedImage, Astro.site).href : resolvedImage;
 }
 
+// Abbreviated month form (e.g. "Oct 18–19, 2026") used as a fallback when the
+// full-month title would exceed 60 chars.
+function shortFormatDateRange(d: typeof data): string {
+  const opts = { month: 'short' as const, day: 'numeric' as const, year: 'numeric' as const, ...UTC };
+  const start = d.date.toLocaleDateString('en-US', opts);
+  if (!d.endDate) return start;
+  const sm = d.date.toLocaleDateString('en-US', { month: 'short', ...UTC });
+  const em = d.endDate.toLocaleDateString('en-US', { month: 'short', ...UTC });
+  const sy = d.date.toLocaleDateString('en-US', { year: 'numeric', ...UTC });
+  const ey = d.endDate.toLocaleDateString('en-US', { year: 'numeric', ...UTC });
+  if (sm === em && sy === ey) {
+    const d1 = d.date.toLocaleDateString('en-US', { day: 'numeric', ...UTC });
+    const d2 = d.endDate.toLocaleDateString('en-US', { day: 'numeric', ...UTC });
+    return `${sm} ${d1}–${d2}, ${sy}`;
+  }
+  return `${start} – ${d.endDate.toLocaleDateString('en-US', opts)}`;
+}
+
+const fullEventTitle = `${data.title} · ${formatDateRange(data)} · ${data.location}`;
+const eventTitle =
+  fullEventTitle.length <= 60 ? fullEventTitle : `${data.title} · ${shortFormatDateRange(data)} · ${data.location}`;
+
 const metadata = {
-  title: data.title,
+  title: eventTitle,
   description: data.excerpt ?? `${data.title} — ${formatDateRange(data)} at ${data.location}`,
-  openGraph: data.image ? { images: [{ url: data.image, width: 1200, height: 630 }] } : undefined,
+  openGraph: { images: [{ url: `/og/${event.id}.jpg`, width: 1200, height: 630 }] },
 };
 
 const jsonLd = {
