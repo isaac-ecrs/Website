@@ -246,7 +246,7 @@ async function renderEventCard(title: string, dateStr: string, location: string)
                     children: `${dateStr}  ·  ${location}`,
                   },
                 },
-                // CTA
+                // CTA — white text-outline makes pink readable on the dark overlay
                 {
                   type: 'div',
                   props: {
@@ -256,8 +256,10 @@ async function renderEventCard(title: string, dateStr: string, location: string)
                       color: '#bd0f5d',
                       marginTop: 28,
                       letterSpacing: 1,
+                      textShadow:
+                        '-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white, 0 -2px 0 white, 0 2px 0 white, -2px 0 0 white, 2px 0 0 white',
                     },
-                    children: 'Register at ecrs.org →',
+                    children: 'Register at ecrs.org',
                   },
                 },
               ],
