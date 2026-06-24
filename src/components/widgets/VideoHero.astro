@@ -91,7 +91,6 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           ]}
           muted
           playsinline
-          autoplay={i === 0}
           preload={i === 0 ? 'metadata' : 'none'}
           poster={v.poster}
         >
@@ -440,9 +439,10 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
     if (!reducedMotion) {
       if (videos.length > 1) {
         // Round-robin: rotate the starting video across visits via localStorage.
-        // First visit (no key) always starts at 0 (the longest clip). Each
-        // subsequent visit advances by 1, wrapping safely regardless of how
-        // many videos exist.
+        // First visit (no key) always starts at 0 (the longest clip). Each subsequent
+        // visit advances by 1, wrapping safely regardless of how many videos exist.
+        // Playback is started entirely by JS (no HTML autoplay) to avoid a flash of
+        // video[0] before the correct starting clip is determined.
         const STORAGE_KEY = 'ecrs-hero-video';
         const stored = parseInt(localStorage.getItem(STORAGE_KEY) ?? '-1', 10);
         const startIndex = stored < 0 ? 0 : (stored + 1) % videos.length;
@@ -489,15 +489,13 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           });
         });
 
-        // If not starting at index 0, immediately switch visibility (video[0]
-        // has the HTML autoplay attribute but we override it right away).
+        // Show and play the starting video; hide video[0] if it isn't the start.
         if (startIndex !== 0) {
-          videos[0].pause();
           videos[0].style.opacity = '0';
           videos[startIndex].style.opacity = '1';
           videos[startIndex].preload = 'auto';
-          videos[startIndex].play().catch(() => {});
         }
+        videos[startIndex]?.play().catch(() => {});
 
         // Defer preloading subsequent videos until 5 seconds remain in the current
         // clip — enough runway even on slow mobile, without an upfront 2 MB download.
@@ -511,7 +509,6 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
             this.removeEventListener('timeupdate', onProgress);
           }
         });
-        if (startIndex === 0) videos[0]?.play().catch(() => {});
         isPlaying = true;
       } else if (videos.length === 1) {
         videos[0].loop = true;
