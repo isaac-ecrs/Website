@@ -17,8 +17,8 @@ export interface Props {
 const { metadata = {}, noIndex = false } = Astro.props;
 
 // Default OG image = next upcoming event's composed card.
-// Pages that want a different image (about/contact/donate → /og/default.png,
-// event detail → /og/<id>.png) set metadata.openGraph.images explicitly.
+// Pages that want a different image (about/contact/donate → /og/default.jpg,
+// event detail → /og/<id>.jpg) set metadata.openGraph.images explicitly.
 let effectiveMetadata = metadata;
 if (!metadata.openGraph?.images?.length) {
   const now = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) + 'T00:00:00Z');
@@ -32,7 +32,7 @@ if (!metadata.openGraph?.images?.length) {
       ...metadata,
       openGraph: {
         ...metadata.openGraph,
-        images: [{ url: `/og/${nextEvent.id}.png`, width: 1200, height: 630 }],
+        images: [{ url: `/og/${nextEvent.id}.jpg`, width: 1200, height: 630 }],
       },
     };
   }

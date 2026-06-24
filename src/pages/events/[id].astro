@@ -93,7 +93,7 @@ if (resolvedImage && typeof resolvedImage === 'object') {
 const metadata = {
   title: data.title,
   description: data.excerpt ?? `${data.title} — ${formatDateRange(data)} at ${data.location}`,
-  openGraph: { images: [{ url: `/og/${event.id}.png`, width: 1200, height: 630 }] },
+  openGraph: { images: [{ url: `/og/${event.id}.jpg`, width: 1200, height: 630 }] },
 };
 
 const jsonLd = {

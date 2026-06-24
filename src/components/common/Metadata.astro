@@ -40,6 +40,17 @@ const adaptedOg = await adaptOpenGraphImages(mergedOg, Astro.site);
 
 const firstImage = adaptedOg?.images?.[0];
 
+// Truncate to keep descriptions within platform display limits.
+// og:description shows ~125 chars on mobile; HTML meta ~155 chars for Google snippets.
+function truncate(text: string | undefined, max: number): string | undefined {
+  if (!text || text.length <= max) return text;
+  return text.slice(0, max - 1).trimEnd() + '…';
+}
+
+const rawDescription = description || METADATA?.description;
+
+const logoUrl = Astro.site ? String(new URL('/images/ecrs-logo.png', Astro.site)) : '/images/ecrs-logo.png';
+
 function buildOpenGraph(og: MetaDataOpenGraph): SEOProps['openGraph'] | undefined {
   if (!og) return undefined;
 
@@ -54,7 +65,7 @@ function buildOpenGraph(og: MetaDataOpenGraph): SEOProps['openGraph'] | undefine
       url: og.url,
     },
     optional: {
-      description: description || METADATA?.description,
+      description: truncate(rawDescription, 125),
       locale: og.locale,
       siteName: og.siteName,
     },
@@ -103,11 +114,11 @@ const seoProps: SEOProps = {
       : typeof METADATA?.robots?.follow !== 'undefined'
         ? !METADATA.robots.follow
         : true,
-  description: description || METADATA?.description,
+  description: truncate(rawDescription, 155),
   openGraph: buildOpenGraph(adaptedOg),
   twitter: mergedTwitter,
   surpressWarnings: true,
 };
 ---
 
-<SEO {...seoProps} />
+<SEO {...seoProps} extend={{ meta: [{ property: 'og:logo', content: logoUrl }] }} />

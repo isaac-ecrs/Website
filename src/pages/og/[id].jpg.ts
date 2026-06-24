@@ -55,8 +55,8 @@ let _lineDanceUri: string | undefined;
 const lineDanceUri = async () =>
   (_lineDanceUri ??= await toDataUri(resolve(ROOT, 'src/assets/images/ecrs-line-dance.jpg')));
 
-async function svgToPng(svg: string): Promise<Buffer> {
-  return sharp(Buffer.from(svg)).png().toBuffer();
+async function svgToJpeg(svg: string): Promise<Buffer> {
+  return sharp(Buffer.from(svg)).jpeg({ quality: 85 }).toBuffer();
 }
 
 // ── Default branded card ──────────────────────────────────────────────────────
@@ -151,7 +151,7 @@ async function renderDefaultCard(): Promise<Buffer> {
     { width: OG_W, height: OG_H, fonts: FONTS }
   );
 
-  return svgToPng(svg);
+  return svgToJpeg(svg);
 }
 
 // ── Per-event card ────────────────────────────────────────────────────────────
@@ -246,6 +246,20 @@ async function renderEventCard(title: string, dateStr: string, location: string)
                     children: `${dateStr}  ·  ${location}`,
                   },
                 },
+                // CTA
+                {
+                  type: 'div',
+                  props: {
+                    style: {
+                      fontSize: 26,
+                      fontWeight: 700,
+                      color: '#bd0f5d',
+                      marginTop: 28,
+                      letterSpacing: 1,
+                    },
+                    children: 'Register at ecrs.org →',
+                  },
+                },
               ],
             },
           },
@@ -255,7 +269,7 @@ async function renderEventCard(title: string, dateStr: string, location: string)
     { width: OG_W, height: OG_H, fonts: FONTS }
   );
 
-  return svgToPng(svg);
+  return svgToJpeg(svg);
 }
 
 // ── Formatting helpers ────────────────────────────────────────────────────────
@@ -282,19 +296,19 @@ export async function getStaticPaths() {
 }
 
 export const GET: APIRoute = async ({ params, props }) => {
-  let png: Buffer;
+  let img: Buffer;
 
   if (params.id === 'default') {
-    png = await renderDefaultCard();
+    img = await renderDefaultCard();
   } else {
     const { event } = props as { event: Awaited<ReturnType<typeof getCollection<'event'>>>[number] };
     const { data } = event;
-    png = await renderEventCard(data.title, formatEventDate(data.date, data.endDate ?? undefined), data.location);
+    img = await renderEventCard(data.title, formatEventDate(data.date, data.endDate ?? undefined), data.location);
   }
 
-  return new Response(new Uint8Array(png), {
+  return new Response(new Uint8Array(img), {
     headers: {
-      'Content-Type': 'image/png',
+      'Content-Type': 'image/jpeg',
       'Cache-Control': 'public, max-age=31536000, immutable',
     },
   });

@@ -16,7 +16,7 @@ metadata:
   openGraph:
     site_name: ECRS
     images:
-      - url: '/og/default.png'
+      - url: '/og/default.jpg'
         width: 1200
         height: 630
     type: website
