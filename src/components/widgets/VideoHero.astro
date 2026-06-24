@@ -79,16 +79,35 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
   style="min-height: max(600px, 100svh);"
   aria-label={title}
 >
-  <!-- Video backgrounds (only first is visible initially) -->
+  <!--
+    Inline sync script — runs before the video elements are parsed so the
+    correct starting video is already visible at first paint (no flash).
+    Injects a single CSS rule that overrides opacity-0 for the target clip,
+    then stores the index on the section for the module script to read.
+  -->
+  <script is:inline define:vars={{ videoCount: videos.length }}>
+    (function () {
+      var key = 'ecrs-hero-video';
+      var stored = -1;
+      try { stored = parseInt(localStorage.getItem(key) ?? '-1', 10); } catch (_) {}
+      var startIndex = stored < 0 ? 0 : (stored + 1) % videoCount;
+      try { localStorage.setItem(key, String(startIndex)); } catch (_) {}
+      // nth-child is 1-based
+      var css = '[data-video-hero] [data-hero-video]:nth-child(' + (startIndex + 1) + '){opacity:1}';
+      var el = document.createElement('style');
+      el.textContent = css;
+      document.head.appendChild(el);
+      document.currentScript.closest('[data-video-hero]').dataset.heroStart = startIndex;
+    })();
+  </script>
+
+  <!-- Video backgrounds (all start hidden; inline script above reveals the right one) -->
   <div class="absolute inset-0" aria-hidden="true">
     {
       videos.map((v, i) => (
         <video
           data-hero-video
-          class:list={[
-            'absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms]',
-            { 'opacity-0': i > 0 },
-          ]}
+          class="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] opacity-0"
           muted
           playsinline
           preload={i === 0 ? 'metadata' : 'none'}
@@ -438,15 +457,10 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
 
     if (!reducedMotion) {
       if (videos.length > 1) {
-        // Round-robin: rotate the starting video across visits via localStorage.
-        // First visit (no key) always starts at 0 (the longest clip). Each subsequent
-        // visit advances by 1, wrapping safely regardless of how many videos exist.
-        // Playback is started entirely by JS (no HTML autoplay) to avoid a flash of
-        // video[0] before the correct starting clip is determined.
-        const STORAGE_KEY = 'ecrs-hero-video';
-        const stored = parseInt(localStorage.getItem(STORAGE_KEY) ?? '-1', 10);
-        const startIndex = stored < 0 ? 0 : (stored + 1) % videos.length;
-        localStorage.setItem(STORAGE_KEY, String(startIndex));
+        // startIndex was already computed and stored by the inline script above
+        // (which also updated localStorage and injected the CSS). Read it back
+        // from the data attribute to avoid re-running the localStorage logic.
+        const startIndex = parseInt(section.dataset.heroStart ?? '0', 10);
 
         let current = startIndex;
         let transitioning = false;
@@ -489,12 +503,9 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           });
         });
 
-        // Show and play the starting video; hide video[0] if it isn't the start.
-        if (startIndex !== 0) {
-          videos[0].style.opacity = '0';
-          videos[startIndex].style.opacity = '1';
-          videos[startIndex].preload = 'auto';
-        }
+        // CSS (injected by the inline script) already set the correct opacity.
+        // Just kick off playback.
+        if (startIndex !== 0) videos[startIndex].preload = 'auto';
         videos[startIndex]?.play().catch(() => {});
 
         // Defer preloading subsequent videos until 5 seconds remain in the current
