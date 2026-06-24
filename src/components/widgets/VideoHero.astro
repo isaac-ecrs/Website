@@ -439,7 +439,16 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
 
     if (!reducedMotion) {
       if (videos.length > 1) {
-        let current = 0;
+        // Round-robin: rotate the starting video across visits via localStorage.
+        // First visit (no key) always starts at 0 (the longest clip). Each
+        // subsequent visit advances by 1, wrapping safely regardless of how
+        // many videos exist.
+        const STORAGE_KEY = 'ecrs-hero-video';
+        const stored = parseInt(localStorage.getItem(STORAGE_KEY) ?? '-1', 10);
+        const startIndex = stored < 0 ? 0 : (stored + 1) % videos.length;
+        localStorage.setItem(STORAGE_KEY, String(startIndex));
+
+        let current = startIndex;
         let transitioning = false;
         let queued: number | null = null;
 
@@ -480,19 +489,29 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           });
         });
 
+        // If not starting at index 0, immediately switch visibility (video[0]
+        // has the HTML autoplay attribute but we override it right away).
+        if (startIndex !== 0) {
+          videos[0].pause();
+          videos[0].style.opacity = '0';
+          videos[startIndex].style.opacity = '1';
+          videos[startIndex].preload = 'auto';
+          videos[startIndex].play().catch(() => {});
+        }
+
         // Defer preloading subsequent videos until 5 seconds remain in the current
         // clip — enough runway even on slow mobile, without an upfront 2 MB download.
         const preloadNext = (afterIndex: number) => {
           const next = videos[(afterIndex + 1) % videos.length];
           if (next && next.preload !== 'auto') next.preload = 'auto';
         };
-        videos[0]?.addEventListener('timeupdate', function onProgress(this: HTMLVideoElement) {
+        videos[startIndex]?.addEventListener('timeupdate', function onProgress(this: HTMLVideoElement) {
           if (this.duration && this.duration - this.currentTime <= 5) {
-            preloadNext(0);
+            preloadNext(startIndex);
             this.removeEventListener('timeupdate', onProgress);
           }
         });
-        videos[0]?.play().catch(() => {});
+        if (startIndex === 0) videos[0]?.play().catch(() => {});
         isPlaying = true;
       } else if (videos.length === 1) {
         videos[0].loop = true;
