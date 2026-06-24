@@ -1,7 +1,12 @@
 const UTC: Intl.DateTimeFormatOptions = { timeZone: 'UTC' };
 
 export function formatEventDateRange(date: Date, endDate?: Date, monthStyle: 'long' | 'short' = 'long'): string {
-  const opts = { month: monthStyle as Intl.DateTimeFormatOptions['month'], day: 'numeric' as const, year: 'numeric' as const, ...UTC };
+  const opts = {
+    month: monthStyle as Intl.DateTimeFormatOptions['month'],
+    day: 'numeric' as const,
+    year: 'numeric' as const,
+    ...UTC,
+  };
   const start = date.toLocaleDateString('en-US', opts);
   if (!endDate) return start;
   const sm = date.toLocaleDateString('en-US', { month: monthStyle, ...UTC });

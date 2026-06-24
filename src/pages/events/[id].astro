@@ -77,7 +77,9 @@ if (resolvedImage && typeof resolvedImage === 'object') {
 
 const fullEventTitle = `${data.title} · ${formatEventDateRange(data.date, data.endDate)} · ${data.location}`;
 const eventTitle =
-  fullEventTitle.length <= 60 ? fullEventTitle : `${data.title} · ${formatEventDateRange(data.date, data.endDate, 'short')} · ${data.location}`;
+  fullEventTitle.length <= 60
+    ? fullEventTitle
+    : `${data.title} · ${formatEventDateRange(data.date, data.endDate, 'short')} · ${data.location}`;
 
 const metadata = {
   title: eventTitle,
@@ -178,7 +180,8 @@ const jsonLd = {
           id="share-btn"
           class="mt-2 shrink-0 p-2 rounded-full text-muted hover:text-primary hover:bg-primary/10 transition-colors cursor-pointer"
           data-title={data.title}
-          data-text={data.excerpt ?? `${data.title} — ${formatEventDateRange(data.date, data.endDate)} at ${data.location}`}
+          data-text={data.excerpt ??
+            `${data.title} — ${formatEventDateRange(data.date, data.endDate)} at ${data.location}`}
           aria-label="Share this event"
         >
           <svg
@@ -223,7 +226,9 @@ const jsonLd = {
           </span>
           <div>
             <p class="text-xs font-bold uppercase tracking-widest text-muted">Date</p>
-            <p class="text-default font-semibold group-hover:underline">{formatEventDateRange(data.date, data.endDate)}</p>
+            <p class="text-default font-semibold group-hover:underline">
+              {formatEventDateRange(data.date, data.endDate)}
+            </p>
             {
               (data.startTime || data.endTime) && (
                 <p class="text-sm text-muted">
