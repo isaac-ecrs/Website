@@ -1,7 +1,6 @@
 ---
 import { readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { spawnSync } from 'node:child_process';
 import { getCollection, getEntry } from 'astro:content';
 import Layout from '~/layouts/PageLayout.astro';
 import VideoHero from '~/components/widgets/VideoHero.astro';
@@ -13,22 +12,14 @@ import CallToAction from '~/components/widgets/CallToAction.astro';
 import siteData from '~/data/settings/site.json';
 import { formatEventDateRange } from '~/utils/dates';
 
-// --- Hero videos: sorted longest-first so the first clip outlasts Lighthouse's
-// ~17 s measurement window at 4G throttle, preventing a carousel advance mid-audit.
+// --- Hero videos: lead clip rotates by calendar day so visitors see variety across builds.
 const videoDir = join(process.cwd(), 'public/videos');
-
-function videoDuration(filePath: string): number {
-  const r = spawnSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', filePath], {
-    encoding: 'utf8',
-  });
-  return parseFloat(r.stdout) || 0;
-}
 
 const heroVideos = (() => {
   try {
-    return readdirSync(videoDir)
+    const clips = readdirSync(videoDir)
       .filter((f) => f.endsWith('.webm'))
-      .sort((a, b) => videoDuration(join(videoDir, b)) - videoDuration(join(videoDir, a)))
+      .sort() // stable alphabetical order makes the day-based rotation predictable
       .map((f) => {
         const base = f.replace('.webm', '');
         const webpPoster = `${base}-poster.webp`;
@@ -44,6 +35,8 @@ const heroVideos = (() => {
           poster,
         };
       });
+    const dayIndex = Math.floor(Date.now() / 86_400_000) % clips.length;
+    return [...clips.slice(dayIndex), ...clips.slice(0, dayIndex)];
   } catch {
     return [];
   }

@@ -79,37 +79,19 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
   style="min-height: max(600px, 100svh);"
   aria-label={title}
 >
-  <!--
-    Inline sync script — runs before the video elements are parsed so the
-    correct starting video is already visible at first paint (no flash).
-    Injects a single CSS rule that overrides opacity-0 for the target clip,
-    then stores the index on the section for the module script to read.
-  -->
-  <script is:inline define:vars={{ videoCount: videos.length }}>
-    (function () {
-      var key = 'ecrs-hero-video';
-      var stored = -1;
-      try { stored = parseInt(localStorage.getItem(key) ?? '-1', 10); } catch (_) {}
-      var startIndex = stored < 0 ? 0 : (stored + 1) % videoCount;
-      try { localStorage.setItem(key, String(startIndex)); } catch (_) {}
-      // nth-child is 1-based
-      var css = '[data-video-hero] [data-hero-video]:nth-child(' + (startIndex + 1) + '){opacity:1}';
-      var el = document.createElement('style');
-      el.textContent = css;
-      document.head.appendChild(el);
-      document.currentScript.closest('[data-video-hero]').dataset.heroStart = startIndex;
-    })();
-  </script>
-
-  <!-- Video backgrounds (all start hidden; inline script above reveals the right one) -->
+  <!-- Video backgrounds (only first is visible initially) -->
   <div class="absolute inset-0" aria-hidden="true">
     {
       videos.map((v, i) => (
         <video
           data-hero-video
-          class="absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms] opacity-0"
+          class:list={[
+            'absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms]',
+            { 'opacity-0': i > 0 },
+          ]}
           muted
           playsinline
+          autoplay={i === 0}
           preload={i === 0 ? 'metadata' : 'none'}
           poster={v.poster}
         >
@@ -457,12 +439,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
 
     if (!reducedMotion) {
       if (videos.length > 1) {
-        // startIndex was already computed and stored by the inline script above
-        // (which also updated localStorage and injected the CSS). Read it back
-        // from the data attribute to avoid re-running the localStorage logic.
-        const startIndex = parseInt(section.dataset.heroStart ?? '0', 10);
-
-        let current = startIndex;
+        let current = 0;
         let transitioning = false;
         let queued: number | null = null;
 
@@ -503,23 +480,19 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           });
         });
 
-        // CSS (injected by the inline script) already set the correct opacity.
-        // Just kick off playback.
-        if (startIndex !== 0) videos[startIndex].preload = 'auto';
-        videos[startIndex]?.play().catch(() => {});
-
         // Defer preloading subsequent videos until 5 seconds remain in the current
         // clip — enough runway even on slow mobile, without an upfront 2 MB download.
         const preloadNext = (afterIndex: number) => {
           const next = videos[(afterIndex + 1) % videos.length];
           if (next && next.preload !== 'auto') next.preload = 'auto';
         };
-        videos[startIndex]?.addEventListener('timeupdate', function onProgress(this: HTMLVideoElement) {
+        videos[0]?.addEventListener('timeupdate', function onProgress(this: HTMLVideoElement) {
           if (this.duration && this.duration - this.currentTime <= 5) {
-            preloadNext(startIndex);
+            preloadNext(0);
             this.removeEventListener('timeupdate', onProgress);
           }
         });
+        videos[0]?.play().catch(() => {});
         isPlaying = true;
       } else if (videos.length === 1) {
         videos[0].loop = true;
