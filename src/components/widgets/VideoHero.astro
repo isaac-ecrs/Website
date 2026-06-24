@@ -86,7 +86,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
         <video
           data-hero-video
           class:list={[
-            'absolute inset-0 w-full h-full object-cover transition-opacity duration-[1200ms]',
+            'absolute inset-0 w-full h-full object-cover transition-opacity duration-[2000ms]',
             { 'opacity-0': i > 0 },
           ]}
           muted
@@ -471,7 +471,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
               queued = null;
               crossfadeTo(q);
             }
-          }, 1300);
+          }, 2100);
         }
 
         videos.forEach((video, i) => {
