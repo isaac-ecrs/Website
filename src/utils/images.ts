@@ -77,6 +77,15 @@ export const adaptOpenGraphImages = async (
     openGraph.images.map(async (image) => {
       if (!image?.url) return { url: '' };
 
+      // Pre-generated OG images served from /og/ — already final, just make absolute.
+      if (image.url.startsWith('/og/')) {
+        return {
+          url: astroSite ? String(new URL(image.url, astroSite)) : image.url,
+          width: image.width ?? OG_WIDTH,
+          height: image.height ?? OG_HEIGHT,
+        };
+      }
+
       const resolved = await findImage(image.url);
       if (!resolved) return { url: '' };
 

@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '~/layouts/Layout.astro';
 import Header from '~/components/widgets/Header.astro';
 import Footer from '~/components/widgets/Footer.astro';
@@ -13,10 +14,32 @@ export interface Props {
   noIndex?: boolean;
 }
 
-const { metadata, noIndex = false } = Astro.props;
+const { metadata = {}, noIndex = false } = Astro.props;
+
+// Default OG image = next upcoming event's composed card.
+// Pages that want a different image (about/contact/donate → /og/default.png,
+// event detail → /og/<id>.png) set metadata.openGraph.images explicitly.
+let effectiveMetadata = metadata;
+if (!metadata.openGraph?.images?.length) {
+  const now = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) + 'T00:00:00Z');
+  const allEvents = await getCollection('event', ({ data }) => !data.draft);
+  const nextEvent = allEvents
+    .filter((e) => (e.data.endDate ?? e.data.date) >= now)
+    .sort((a, b) => a.data.date.getTime() - b.data.date.getTime())[0];
+
+  if (nextEvent) {
+    effectiveMetadata = {
+      ...metadata,
+      openGraph: {
+        ...metadata.openGraph,
+        images: [{ url: `/og/${nextEvent.id}.png`, width: 1200, height: 630 }],
+      },
+    };
+  }
+}
 ---
 
-<Layout metadata={metadata}>
+<Layout metadata={effectiveMetadata}>
   <slot name="head" slot="head" />
   <slot name="header">
     <Header {...headerData} isSticky showToggleTheme />
