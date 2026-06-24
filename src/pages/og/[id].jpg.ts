@@ -246,20 +246,27 @@ async function renderEventCard(title: string, dateStr: string, location: string)
                     children: `${dateStr}  ·  ${location}`,
                   },
                 },
-                // CTA — white text-outline makes pink readable on the dark overlay
+                // CTA pill
                 {
                   type: 'div',
                   props: {
                     style: {
-                      fontSize: 26,
-                      fontWeight: 700,
-                      color: '#bd0f5d',
+                      display: 'flex',
                       marginTop: 28,
-                      letterSpacing: 1,
-                      textShadow:
-                        '-1px -1px 0 white, 1px -1px 0 white, -1px 1px 0 white, 1px 1px 0 white, 0 -2px 0 white, 0 2px 0 white, -2px 0 0 white, 2px 0 0 white',
+                      backgroundColor: '#bd0f5d',
+                      borderRadius: 9999,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      paddingLeft: 32,
+                      paddingRight: 32,
                     },
-                    children: 'Register at ecrs.org',
+                    children: {
+                      type: 'div',
+                      props: {
+                        style: { fontSize: 26, fontWeight: 700, color: 'white', letterSpacing: 1 },
+                        children: 'Register at ecrs.org',
+                      },
+                    },
                   },
                 },
               ],
