@@ -134,12 +134,27 @@ async function renderDefaultCard(): Promise<Buffer> {
                     children: 'Come to Play. Play to Learn.',
                   },
                 },
-                // URL
+                // CTA pill
                 {
                   type: 'div',
                   props: {
-                    style: { fontSize: 26, fontWeight: 400, color: 'rgba(255,255,255,0.55)', marginTop: 18 },
-                    children: 'ecrs.org',
+                    style: {
+                      display: 'flex',
+                      marginTop: 28,
+                      backgroundColor: '#bd0f5d',
+                      borderRadius: 9999,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      paddingLeft: 32,
+                      paddingRight: 32,
+                    },
+                    children: {
+                      type: 'div',
+                      props: {
+                        style: { fontSize: 26, fontWeight: 700, color: 'white', letterSpacing: 1 },
+                        children: 'Learn more at ecrs.org',
+                      },
+                    },
                   },
                 },
               ],
