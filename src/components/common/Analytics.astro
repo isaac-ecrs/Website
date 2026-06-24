@@ -13,7 +13,7 @@ const id = ANALYTICS?.vendors?.googleAnalytics?.id ? String(ANALYTICS.vendors.go
 
     // Never load GA in local development.
     var host = location.hostname;
-    var isLocal = host === 'localhost' || host === '127.0.0.1' || host === '';
+    var isLocal = host === 'localhost' || host === '127.0.0.1' || host === '' || host.endsWith('.pages.dev');
 
     function getStored() {
       try {
