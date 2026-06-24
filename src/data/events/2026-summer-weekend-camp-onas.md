@@ -11,7 +11,6 @@ description: |
   Our Camping Weekend is ECRS's most affordable residential event – where newcomers and longtime members gather under the stars for a weekend of pure play.
 image: '~/assets/images/sites/camp-onas.jpg'
 registrationUrl: 'https://www.ecrs.org/event/onas2026/'
-registrationEmail: 'registration@ecrs.org'
 registrationDeadline: 2026-06-05
 pricing:
   - ageRange: '0–1'

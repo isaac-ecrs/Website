@@ -4,6 +4,7 @@ import Layout from '~/layouts/PageLayout.astro';
 import HeroText from '~/components/widgets/HeroText.astro';
 import EventCard from '~/components/widgets/EventCard.astro';
 import eventsListSettings from '~/data/settings/events-list.json';
+import { formatEventDateRange } from '~/utils/dates';
 
 const allEvents = await getCollection('event', ({ data }) => !data.draft);
 // en-CA produces YYYY-MM-DD output (the only locale that does), which lets us
@@ -17,22 +18,6 @@ const upcoming = allEvents
 const past = allEvents
   .filter((e) => (e.data.endDate ?? e.data.date) < now)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-
-function formatDate(event: (typeof allEvents)[0]['data']) {
-  const opts: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' };
-  const start = event.date.toLocaleDateString('en-US', opts);
-  if (!event.endDate) return start;
-  const sm = event.date.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
-  const em = event.endDate.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
-  const sy = event.date.toLocaleDateString('en-US', { year: 'numeric', timeZone: 'UTC' });
-  const ey = event.endDate.toLocaleDateString('en-US', { year: 'numeric', timeZone: 'UTC' });
-  if (sm === em && sy === ey) {
-    const d1 = event.date.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' });
-    const d2 = event.endDate.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' });
-    return `${sm} ${d1}–${d2}, ${sy}`;
-  }
-  return `${start} – ${event.endDate.toLocaleDateString('en-US', opts)}`;
-}
 
 const metadata = {
   title: eventsListSettings.heroTitle,
@@ -62,7 +47,7 @@ const metadata = {
             <li>
               <EventCard
                 title={event.data.title}
-                date={formatDate(event.data)}
+                date={formatEventDateRange(event.data.date, event.data.endDate)}
                 location={event.data.location}
                 href={`/events/${event.id}`}
                 image={event.data.image}
@@ -95,7 +80,7 @@ const metadata = {
             <li>
               <EventCard
                 title={event.data.title}
-                date={formatDate(event.data)}
+                date={formatEventDateRange(event.data.date, event.data.endDate)}
                 location={event.data.location}
                 href={`/events/${event.id}`}
                 image={event.data.image}

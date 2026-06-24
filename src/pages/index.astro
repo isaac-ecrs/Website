@@ -11,6 +11,7 @@ import Image from '~/components/common/Image.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
 import siteData from '~/data/settings/site.json';
+import { formatEventDateRange } from '~/utils/dates';
 
 // --- Hero videos: sorted longest-first so the first clip outlasts Lighthouse's
 // ~17 s measurement window at 4G throttle, preventing a carousel advance mid-audit.
@@ -23,24 +24,30 @@ function videoDuration(filePath: string): number {
   return parseFloat(r.stdout) || 0;
 }
 
-const heroVideos = readdirSync(videoDir)
-  .filter((f) => f.endsWith('.webm'))
-  .sort((a, b) => videoDuration(join(videoDir, b)) - videoDuration(join(videoDir, a)))
-  .map((f) => {
-    const base = f.replace('.webm', '');
-    const webpPoster = `${base}-poster.webp`;
-    const jpgPoster = `${base}-poster.jpg`;
-    const poster = existsSync(join(videoDir, webpPoster))
-      ? `/videos/${webpPoster}`
-      : existsSync(join(videoDir, jpgPoster))
-        ? `/videos/${jpgPoster}`
-        : undefined;
-    return {
-      webm: `/videos/${f}`,
-      mp4: `/videos/${f.replace('.webm', '.mp4')}`,
-      poster,
-    };
-  });
+const heroVideos = (() => {
+  try {
+    return readdirSync(videoDir)
+      .filter((f) => f.endsWith('.webm'))
+      .sort((a, b) => videoDuration(join(videoDir, b)) - videoDuration(join(videoDir, a)))
+      .map((f) => {
+        const base = f.replace('.webm', '');
+        const webpPoster = `${base}-poster.webp`;
+        const jpgPoster = `${base}-poster.jpg`;
+        const poster = existsSync(join(videoDir, webpPoster))
+          ? `/videos/${webpPoster}`
+          : existsSync(join(videoDir, jpgPoster))
+            ? `/videos/${jpgPoster}`
+            : undefined;
+        return {
+          webm: `/videos/${f}`,
+          mp4: `/videos/${f.replace('.webm', '.mp4')}`,
+          poster,
+        };
+      });
+  } catch {
+    return [];
+  }
+})();
 
 // --- Data fetching ---
 const landingEntry = await getEntry('landingSettings', 'landing');
@@ -57,24 +64,7 @@ const upcomingAll = allEvents
 const featuredEvent = upcomingAll[0];
 const upcomingEvents = upcomingAll.slice(1, 4);
 
-function formatEventDate(event: (typeof allEvents)[0]['data']) {
-  const opts: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' };
-  const start = event.date.toLocaleDateString('en-US', opts);
-  if (!event.endDate) return start;
-  // Same month — collapse: "June 12–14, 2026"
-  const startMonth = event.date.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
-  const endMonth = event.endDate.toLocaleDateString('en-US', { month: 'long', timeZone: 'UTC' });
-  const startYear = event.date.toLocaleDateString('en-US', { year: 'numeric', timeZone: 'UTC' });
-  const endYear = event.endDate.toLocaleDateString('en-US', { year: 'numeric', timeZone: 'UTC' });
-  if (startMonth === endMonth && startYear === endYear) {
-    const d1 = event.date.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' });
-    const d2 = event.endDate.toLocaleDateString('en-US', { day: 'numeric', timeZone: 'UTC' });
-    return `${startMonth} ${d1}–${d2}, ${startYear}`;
-  }
-  return `${start} – ${event.endDate.toLocaleDateString('en-US', opts)}`;
-}
-
-const featuredDateStr = featuredEvent ? formatEventDate(featuredEvent.data) : '';
+const featuredDateStr = featuredEvent ? formatEventDateRange(featuredEvent.data.date, featuredEvent.data.endDate) : '';
 
 // --- Organization / NGO structured data (brand SERP, knowledge panel) ---
 const orgJsonLd = {
@@ -256,7 +246,7 @@ const metadata = {
               <a
                 href={`/events/${event.id}`}
                 class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                aria-label={`${event.data.title} — ${formatEventDate(event.data)}`}
+                aria-label={`${event.data.title} — ${formatEventDateRange(event.data.date, event.data.endDate)}`}
               >
                 {event.data.image && (
                   <Image
@@ -273,7 +263,7 @@ const metadata = {
                 )}
                 <div class="flex flex-col flex-1 p-5">
                   <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">
-                    {formatEventDate(event.data)}
+                    {formatEventDateRange(event.data.date, event.data.endDate)}
                   </p>
                   <h3 class="font-heading text-xl font-bold text-heading group-hover:text-primary transition-colors">
                     {event.data.title}
