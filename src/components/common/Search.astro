@@ -6,13 +6,10 @@
 // astro.config.ts) and serves the index in dev/preview. The web components below
 // are registered once by PagefindConfig's script import and auto-upgrade after
 // View Transitions, so no client init is needed here.
-import PagefindConfig from 'astro-pagefind/components/PagefindConfig.astro';
 ---
 
 <div class="ecrs-search inline-flex">
-  <PagefindConfig />
   <pagefind-modal-trigger compact hide-shortcut></pagefind-modal-trigger>
-  <pagefind-modal></pagefind-modal>
 </div>
 
 <script>
@@ -56,8 +53,50 @@ import PagefindConfig from 'astro-pagefind/components/PagefindConfig.astro';
     });
   }
 
+  // Pagefind's instance manager adds components on every connectedCallback but
+  // never removes them on disconnectedCallback. After each View Transitions swap
+  // the old pagefind-modal/trigger elements are disconnected but remain in the
+  // registry; openModal() always calls modals[0] which is then the stale
+  // disconnected original, causing a silent no-op. Scrub the registry after
+  // every swap so only the newly-connected elements remain.
+  function purgeStaleComponents() {
+    const modal = document.querySelector('pagefind-modal');
+    if (!modal) return;
+    const inst = (modal as unknown as Record<string, unknown>).instance as
+      | { components?: unknown[]; componentsByType?: Record<string, unknown[]> }
+      | undefined;
+    if (!inst) return;
+    const alive = (c: unknown) => c instanceof Element && c.isConnected;
+    if (Array.isArray(inst.components)) inst.components = inst.components.filter(alive);
+    if (inst.componentsByType) {
+      for (const type of Object.keys(inst.componentsByType)) {
+        inst.componentsByType[type] = inst.componentsByType[type].filter(alive);
+      }
+    }
+  }
+
+  // Close the modal when the user clicks any result link, including links that
+  // point to the current page (anchors, same-URL). Those don't trigger a View
+  // Transitions swap, so the modal would otherwise stay open.
+  function initModalCloseOnResult() {
+    document.querySelectorAll('pagefind-modal').forEach((modal) => {
+      if ((modal as unknown as Record<string, unknown>).__resultCloseInit) return;
+      (modal as unknown as Record<string, unknown>).__resultCloseInit = true;
+      modal.addEventListener('click', (e) => {
+        if (e.target instanceof Element && e.target.closest('a[href]')) {
+          (modal as unknown as { close?: () => void }).close?.();
+        }
+      });
+    });
+  }
+
   initSearchUrlFix();
-  document.addEventListener('astro:after-swap', initSearchUrlFix);
+  initModalCloseOnResult();
+  document.addEventListener('astro:after-swap', () => {
+    purgeStaleComponents();
+    initSearchUrlFix();
+    initModalCloseOnResult();
+  });
 </script>
 
 <style is:global>
