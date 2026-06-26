@@ -18,12 +18,15 @@ classes:
   - name: 'Small Scenes'
     leaderId: isaac-lebwohl-steiner
   - name: "Let's Make Music Together"
-    leader: 'Fern Lox & Bonnie Ostrofsky'
+    leaders:
+      - id: fern-lox
+      - id: bonnie-ostrofsky
   - name: 'Folk Dancing'
     leaderId: sharon-underberg
   - name: 'Smorgasbord'
     leaderId: frank-baskin
     description: 'An opportunity for any participant to lead an activity — singing, games, dance, or other creative pursuits.'
   - name: 'Exploring the Outdoors in Early Spring'
-    leader: 'Kirk Wattles'
+    leaders:
+      - id: kirk-wattles
 ---

@@ -14,11 +14,13 @@ classes:
   - name: 'Informal Dramatics'
     leaderId: arnie-zacharias
   - name: 'Games'
-    leader: 'Trevor'
+    leaders:
+      - id: trevor
   - name: 'Crafts'
     leaderId: kay-gering
   - name: 'Singing'
-    leader: 'Trevor'
+    leaders:
+      - id: trevor
   - name: 'Smorgasbord'
     leaderId: frank-baskin
     description: 'An opportunity for any participant to lead an activity — singing, games, dance, or other creative pursuits. A wonderful chance to practice leadership in a supportive environment.'

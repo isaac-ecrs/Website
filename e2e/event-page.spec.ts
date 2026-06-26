@@ -134,12 +134,12 @@ test.describe('leader popover', () => {
   });
 
   test('leader name is a clickable button in the class listing', async ({ page }) => {
-    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' });
+    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' }).first();
     await expect(trigger).toBeVisible();
   });
 
   test('clicking leader button opens the popover with name and profile link', async ({ page }) => {
-    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' });
+    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' }).first();
     await trigger.scrollIntoViewIfNeeded();
     await trigger.click();
 
@@ -150,7 +150,7 @@ test.describe('leader popover', () => {
   });
 
   test('hovering leader button opens the popover', async ({ page }) => {
-    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' });
+    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' }).first();
     await trigger.scrollIntoViewIfNeeded();
     await trigger.hover();
 
@@ -159,7 +159,7 @@ test.describe('leader popover', () => {
   });
 
   test('popover closes after moving mouse away', async ({ page }) => {
-    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' });
+    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' }).first();
     await trigger.scrollIntoViewIfNeeded();
     await trigger.hover();
 
@@ -172,7 +172,7 @@ test.describe('leader popover', () => {
   });
 
   test('popover profile link points to /our-people with correct anchor', async ({ page }) => {
-    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' });
+    const trigger = page.getByRole('button', { name: 'Isaac Lebwohl-Steiner' }).first();
     await trigger.scrollIntoViewIfNeeded();
     await trigger.click();
 

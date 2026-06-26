@@ -179,6 +179,15 @@ const eventCollection = defineCollection({
       .array(
         z.object({
           name: z.string(),
+          leaders: z
+            .array(
+              z.object({
+                id: z.string().optional(),
+                name: z.string().optional(),
+                role: z.enum(['assistant']).optional(),
+              })
+            )
+            .optional(),
           leaderId: z.string().optional(),
           leader: z.string().optional(),
           ageRange: z.string().optional(),

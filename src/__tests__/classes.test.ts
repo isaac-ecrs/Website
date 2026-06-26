@@ -67,4 +67,14 @@ describe('groupClassesByPeriod', () => {
     const groups = groupClassesByPeriod([cls]);
     expect(groups.get('Morning')![0]).toEqual(cls);
   });
+
+  it('passes through leaders array unchanged', () => {
+    const cls = {
+      name: 'Folk Dance',
+      leaders: [{ id: 'isaac-lebwohl-steiner' }, { id: 'judi-powers' }],
+      period: 'Morning',
+    };
+    const groups = groupClassesByPeriod([cls]);
+    expect(groups.get('Morning')![0]).toEqual(cls);
+  });
 });
