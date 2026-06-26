@@ -1,0 +1,13 @@
+---
+import CognitoForm from '~/components/widgets/CognitoForm.astro';
+import Layout from '~/layouts/PageLayout.astro';
+---
+
+<Layout metadata={{ title: 'Form Test', robots: { index: false, follow: false } }}>
+  <section class="py-12 px-4 max-w-3xl mx-auto">
+    <h1 class="text-2xl font-bold mb-2">Form Submission Test</h1>
+    <p class="text-muted mb-8">Test page for Cognito postMessage probe. Not linked from navigation.</p>
+  </section>
+
+  <CognitoForm formId="127" />
+</Layout>
