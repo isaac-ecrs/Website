@@ -18,16 +18,9 @@ const metadata = {
 
   <Content image={{ src: aboutSettings.introImage, alt: aboutSettings.introImageAlt }}>
     <Fragment slot="content">{aboutSettings.introText}</Fragment>
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-orange-50 dark:bg-transparent"></div>
-    </Fragment>
   </Content>
 
-  <Features2 title="" columns={2} items={aboutSettings.pillars}>
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-orange-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
+  <Features2 title="" columns={2} items={aboutSettings.pillars} />
 
   <CallToAction
     title={aboutSettings.ctaTitle}

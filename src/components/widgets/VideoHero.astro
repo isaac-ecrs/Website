@@ -125,7 +125,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center relative">
             <div class="text-center lg:text-left">
               {badge && (
-                <div class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-accent dark:bg-[#007099] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
+                <div class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 rounded-full bg-[rgb(0,137,185)] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
                   <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true" />
                   {badge}
                 </div>
@@ -165,7 +165,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
             {eventHref ? (
               <a
                 href={eventHref}
-                class="group flex flex-col bg-black/50 hover:bg-black/65 backdrop-blur-md rounded-3xl border border-white/25 hover:border-white/50 overflow-hidden transition-all w-full"
+                class="group flex flex-col bg-white/15 hover:bg-white/20 dark:bg-black/50 dark:hover:bg-black/65 backdrop-blur-md rounded-3xl border border-white/35 hover:border-white/60 dark:border-white/25 dark:hover:border-white/50 overflow-hidden transition-all w-full"
               >
                 {eventCard.image && (
                   <Image
@@ -234,7 +234,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
                         </div>
                       </div>
                     )}
-                    <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary dark:bg-[#bd0f5d] group-hover:bg-secondary text-white text-sm font-bold uppercase tracking-wide transition-colors shadow-lg whitespace-nowrap">
+                    <span class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[rgb(214,40,115)] group-hover:bg-secondary text-white text-sm font-bold uppercase tracking-wide transition-colors shadow-lg whitespace-nowrap">
                       {eventCard.hasRegistration ? 'Register Now' : 'Learn More'}
                       <svg
                         class="w-4 h-4"
@@ -251,7 +251,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
                 </div>
               </a>
             ) : (
-              <div class="flex flex-col bg-black/50 backdrop-blur-md rounded-3xl border border-white/25 overflow-hidden w-full">
+              <div class="flex flex-col bg-white/15 dark:bg-black/50 backdrop-blur-md rounded-3xl border border-white/35 dark:border-white/25 overflow-hidden w-full">
                 {eventCard.image && (
                   <Image
                     src={eventCard.image}
@@ -290,7 +290,7 @@ const ssrCountdown = eventCard?.dateISO ? countdownUnits(eventCard.dateISO) : []
           /* No event card — single column, centered */
           <div class="max-w-3xl mx-auto text-center">
             {badge && (
-              <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-accent dark:bg-[#007099] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
+              <div class="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full bg-[rgb(0,137,185)] backdrop-blur-sm text-white text-sm font-bold uppercase tracking-widest shadow-lg">
                 <span class="w-2 h-2 rounded-full bg-white/80 animate-pulse" aria-hidden="true" />
                 {badge}
               </div>
