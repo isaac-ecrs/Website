@@ -24,7 +24,8 @@ classes:
     description: 'Stretch your body, relax and feel renewed with Chair Yoga. Yoga poses and exercises done in a chair or standing next to a chair.'
     days: 'Days 1–2'
   - name: 'Breathe and Be'
-    leader: 'Heather Klemanski'
+    leaders:
+      - id: heather-klemanski
     description: "A gentle introduction to mindfulness through breath, easy movement, and self-compassion. You'll explore simple practices to slow down, reconnect, and manage stress. The final session closes with a calming sound bath."
     days: 'Days 3–4'
   - name: 'Sketch 101: From Blank Page to Big Laughs'
@@ -44,7 +45,8 @@ classes:
     description: "Join the merriment as we create décor for our New Year's Eve celebration. Follow preplanned designs or bring your festive imagination."
     days: 'Days 1–2'
   - name: 'Empathy Games'
-    leader: 'Rob Eames'
+    leaders:
+      - id: rob-eames
     description: "In this interactive workshop, we'll use empathy games to explore interpersonal connection and support. Each activity builds toward deeper connection and a shared understanding of the meaning of interdependence."
     days: 'Days 3–4'
   - name: 'Joy of Movement: Moving to Heal'
@@ -52,7 +54,8 @@ classes:
     description: "Let's dance and stretch your body's way. Music and dance will be fun, playful, and healing. All levels invited."
     days: 'Days 3–4'
   - name: 'Relax with Board and Word Games'
-    leader: 'Bonnie Ostrofsky'
+    leaders:
+      - id: bonnie-ostrofsky
     description: 'Enjoy relaxing with friends over new or old games. Play an old favorite, or learn a new game. Bring your own to share!'
     days: 'Days 1–2'
   - name: 'Small Scenes'
@@ -60,7 +63,9 @@ classes:
     description: "Using scripts (no memorizing required!) we'll rehearse, perform, and discuss a collection of scenes. Comedy, drama, we have it all. Explore, discover, and create!"
     days: 'Days 1–2'
   - name: 'Hat Game'
-    leader: 'Josh & Rachael Silverbauer'
+    leaders:
+      - id: josh-silverbauer
+      - id: rachael-silverbauer
     description: 'Equal parts ice-breaker, improv lab, and rapid-fire creativity workshop. Every participant writes a brief activity prompt and drops it into a hat — then we bring them to life.'
     days: 'Days 1–2'
   - name: 'Improv Games'
@@ -68,15 +73,19 @@ classes:
     description: "Are you ready? No? Perfect! Come make it up as you go. We'll learn a little, play a lot, and laugh too much. No experience needed."
     days: 'Days 3–4'
   - name: 'Explore Your Encore'
-    leader: 'Reed Dewey'
+    leaders:
+      - id: reed-dewey
     description: 'Explore your post-career ideas for life with others. Geared to anyone age 50 and older. Leave with new ideas, insights, and an action plan.'
     days: 'Days 3–4'
   - name: 'Rock Opera Build'
-    leader: 'Josh & Rachael Silverbauer'
+    leaders:
+      - id: josh-silverbauer
+      - id: rachael-silverbauer
     description: 'A mini-lab guiding participants through the creative arc of producing an original rock opera — from seed idea to song building. No prior music theory required.'
     days: 'Days 3–4'
   - name: "Children's Program"
-    leader: 'Lisa Natle'
+    leaders:
+      - id: lisa-natle
     description: 'Why should the grown-ups have all the fun? ECRS offers a completely integrated program for children ages 2–11 during two class periods. Children may learn new games, create new crafts, sing silly songs, and more.'
     days: 'All 4 days'
 ---

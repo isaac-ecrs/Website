@@ -16,7 +16,8 @@ classes:
   - name: 'Informal Dramatics'
     leaderId: arnie-zacharias
   - name: 'Games'
-    leader: 'Trevor'
+    leaders:
+      - id: trevor
   - name: 'Small Scenes'
     leaderId: glenn-lebwohl-steiner
   - name: 'Crafts: Paint Like Pollock'

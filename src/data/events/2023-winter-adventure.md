@@ -27,26 +27,33 @@ classes:
     leaderId: frank-baskin
     days: 'Days 1–2'
   - name: 'Sing and Play Instruments'
-    leader: 'Bonnie Ostrofsky'
+    leaders:
+      - id: bonnie-ostrofsky
     days: 'Days 1–2'
   - name: 'A Cappella Songs from the Sea and the City'
     leader: 'Mark Schwartz'
     days: 'Days 3–4'
   - name: 'Late Night Dance'
-    leader: 'Celia Nicholson, Carmen Siftar & Sonia Nicholson'
+    leaders:
+      - id: celia-nicholson
+      - id: carmen-siftar
+      - id: sonia-nicholson
     days: 'Days 1–2'
   - name: 'Breakthrough Decluttering'
     leader: 'Bari Prince'
     days: 'Days 1–2'
   - name: 'A Journey to Self-Kindness'
-    leader: 'Heather Klemanski'
+    leaders:
+      - id: heather-klemanski
     days: 'Days 3–4'
   - name: 'The Write Stuff'
-    leader: 'Beverly Pincus'
+    leaders:
+      - id: beverly-pincus
     description: "Through fun original writing exercises we'll stimulate creativity and break through writing blocks. You'll write the stories of your lives in a safe, supportive environment."
     days: 'All 4 days'
   - name: 'Party Games for All Ages'
-    leader: 'Trevor'
+    leaders:
+      - id: trevor
     days: 'Days 3–4'
   - name: 'Improv Theater'
     leader: 'Howard Moody'
@@ -65,7 +72,8 @@ classes:
     leader: 'Max Kaye'
     days: 'Days 3–4'
   - name: 'Active Games for Teens and Adults'
-    leader: 'Trevor'
+    leaders:
+      - id: trevor
     days: 'Days 1–2'
   - name: "The Children's March"
     leader: 'Carolyn Michener'

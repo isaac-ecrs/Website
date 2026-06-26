@@ -29,7 +29,12 @@ const { data } = event;
 const allLeaders = await getCollection('leader');
 const leaderMap = new Map<string, CollectionEntry<'leader'>['data']>(allLeaders.map((l) => [l.id, l.data]));
 
-const linkedLeaderIds = [...new Set((data.classes ?? []).map((c) => c.leaderId).filter((id): id is string => !!id))];
+const linkedLeaderIds = [
+  ...new Set([
+    ...(data.classes ?? []).map((c) => c.leaderId).filter((id): id is string => !!id),
+    ...(data.classes ?? []).flatMap((c) => (c.leaders ?? []).map((l) => l.id).filter((id): id is string => !!id)),
+  ]),
+];
 
 const UTC: Intl.DateTimeFormatOptions = { timeZone: 'UTC' };
 
@@ -590,18 +595,32 @@ const jsonLd = {
                             <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                               <span class="font-semibold text-heading">{cls.name}</span>
                               {(() => {
-                                const record = cls.leaderId ? leaderMap.get(cls.leaderId) : null;
-                                const name = record?.name ?? cls.leader;
-                                const photo = record?.photo;
-                                if (!name) return null;
-                                if (record) {
-                                  return (
-                                    <span class="inline-flex items-center gap-1.5 text-sm text-muted">
-                                      —
-                                      {photo && (
+                                const resolved = cls.leaders?.length
+                                  ? cls.leaders.flatMap((l) => {
+                                      const rec = l.id ? (leaderMap.get(l.id) ?? null) : null;
+                                      const nm = rec?.name ?? l.name;
+                                      if (!nm) return [];
+                                      return [{ name: nm, record: rec, id: l.id, role: l.role }];
+                                    })
+                                  : (() => {
+                                      const rec = cls.leaderId ? (leaderMap.get(cls.leaderId) ?? null) : null;
+                                      const nm = rec?.name ?? cls.leader;
+                                      if (!nm) return [];
+                                      return [{ name: nm, record: rec, id: cls.leaderId, role: undefined }];
+                                    })();
+
+                                if (!resolved.length) return null;
+
+                                const primary = resolved.filter((l) => l.role !== 'assistant');
+                                const assistants = resolved.filter((l) => l.role === 'assistant');
+
+                                const renderLeader = (l: (typeof resolved)[0]) =>
+                                  l.record ? (
+                                    <span class="inline-flex items-center gap-1">
+                                      {l.record.photo && (
                                         <Image
-                                          src={photo}
-                                          alt={name}
+                                          src={l.record.photo}
+                                          alt={l.name}
                                           width={20}
                                           height={20}
                                           widths={[20, 40]}
@@ -612,18 +631,41 @@ const jsonLd = {
                                       )}
                                       <button
                                         type="button"
-                                        data-popover-target={`leader-${cls.leaderId}`}
-                                        aria-controls={`leader-${cls.leaderId}`}
+                                        data-popover-target={`leader-${l.id}`}
+                                        aria-controls={`leader-${l.id}`}
                                         aria-expanded="false"
                                         class="underline decoration-dotted underline-offset-2 cursor-pointer hover:text-primary transition-colors"
                                       >
-                                        {name}
+                                        {l.name}
                                       </button>
                                     </span>
+                                  ) : (
+                                    <span>{l.name}</span>
                                   );
-                                }
+
+                                const renderGroup = (items: typeof resolved) =>
+                                  items.map((l, i) => {
+                                    const isLast = i === items.length - 1;
+                                    return (
+                                      <>
+                                        {renderLeader(l)}
+                                        {items.length >= 3 && !isLast && <span>,</span>}
+                                        {i === items.length - 2 && <span>and</span>}
+                                      </>
+                                    );
+                                  });
+
                                 return (
-                                  <span class="inline-flex items-center gap-1.5 text-sm text-muted">— {name}</span>
+                                  <span class="inline-flex items-center flex-wrap gap-1 text-sm text-muted">
+                                    —
+                                    {renderGroup(primary)}
+                                    {assistants.length > 0 && (
+                                      <>
+                                        <span>assisted by</span>
+                                        {renderGroup(assistants)}
+                                      </>
+                                    )}
+                                  </span>
                                 );
                               })()}
                               {cls.ageRange && (
