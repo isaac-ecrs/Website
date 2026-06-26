@@ -27,18 +27,23 @@ const { formId, formName } = Astro.props;
       s.dataset.form = container.dataset.cognitoForm;
       container.appendChild(s);
 
-      // Watch for Cognito adding `is-success` to the form element on submission.
-      const observer = new MutationObserver(function () {
+      // TEMP DEBUG
+      console.log('[CognitoDebug] setting up observer for', container.dataset.cognitoForm);
+      const observer = new MutationObserver(function (mutations) {
+        console.log('[CognitoDebug] mutation fired, mutations:', mutations.length);
         const form = container.querySelector('form.is-success');
+        console.log('[CognitoDebug] form.is-success found:', !!form);
         if (form) {
           observer.disconnect();
           const name = container.dataset.cognitoFormName;
+          console.log('[CognitoDebug] ecrsTrack exists:', !!window.ecrsTrack, 'name:', name);
           if (name && window.ecrsTrack) {
             window.ecrsTrack('form_submit_' + name, { form_name: name, form_id: container.dataset.cognitoForm });
           }
         }
       });
       observer.observe(container, { subtree: true, attributes: true, attributeFilter: ['class'] });
+      console.log('[CognitoDebug] observer active');
     });
   })();
 </script>
