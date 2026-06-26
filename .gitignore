@@ -34,3 +34,7 @@ video-sources/
 
 # Performance audit reports (keep only SUMMARY.md if desired)
 perf-audit/
+
+# Test / coverage artifacts
+coverage/
+test-results/

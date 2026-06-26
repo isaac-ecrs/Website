@@ -82,4 +82,30 @@ describe('adaptOpenGraphImages', () => {
     const result = await adaptOpenGraphImages(og, SITE);
     expect(result.images?.[0]?.url).toBe('');
   });
+
+  it('makes /og/ URLs absolute when astroSite is provided', async () => {
+    const og = { images: [{ url: '/og/event-2026.jpg' }] };
+    const result = await adaptOpenGraphImages(og, SITE);
+    expect(result.images?.[0]?.url).toBe('https://ecrs.org/og/event-2026.jpg');
+  });
+
+  it('returns raw /og/ path when no astroSite is provided', async () => {
+    const og = { images: [{ url: '/og/event-2026.jpg' }] };
+    const result = await adaptOpenGraphImages(og, undefined);
+    expect(result.images?.[0]?.url).toBe('/og/event-2026.jpg');
+  });
+
+  it('defaults width/height to OG dimensions for /og/ images', async () => {
+    const og = { images: [{ url: '/og/event-2026.jpg' }] };
+    const result = await adaptOpenGraphImages(og, SITE);
+    expect(result.images?.[0]?.width).toBe(1200);
+    expect(result.images?.[0]?.height).toBe(626);
+  });
+
+  it('preserves explicit width/height for /og/ images', async () => {
+    const og = { images: [{ url: '/og/event-2026.jpg', width: 800, height: 400 }] };
+    const result = await adaptOpenGraphImages(og, SITE);
+    expect(result.images?.[0]?.width).toBe(800);
+    expect(result.images?.[0]?.height).toBe(400);
+  });
 });
