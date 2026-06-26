@@ -104,3 +104,19 @@ After changes, always verify:
 1. `npm run build` succeeds
 2. `npm run check` passes (astro check + ESLint + Prettier)
 3. Visual check in browser: homepage, blog, dark mode, mobile menu
+
+## Known Issues / Upgrade Holds
+
+### Astro 7 (Vite 8 / Rolldown) — CSS regression, hold until upstream fix
+
+**Symptom:** Production build (`astro build`) produces CSS with zero responsive `@media (min-width:…)` breakpoints. The dev server (`astro dev`) renders correctly because it uses Vite's dev pipeline, not Rolldown. Cloudflare Pages deploys the production build, so the deployed site would be stuck in "mobile-only" layout at all screen sizes.
+
+**Root cause:** Astro 7 ships Vite 8, which uses Rolldown (a Rust-based bundler) instead of Rollup. Rolldown processes CSS files with its own native CSS bundler, which resolves `@import 'tailwindcss'` to `tailwindcss/index.css` — a 30 KB file of theme variables with no utility classes. The `@tailwindcss/vite` plugin correctly generates full utility CSS (101 KB, 23 breakpoint queries) in its `transform` hook, but Rolldown's native CSS bundler runs independently of the transform pipeline and its output replaces the plugin's output in the final asset.
+
+The `@tailwindcss/postcss` route has the same problem: Vite 8's internal `postcss-import` resolves `@import 'tailwindcss'` before `@tailwindcss/postcss` can handle it.
+
+**Versions tested:** `astro@7.0.0`, `astro@7.0.3`, `vite@8.1.0`, `@tailwindcss/vite@4.3.1` (all latest as of 2026-06-26). None resolved the issue.
+
+**When to retry:** Watch for a release of `@tailwindcss/vite` that explicitly mentions Rolldown / Vite 8 CSS asset pipeline compatibility. The Dependabot bump is in the git history at commit `35719ef` (branch `feat/brighter-hero`) and can be cherry-picked once the upstream fix ships.
+
+**Workaround (if urgently needed):** Run `npx tailwindcss -i src/assets/styles/tailwind.css -o src/assets/styles/tailwind.built.css` as a prebuild step, import the generated file in `Layout.astro`, and remove `@tailwindcss/vite` from `astro.config.ts`. Rolldown passes plain CSS through unchanged. Requires `tailwindcss --watch` alongside `astro dev` for hot-reloading during development.
