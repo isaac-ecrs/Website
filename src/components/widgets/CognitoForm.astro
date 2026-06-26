@@ -1,14 +1,15 @@
 ---
 interface Props {
   formId: string;
+  formName?: string;
   title?: string;
 }
 
-const { formId } = Astro.props;
+const { formId, formName } = Astro.props;
 ---
 
 <section class="cognito-section">
-  <div class="cognito-container" data-cognito-form={formId}></div>
+  <div class="cognito-container" data-cognito-form={formId} data-cognito-form-name={formName}></div>
 </section>
 
 <script is:inline data-astro-rerun>
@@ -25,6 +26,18 @@ const { formId } = Astro.props;
       s.dataset.key = 'tdXs_w0YA0KlSRyaghpLKw';
       s.dataset.form = container.dataset.cognitoForm;
       container.appendChild(s);
+
+      const observer = new MutationObserver(function () {
+        const form = container.querySelector('form.is-success');
+        if (form) {
+          observer.disconnect();
+          const name = container.dataset.cognitoFormName;
+          if (name && window.ecrsTrack) {
+            window.ecrsTrack('form_submit_' + name, { form_name: name, form_id: container.dataset.cognitoForm });
+          }
+        }
+      });
+      observer.observe(container, { subtree: true, attributes: true, attributeFilter: ['class'] });
     });
   })();
 </script>
