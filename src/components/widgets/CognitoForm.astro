@@ -32,9 +32,7 @@ const { formId } = Astro.props;
 <script is:inline>
   // TEMP: probe Cognito postMessage format — remove after confirming payload shape
   window.addEventListener('message', function (e) {
-    if (e.origin && e.origin.includes('cognito')) {
-      console.log('[CognitoProbe] origin:', e.origin, 'data:', JSON.stringify(e.data));
-    }
+    console.log('[CognitoProbe] origin:', e.origin, 'data:', JSON.stringify(e.data));
   });
 </script>
 
