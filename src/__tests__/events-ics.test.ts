@@ -132,4 +132,17 @@ describe('GET /events/[id].ics', () => {
     const bareLF = text.replace(/\r\n/g, '').includes('\n');
     expect(bareLF).toBe(false);
   });
+
+  it('folds lines longer than 75 octets per RFC 5545 §3.1', async () => {
+    // "DESCRIPTION:" = 12 chars; 70 A's pushes total to 82 > 75
+    const longDesc = 'A'.repeat(70);
+    const text = await callGet(makeEvent({ description: longDesc }));
+    const lines = text.split('\r\n');
+    const descIdx = lines.findIndex((l) => l.startsWith('DESCRIPTION:'));
+    expect(descIdx).toBeGreaterThanOrEqual(0);
+    // First chunk must be exactly 75 chars
+    expect(lines[descIdx]).toBe('DESCRIPTION:' + 'A'.repeat(63));
+    // Continuation line: leading space + remaining 7 chars
+    expect(lines[descIdx + 1]).toBe(' ' + 'A'.repeat(7));
+  });
 });
