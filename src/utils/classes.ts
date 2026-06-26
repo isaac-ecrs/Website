@@ -1,5 +1,12 @@
+export type LeaderEntry = {
+  id?: string;
+  name?: string;
+  role?: 'assistant';
+};
+
 export type EventClass = {
   name: string;
+  leaders?: LeaderEntry[];
   leaderId?: string;
   leader?: string;
   ageRange?: string;

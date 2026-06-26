@@ -8,6 +8,13 @@ import Image from '~/components/common/Image.astro';
 import { findImage } from '~/utils/images';
 import siteSettings from '~/data/settings/site.json';
 import { groupClassesByPeriod } from '~/utils/classes';
+
+type ResolvedLeader = {
+  name: string;
+  record: CollectionEntry<'leader'>['data'] | null;
+  id: string | undefined;
+  role: 'assistant' | undefined;
+};
 import { computeEventSections } from '~/utils/eventSections';
 import { formatEventDateRange } from '~/utils/dates';
 
@@ -595,8 +602,8 @@ const jsonLd = {
                             <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                               <span class="font-semibold text-heading">{cls.name}</span>
                               {(() => {
-                                const resolved = cls.leaders?.length
-                                  ? cls.leaders.flatMap((l) => {
+                                const resolved: ResolvedLeader[] = cls.leaders?.length
+                                  ? cls.leaders.flatMap((l): ResolvedLeader[] => {
                                       const rec = l.id ? (leaderMap.get(l.id) ?? null) : null;
                                       const nm = rec?.name ?? l.name;
                                       if (!nm) return [];
@@ -657,8 +664,7 @@ const jsonLd = {
 
                                 return (
                                   <span class="inline-flex items-center flex-wrap gap-1 text-sm text-muted">
-                                    —
-                                    {renderGroup(primary)}
+                                    —{renderGroup(primary)}
                                     {assistants.length > 0 && (
                                       <>
                                         <span>assisted by</span>
