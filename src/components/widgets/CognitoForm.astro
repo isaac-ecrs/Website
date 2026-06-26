@@ -28,11 +28,11 @@ const { formId, formName } = Astro.props;
       container.appendChild(s);
 
       // Watch for Cognito adding `is-success` to the form element on submission.
-      var observer = new MutationObserver(function () {
-        var form = container.querySelector('form.is-success');
+      const observer = new MutationObserver(function () {
+        const form = container.querySelector('form.is-success');
         if (form) {
           observer.disconnect();
-          var name = container.dataset.cognitoFormName;
+          const name = container.dataset.cognitoFormName;
           if (name && window.ecrsTrack) {
             window.ecrsTrack('form_submit_' + name, { form_name: name, form_id: container.dataset.cognitoForm });
           }
