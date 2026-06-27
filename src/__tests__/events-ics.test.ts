@@ -4,7 +4,9 @@ vi.mock('astro:content', () => ({
   getCollection: vi.fn(),
 }));
 
-import { GET } from '../pages/events/[id].ics';
+import { vi } from 'vitest';
+import { getCollection } from 'astro:content';
+import { GET, getStaticPaths } from '../pages/events/[id].ics';
 
 const makeEvent = (
   overrides: Partial<{
@@ -37,6 +39,18 @@ const makeEvent = (
 const callGet = async (event: ReturnType<typeof makeEvent>): Promise<string> =>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (await GET({ props: { event } } as any)).text();
+
+describe('getStaticPaths', () => {
+  it('maps each event to {params: {id}, props: {event}}', async () => {
+    const fakeEvents = [makeEvent({ id: 'event-a' }), makeEvent({ id: 'event-b' })];
+    vi.mocked(getCollection).mockResolvedValueOnce(fakeEvents as never);
+    const paths = await getStaticPaths({} as never);
+    expect(paths).toEqual([
+      { params: { id: 'event-a' }, props: { event: fakeEvents[0] } },
+      { params: { id: 'event-b' }, props: { event: fakeEvents[1] } },
+    ]);
+  });
+});
 
 describe('GET /events/[id].ics', () => {
   it('returns text/calendar content-type', async () => {
