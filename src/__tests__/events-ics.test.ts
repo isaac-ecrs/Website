@@ -4,7 +4,6 @@ vi.mock('astro:content', () => ({
   getCollection: vi.fn(),
 }));
 
-import { vi } from 'vitest';
 import { getCollection } from 'astro:content';
 import { GET, getStaticPaths } from '../pages/events/[id].ics';
 

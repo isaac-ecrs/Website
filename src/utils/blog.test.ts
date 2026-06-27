@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { vi, describe, it, expect, beforeAll } from 'vitest';
 import type { Post } from '~/types';
 
 // Must be hoisted before imports that use astro:content
@@ -10,7 +10,6 @@ vi.mock('astro:content', () => ({
   }),
 }));
 
-import { vi } from 'vitest';
 import { getCollection } from 'astro:content';
 import {
   fetchPosts,
