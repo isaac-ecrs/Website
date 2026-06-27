@@ -32,6 +32,12 @@ video-sources/
 # Netlify CLI state
 .netlify/
 
+# Wrangler CLI local state
+.wrangler/
+
+# Claude Code local session data
+.claude/
+
 # Performance audit reports (keep only SUMMARY.md if desired)
 perf-audit/
 

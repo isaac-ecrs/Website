@@ -73,11 +73,8 @@ const postCollection = defineCollection({
 const landingSettingsCollection = defineCollection({
   loader: glob({ pattern: '*.md', base: 'src/data/settings' }),
   schema: z.object({
-    heroTagline: z.string(),
     heroTitle: z.string(),
     heroSubtitle: z.string(),
-    heroImage: z.string().optional(),
-    heroImageAlt: z.string().optional(),
     aboutTitle: z.string(),
     aboutBody: z.string(),
     aboutImage: z.string().optional(),
