@@ -120,7 +120,12 @@ collections:
         fields:
           - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
           - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
-          - { label: 'SEO Description', name: 'metaDescription', widget: 'text', hint: 'Shown in search engine results' }
+          - {
+              label: 'SEO Description',
+              name: 'metaDescription',
+              widget: 'text',
+              hint: 'Shown in search engine results',
+            }
           - { label: 'Intro Text', name: 'introText', widget: 'text' }
           - {
               label: 'Cognito Form ID',

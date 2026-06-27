@@ -220,8 +220,12 @@ const metadata = {
     upcomingEvents.length > 0 && (
       <div id="more-events" class="py-16 md:py-20 px-4 max-w-7xl mx-auto">
         <div class="text-center mb-12">
-          <p class="text-base font-bold uppercase tracking-widest text-primary mb-2">{landing?.moreEventsEyebrow ?? 'Join Us'}</p>
-          <h2 class="font-heading text-4xl md:text-5xl font-bold text-heading">{landing?.moreEventsHeading ?? 'More Upcoming Events'}</h2>
+          <p class="text-base font-bold uppercase tracking-widest text-primary mb-2">
+            {landing?.moreEventsEyebrow ?? 'Join Us'}
+          </p>
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-heading">
+            {landing?.moreEventsHeading ?? 'More Upcoming Events'}
+          </h2>
         </div>
         <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
           {upcomingEvents.map((event: (typeof upcomingEvents)[0]) => (
@@ -276,7 +280,11 @@ const metadata = {
     title={landing?.ctaTitle ?? 'Ready to join the community?'}
     subtitle={landing?.ctaSubtitle ?? ''}
     actions={[
-      { variant: 'primary', text: landing?.ctaPrimaryText ?? 'See Upcoming Events', href: landing?.ctaPrimaryHref ?? '/events' },
+      {
+        variant: 'primary',
+        text: landing?.ctaPrimaryText ?? 'See Upcoming Events',
+        href: landing?.ctaPrimaryHref ?? '/events',
+      },
       { text: landing?.ctaSecondaryText ?? 'Contact Us', href: landing?.ctaSecondaryHref ?? '/contact' },
     ]}
   >
