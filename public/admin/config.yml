@@ -26,6 +26,125 @@ collections:
   - name: 'pages'
     label: 'Pages'
     files:
+      - name: 'landing'
+        label: 'Home'
+        file: 'src/data/settings/landing.md'
+        fields:
+          - { label: 'Hero Headline', name: 'heroTitle', widget: 'string' }
+          - { label: 'Hero Subtitle', name: 'heroSubtitle', widget: 'text' }
+          - { label: '"Who We Are" Heading', name: 'aboutTitle', widget: 'string' }
+          - { label: '"Who We Are" Body', name: 'aboutBody', widget: 'markdown' }
+          - { label: '"Who We Are" Image', name: 'aboutImage', widget: 'image', required: false }
+          - label: 'Value Pillars (Features section)'
+            name: 'pillars'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:music' }
+
+      - name: 'about'
+        label: 'About'
+        file: 'src/data/settings/about.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Intro Text', name: 'introText', widget: 'text' }
+          - { label: 'Intro Image', name: 'introImage', widget: 'image' }
+          - { label: 'Intro Image Alt Text', name: 'introImageAlt', widget: 'string' }
+          - label: 'Pillars'
+            name: 'pillars'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:heart' }
+          - { label: 'CTA Title', name: 'ctaTitle', widget: 'string' }
+          - { label: 'CTA Subtitle', name: 'ctaSubtitle', widget: 'text' }
+          - { label: 'CTA Primary Button Text', name: 'ctaPrimaryText', widget: 'string' }
+          - { label: 'CTA Primary Button URL', name: 'ctaPrimaryHref', widget: 'string' }
+          - { label: 'CTA Secondary Button Text', name: 'ctaSecondaryText', widget: 'string' }
+          - { label: 'CTA Secondary Button URL', name: 'ctaSecondaryHref', widget: 'string' }
+
+      - name: 'events-list'
+        label: 'Events'
+        file: 'src/data/settings/events-list.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Hero Subtitle', name: 'heroSubtitle', widget: 'text' }
+
+      - name: 'contact'
+        label: 'Contact'
+        file: 'src/data/settings/contact.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Intro Text', name: 'introText', widget: 'text' }
+          - {
+              label: 'Cognito Form ID',
+              name: 'cognitoFormId',
+              widget: 'string',
+              hint: 'Number from the Cognito Forms embed URL',
+            }
+          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '600' }
+
+      - name: 'donation'
+        label: 'Donate'
+        file: 'src/data/settings/donation.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Intro Text', name: 'introText', widget: 'text' }
+          - {
+              label: 'Cognito Form ID',
+              name: 'cognitoFormId',
+              widget: 'string',
+              hint: 'The number at the end of the Cognito Forms embed URL (e.g. 17)',
+            }
+          - {
+              label: 'Form Height (px)',
+              name: 'cognitoFormHeight',
+              widget: 'string',
+              default: '600',
+              hint: 'Adjust if the form is taller or shorter than the default',
+            }
+
+      - name: 'membership'
+        label: 'Membership'
+        file: 'src/data/settings/membership.json'
+        fields:
+          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
+          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'Benefits Section Title', name: 'benefitsTitle', widget: 'string' }
+          - label: 'Benefits'
+            name: 'benefits'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:ticket' }
+          - { label: 'Pricing Section Title', name: 'pricingTitle', widget: 'string' }
+          - { label: 'Pricing Intro Text', name: 'pricingIntro', widget: 'text' }
+          - label: 'Pricing Tiers'
+            name: 'pricingTiers'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Subtitle', name: 'subtitle', widget: 'string' }
+              - { label: 'Price', name: 'price', widget: 'string', hint: 'e.g. $25' }
+              - { label: 'Featured (highlighted)', name: 'featured', widget: 'boolean', default: false }
+          - { label: 'Form Section Heading', name: 'formHeading', widget: 'string' }
+          - { label: 'Form Note', name: 'formNote', widget: 'text' }
+          - { label: 'Form Note Email', name: 'formNoteEmail', widget: 'string' }
+          - {
+              label: 'Cognito Form ID',
+              name: 'cognitoFormId',
+              widget: 'string',
+              hint: 'Number from the Cognito Forms embed URL',
+            }
+          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '1400' }
+
       - name: 'people'
         label: 'Our People'
         file: 'src/data/pages/people.json'
@@ -299,7 +418,20 @@ collections:
         required: false
         field: { label: 'Tag', name: 'tag', widget: 'string' }
 
-  # --- FILE COLLECTIONS (single-instance pages & global settings) ---
+  # --- TESTIMONIALS (folder collection — one file per testimonial) ---
+  - name: 'testimonial'
+    label: 'Testimonials'
+    label_singular: 'Testimonial'
+    folder: 'src/data/testimonials'
+    create: true
+    slug: '{{fields.name | slugify}}'
+    summary: '{{fields.quote}}'
+    fields:
+      - { label: 'Quote', name: 'quote', widget: 'text' }
+      - { label: 'Name', name: 'name', widget: 'string', required: false }
+      - { label: 'Role / Affiliation', name: 'role', widget: 'string', required: false }
+
+  # --- GLOBAL SETTINGS (navigation, footer, social) ---
   - name: 'settings'
     label: 'Site Settings'
     files:
@@ -333,124 +465,6 @@ collections:
             fields:
               - { label: 'Button Text', name: 'text', widget: 'string' }
               - { label: 'Button URL', name: 'href', widget: 'string' }
-
-      - label: 'Landing Page'
-        name: 'landing'
-        file: 'src/data/settings/landing.md'
-        fields:
-          - { label: 'Hero Headline', name: 'heroTitle', widget: 'string' }
-          - { label: 'Hero Subtitle', name: 'heroSubtitle', widget: 'text' }
-          - { label: '"Who We Are" Heading', name: 'aboutTitle', widget: 'string' }
-          - { label: '"Who We Are" Body', name: 'aboutBody', widget: 'markdown' }
-          - { label: '"Who We Are" Image', name: 'aboutImage', widget: 'image', required: false }
-          - label: 'Value Pillars (Features section)'
-            name: 'pillars'
-            widget: 'list'
-            fields:
-              - { label: 'Title', name: 'title', widget: 'string' }
-              - { label: 'Description', name: 'description', widget: 'text' }
-              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:music' }
-      - label: 'Donation Page'
-        name: 'donation'
-        file: 'src/data/settings/donation.json'
-        fields:
-          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
-          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
-          - { label: 'Intro Text', name: 'introText', widget: 'text' }
-          - {
-              label: 'Cognito Form ID',
-              name: 'cognitoFormId',
-              widget: 'string',
-              hint: 'The number at the end of the Cognito Forms embed URL (e.g. 17)',
-            }
-          - {
-              label: 'Form Height (px)',
-              name: 'cognitoFormHeight',
-              widget: 'string',
-              default: '600',
-              hint: 'Adjust if the form is taller or shorter than the default',
-            }
-
-      - label: 'About Page'
-        name: 'about'
-        file: 'src/data/settings/about.json'
-        fields:
-          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
-          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
-          - { label: 'Intro Text', name: 'introText', widget: 'text' }
-          - { label: 'Intro Image', name: 'introImage', widget: 'image' }
-          - { label: 'Intro Image Alt Text', name: 'introImageAlt', widget: 'string' }
-          - label: 'Pillars'
-            name: 'pillars'
-            widget: 'list'
-            fields:
-              - { label: 'Title', name: 'title', widget: 'string' }
-              - { label: 'Description', name: 'description', widget: 'text' }
-              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:heart' }
-          - { label: 'CTA Title', name: 'ctaTitle', widget: 'string' }
-          - { label: 'CTA Subtitle', name: 'ctaSubtitle', widget: 'text' }
-          - { label: 'CTA Primary Button Text', name: 'ctaPrimaryText', widget: 'string' }
-          - { label: 'CTA Primary Button URL', name: 'ctaPrimaryHref', widget: 'string' }
-          - { label: 'CTA Secondary Button Text', name: 'ctaSecondaryText', widget: 'string' }
-          - { label: 'CTA Secondary Button URL', name: 'ctaSecondaryHref', widget: 'string' }
-
-      - label: 'Contact Page'
-        name: 'contact'
-        file: 'src/data/settings/contact.json'
-        fields:
-          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
-          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
-          - { label: 'Intro Text', name: 'introText', widget: 'text' }
-          - {
-              label: 'Cognito Form ID',
-              name: 'cognitoFormId',
-              widget: 'string',
-              hint: 'Number from the Cognito Forms embed URL',
-            }
-          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '600' }
-
-      - label: 'Membership Page'
-        name: 'membership'
-        file: 'src/data/settings/membership.json'
-        fields:
-          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
-          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
-          - { label: 'Benefits Section Title', name: 'benefitsTitle', widget: 'string' }
-          - label: 'Benefits'
-            name: 'benefits'
-            widget: 'list'
-            fields:
-              - { label: 'Title', name: 'title', widget: 'string' }
-              - { label: 'Description', name: 'description', widget: 'text' }
-              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:ticket' }
-          - { label: 'Pricing Section Title', name: 'pricingTitle', widget: 'string' }
-          - { label: 'Pricing Intro Text', name: 'pricingIntro', widget: 'text' }
-          - label: 'Pricing Tiers'
-            name: 'pricingTiers'
-            widget: 'list'
-            fields:
-              - { label: 'Title', name: 'title', widget: 'string' }
-              - { label: 'Subtitle', name: 'subtitle', widget: 'string' }
-              - { label: 'Price', name: 'price', widget: 'string', hint: 'e.g. $25' }
-              - { label: 'Featured (highlighted)', name: 'featured', widget: 'boolean', default: false }
-          - { label: 'Form Section Heading', name: 'formHeading', widget: 'string' }
-          - { label: 'Form Note', name: 'formNote', widget: 'text' }
-          - { label: 'Form Note Email', name: 'formNoteEmail', widget: 'string' }
-          - {
-              label: 'Cognito Form ID',
-              name: 'cognitoFormId',
-              widget: 'string',
-              hint: 'Number from the Cognito Forms embed URL',
-            }
-          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '1400' }
-
-      - label: 'Events List Page'
-        name: 'events-list'
-        file: 'src/data/settings/events-list.json'
-        fields:
-          - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
-          - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
-          - { label: 'Hero Subtitle', name: 'heroSubtitle', widget: 'text' }
 
       - label: 'Footer'
         name: 'footer'
