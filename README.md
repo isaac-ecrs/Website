@@ -1,7 +1,7 @@
 # ECRS Website
 
 [![CI](https://github.com/isaac-ecrs/Website/actions/workflows/actions.yaml/badge.svg?branch=main)](https://github.com/isaac-ecrs/Website/actions/workflows/actions.yaml)
-[![Coverage](https://codecov.io/gh/isaac-ecrs/Website/graph/badge.svg)](https://codecov.io/gh/isaac-ecrs/Website)
+[![Coverage](https://codecov.io/gh/EasternCooperative/Website/graph/badge.svg)](https://codecov.io/gh/EasternCooperative/Website)
 [![Deployed on Cloudflare Pages](https://img.shields.io/badge/deployed-Cloudflare%20Pages-F38020?logo=cloudflare&logoColor=white)](https://ecrs.org)
 
 Website for the Eastern Cooperative Recreation School (ECRS). Built with [Astro](https://astro.build/) + [Tailwind CSS](https://tailwindcss.com/), deployed on Cloudflare Pages, content managed via Sveltia CMS.
