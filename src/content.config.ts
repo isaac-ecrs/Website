@@ -123,6 +123,15 @@ const tuitionTierSchema = z.object({
   note: z.string().optional(),
 });
 
+const testimonialCollection = defineCollection({
+  loader: glob({ pattern: '*.md', base: 'src/data/testimonials' }),
+  schema: z.object({
+    quote: z.string(),
+    name: z.string().optional(),
+    role: z.string().optional(),
+  }),
+});
+
 const leaderCollection = defineCollection({
   loader: glob({ pattern: '*.md', base: 'src/data/leaders' }),
   schema: z.object({
@@ -215,5 +224,6 @@ export const collections = {
   post: postCollection,
   event: eventCollection,
   leader: leaderCollection,
+  testimonial: testimonialCollection,
   landingSettings: landingSettingsCollection,
 };

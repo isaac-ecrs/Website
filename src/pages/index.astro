@@ -5,6 +5,7 @@ import { getCollection, getEntry } from 'astro:content';
 import Layout from '~/layouts/PageLayout.astro';
 import VideoHero from '~/components/widgets/VideoHero.astro';
 import Features from '~/components/widgets/Features.astro';
+import Testimonials from '~/components/widgets/Testimonials.astro';
 import Content from '~/components/widgets/Content.astro';
 import Image from '~/components/common/Image.astro';
 import Stats from '~/components/widgets/Stats.astro';
@@ -44,6 +45,7 @@ const heroVideos = (() => {
 
 // --- Data fetching ---
 const landingEntry = await getEntry('landingSettings', 'landing');
+const testimonials = await getCollection('testimonial');
 const landing = landingEntry?.data;
 
 const allEvents = await getCollection('event', ({ data }) => !data.draft);
@@ -149,6 +151,11 @@ const metadata = {
       <div class="absolute inset-0 bg-gray-50 dark:bg-transparent"></div>
     </Fragment>
   </Features>
+
+  <!-- ============================================================
+       TESTIMONIALS
+       ============================================================ -->
+  <Testimonials testimonials={testimonials} />
 
   <!-- ============================================================
        WHO WE ARE
