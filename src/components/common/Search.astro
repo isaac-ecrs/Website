@@ -36,9 +36,9 @@
   const observers = new WeakMap<Element, MutationObserver>();
 
   function initSearchUrlFix() {
-    document.querySelectorAll('pagefind-modal').forEach((modal) => {
-      if (observers.has(modal)) return;
-      modal.querySelectorAll('a[href]').forEach(normalizeHref);
+    document.querySelectorAll('pagefind-modal, pagefind-results').forEach((container) => {
+      if (observers.has(container)) return;
+      container.querySelectorAll('a[href]').forEach(normalizeHref);
       const observer = new MutationObserver((mutations) => {
         for (const mutation of mutations) {
           for (const node of mutation.addedNodes) {
@@ -48,8 +48,8 @@
           }
         }
       });
-      observer.observe(modal, { childList: true, subtree: true });
-      observers.set(modal, observer);
+      observer.observe(container, { childList: true, subtree: true });
+      observers.set(container, observer);
     });
   }
 
@@ -104,7 +104,9 @@
      tokens already flip under .dark (see CustomStyles.astro); only the neutral
      border/hover surfaces need explicit dark overrides. */
   pagefind-modal,
-  pagefind-modal-trigger {
+  pagefind-modal-trigger,
+  pagefind-input,
+  pagefind-results {
     --pf-background: var(--aw-color-bg-page);
     --pf-text: var(--aw-color-text-default);
     --pf-text-secondary: var(--aw-color-text-muted);
@@ -114,7 +116,15 @@
     --pf-hover: rgb(243 244 246); /* gray-100 */
     --pf-mark: var(--aw-color-primary);
     --pf-modal-backdrop: rgb(0 0 0 / 50%);
+    --pf-font: inherit;
+    --pf-input-height: 52px;
+    --pf-input-font-size: 1.125rem;
+    --pf-border-radius: 9999px;
   }
+  pagefind-results {
+    --pf-border-radius: 6px;
+  }
+
   .dark pagefind-modal,
   .dark pagefind-modal-trigger {
     --pf-border: rgb(51 65 85); /* slate-700 */

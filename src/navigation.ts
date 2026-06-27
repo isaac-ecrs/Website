@@ -26,6 +26,7 @@ export const footerData_ = {
     href: s.url,
   })),
   footNote: footerData.footNote,
+  address: footerData.address,
 };
 
 // Re-export as footerData for backward compat with any existing Layout imports

@@ -2,13 +2,13 @@
 interface Props {
   formId: string;
   formName?: string;
-  title?: string;
+  id?: string;
 }
 
-const { formId, formName } = Astro.props;
+const { formId, formName, id } = Astro.props;
 ---
 
-<section class="cognito-section">
+<section id={id} class="cognito-section">
   <div class="cognito-container" data-cognito-form={formId} data-cognito-form-name={formName}></div>
 </section>
 

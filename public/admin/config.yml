@@ -35,13 +35,35 @@ collections:
           - { label: '"Who We Are" Heading', name: 'aboutTitle', widget: 'string' }
           - { label: '"Who We Are" Body', name: 'aboutBody', widget: 'markdown' }
           - { label: '"Who We Are" Image', name: 'aboutImage', widget: 'image', required: false }
-          - label: 'Value Pillars (Features section)'
+          - label: '"What to Expect" Section'
+            name: 'whatToExpectTitle'
+            widget: 'string'
+          - { label: '"What to Expect" Subtitle', name: 'whatToExpectSubtitle', widget: 'text' }
+          - label: '"What to Expect" Items'
+            name: 'whatToExpectItems'
+            widget: 'list'
+            fields:
+              - { label: 'Title', name: 'title', widget: 'string' }
+              - { label: 'Description', name: 'description', widget: 'text' }
+              - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:palette' }
+          - { label: '"Why ECRS?" Heading', name: 'whyTitle', widget: 'string' }
+          - { label: '"Why ECRS?" Subtitle', name: 'whySubtitle', widget: 'text' }
+          - label: 'Value Pillars ("Why ECRS?" items)'
             name: 'pillars'
             widget: 'list'
             fields:
               - { label: 'Title', name: 'title', widget: 'string' }
               - { label: 'Description', name: 'description', widget: 'text' }
               - { label: 'Icon (tabler)', name: 'icon', widget: 'string', hint: 'e.g. tabler:music' }
+          - { label: '"More Events" Eyebrow', name: 'moreEventsEyebrow', widget: 'string' }
+          - { label: '"More Events" Heading', name: 'moreEventsHeading', widget: 'string' }
+          - { label: '"More Events" View All Button', name: 'moreEventsViewAllText', widget: 'string' }
+          - { label: 'CTA Heading', name: 'ctaTitle', widget: 'string' }
+          - { label: 'CTA Subtitle', name: 'ctaSubtitle', widget: 'text' }
+          - { label: 'CTA Primary Button Text', name: 'ctaPrimaryText', widget: 'string' }
+          - { label: 'CTA Primary Button URL', name: 'ctaPrimaryHref', widget: 'string' }
+          - { label: 'CTA Secondary Button Text', name: 'ctaSecondaryText', widget: 'string' }
+          - { label: 'CTA Secondary Button URL', name: 'ctaSecondaryHref', widget: 'string' }
 
       - name: 'about'
         label: 'About'
@@ -73,6 +95,9 @@ collections:
           - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
           - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
           - { label: 'Hero Subtitle', name: 'heroSubtitle', widget: 'text' }
+          - { label: 'Upcoming Events Heading', name: 'upcomingHeading', widget: 'string' }
+          - { label: 'Past Events Heading', name: 'pastHeading', widget: 'string' }
+          - { label: 'No Upcoming Events Message', name: 'emptyStateText', widget: 'string' }
 
       - name: 'contact'
         label: 'Contact'
@@ -95,6 +120,7 @@ collections:
         fields:
           - { label: 'Hero Tagline', name: 'heroTagline', widget: 'string' }
           - { label: 'Hero Title', name: 'heroTitle', widget: 'string' }
+          - { label: 'SEO Description', name: 'metaDescription', widget: 'text', hint: 'Shown in search engine results' }
           - { label: 'Intro Text', name: 'introText', widget: 'text' }
           - {
               label: 'Cognito Form ID',
@@ -164,6 +190,14 @@ collections:
                   - { label: 'Title / Role', name: 'title', widget: 'string', required: false }
                   - { label: 'Photo', name: 'photo', widget: 'image', required: false }
                   - { label: 'Bio', name: 'bio', widget: 'text', required: false }
+
+      - name: 'not-found'
+        label: '404 Page'
+        file: 'src/data/settings/not-found.json'
+        fields:
+          - { label: 'Heading', name: 'title', widget: 'string' }
+          - { label: 'Subtitle', name: 'subtitle', widget: 'string' }
+          - { label: 'Back to Homepage Link Text', name: 'backLinkText', widget: 'string' }
 
   # --- LEADERS (folder collection — one file per person) ---
   - name: 'leader'
@@ -471,6 +505,7 @@ collections:
         file: 'src/data/settings/footer.json'
         fields:
           - { label: 'Footer Note / Copyright', name: 'footNote', widget: 'string' }
+          - { label: 'Address', name: 'address', widget: 'string' }
           - label: 'Footer Link Columns'
             name: 'columns'
             widget: 'list'

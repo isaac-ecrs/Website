@@ -5,9 +5,8 @@ import Layout from '~/layouts/PageLayout.astro';
 import donationSettings from '~/data/settings/donation.json';
 
 const metadata = {
-  title: 'Donate',
-  description:
-    'Support ECRS with a donation and help us continue bringing people together through creative, cooperative recreation.',
+  title: donationSettings.heroTitle,
+  description: donationSettings.metaDescription,
   openGraph: { images: [{ url: '/og/default.jpg', width: 1200, height: 630 }] },
 };
 ---
@@ -19,5 +18,5 @@ const metadata = {
     <p class="text-center text-muted">{donationSettings.introText}</p>
   </section>
 
-  <CognitoForm formId={donationSettings.cognitoFormId} formName="donation" />
+  <CognitoForm formId={donationSettings.cognitoFormId} formName="donation" id="donation-form" />
 </Layout>

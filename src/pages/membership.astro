@@ -22,7 +22,7 @@ const metadata = {
   </Features2>
 
   <!-- Pricing -->
-  <section class="py-12 px-4 max-w-4xl mx-auto">
+  <section id="pricing" class="py-12 px-4 max-w-4xl mx-auto">
     <h2 class="text-3xl font-bold text-center mb-4 text-default">{membershipSettings.pricingTitle}</h2>
     <p class="text-center text-muted mb-10 max-w-2xl mx-auto">{membershipSettings.pricingIntro}</p>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
@@ -46,12 +46,12 @@ const metadata = {
   </section>
 
   <!-- Cognito Forms embed -->
-  <section class="py-8 px-4 max-w-3xl mx-auto">
+  <section id="membership-form" class="py-8 px-4 max-w-3xl mx-auto">
     <h2 class="text-2xl font-bold text-center mb-6 text-default">{membershipSettings.formHeading}</h2>
     <p class="text-center text-muted mb-4">
       {membershipSettings.formNote}{' '}
       <a href={`mailto:${membershipSettings.formNoteEmail}`} class="text-link">{membershipSettings.formNoteEmail}</a>
     </p>
   </section>
-  <CognitoForm formId={membershipSettings.cognitoFormId} formName="membership" />
+  <CognitoForm formId={membershipSettings.cognitoFormId} formName="membership" id="join" />
 </Layout>
