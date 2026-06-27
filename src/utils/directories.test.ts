@@ -13,18 +13,18 @@ describe('getProjectRootDir', () => {
     vi.stubEnv('MODE', 'test');
     const { getProjectRootDir } = await import('./directories');
     const root = getProjectRootDir();
-    expect(path.isAbsolute(root)).toBe(true);
-    expect(root).toMatch(/ECRSWebsite[\\/]?$/);
+    // __dirname is <root>/src/utils — two levels up should equal <root>
+    const expected = path.resolve(__dirname, '../..');
+    expect(root.replace(/[/\\]+$/, '')).toBe(expected);
   });
 
-  it('returns one level up in production mode', async () => {
+  it('returns one level up from src/utils in production mode', async () => {
     vi.stubEnv('MODE', 'production');
-    // Re-import to pick up stubbed env — directories.ts reads MODE at call time
     const { getProjectRootDir } = await import('./directories');
     const root = getProjectRootDir();
-    expect(path.isAbsolute(root)).toBe(true);
-    // production path is __dirname/../ (one level up from src/utils)
-    expect(root).toMatch(/src[\\/]?$/);
+    // production: __dirname/../ = <root>/src
+    const expected = path.resolve(__dirname, '..');
+    expect(root.replace(/[/\\]+$/, '')).toBe(expected);
   });
 });
 
