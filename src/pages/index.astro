@@ -187,17 +187,6 @@ const metadata = {
     columns={2}
     items={landing?.pillars ?? [
       {
-        title: 'Intergenerational',
-        description:
-          'Events welcome everyone from toddlers to elders. When generations play together, community is built.',
-        icon: 'tabler:users-group',
-      },
-      {
-        title: 'Creative Arts',
-        description: 'Singing, dancing, dramatics, and crafts — no experience needed. We learn by doing, together.',
-        icon: 'tabler:music',
-      },
-      {
         title: 'Play & Games',
         description: 'Cooperative games and outdoor activities that bring out the joy in every participant.',
         icon: 'tabler:confetti',
@@ -206,6 +195,17 @@ const metadata = {
         title: 'Build Community',
         description: 'Over 85 years of creating lasting friendships across generations, backgrounds, and geographies.',
         icon: 'tabler:heart-handshake',
+      },
+      {
+        title: 'Creative Arts',
+        description: 'Singing, dancing, dramatics, and crafts — no experience needed. We learn by doing, together.',
+        icon: 'tabler:music',
+      },
+      {
+        title: 'Intergenerational',
+        description:
+          'Events welcome everyone from toddlers to elders. When generations play together, community is built.',
+        icon: 'tabler:users-group',
       },
     ]}
   />
@@ -239,7 +239,7 @@ const metadata = {
               <a
                 href={`/events/${event.id}`}
                 class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                aria-label={`${event.data.title} — ${formatEventDateRange(event.data.date, event.data.endDate)}`}
+
               >
                 {event.data.image && (
                   <Image
