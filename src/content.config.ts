@@ -97,6 +97,29 @@ const landingSettingsCollection = defineCollection({
         })
       )
       .optional(),
+    whatToExpectTitle: z.string().optional(),
+    whatToExpectSubtitle: z.string().optional(),
+    whatToExpectItems: z
+      .array(
+        z.object({
+          title: z.string(),
+          description: z.string(),
+          icon: z.string(),
+          iconColor: z.string().optional(),
+        })
+      )
+      .optional(),
+    whyTitle: z.string().optional(),
+    whySubtitle: z.string().optional(),
+    ctaTitle: z.string().optional(),
+    ctaSubtitle: z.string().optional(),
+    ctaPrimaryText: z.string().optional(),
+    ctaPrimaryHref: z.string().optional(),
+    ctaSecondaryText: z.string().optional(),
+    ctaSecondaryHref: z.string().optional(),
+    moreEventsEyebrow: z.string().optional(),
+    moreEventsHeading: z.string().optional(),
+    moreEventsViewAllText: z.string().optional(),
   }),
 });
 

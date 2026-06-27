@@ -120,32 +120,15 @@ const metadata = {
        ============================================================ -->
   <Features
     id="what-to-expect"
-    title="What to Expect"
-    subtitle="Events range from single days to a five-day Winter Adventure, and the shape of the day is always the same."
+    title={landing?.whatToExpectTitle ?? 'What to Expect'}
+    subtitle={landing?.whatToExpectSubtitle ?? ''}
     columns={3}
-    items={[
-      {
-        title: 'Daytime Classes',
-        description:
-          'An ever-changing menu of optional workshops: dance, drama, crafts, music, and personal growth. Participate at your own level of interest, ability, and comfort.',
-        icon: 'tabler:palette',
-        classes: { icon: 'bg-[#01aced]' },
-      },
-      {
-        title: 'Shared Meals & Downtime',
-        description:
-          "Meals are family-style and built for connection. Between sessions there's space to relax, wander, or start a spontaneous game.",
-        icon: 'tabler:friends',
-        classes: { icon: 'bg-[#41b03b]' },
-      },
-      {
-        title: 'Evening Merriment',
-        description:
-          'Nights come alive with folk dancing, singing, informal dramatics, and cooperative games. No experience required. Just show up and play.',
-        icon: 'tabler:moon-stars',
-        classes: { icon: 'bg-[#f48612]' },
-      },
-    ]}
+    items={(landing?.whatToExpectItems ?? []).map((item) => ({
+      title: item.title,
+      description: item.description,
+      icon: item.icon,
+      classes: item.iconColor ? { icon: item.iconColor } : undefined,
+    }))}
   >
     <Fragment slot="bg">
       <div class="absolute inset-0 bg-gray-50 dark:bg-transparent"></div>
@@ -189,8 +172,8 @@ const metadata = {
        ============================================================ -->
   <Features
     id="what-we-do"
-    title="Why ECRS?"
-    subtitle="For over 85 years, ECRS has brought people of all ages together through creative, joyful community experiences."
+    title={landing?.whyTitle ?? 'Why ECRS?'}
+    subtitle={landing?.whySubtitle ?? ''}
     columns={2}
     items={landing?.pillars ?? [
       {
@@ -235,10 +218,14 @@ const metadata = {
        ============================================================ -->
   {
     upcomingEvents.length > 0 && (
-      <div class="py-16 md:py-20 px-4 max-w-7xl mx-auto">
+      <div id="more-events" class="py-16 md:py-20 px-4 max-w-7xl mx-auto">
         <div class="text-center mb-12">
-          <p class="text-base font-bold uppercase tracking-widest text-primary mb-2">Join Us</p>
-          <h2 class="font-heading text-4xl md:text-5xl font-bold text-heading">More Upcoming Events</h2>
+          <p class="text-base font-bold uppercase tracking-widest text-primary mb-2">
+            {landing?.moreEventsEyebrow ?? 'Join Us'}
+          </p>
+          <h2 class="font-heading text-4xl md:text-5xl font-bold text-heading">
+            {landing?.moreEventsHeading ?? 'More Upcoming Events'}
+          </h2>
         </div>
         <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
           {upcomingEvents.map((event: (typeof upcomingEvents)[0]) => (
@@ -279,7 +266,7 @@ const metadata = {
         </ul>
         <div class="text-center mt-10">
           <a href="/events" class="btn btn-secondary">
-            View all events
+            {landing?.moreEventsViewAllText ?? 'View all events'}
           </a>
         </div>
       </div>
@@ -290,11 +277,15 @@ const metadata = {
        GET INVOLVED CTA
        ============================================================ -->
   <CallToAction
-    title="Ready to join the community?"
-    subtitle="All events are open to people of all ages and all levels of experience. Newcomers always receive 50% off their first event."
+    title={landing?.ctaTitle ?? 'Ready to join the community?'}
+    subtitle={landing?.ctaSubtitle ?? ''}
     actions={[
-      { variant: 'primary', text: 'See Upcoming Events', href: '/events' },
-      { text: 'Contact Us', href: '/contact' },
+      {
+        variant: 'primary',
+        text: landing?.ctaPrimaryText ?? 'See Upcoming Events',
+        href: landing?.ctaPrimaryHref ?? '/events',
+      },
+      { text: landing?.ctaSecondaryText ?? 'Contact Us', href: landing?.ctaSecondaryHref ?? '/contact' },
     ]}
   >
     <Fragment slot="bg">

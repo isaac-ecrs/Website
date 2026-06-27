@@ -20,10 +20,11 @@ export interface Props {
   secondaryLinks: Array<Link>;
   socialLinks: Array<Link>;
   footNote?: string;
+  address?: string;
   theme?: string;
 }
 
-const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme = 'light' } = Astro.props;
+const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', address = '', theme = 'light' } = Astro.props;
 ---
 
 <footer
@@ -110,9 +111,7 @@ const { socialLinks = [], secondaryLinks = [], links = [], footNote = '', theme 
 
       <div class="text-sm text-muted dark:text-muted">
         <Fragment set:html={footNote} />
-        <address class="not-italic mt-1">
-          Eastern Cooperative Recreation School · 323 Race St, Philadelphia, PA 19106
-        </address>
+        {address && <address class="not-italic mt-1">{address}</address>}
       </div>
     </div>
   </div>
