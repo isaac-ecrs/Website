@@ -11,7 +11,17 @@ vi.mock('astro:content', () => ({
 }));
 
 import { getCollection } from 'astro:content';
-import { fetchPosts, getRelatedPosts, findLatestPosts, findPostsBySlugs, findPostsByIds } from './blog';
+import {
+  fetchPosts,
+  getRelatedPosts,
+  findLatestPosts,
+  findPostsBySlugs,
+  findPostsByIds,
+  getStaticPathsBlogList,
+  getStaticPathsBlogPost,
+  getStaticPathsBlogCategory,
+  getStaticPathsBlogTag,
+} from './blog';
 
 // Minimal Post fixtures — bypass getNormalizedPost by populating _posts via
 // getCollection mock so the full normalization runs with these collection entries.
@@ -122,6 +132,22 @@ describe('getRelatedPosts', () => {
     expect(related).toHaveLength(1);
   });
 
+  it('handles a post with no tags gracefully', async () => {
+    const noTags: Post = {
+      id: 'no-tags',
+      slug: 'no-tags',
+      permalink: '/no-tags',
+      publishDate: new Date(),
+      title: 'No Tags',
+      draft: false,
+      metadata: {},
+      tags: undefined as unknown as Post['tags'],
+      Content: vi.fn() as unknown as Post['Content'],
+    };
+    const related = await getRelatedPosts(noTags, 4);
+    expect(Array.isArray(related)).toBe(true);
+  });
+
   it('returns empty array when there are no other posts', async () => {
     const isolated: Post = {
       id: 'solo',
@@ -138,5 +164,27 @@ describe('getRelatedPosts', () => {
     // Test the scoring with an original that matches nothing
     const related = await getRelatedPosts(isolated, 10);
     expect(related).toHaveLength(posts.length);
+  });
+});
+
+// Blog is disabled in config (isEnabled: false), so all getStaticPaths* return [] immediately.
+// These tests cover the guard branches and register the functions as executed.
+describe('getStaticPaths* (blog disabled)', () => {
+  const paginate = vi.fn();
+
+  it('getStaticPathsBlogList returns [] when blog is disabled', async () => {
+    expect(await getStaticPathsBlogList({ paginate })).toEqual([]);
+  });
+
+  it('getStaticPathsBlogPost returns [] when blog is disabled', async () => {
+    expect(await getStaticPathsBlogPost()).toEqual([]);
+  });
+
+  it('getStaticPathsBlogCategory returns [] when blog is disabled', async () => {
+    expect(await getStaticPathsBlogCategory({ paginate })).toEqual([]);
+  });
+
+  it('getStaticPathsBlogTag returns [] when blog is disabled', async () => {
+    expect(await getStaticPathsBlogTag({ paginate })).toEqual([]);
   });
 });

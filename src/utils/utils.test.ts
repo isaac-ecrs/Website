@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { trim, toUiAmount } from './utils';
+import { trim, toUiAmount, getFormattedDate } from './utils';
 
 describe('trim', () => {
   it('returns empty string unchanged', () => {
@@ -28,6 +28,19 @@ describe('trim', () => {
 
   it('returns empty string when the entire string is the strip char', () => {
     expect(trim('///', '/')).toBe('');
+  });
+});
+
+describe('getFormattedDate', () => {
+  it('formats a valid date as a short-month string', () => {
+    const result = getFormattedDate(new Date('2026-06-14T00:00:00Z'));
+    expect(typeof result).toBe('string');
+    expect(result).toContain('2026');
+  });
+
+  it('returns empty string for a falsy value', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(getFormattedDate(null as any)).toBe('');
   });
 });
 
