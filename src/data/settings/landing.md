@@ -11,16 +11,6 @@ aboutBody: |
   ECRS is a warm and welcoming community for folks of all ages. An ECRS event is an experience not to be missed! We have been building community with fun-filled, intergenerational events for more than 85 years.
 aboutImage: '~/assets/images/ecrs-line-dance.jpg'
 pillars:
-  - title: 'Intergenerational'
-    description: 'Fun-filled events for folks of all ages — building community across generations for more than 85 years.'
-    icon: 'tabler:users-group'
-    classes:
-      icon: 'bg-[#01aced]'
-  - title: 'Creative Arts'
-    description: 'Singing, dancing, informal dramatics, and crafts that emphasize enjoyment, creativity, and personal growth.'
-    icon: 'tabler:music'
-    classes:
-      icon: 'bg-[#41b03b]'
   - title: 'Play & Games'
     description: 'Fun activities – both active and relaxing – including cooperative games and personal development.'
     icon: 'tabler:confetti'
@@ -29,6 +19,16 @@ pillars:
   - title: 'Build Community'
     description: 'Develop leadership and build community for the whole family through play and the arts.'
     icon: 'tabler:heart-handshake'
+    classes:
+      icon: 'bg-[#01aced]'
+  - title: 'Creative Arts'
+    description: 'Singing, dancing, informal dramatics, and crafts that emphasize enjoyment, creativity, and personal growth.'
+    icon: 'tabler:music'
+    classes:
+      icon: 'bg-[#41b03b]'
+  - title: 'Intergenerational'
+    description: 'Fun-filled events for folks of all ages — building community across generations for more than 85 years.'
+    icon: 'tabler:users-group'
     classes:
       icon: 'bg-[#01aced]'
 ---

@@ -38,3 +38,6 @@ perf-audit/
 # Test / coverage artifacts
 coverage/
 test-results/
+
+# Lighthouse CI output
+.lighthouseci/
