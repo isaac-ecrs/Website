@@ -44,7 +44,14 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
       include: ['src/**/*.ts'],
-      exclude: ['src/**/*.d.ts', 'src/**/*.test.ts', 'src/__tests__/**', 'src/env.d.ts', 'src/types.d.ts', 'src/content.config.ts'],
+      exclude: [
+        'src/**/*.d.ts',
+        'src/**/*.test.ts',
+        'src/__tests__/**',
+        'src/env.d.ts',
+        'src/types.d.ts',
+        'src/content.config.ts',
+      ],
     },
   },
 });
