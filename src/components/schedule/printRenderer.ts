@@ -136,7 +136,6 @@ export function downloadMasterSchedule(data: MasterScheduleData, eventName: stri
     vLineColor: () => '#cccccc',
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pdfMake
     .createPdf({
       pageOrientation: landscape ? 'landscape' : 'portrait',
@@ -162,6 +161,7 @@ export function downloadMasterSchedule(data: MasterScheduleData, eventName: stri
           layout: tableLayout,
         },
       ],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
     .download(`${eventName.replace(/\s+/g, '_')}_Schedule_${year}.pdf`);
 }
@@ -238,7 +238,6 @@ export function downloadRosters(rosters: RosterEntry[], eventName: string): void
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pdfMake
     .createPdf({
       pageSize: 'LETTER',
@@ -251,6 +250,7 @@ export function downloadRosters(rosters: RosterEntry[], eventName: string): void
         margin: [0, 12, 0, 0],
       }),
       content,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
     .download(`${eventName}_Rosters.pdf`);
 }
@@ -352,7 +352,6 @@ export async function downloadIndividualSchedules(
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   pdfMake
     .createPdf({
       pageSize: 'LETTER',
@@ -365,6 +364,7 @@ export async function downloadIndividualSchedules(
         margin: [0, 12, 0, 0],
       }),
       content,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } as any)
     .download(`${eventName}_IndividualSchedules.pdf`);
 }
