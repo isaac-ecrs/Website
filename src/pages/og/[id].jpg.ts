@@ -65,6 +65,7 @@ async function svgToJpeg(svg: string): Promise<Buffer> {
 async function renderDefaultCard(): Promise<Buffer> {
   const logo = await darkLogoUri();
   const bg = await lineDanceUri();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const svg = await satori(
     {
       type: 'div',
@@ -163,7 +164,7 @@ async function renderDefaultCard(): Promise<Buffer> {
           },
         ],
       },
-    },
+    } as any,
     { width: OG_W, height: OG_H, fonts: FONTS }
   );
 
@@ -180,6 +181,7 @@ async function renderEventCard(title: string, dateStr: string, location: string)
   const logo = await darkLogoUri();
   const bg = await lineDanceUri();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const svg = await satori(
     {
       type: 'div',
@@ -290,7 +292,7 @@ async function renderEventCard(title: string, dateStr: string, location: string)
           },
         ],
       },
-    },
+    } as any,
     { width: OG_W, height: OG_H, fonts: FONTS }
   );
 
