@@ -1,0 +1,15 @@
+---
+export const prerender = true;
+import Layout from '~/layouts/PageLayout.astro';
+import ScheduleGenerator from '~/components/schedule/ScheduleGenerator';
+---
+
+<Layout
+  metadata={{
+    title: 'Schedule Generator',
+    description: 'Generate workshop schedules from a Cognito Forms Excel export.',
+    robots: { index: false, follow: false },
+  }}
+>
+  <ScheduleGenerator client:only="react" />
+</Layout>
