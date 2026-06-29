@@ -69,6 +69,19 @@ const pricingNotes: PricingTier[] = (data.pricing ?? []).filter((p) => p.note);
 function formatCutoff(d: Date) {
   return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 }
+
+// Combine a UTC-midnight Date with an optional "H:MM AM/PM" time string into an
+// ISO 8601 local-time string (no offset — Schema.org accepts this for local events).
+function buildISODateTime(date: Date, timeStr: string | undefined): string {
+  const datePart = date.toISOString().split('T')[0];
+  if (!timeStr) return date.toISOString();
+  const m = timeStr.match(/^(\d+):(\d+)\s*(AM|PM)$/i);
+  if (!m) return date.toISOString();
+  let h = parseInt(m[1], 10);
+  if (m[3].toUpperCase() === 'PM' && h !== 12) h += 12;
+  if (m[3].toUpperCase() === 'AM' && h === 12) h = 0;
+  return `${datePart}T${String(h).padStart(2, '0')}:${m[2]}:00`;
+}
 const eventTags: string[] = data.tags ?? [];
 
 // Keep draft events and e2e test fixtures out of the search index, mirroring
@@ -103,8 +116,8 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
   name: data.title,
-  startDate: data.date.toISOString(),
-  endDate: data.endDate?.toISOString() ?? data.date.toISOString(),
+  startDate: buildISODateTime(data.date, data.startTime),
+  endDate: data.endDate ? buildISODateTime(data.endDate, data.endTime) : buildISODateTime(data.date, data.endTime),
   eventStatus: isPast ? 'https://schema.org/EventPast' : 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
   location: {
@@ -120,6 +133,11 @@ const jsonLd = {
     name: 'ECRS',
     url: Astro.site ? String(Astro.site) : undefined,
   },
+  audience: {
+    '@type': 'PeopleAudience',
+    audienceType: 'All ages, intergenerational, families',
+    suggestedMinAge: 0,
+  },
   offers:
     pricingRows.length > 0
       ? pricingRows.map((p) => ({
@@ -132,11 +150,27 @@ const jsonLd = {
         }))
       : undefined,
 };
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: Astro.site ? String(Astro.site) : 'https://ecrs.org/' },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Events',
+      item: Astro.site ? new URL('/events', Astro.site).href : 'https://ecrs.org/events',
+    },
+    { '@type': 'ListItem', position: 3, name: data.title },
+  ],
+};
 ---
 
 <Layout metadata={metadata} noIndex={noIndex}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
   </Fragment>
 
   <!-- ============================================================

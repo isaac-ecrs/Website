@@ -1,7 +1,7 @@
 ---
 import '~/assets/styles/tailwind.css';
 
-import { I18N, SITE, METADATA } from 'astrowind:config';
+import { I18N, SITE } from 'astrowind:config';
 
 import CommonMeta from '~/components/common/CommonMeta.astro';
 import Favicons from '~/components/Favicons.astro';
@@ -48,15 +48,17 @@ const { language, textDirection } = I18N;
     <link rel="preload" href="/fonts/rusty-hooks.woff2" as="font" type="font/woff2" crossorigin />
 
     <script
+      is:inline
       type="application/ld+json"
       set:html={JSON.stringify({
         '@context': 'https://schema.org',
-        '@type': 'Organization',
-        name: SITE.name,
+        '@type': 'NGO',
+        name: 'Eastern Cooperative Recreation School',
+        alternateName: siteData.name,
         url: Astro.site ? String(Astro.site) : SITE.site,
         logo: Astro.site ? String(new URL('/images/ecrs-logo.png', Astro.site)) : '/images/ecrs-logo.png',
-        description: METADATA.description,
-        sameAs: siteData.socialLinks.map((s) => s.url),
+        description: siteData.mission,
+        sameAs: siteData.socialLinks.map((s) => s.url).filter(Boolean),
       })}
     />
 
