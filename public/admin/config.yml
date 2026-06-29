@@ -6,7 +6,7 @@
 
 backend:
   name: github
-  repo: isaac-ecrs/Website
+  repo: EasternCooperative/Website
   branch: main
   auth_scope: public_repo
   base_url: https://sveltia-cms-auth.isaac-cd9.workers.dev
