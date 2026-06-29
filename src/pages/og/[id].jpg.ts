@@ -66,6 +66,7 @@ async function renderDefaultCard(): Promise<Buffer> {
   const logo = await darkLogoUri();
   const bg = await lineDanceUri();
   const svg = await satori(
+    // @ts-expect-error — satori accepts {type,props} objects at runtime; its ReactNode typing requires JSX
     {
       type: 'div',
       props: {
@@ -181,6 +182,7 @@ async function renderEventCard(title: string, dateStr: string, location: string)
   const bg = await lineDanceUri();
 
   const svg = await satori(
+    // @ts-expect-error — satori accepts {type,props} objects at runtime; its ReactNode typing requires JSX
     {
       type: 'div',
       props: {
