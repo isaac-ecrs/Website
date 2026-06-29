@@ -4,9 +4,7 @@ date: 2023-06-09
 endDate: 2023-06-11
 startTime: '5:00 PM'
 endTime: '3:00 PM'
-location: 'Camp Onas'
-address: '609 Geigel Hill Road, Ottsville, PA 18942'
-image: '~/assets/images/sites/camp-onas.jpg'
+siteId: camp-onas
 tags:
   - weekend
   - camping

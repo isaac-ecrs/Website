@@ -5,8 +5,11 @@ import HeroText from '~/components/widgets/HeroText.astro';
 import EventCard from '~/components/widgets/EventCard.astro';
 import eventsListSettings from '~/data/settings/events-list.json';
 import { formatEventDateRange } from '~/utils/dates';
+import { resolveVenue } from '~/utils/resolveEvent';
 
 const allEvents = await getCollection('event', ({ data }) => !data.draft);
+const allSites = await getCollection('site');
+const siteMap = new Map(allSites.map((s) => [s.id, s.data]));
 // en-CA produces YYYY-MM-DD output (the only locale that does), which lets us
 // concatenate directly into a valid ISO string. The timezone is what matters here.
 const now = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) + 'T00:00:00Z');
@@ -44,11 +47,10 @@ const itemListJsonLd = {
           ? 'https://schema.org/EventPast'
           : 'https://schema.org/EventScheduled',
       eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-      location: {
-        '@type': 'Place',
-        name: event.data.location,
-        ...(event.data.address ? { address: event.data.address } : {}),
-      },
+      location: (() => {
+        const v = resolveVenue(event.data, event.data.siteId ? siteMap.get(event.data.siteId) : undefined);
+        return { '@type': 'Place', name: v.location, ...(v.address ? { address: v.address } : {}) };
+      })(),
       audience: {
         '@type': 'PeopleAudience',
         audienceType: 'All ages, intergenerational, families',
@@ -84,21 +86,24 @@ const itemListJsonLd = {
         <p class="text-muted text-lg">{eventsListSettings.emptyStateText}</p>
       ) : (
         <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
-          {upcoming.map((event: (typeof upcoming)[0]) => (
-            <li>
-              <EventCard
-                title={event.data.title}
-                date={formatEventDateRange(event.data.date, event.data.endDate)}
-                location={event.data.location}
-                href={`/events/${event.id}`}
-                image={event.data.image}
-                excerpt={event.data.excerpt}
-                registrationDeadline={event.data.registrationDeadline}
-                hasRegistration={!!(event.data.registrationUrl || event.data.cognitoFormId)}
-                variant="upcoming"
-              />
-            </li>
-          ))}
+          {upcoming.map((event: (typeof upcoming)[0]) => {
+            const v = resolveVenue(event.data, event.data.siteId ? siteMap.get(event.data.siteId) : undefined);
+            return (
+              <li>
+                <EventCard
+                  title={event.data.title}
+                  date={formatEventDateRange(event.data.date, event.data.endDate)}
+                  location={v.location}
+                  href={`/events/${event.id}`}
+                  image={v.image}
+                  excerpt={event.data.excerpt}
+                  registrationDeadline={event.data.registrationDeadline}
+                  hasRegistration={!!(event.data.registrationUrl || event.data.cognitoFormId)}
+                  variant="upcoming"
+                />
+              </li>
+            );
+          })}
         </ul>
       )
     }
@@ -117,18 +122,21 @@ const itemListJsonLd = {
           {eventsListSettings.pastHeading}
         </h2>
         <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
-          {past.map((event: (typeof past)[0]) => (
-            <li>
-              <EventCard
-                title={event.data.title}
-                date={formatEventDateRange(event.data.date, event.data.endDate)}
-                location={event.data.location}
-                href={`/events/${event.id}`}
-                image={event.data.image}
-                variant="past"
-              />
-            </li>
-          ))}
+          {past.map((event: (typeof past)[0]) => {
+            const v = resolveVenue(event.data, event.data.siteId ? siteMap.get(event.data.siteId) : undefined);
+            return (
+              <li>
+                <EventCard
+                  title={event.data.title}
+                  date={formatEventDateRange(event.data.date, event.data.endDate)}
+                  location={v.location}
+                  href={`/events/${event.id}`}
+                  image={v.image}
+                  variant="past"
+                />
+              </li>
+            );
+          })}
         </ul>
       </section>
     )

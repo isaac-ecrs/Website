@@ -4,8 +4,7 @@ date: 2025-03-28
 endDate: 2025-03-30
 startTime: '4:30 PM'
 endTime: '1:00 PM'
-location: 'Stony Point Center'
-address: 'Stony Point, NY'
+siteId: stony-point-center
 tags:
   - weekend
 classes:

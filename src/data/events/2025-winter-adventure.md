@@ -4,9 +4,7 @@ date: 2025-12-27
 endDate: 2026-01-01
 startTime: '4:00 PM'
 endTime: '12:00 PM'
-location: 'The Y at Watson Woods'
-address: 'Painted Post, NY'
-image: '~/assets/images/sites/watson.jpg'
+siteId: the-y-at-watson-woods
 tags:
   - multi-day
   - new-year

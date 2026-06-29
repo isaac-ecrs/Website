@@ -162,6 +162,17 @@ const leaderCollection = defineCollection({
   }),
 });
 
+const siteCollection = defineCollection({
+  loader: glob({ pattern: '*.md', base: 'src/data/sites' }),
+  schema: z.object({
+    name: z.string(),
+    address: z.string().optional(),
+    phone: z.string().optional(),
+    accessibilityNote: z.string().optional(),
+    image: z.string().optional(),
+  }),
+});
+
 const eventCollection = defineCollection({
   loader: glob({ pattern: ['*.md', '*.mdx'], base: 'src/data/events' }),
   schema: z.object({
@@ -170,7 +181,8 @@ const eventCollection = defineCollection({
     endDate: optionalDate,
     startTime: z.string().optional(),
     endTime: z.string().optional(),
-    location: z.string(),
+    siteId: z.string().optional(),
+    location: z.string().optional(),
     address: z.string().optional(),
     phone: z.string().optional(),
     accessibilityNote: z.string().optional(),
@@ -244,6 +256,7 @@ export const collections = {
   post: postCollection,
   event: eventCollection,
   leader: leaderCollection,
+  site: siteCollection,
   testimonial: testimonialCollection,
   landingSettings: landingSettingsCollection,
 };
