@@ -163,7 +163,8 @@ async function renderDefaultCard(): Promise<Buffer> {
           },
         ],
       },
-    },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any,
     { width: OG_W, height: OG_H, fonts: FONTS }
   );
 
@@ -290,7 +291,8 @@ async function renderEventCard(title: string, dateStr: string, location: string)
           },
         ],
       },
-    },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any,
     { width: OG_W, height: OG_H, fonts: FONTS }
   );
 

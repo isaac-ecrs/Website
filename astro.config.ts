@@ -16,6 +16,8 @@ import astrowind from './vendor/integration';
 
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter';
 
+import react from '@astrojs/react';
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
@@ -45,7 +47,6 @@ export default defineConfig({
         ],
       },
     }),
-
     compress({
       CSS: true,
       HTML: {
@@ -57,17 +58,12 @@ export default defineConfig({
       JavaScript: true,
       SVG: false,
       Logger: 1,
-    }),
-
-    // Indexes the built HTML in dist/ after the build (and serves the index in
+    }), // Indexes the built HTML in dist/ after the build (and serves the index in
     // dev/preview). Placed after compress so it indexes the final output.
     pagefind(),
-
     astrowind({
       config: './src/config.yaml',
-    }),
-
-    // CF_PAGES_URL is the Cloudflare Pages deployment URL — always the *.pages.dev
+    }), // CF_PAGES_URL is the Cloudflare Pages deployment URL — always the *.pages.dev
     // address, even after a custom domain is added. We use it to make OG image
     // URLs and sitemaps resolve against the actual deployment rather than the
     // hardcoded ecrs.org in config.yaml (which doesn't exist yet).
@@ -90,6 +86,7 @@ export default defineConfig({
           },
         ]
       : []),
+    react(),
   ],
 
   image: {
