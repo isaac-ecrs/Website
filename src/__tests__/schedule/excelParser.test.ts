@@ -214,6 +214,32 @@ describe('parseExcel', () => {
     expect(() => parseExcel(buffer)).toThrow(ExcelParseError);
   });
 
+  it('throws ExcelParseError when the file bytes are not a valid xlsx', () => {
+    const garbage = new Uint8Array([0, 1, 2, 3, 4, 5]).buffer;
+    expect(() => parseExcel(garbage)).toThrow(ExcelParseError);
+  });
+
+  it('throws ExcelParseError when ClassSelection has no data rows', () => {
+    // Sheet exists but contains only the header row — attendees.size === 0
+    const buffer = buildWorkbook({
+      ClassSelection: makeClassSelectionSheet([]),
+      MorningFirstPeriod: makePeriodSheet([row('SEL001', 'Alice', 'Johnson', 'Woodworking (John Smith)')]),
+    });
+    expect(() => parseExcel(buffer)).toThrow(ExcelParseError);
+  });
+
+  it('creates a synthetic attendee when period row selectionId is absent from ClassSelection', () => {
+    // ClassSelection has SEL001; period sheet has SEL999 — triggers the fallback attendee branch
+    const buffer = buildWorkbook({
+      ClassSelection: makeClassSelectionSheet([attendeeRow('SEL001', 'Alice', 'Johnson')]),
+      MorningFirstPeriod: makePeriodSheet([row('SEL999', 'Bob', 'Williams', 'Pottery (Jane Doe)')]),
+    });
+    const workshops = parseExcel(buffer);
+    expect(workshops).toHaveLength(1);
+    expect(workshops[0].name).toBe('Pottery');
+    expect(workshops[0].selections[0].firstName).toBe('Bob');
+  });
+
   it('handles very long workshop names', () => {
     const longName = 'A'.repeat(500);
     const buffer = buildWorkbook({
