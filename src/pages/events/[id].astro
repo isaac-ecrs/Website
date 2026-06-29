@@ -169,8 +169,8 @@ const breadcrumbJsonLd = {
 
 <Layout metadata={metadata} noIndex={noIndex}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
   </Fragment>
 
   <!-- ============================================================

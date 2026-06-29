@@ -63,7 +63,7 @@ const itemListJsonLd = {
 
 <Layout metadata={metadata}>
   <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
   </Fragment>
   <HeroText
     tagline={eventsListSettings.heroTagline}
