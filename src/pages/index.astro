@@ -10,7 +10,6 @@ import Content from '~/components/widgets/Content.astro';
 import Image from '~/components/common/Image.astro';
 import Stats from '~/components/widgets/Stats.astro';
 import CallToAction from '~/components/widgets/CallToAction.astro';
-import siteData from '~/data/settings/site.json';
 import { formatEventDateRange } from '~/utils/dates';
 
 // --- Hero videos: lead clip rotates by calendar day so visitors see variety across builds.
@@ -61,18 +60,6 @@ const upcomingEvents = upcomingAll.slice(1, 4);
 
 const featuredDateStr = featuredEvent ? formatEventDateRange(featuredEvent.data.date, featuredEvent.data.endDate) : '';
 
-// --- Organization / NGO structured data (brand SERP, knowledge panel) ---
-const orgJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'NGO',
-  name: 'Eastern Cooperative Recreation School',
-  alternateName: siteData.name,
-  url: Astro.site ? String(Astro.site) : 'https://ecrs.org',
-  logo: Astro.site ? new URL('/images/ecrs-logo.png', Astro.site).href : undefined,
-  description: siteData.mission,
-  sameAs: siteData.socialLinks.map((s) => s.url).filter(Boolean),
-};
-
 const metadata = {
   title: 'ECRS — Come to Play. Play to Learn.',
   ignoreTitleTemplate: true,
@@ -83,10 +70,6 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <Fragment slot="head">
-    <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
-  </Fragment>
-
   <!-- ============================================================
        HERO — full-bleed cycling video background
        ============================================================ -->

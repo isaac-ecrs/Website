@@ -23,9 +23,48 @@ const metadata = {
   title: eventsListSettings.heroTitle,
   description: eventsListSettings.heroSubtitle,
 };
+
+const allOrdered = [...upcoming, ...past];
+const itemListJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'ECRS Events',
+  url: Astro.site ? new URL('/events', Astro.site).href : 'https://ecrs.org/events',
+  itemListElement: allOrdered.map((event, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Event',
+      '@id': Astro.site ? new URL(`/events/${event.id}`, Astro.site).href : `https://ecrs.org/events/${event.id}`,
+      name: event.data.title,
+      startDate: event.data.date.toISOString(),
+      ...(event.data.endDate ? { endDate: event.data.endDate.toISOString() } : {}),
+      eventStatus:
+        (event.data.endDate ?? event.data.date) < now
+          ? 'https://schema.org/EventPast'
+          : 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      location: {
+        '@type': 'Place',
+        name: event.data.location,
+        ...(event.data.address ? { address: event.data.address } : {}),
+      },
+      audience: {
+        '@type': 'PeopleAudience',
+        audienceType: 'All ages, intergenerational, families',
+        suggestedMinAge: 0,
+      },
+      ...(event.data.excerpt ? { description: event.data.excerpt } : {}),
+      url: Astro.site ? new URL(`/events/${event.id}`, Astro.site).href : `https://ecrs.org/events/${event.id}`,
+    },
+  })),
+};
 ---
 
 <Layout metadata={metadata}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
+  </Fragment>
   <HeroText
     tagline={eventsListSettings.heroTagline}
     title={eventsListSettings.heroTitle}
