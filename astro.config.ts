@@ -7,14 +7,13 @@ import { unified } from '@astrojs/markdown-remark';
 
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
-import mdx from '@astrojs/mdx';
 import icon from 'astro-icon';
 import compress from 'astro-compress';
 import pagefind from 'astro-pagefind';
 
 import astrowind from './vendor/integration';
 
-import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter';
+import { responsiveTablesRehypePlugin } from './src/utils/frontmatter';
 
 import react from '@astrojs/react';
 
@@ -30,7 +29,6 @@ export default defineConfig({
     sitemap({
       filter: (page) => !page.includes('/events/e2e-'),
     }),
-    mdx(),
     icon({
       include: {
         tabler: ['*'],
@@ -105,7 +103,6 @@ export default defineConfig({
 
   markdown: {
     processor: unified({
-      remarkPlugins: [readingTimeRemarkPlugin],
       rehypePlugins: [responsiveTablesRehypePlugin],
     }),
   },

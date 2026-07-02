@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { responsiveTablesRehypePlugin, readingTimeRemarkPlugin } from './frontmatter';
+import { responsiveTablesRehypePlugin } from './frontmatter';
 
 type MockElement = {
   type: string;
@@ -64,28 +64,5 @@ describe('responsiveTablesRehypePlugin', () => {
     expect(tree.children[0].tagName).toBe('p');
     expect(tree.children[1].tagName).toBe('div');
     expect(tree.children[1].children?.[0]).toBe(table);
-  });
-});
-
-describe('readingTimeRemarkPlugin', () => {
-  // RemarkPlugin is typed as a unified Processor method; cast the function itself
-  // to drop the `this: Processor` constraint before calling.
-  const plugin = (readingTimeRemarkPlugin as unknown as () => (tree: unknown, file: unknown) => void)();
-
-  it('sets readingTime on frontmatter as a positive integer', () => {
-    const tree = {
-      type: 'root',
-      children: [{ type: 'paragraph', children: [{ type: 'text', value: 'Hello world. '.repeat(200) }] }],
-    };
-    const file = { data: { astro: { frontmatter: {} as Record<string, unknown> } } };
-    plugin(tree, file);
-    expect(typeof file.data.astro.frontmatter.readingTime).toBe('number');
-    expect(file.data.astro.frontmatter.readingTime).toBeGreaterThan(0);
-  });
-
-  it('does not throw when frontmatter is absent', () => {
-    const tree = { type: 'root', children: [] };
-    const file = { data: {} };
-    expect(() => plugin(tree, file)).not.toThrow();
   });
 });
