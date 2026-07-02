@@ -183,10 +183,24 @@ function processAddress(addr, attendeeCount) {
   }
 }
 
+// Writes the output file, skipping when the city data is unchanged so the
+// prebuild run doesn't dirty the tracked JSON (fresh generatedAt timestamp)
+// on every `npm run build`. Trailing newline keeps prettier --check happy.
+function writeCitiesFile(cities) {
+  if (fs.existsSync(outputFile)) {
+    const previous = JSON.parse(fs.readFileSync(outputFile, 'utf8'));
+    if (JSON.stringify(previous.cities) === JSON.stringify(cities)) {
+      console.log(`\n✓ ${cities.length} cities — unchanged, skipping write`);
+      return;
+    }
+  }
+  const output = { generatedAt: new Date().toISOString(), cities };
+  fs.writeFileSync(outputFile, JSON.stringify(output, null, 2) + '\n');
+}
+
 function writeOutput() {
   const cities = Array.from(cityMap.values()).sort((a, b) => b.count - a.count);
-  const output = { generatedAt: new Date().toISOString(), cities };
-  fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
+  writeCitiesFile(cities);
   console.log(`\n✓ ${cities.length} cities, ${skipped} skipped`);
   console.log(`  Output: ${outputFile}`);
   console.log('\nTop cities:');
@@ -431,8 +445,7 @@ async function runJsonMergeMode(jsonFiles) {
   }
 
   const cities = Array.from(merged.values()).sort((a, b) => b.count - a.count);
-  const output = { generatedAt: new Date().toISOString(), cities };
-  fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
+  writeCitiesFile(cities);
 
   const total = cities.reduce((s, c) => s + c.count, 0);
   const geocoded = cities.filter((c) => c.lat !== null).length;
