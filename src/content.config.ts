@@ -7,7 +7,9 @@ const optionalDate = z.preprocess(emptyToUndefined, z.date().optional());
 const optionalString = z.preprocess(emptyToUndefined, z.string().optional());
 
 const landingSettingsCollection = defineCollection({
-  loader: glob({ pattern: '*.md', base: 'src/data/settings' }),
+  // Only landing.md — the JSON siblings in settings/ are plain imports, and a
+  // stray future .md must not get pulled into this schema and break the build.
+  loader: glob({ pattern: 'landing.md', base: 'src/data/settings' }),
   schema: z.object({
     heroTitle: z.string(),
     heroSubtitle: z.string(),

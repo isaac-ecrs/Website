@@ -1,10 +1,10 @@
-# AstroWind Agent Instructions
+# ECRS Website Agent Instructions
 
 ## Project Overview
 
-AstroWind is a free, open-source website template built with **Astro v6** and **Tailwind CSS v4**. It generates a fully static site optimized for performance, SEO, and accessibility.
+The ECRS website — a fully static site built with **Astro v6** and **Tailwind CSS v4**, derived from the AstroWind template. Content is managed through Sveltia CMS and the site deploys on Cloudflare Pages: see [docs/deployment-and-cms.md](./docs/deployment-and-cms.md) before touching CI, the CMS config, or branch settings.
 
-**Stack:** Astro v6 | Tailwind CSS v4 | TypeScript 5.9 | MDX | Sharp
+**Stack:** Astro v6 | Tailwind CSS v4 | TypeScript | React (islands) | Sharp
 
 ## Quick Reference
 
@@ -28,17 +28,21 @@ src/
   components/
     common/        # Shared: Image, Metadata, Analytics, ToggleTheme
     ui/            # Primitives: Button, Headline, WidgetWrapper, ItemGrid
-    widgets/       # Page sections: Hero, Features, Pricing, Header, Footer
-    blog/          # Blog: SinglePost, List, Pagination, Tags
+    widgets/       # Page sections: Hero, Features, Header, Footer, CognitoForm
+    schedule/      # React schedule-generator island
     CustomStyles.astro  # CSS variables for colors and fonts
-  content.config.ts    # Content Collections schema (Astro v6 location)
-  data/post/           # Blog posts (.md, .mdx)
+  content.config.ts    # Content Collections schema (zod — validates CMS content)
+  data/                # CMS-managed content: events/, leaders/, sites/,
+                       # testimonials/, settings/, pages/
   layouts/             # Layout.astro, PageLayout.astro, MarkdownLayout.astro
-  pages/               # File-based routing
-  utils/               # blog.ts, images.ts, permalinks.ts, frontmatter.ts
+  pages/               # File-based routing (events/, og/, internal/, …)
+  utils/               # images.ts, permalinks.ts, dates.ts, eventSections.ts
   config.yaml          # Site configuration (loaded as virtual module)
   navigation.ts        # Navigation structure
   types.d.ts           # TypeScript type definitions
+public/admin/          # Sveltia CMS (config.yml + admin page)
+scripts/               # Prebuild: Sveltia copy, image copy, member locations
+functions/             # Cloudflare Pages Functions (edge middleware)
 vendor/integration/    # Custom Astro integration for config loading
 ```
 
@@ -53,7 +57,7 @@ import { SITE } from 'astrowind:config';
 
 ### Configuration System
 
-Site config lives in `src/config.yaml` and is loaded as a Vite virtual module `astrowind:config` by the custom integration in `vendor/integration/`. Exports: `SITE`, `I18N`, `METADATA`, `APP_BLOG`, `UI`, `ANALYTICS`.
+Site config lives in `src/config.yaml` and is loaded as a Vite virtual module `astrowind:config` by the custom integration in `vendor/integration/`. Exports in use: `SITE`, `I18N`, `METADATA`, `UI`, `ANALYTICS`.
 
 ## Tailwind CSS v4
 
@@ -75,9 +79,7 @@ Components use `twMerge` from `tailwind-merge` v3 for conditional class composit
 
 ## Content Collections
 
-Defined in `src/content.config.ts` using the Astro v6 Content Layer API with `glob()` loader. Posts are in `src/data/post/` as `.md` or `.mdx` files.
-
-Post frontmatter: `title` (required), `publishDate`, `updateDate`, `draft`, `excerpt`, `image`, `category`, `tags`, `author`, `metadata`.
+Defined in `src/content.config.ts` using the Astro v6 Content Layer API with `glob()` loaders: `event` (`src/data/events/`), `leader`, `site` (venues), `testimonial`, and `landingSettings` (`src/data/settings/landing.md`). The zod schemas double as validation for CMS commits — a build fails on invalid content. The full CMS ↔ collection mapping is in [docs/deployment-and-cms.md](./docs/deployment-and-cms.md); when adding a field, update `public/admin/config.yml` and the zod schema together.
 
 ## Component Patterns
 
@@ -103,7 +105,8 @@ After changes, always verify:
 
 1. `npm run build` succeeds
 2. `npm run check` passes (astro check + ESLint + Prettier)
-3. Visual check in browser: homepage, blog, dark mode, mobile menu
+3. `npm test` passes (Vitest); `npm run test:e2e` for event-page/UI changes
+4. Visual check in browser: homepage, events listing, an event detail page, dark mode, mobile menu
 
 ## Known Issues / Upgrade Holds
 
