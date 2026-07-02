@@ -2,6 +2,10 @@
 dist/
 .output/
 
+# Member data exports (raw PII — never commit)
+scripts/input/*.csv
+scripts/input/*.xlsx
+
 # dependencies
 node_modules/
 

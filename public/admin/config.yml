@@ -224,6 +224,33 @@ collections:
       - { label: 'Photo', name: 'photo', widget: 'image', required: false }
       - { label: 'Bio', name: 'bio', widget: 'text', required: false }
 
+  # --- VENUES (folder collection — one file per venue) ---
+  - name: 'site'
+    label: 'Venues'
+    label_singular: 'Venue'
+    folder: 'src/data/sites'
+    create: true
+    identifier_field: name
+    slug: '{{fields.name | slugify}}'
+    fields:
+      - { label: 'Name', name: 'name', widget: 'string' }
+      - { label: 'Full Address', name: 'address', widget: 'string', required: false }
+      - { label: 'Phone', name: 'phone', widget: 'string', required: false }
+      - {
+          label: 'Accessibility Note',
+          name: 'accessibilityNote',
+          widget: 'string',
+          required: false,
+          hint: 'e.g. Venue is wheelchair accessible',
+        }
+      - {
+          label: 'Venue Image',
+          name: 'image',
+          widget: 'image',
+          required: false,
+          hint: 'Default image shown on all events at this venue.',
+        }
+
   # --- EVENTS (folder collection — one file per event) ---
   - name: 'event'
     label: 'Events'
@@ -244,18 +271,53 @@ collections:
         }
       - { label: 'Start Time', name: 'startTime', widget: 'string', required: false, hint: 'e.g. 5:00 PM' }
       - { label: 'End Time', name: 'endTime', widget: 'string', required: false, hint: 'e.g. 3:00 PM' }
-      - { label: 'Location Name', name: 'location', widget: 'string', hint: 'e.g. Camp Onas' }
-      - { label: 'Full Address', name: 'address', widget: 'string', required: false }
+      - {
+          label: 'Venue',
+          name: 'siteId',
+          widget: 'relation',
+          collection: 'site',
+          search_fields: ['name'],
+          value_field: '{{slug}}',
+          display_fields: ['name'],
+          required: false,
+          hint: 'Select a venue — location name, address, and image will be pulled automatically.',
+        }
+      - {
+          label: 'Location Name Override',
+          name: 'location',
+          widget: 'string',
+          required: false,
+          hint: 'Leave blank when a venue is selected above. Fill this only for one-off locations.',
+        }
+      - {
+          label: 'Address Override',
+          name: 'address',
+          widget: 'string',
+          required: false,
+          hint: 'Leave blank to use the venue address.',
+        }
       - { label: 'Short Description (excerpt)', name: 'excerpt', widget: 'string', required: false }
       - { label: 'Full Description', name: 'description', widget: 'markdown', required: false }
-      - { label: 'Event Image', name: 'image', widget: 'image', required: false }
-      - { label: 'Phone', name: 'phone', widget: 'string', required: false, hint: 'Venue phone number' }
       - {
-          label: 'Accessibility Note',
+          label: 'Event Image Override',
+          name: 'image',
+          widget: 'image',
+          required: false,
+          hint: 'Optional — overrides the venue image for this specific event.',
+        }
+      - {
+          label: 'Phone Override',
+          name: 'phone',
+          widget: 'string',
+          required: false,
+          hint: 'Overrides venue phone number',
+        }
+      - {
+          label: 'Accessibility Note Override',
           name: 'accessibilityNote',
           widget: 'string',
           required: false,
-          hint: 'e.g. Venue is wheelchair accessible',
+          hint: 'Overrides the venue accessibility note for this event.',
         }
 
       # ── Registration ──────────────────────────────────────────────

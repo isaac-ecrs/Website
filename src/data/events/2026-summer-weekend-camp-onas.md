@@ -4,12 +4,10 @@ date: 2026-06-12
 endDate: 2026-06-14
 startTime: '5:00 PM'
 endTime: '3:00 PM'
-location: 'Camp Onas'
-address: '609 Geigel Hill Road, Ottsville, PA 18942'
+siteId: camp-onas
 excerpt: "Our Camping Weekend is ECRS's most affordable residential event – where newcomers and longtime members gather under the stars for a weekend of pure play."
 description: |
   Our Camping Weekend is ECRS's most affordable residential event – where newcomers and longtime members gather under the stars for a weekend of pure play.
-image: '~/assets/images/sites/camp-onas.jpg'
 registrationUrl: 'https://www.ecrs.org/event/onas2026/'
 registrationDeadline: 2026-06-05
 pricing:

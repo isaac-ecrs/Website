@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
+import { resolveVenue } from '~/utils/resolveEvent';
 import satori from 'satori';
 import sharp from 'sharp';
 import { readFileSync } from 'node:fs';
@@ -303,7 +304,15 @@ async function renderEventCard(title: string, dateStr: string, location: string)
 
 export async function getStaticPaths() {
   const events = await getCollection('event');
-  return [{ params: { id: 'default' } }, ...events.map((e) => ({ params: { id: e.id }, props: { event: e } }))];
+  const sites = await getCollection('site');
+  const siteMap = new Map(sites.map((s) => [s.id, s.data]));
+  return [
+    { params: { id: 'default' } },
+    ...events.map((e) => ({
+      params: { id: e.id },
+      props: { event: e, siteData: e.data.siteId ? siteMap.get(e.data.siteId) : undefined },
+    })),
+  ];
 }
 
 export const GET: APIRoute = async ({ params, props }) => {
@@ -312,9 +321,13 @@ export const GET: APIRoute = async ({ params, props }) => {
   if (params.id === 'default') {
     img = await renderDefaultCard();
   } else {
-    const { event } = props as { event: Awaited<ReturnType<typeof getCollection<'event'>>>[number] };
+    const { event, siteData } = props as {
+      event: Awaited<ReturnType<typeof getCollection<'event'>>>[number];
+      siteData?: Awaited<ReturnType<typeof getCollection<'site'>>>[number]['data'];
+    };
     const { data } = event;
-    img = await renderEventCard(data.title, formatEventDateRange(data.date, data.endDate, 'short'), data.location);
+    const venue = resolveVenue(data, siteData);
+    img = await renderEventCard(data.title, formatEventDateRange(data.date, data.endDate, 'short'), venue.location);
   }
 
   return new Response(new Uint8Array(img), {

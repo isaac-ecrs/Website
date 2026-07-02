@@ -1,17 +1,21 @@
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { resolveVenue } from '~/utils/resolveEvent';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const events = await getCollection('event');
+  const sites = await getCollection('site');
+  const siteMap = new Map(sites.map((s) => [s.id, s.data]));
   return events.map((event) => ({
     params: { id: event.id },
-    props: { event },
+    props: { event, siteData: event.data.siteId ? siteMap.get(event.data.siteId) : undefined },
   }));
 };
 
 export const GET: APIRoute = ({ props }) => {
-  const { event } = props as { event: CollectionEntry<'event'> };
+  const { event, siteData } = props as { event: CollectionEntry<'event'>; siteData?: CollectionEntry<'site'>['data'] };
   const { data, id } = event;
+  const venue = resolveVenue(data, siteData);
 
   const fmtDate = (d: Date) => {
     const y = d.getUTCFullYear();
@@ -41,7 +45,7 @@ export const GET: APIRoute = ({ props }) => {
     return out.join('\r\n');
   };
 
-  const location = [data.location, data.address].filter(Boolean).join(', ');
+  const location = [venue.location, venue.address].filter(Boolean).join(', ');
   const dtstamp = new Date().toISOString().replace(/[-:.]/g, '').slice(0, 15) + 'Z';
 
   const lines =

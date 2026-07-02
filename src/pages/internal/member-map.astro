@@ -1,0 +1,65 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import InternalMemberMap from '~/components/widgets/InternalMemberMap';
+import memberLocations from '~/data/member-locations.json';
+import siteGeocodesRaw from '~/data/site-geocodes.json';
+
+// Not linked from public nav — internal planning tool.
+// Data shown here is aggregated at city level; no PII is present.
+
+const metadata = {
+  title: 'Member Map (Internal)',
+  description: 'Internal planning view of member geographic distribution.',
+  robots: { index: false, follow: false },
+};
+
+const knownSites = siteGeocodesRaw;
+---
+
+<Layout metadata={metadata}>
+  <section class="py-10 px-4 max-w-5xl mx-auto space-y-12">
+    <div>
+      <div class="flex items-baseline justify-between mb-1">
+        <h1 class="text-3xl font-bold text-default">Member Distribution</h1>
+        <span class="text-sm text-muted">Internal planning view</span>
+      </div>
+      <InternalMemberMap
+        committedCities={memberLocations.cities}
+        committedAt={memberLocations.generatedAt}
+        knownSites={knownSites}
+        client:load
+      />
+    </div>
+
+    <div>
+      <h2 class="text-xl font-semibold text-default mb-3">All Cities</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm text-default">
+          <thead>
+            <tr class="border-b border-gray-200 dark:border-gray-700">
+              <th class="text-left py-2 pr-6 font-medium">City</th>
+              <th class="text-right py-2 pr-6 font-medium">Members</th>
+              <th class="text-left py-2 font-medium">Country</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              memberLocations.cities.map((city) => (
+                <tr class="border-b border-gray-100 dark:border-gray-800">
+                  <td class="py-2 pr-6">{city.name}</td>
+                  <td class="py-2 pr-6 text-right tabular-nums font-semibold">{city.count}</td>
+                  <td class="py-2 text-muted">{city.country}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="text-xs text-muted border-t border-gray-200 dark:border-gray-700 pt-4">
+      To update: export from Cognito Forms as Excel → upload above → download JSON → drop into
+      <code>scripts/input/member-locations/</code> → commit. The build merges all files in that folder automatically.
+    </p>
+  </section>
+</Layout>

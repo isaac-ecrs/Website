@@ -2,6 +2,7 @@
 import { readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { getCollection, getEntry } from 'astro:content';
+import { resolveVenue } from '~/utils/resolveEvent';
 import Layout from '~/layouts/PageLayout.astro';
 import VideoHero from '~/components/widgets/VideoHero.astro';
 import Features from '~/components/widgets/Features.astro';
@@ -48,6 +49,8 @@ const testimonials = await getCollection('testimonial');
 const landing = landingEntry?.data;
 
 const allEvents = await getCollection('event', ({ data }) => !data.draft);
+const allSites = await getCollection('site');
+const siteMap = new Map(allSites.map((s) => [s.id, s.data]));
 // en-CA produces YYYY-MM-DD output (the only locale that does), which lets us
 // concatenate directly into a valid ISO string. The timezone is what matters here.
 const now = new Date(new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }) + 'T00:00:00Z');
@@ -57,6 +60,9 @@ const upcomingAll = allEvents
 
 const featuredEvent = upcomingAll[0];
 const upcomingEvents = upcomingAll.slice(1, 4);
+const featuredVenue = featuredEvent
+  ? resolveVenue(featuredEvent.data, featuredEvent.data.siteId ? siteMap.get(featuredEvent.data.siteId) : undefined)
+  : undefined;
 
 const featuredDateStr = featuredEvent ? formatEventDateRange(featuredEvent.data.date, featuredEvent.data.endDate) : '';
 
@@ -84,11 +90,11 @@ const metadata = {
           label: 'Upcoming Event',
           title: featuredEvent.data.title,
           date: featuredDateStr,
-          location: featuredEvent.data.location,
+          location: featuredVenue!.location,
           deadline: featuredEvent.data.registrationDeadline
             ? `Register by ${featuredEvent.data.registrationDeadline.toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' })}`
             : undefined,
-          image: featuredEvent.data.image,
+          image: featuredVenue!.image,
           dateISO: featuredEvent.data.date.toISOString(),
           hasRegistration: !!(featuredEvent.data.registrationUrl || featuredEvent.data.cognitoFormId),
         }
@@ -211,41 +217,44 @@ const metadata = {
           </h2>
         </div>
         <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" role="list">
-          {upcomingEvents.map((event: (typeof upcomingEvents)[0]) => (
-            <li>
-              <a
-                href={`/events/${event.id}`}
-                class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-              >
-                {event.data.image && (
-                  <Image
-                    src={event.data.image}
-                    alt=""
-                    width={600}
-                    height={300}
-                    widths={[400, 600, 800]}
-                    sizes="(max-width: 768px) 100vw, 400px"
-                    layout="cover"
-                    class="w-full h-44 object-cover"
-                    loading="lazy"
-                  />
-                )}
-                <div class="flex flex-col flex-1 p-5">
-                  <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">
-                    {formatEventDateRange(event.data.date, event.data.endDate)}
-                  </p>
-                  <h3 class="font-heading text-xl font-bold text-heading group-hover:text-primary transition-colors">
-                    {event.data.title}
-                  </h3>
-                  <p class="text-sm text-muted mt-1 mb-3">{event.data.location}</p>
-                  {event.data.excerpt && <p class="text-sm text-default line-clamp-3 flex-1">{event.data.excerpt}</p>}
-                  <span class="mt-4 text-sm font-semibold text-primary group-hover:underline">
-                    {event.data.registrationUrl || event.data.cognitoFormId ? 'Register Now →' : 'Learn More →'}
-                  </span>
-                </div>
-              </a>
-            </li>
-          ))}
+          {upcomingEvents.map((event: (typeof upcomingEvents)[0]) => {
+            const v = resolveVenue(event.data, event.data.siteId ? siteMap.get(event.data.siteId) : undefined);
+            return (
+              <li>
+                <a
+                  href={`/events/${event.id}`}
+                  class="group flex flex-col h-full rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg hover:border-primary/40 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                >
+                  {v.image && (
+                    <Image
+                      src={v.image}
+                      alt=""
+                      width={600}
+                      height={300}
+                      widths={[400, 600, 800]}
+                      sizes="(max-width: 768px) 100vw, 400px"
+                      layout="cover"
+                      class="w-full h-44 object-cover"
+                      loading="lazy"
+                    />
+                  )}
+                  <div class="flex flex-col flex-1 p-5">
+                    <p class="text-xs font-bold uppercase tracking-widest text-primary mb-1">
+                      {formatEventDateRange(event.data.date, event.data.endDate)}
+                    </p>
+                    <h3 class="font-heading text-xl font-bold text-heading group-hover:text-primary transition-colors">
+                      {event.data.title}
+                    </h3>
+                    <p class="text-sm text-muted mt-1 mb-3">{v.location}</p>
+                    {event.data.excerpt && <p class="text-sm text-default line-clamp-3 flex-1">{event.data.excerpt}</p>}
+                    <span class="mt-4 text-sm font-semibold text-primary group-hover:underline">
+                      {event.data.registrationUrl || event.data.cognitoFormId ? 'Register Now →' : 'Learn More →'}
+                    </span>
+                  </div>
+                </a>
+              </li>
+            );
+          })}
         </ul>
         <div class="text-center mt-10">
           <a href="/events" class="btn btn-secondary">

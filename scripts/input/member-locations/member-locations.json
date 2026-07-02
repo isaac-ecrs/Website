@@ -1,0 +1,909 @@
+{
+  "generatedAt": "2026-06-29T23:10:24.399Z",
+  "cities": [
+    {
+      "name": "Philadelphia, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 27
+    },
+    {
+      "name": "Glenside, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 8
+    },
+    {
+      "name": "Stow, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 5
+    },
+    {
+      "name": "Rockville, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": null,
+      "lng": null,
+      "count": 5
+    },
+    {
+      "name": "Erdenheim, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 4
+    },
+    {
+      "name": "Wyncote, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 4
+    },
+    {
+      "name": "Toronto, CA",
+      "country": "CA",
+      "state": "ON",
+      "lat": 43.65,
+      "lng": -79.38,
+      "count": 4
+    },
+    {
+      "name": "Ossining, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 4
+    },
+    {
+      "name": "Haddon Heights, New Jersey",
+      "country": "US",
+      "state": "New Jersey",
+      "lat": null,
+      "lng": null,
+      "count": 3
+    },
+    {
+      "name": "Chevy Chase, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": null,
+      "lng": null,
+      "count": 3
+    },
+    {
+      "name": "Lexington, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 3
+    },
+    {
+      "name": "York, CA",
+      "country": "CA",
+      "state": "ON",
+      "lat": 43.65,
+      "lng": -79.38,
+      "count": 2
+    },
+    {
+      "name": "Glen Head, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Newtown, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Takoma Park, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "New York, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Newark, DE",
+      "country": "US",
+      "state": "DE",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Glenside, Pa",
+      "country": "US",
+      "state": "Pa",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Apex, NC",
+      "country": "US",
+      "state": "NC",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Hyattsville, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "NORTH RIVER, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Lowell, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Brookline, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "PHILADELPHIA, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Vineyard Haven, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 2
+    },
+    {
+      "name": "Concord, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Feasterville Trevose, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "North River, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "BERNARDSVILLE, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Garrison, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Bothell, WA",
+      "country": "US",
+      "state": "WA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Lakewood, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Florence, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Newton Center, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "LEE, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Wyndmoor, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Blue Bell, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Newtown, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "tappan, ny",
+      "country": "US",
+      "state": "ny",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "IRVINGOTN, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Mt. Kisco, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "York, ON",
+      "country": "US",
+      "state": "ON",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "North Haven, NC",
+      "country": "US",
+      "state": "NC",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Baltimore, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "San Francisco, California",
+      "country": "US",
+      "state": "California",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Amherst, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Rydal, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Wyncote, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Columbia, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Elkins park, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Phila, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Hyattsville, Maryland",
+      "country": "US",
+      "state": "Maryland",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Abington, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Raleigh, NC",
+      "country": "US",
+      "state": "NC",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Bala Cynwyd, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "rydal, pa",
+      "country": "US",
+      "state": "pa",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "North Brunswick, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Trevose, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Montclair, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Columbia, CO",
+      "country": "US",
+      "state": "CO",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Highland Park, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Medford, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Southborough, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Haydenville, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "N. Bellmore, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "HAVERTOWN, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Forest Hill, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Narberth, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Union Hall, VA",
+      "country": "US",
+      "state": "VA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Havertown, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Berlin, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "GARDINER, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Avenel, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Bronxx, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Pikesville, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Somerville, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Bronx, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Keene, NH",
+      "country": "US",
+      "state": "NH",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Cold Spring, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Rego Park, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "North Bellmore, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Big Sur, CA",
+      "country": "US",
+      "state": "CA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Portland, ME",
+      "country": "US",
+      "state": "ME",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Alexandria, VA",
+      "country": "US",
+      "state": "VA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Wappingers Falls, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Flushing, New York",
+      "country": "US",
+      "state": "New York",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Norristown, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "WYNNEWOOD, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Newton Centre, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Chilmark, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Haverford, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Arlington, Massachusetts",
+      "country": "US",
+      "state": "Massachusetts",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Hadley, Massachusetts",
+      "country": "US",
+      "state": "Massachusetts",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "CHILMARK, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Willow Grove, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Tarrytown, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Prescott, AZ",
+      "country": "US",
+      "state": "AZ",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "philadelphia, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Lowell, Massachusetts",
+      "country": "US",
+      "state": "Massachusetts",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Astoria, New York",
+      "country": "US",
+      "state": "New York",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Chicago, IL",
+      "country": "US",
+      "state": "IL",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "cold spring, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Oakville, ON",
+      "country": "US",
+      "state": "ON",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Yorktown Heights, New York",
+      "country": "US",
+      "state": "New York",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Milford, NH",
+      "country": "US",
+      "state": "NH",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Jenkintown, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Media, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "BROOKLYN, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Hillsborough, North Carolina",
+      "country": "US",
+      "state": "North Carolina",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Newton, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Garrison, New York",
+      "country": "US",
+      "state": "New York",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Chevy Chase, Maryland",
+      "country": "US",
+      "state": "Maryland",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    }
+  ]
+}

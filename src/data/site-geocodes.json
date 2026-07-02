@@ -1,0 +1,44 @@
+[
+  {
+    "id": "camp-onas",
+    "name": "Camp Onas",
+    "address": "609 Geigel Hill Road, Ottsville, PA 18942",
+    "lat": 40.3124,
+    "lng": -75.1046
+  },
+  {
+    "id": "pendle-hill",
+    "name": "Pendle Hill",
+    "address": "338 Plush Mill Road, Wallingford, PA 19086",
+    "lat": 39.887,
+    "lng": -75.3534
+  },
+  {
+    "id": "the-philadelphia-ethical-society",
+    "name": "The Philadelphia Ethical Society",
+    "address": "1906 Rittenhouse Square, Philadelphia, PA 19103",
+    "lat": 39.9489,
+    "lng": -75.1722
+  },
+  {
+    "id": "stony-point-center",
+    "name": "Stony Point Center",
+    "address": "Stony Point, NY",
+    "lat": 41.229,
+    "lng": -73.9879
+  },
+  {
+    "id": "the-y-at-watson-woods",
+    "name": "The Y at Watson Woods",
+    "address": "Painted Post, NY",
+    "lat": 42.0056,
+    "lng": -77.0901
+  },
+  {
+    "id": "chestnut-hill-friends-meeting",
+    "name": "Chestnut Hill Friends Meeting",
+    "address": "Chestnut Hill, PA",
+    "lat": 40.0773,
+    "lng": -75.2129
+  }
+]

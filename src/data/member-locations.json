@@ -1,0 +1,845 @@
+{
+  "generatedAt": "2026-06-29T23:12:54.660Z",
+  "cities": [
+    {
+      "name": "Philadelphia, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 39.9527237,
+      "lng": -75.1635262,
+      "count": 30
+    },
+    {
+      "name": "Glenside, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.103196,
+      "lng": -75.1515534,
+      "count": 10
+    },
+    {
+      "name": "Stow, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.4365949,
+      "lng": -71.5050009,
+      "count": 5
+    },
+    {
+      "name": "Rockville, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": 39.0817985,
+      "lng": -77.1516844,
+      "count": 5
+    },
+    {
+      "name": "Erdenheim, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.092055,
+      "lng": -75.2137887,
+      "count": 4
+    },
+    {
+      "name": "Wyncote, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.0906988,
+      "lng": -75.1458857,
+      "count": 4
+    },
+    {
+      "name": "Toronto, CA",
+      "country": "CA",
+      "state": "ON",
+      "lat": 43.65,
+      "lng": -79.38,
+      "count": 4
+    },
+    {
+      "name": "Ossining, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 41.1613168,
+      "lng": -73.8620367,
+      "count": 4
+    },
+    {
+      "name": "Haddon Heights, New Jersey",
+      "country": "US",
+      "state": "New Jersey",
+      "lat": 39.8773356,
+      "lng": -75.0646165,
+      "count": 3
+    },
+    {
+      "name": "Chevy Chase, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": 38.9813699,
+      "lng": -77.0849245,
+      "count": 3
+    },
+    {
+      "name": "Lexington, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.4473175,
+      "lng": -71.2245003,
+      "count": 3
+    },
+    {
+      "name": "North River, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 43.741409,
+      "lng": -74.0530358,
+      "count": 3
+    },
+    {
+      "name": "York, CA",
+      "country": "CA",
+      "state": "ON",
+      "lat": 43.65,
+      "lng": -79.38,
+      "count": 2
+    },
+    {
+      "name": "Glen Head, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 40.8433525,
+      "lng": -73.6257512,
+      "count": 2
+    },
+    {
+      "name": "Newtown, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.2294046,
+      "lng": -74.9365329,
+      "count": 2
+    },
+    {
+      "name": "Takoma Park, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": 38.9778882,
+      "lng": -77.0074765,
+      "count": 2
+    },
+    {
+      "name": "New York, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 40.7127281,
+      "lng": -74.0060152,
+      "count": 2
+    },
+    {
+      "name": "Newark, DE",
+      "country": "US",
+      "state": "DE",
+      "lat": 39.6828358,
+      "lng": -75.7515682,
+      "count": 2
+    },
+    {
+      "name": "Apex, NC",
+      "country": "US",
+      "state": "NC",
+      "lat": 35.7325352,
+      "lng": -78.8505516,
+      "count": 2
+    },
+    {
+      "name": "Hyattsville, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": 38.9529442,
+      "lng": -76.9408647,
+      "count": 2
+    },
+    {
+      "name": "Lowell, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.6414437,
+      "lng": -71.3085329,
+      "count": 2
+    },
+    {
+      "name": "Brookline, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.332918,
+      "lng": -71.1187829,
+      "count": 2
+    },
+    {
+      "name": "Vineyard Haven, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 41.4542914,
+      "lng": -70.6038026,
+      "count": 2
+    },
+    {
+      "name": "Rydal, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.107492,
+      "lng": -75.1106687,
+      "count": 2
+    },
+    {
+      "name": "Havertown, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 39.9809452,
+      "lng": -75.3085201,
+      "count": 2
+    },
+    {
+      "name": "Cold Spring, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 41.4200938,
+      "lng": -73.9545831,
+      "count": 2
+    },
+    {
+      "name": "Chilmark, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 41.343056,
+      "lng": -70.7440232,
+      "count": 2
+    },
+    {
+      "name": "Concord, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.4605189,
+      "lng": -71.3488963,
+      "count": 1
+    },
+    {
+      "name": "Feasterville Trevose, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.1514065,
+      "lng": -74.9886785,
+      "count": 1
+    },
+    {
+      "name": "Bernardsville, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": 40.7186805,
+      "lng": -74.5692273,
+      "count": 1
+    },
+    {
+      "name": "Garrison, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 41.3825364,
+      "lng": -73.9466505,
+      "count": 1
+    },
+    {
+      "name": "Bothell, WA",
+      "country": "US",
+      "state": "WA",
+      "lat": 47.7623204,
+      "lng": -122.2054035,
+      "count": 1
+    },
+    {
+      "name": "Lakewood, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": 40.0940995,
+      "lng": -74.2149889,
+      "count": 1
+    },
+    {
+      "name": "Florence, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.3355692,
+      "lng": -72.6719518,
+      "count": 1
+    },
+    {
+      "name": "Newton Center, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.3300309,
+      "lng": -71.1948774,
+      "count": 1
+    },
+    {
+      "name": "Lee, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.3073477,
+      "lng": -73.2504911,
+      "count": 1
+    },
+    {
+      "name": "Wyndmoor, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": 40.0853435,
+      "lng": -75.1940207,
+      "count": 1
+    },
+    {
+      "name": "Blue Bell, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.147809,
+      "lng": -75.272781,
+      "count": 1
+    },
+    {
+      "name": "Newtown, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": 40.2294046,
+      "lng": -74.9365329,
+      "count": 1
+    },
+    {
+      "name": "Tappan, NY",
+      "country": "US",
+      "state": "ny",
+      "lat": 41.0248325,
+      "lng": -73.9504523,
+      "count": 1
+    },
+    {
+      "name": "Irvingotn, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Mt. Kisco, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 41.2042616,
+      "lng": -73.7270761,
+      "count": 1
+    },
+    {
+      "name": "Ny",
+      "country": "US",
+      "state": "NY",
+      "lat": 43.1561681,
+      "lng": -75.8449946,
+      "count": 1
+    },
+    {
+      "name": "York, ON",
+      "country": "US",
+      "state": "ON",
+      "lat": 44.0007518,
+      "lng": -79.4372217,
+      "count": 1
+    },
+    {
+      "name": "North Haven, NC",
+      "country": "US",
+      "state": "NC",
+      "lat": 35.8727912,
+      "lng": -78.6296895,
+      "count": 1
+    },
+    {
+      "name": "Baltimore, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": 39.2908816,
+      "lng": -76.610759,
+      "count": 1
+    },
+    {
+      "name": "San Francisco, California",
+      "country": "US",
+      "state": "California",
+      "lat": 37.7879363,
+      "lng": -122.4075201,
+      "count": 1
+    },
+    {
+      "name": "Amherst, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.3731948,
+      "lng": -72.5198761,
+      "count": 1
+    },
+    {
+      "name": "Wyncote, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": 40.0906988,
+      "lng": -75.1458857,
+      "count": 1
+    },
+    {
+      "name": "Columbia, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": 39.1938429,
+      "lng": -76.8646092,
+      "count": 1
+    },
+    {
+      "name": "Elkins Park, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.0770553,
+      "lng": -75.1268413,
+      "count": 1
+    },
+    {
+      "name": "Phila, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 39.9255421,
+      "lng": -75.229721,
+      "count": 1
+    },
+    {
+      "name": "Hyattsville, Maryland",
+      "country": "US",
+      "state": "Maryland",
+      "lat": 38.9529442,
+      "lng": -76.9408647,
+      "count": 1
+    },
+    {
+      "name": "Abington, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": 40.114354,
+      "lng": -75.1216878,
+      "count": 1
+    },
+    {
+      "name": "Raleigh, NC",
+      "country": "US",
+      "state": "NC",
+      "lat": 35.7803977,
+      "lng": -78.6390989,
+      "count": 1
+    },
+    {
+      "name": "Bala Cynwyd, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.0086075,
+      "lng": -75.235568,
+      "count": 1
+    },
+    {
+      "name": "North Brunswick, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": 40.4539249,
+      "lng": -74.476545,
+      "count": 1
+    },
+    {
+      "name": "Trevose, Pennsylvania",
+      "country": "US",
+      "state": "Pennsylvania",
+      "lat": 40.1392766,
+      "lng": -74.9810019,
+      "count": 1
+    },
+    {
+      "name": "Montclair, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": 40.8164458,
+      "lng": -74.2210643,
+      "count": 1
+    },
+    {
+      "name": "Columbia, CO",
+      "country": "US",
+      "state": "CO",
+      "lat": 5.2171426,
+      "lng": -75.8217702,
+      "count": 1
+    },
+    {
+      "name": "Highland Park, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": 40.4997407,
+      "lng": -74.4262011,
+      "count": 1
+    },
+    {
+      "name": "Medford, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.4184296,
+      "lng": -71.1061639,
+      "count": 1
+    },
+    {
+      "name": "Southborough, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.3056501,
+      "lng": -71.5245087,
+      "count": 1
+    },
+    {
+      "name": "Haydenville, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.375894,
+      "lng": -72.7024477,
+      "count": 1
+    },
+    {
+      "name": "N. Bellmore, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 40.6892935,
+      "lng": -73.5369169,
+      "count": 1
+    },
+    {
+      "name": "Forest Hill, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": 39.5851063,
+      "lng": -76.387739,
+      "count": 1
+    },
+    {
+      "name": "Narberth, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.00726,
+      "lng": -75.2624168,
+      "count": 1
+    },
+    {
+      "name": "Union Hall, VA",
+      "country": "US",
+      "state": "VA",
+      "lat": 37.0201225,
+      "lng": -79.6900363,
+      "count": 1
+    },
+    {
+      "name": "Berlin, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": 38.324505,
+      "lng": -75.2188589,
+      "count": 1
+    },
+    {
+      "name": "Gardiner, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 41.6798157,
+      "lng": -74.1504231,
+      "count": 1
+    },
+    {
+      "name": "Avenel, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": 40.5848314,
+      "lng": -74.2730161,
+      "count": 1
+    },
+    {
+      "name": "Bronxx, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": null,
+      "lng": null,
+      "count": 1
+    },
+    {
+      "name": "Pikesville, MD",
+      "country": "US",
+      "state": "MD",
+      "lat": 39.385227,
+      "lng": -76.7080456,
+      "count": 1
+    },
+    {
+      "name": "Somerville, NJ",
+      "country": "US",
+      "state": "NJ",
+      "lat": 40.5742696,
+      "lng": -74.60988,
+      "count": 1
+    },
+    {
+      "name": "Bronx, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 40.8466508,
+      "lng": -73.8785937,
+      "count": 1
+    },
+    {
+      "name": "Keene, NH",
+      "country": "US",
+      "state": "NH",
+      "lat": 42.933597,
+      "lng": -72.2784264,
+      "count": 1
+    },
+    {
+      "name": "Rego Park, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 40.722865,
+      "lng": -73.8621025,
+      "count": 1
+    },
+    {
+      "name": "North Bellmore, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 40.6892935,
+      "lng": -73.5369169,
+      "count": 1
+    },
+    {
+      "name": "Big Sur, CA",
+      "country": "US",
+      "state": "CA",
+      "lat": 36.1437044,
+      "lng": -121.564593,
+      "count": 1
+    },
+    {
+      "name": "Portland, ME",
+      "country": "US",
+      "state": "ME",
+      "lat": 43.6573605,
+      "lng": -70.2586618,
+      "count": 1
+    },
+    {
+      "name": "Alexandria, VA",
+      "country": "US",
+      "state": "VA",
+      "lat": 38.8051095,
+      "lng": -77.0470229,
+      "count": 1
+    },
+    {
+      "name": "Wappingers Falls, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 41.597081,
+      "lng": -73.9169663,
+      "count": 1
+    },
+    {
+      "name": "Flushing, New York",
+      "country": "US",
+      "state": "New York",
+      "lat": 40.7654301,
+      "lng": -73.8174291,
+      "count": 1
+    },
+    {
+      "name": "Norristown, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.1146022,
+      "lng": -75.3446458,
+      "count": 1
+    },
+    {
+      "name": "Wynnewood, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.0028514,
+      "lng": -75.2707469,
+      "count": 1
+    },
+    {
+      "name": "Newton Centre, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.3300309,
+      "lng": -71.1948774,
+      "count": 1
+    },
+    {
+      "name": "Haverford, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.0129191,
+      "lng": -75.2966948,
+      "count": 1
+    },
+    {
+      "name": "Arlington, Massachusetts",
+      "country": "US",
+      "state": "Massachusetts",
+      "lat": 42.4153739,
+      "lng": -71.1564428,
+      "count": 1
+    },
+    {
+      "name": "Hadley, Massachusetts",
+      "country": "US",
+      "state": "Massachusetts",
+      "lat": 42.3423259,
+      "lng": -72.5891221,
+      "count": 1
+    },
+    {
+      "name": "Willow Grove, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.1507046,
+      "lng": -75.1162306,
+      "count": 1
+    },
+    {
+      "name": "Tarrytown, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 41.0762077,
+      "lng": -73.8587461,
+      "count": 1
+    },
+    {
+      "name": "Prescott, AZ",
+      "country": "US",
+      "state": "AZ",
+      "lat": 34.539984,
+      "lng": -112.468812,
+      "count": 1
+    },
+    {
+      "name": "Lowell, Massachusetts",
+      "country": "US",
+      "state": "Massachusetts",
+      "lat": 42.6414437,
+      "lng": -71.3085329,
+      "count": 1
+    },
+    {
+      "name": "Astoria, New York",
+      "country": "US",
+      "state": "New York",
+      "lat": 40.7720145,
+      "lng": -73.9302673,
+      "count": 1
+    },
+    {
+      "name": "Chicago, IL",
+      "country": "US",
+      "state": "IL",
+      "lat": 41.8755616,
+      "lng": -87.6244212,
+      "count": 1
+    },
+    {
+      "name": "Oakville, ON",
+      "country": "US",
+      "state": "ON",
+      "lat": 43.447436,
+      "lng": -79.666672,
+      "count": 1
+    },
+    {
+      "name": "Yorktown Heights, New York",
+      "country": "US",
+      "state": "New York",
+      "lat": 41.2701781,
+      "lng": -73.7753539,
+      "count": 1
+    },
+    {
+      "name": "Milford, NH",
+      "country": "US",
+      "state": "NH",
+      "lat": 42.8355775,
+      "lng": -71.6495345,
+      "count": 1
+    },
+    {
+      "name": "Jenkintown, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 40.0959539,
+      "lng": -75.125651,
+      "count": 1
+    },
+    {
+      "name": "Media, PA",
+      "country": "US",
+      "state": "PA",
+      "lat": 39.9167783,
+      "lng": -75.387693,
+      "count": 1
+    },
+    {
+      "name": "Brooklyn, NY",
+      "country": "US",
+      "state": "NY",
+      "lat": 40.6526006,
+      "lng": -73.9497211,
+      "count": 1
+    },
+    {
+      "name": "Hillsborough, North Carolina",
+      "country": "US",
+      "state": "North Carolina",
+      "lat": 36.075382,
+      "lng": -79.0993958,
+      "count": 1
+    },
+    {
+      "name": "Newton, MA",
+      "country": "US",
+      "state": "MA",
+      "lat": 42.3300435,
+      "lng": -71.194862,
+      "count": 1
+    },
+    {
+      "name": "Garrison, New York",
+      "country": "US",
+      "state": "New York",
+      "lat": 41.3825364,
+      "lng": -73.9466505,
+      "count": 1
+    },
+    {
+      "name": "Chevy Chase, Maryland",
+      "country": "US",
+      "state": "Maryland",
+      "lat": 38.9813699,
+      "lng": -77.0849245,
+      "count": 1
+    }
+  ]
+}
