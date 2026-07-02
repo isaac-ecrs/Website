@@ -63,6 +63,14 @@ export default [
     },
   },
   {
-    ignores: ['dist', 'node_modules', '.github', 'types.generated.d.ts', '.astro'],
+    ignores: [
+      'dist',
+      'node_modules',
+      '.github',
+      'types.generated.d.ts',
+      '.astro',
+      // Prebuilt Sveltia CMS bundle copied from node_modules (gitignored)
+      'public/admin/sveltia-cms.js',
+    ],
   },
 ];

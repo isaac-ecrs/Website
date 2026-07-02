@@ -9,9 +9,11 @@
   },
   "scripts": {
     "prepare": "lefthook install",
+    "predev": "node scripts/copy-sveltia-cms.mjs",
     "dev": "astro dev",
+    "prestart": "node scripts/copy-sveltia-cms.mjs",
     "start": "astro dev",
-    "build": "astro build && node scripts/inject-sri.mjs",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "check": "npm run check:astro && npm run check:eslint && npm run check:prettier",
@@ -26,7 +28,7 @@
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix .",
     "fix:prettier": "prettier -w .",
-    "prebuild": "node scripts/copy-public-images.mjs && node scripts/process-member-locations.mjs",
+    "prebuild": "node scripts/copy-sveltia-cms.mjs && node scripts/copy-public-images.mjs && node scripts/process-member-locations.mjs",
     "process-members": "node scripts/process-member-locations.mjs"
   },
   "dependencies": {
@@ -57,6 +59,7 @@
     "@iconify-json/tabler": "^1.2.35",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.61.1",
+    "@sveltia/cms": "^0.169.1",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.2",
     "@types/js-yaml": "^4.0.9",
