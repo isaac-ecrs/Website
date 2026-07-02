@@ -42,11 +42,13 @@ const callGet = async (event: ReturnType<typeof makeEvent>): Promise<string> =>
 describe('getStaticPaths', () => {
   it('maps each event to {params: {id}, props: {event}}', async () => {
     const fakeEvents = [makeEvent({ id: 'event-a' }), makeEvent({ id: 'event-b' })];
-    vi.mocked(getCollection).mockResolvedValueOnce(fakeEvents as never);
+    vi.mocked(getCollection)
+      .mockResolvedValueOnce(fakeEvents as never)
+      .mockResolvedValueOnce([] as never);
     const paths = await getStaticPaths({} as never);
     expect(paths).toEqual([
-      { params: { id: 'event-a' }, props: { event: fakeEvents[0] } },
-      { params: { id: 'event-b' }, props: { event: fakeEvents[1] } },
+      { params: { id: 'event-a' }, props: { event: fakeEvents[0], siteData: undefined } },
+      { params: { id: 'event-b' }, props: { event: fakeEvents[1], siteData: undefined } },
     ]);
   });
 });
