@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T23:12:54.660Z",
+  "generatedAt": "2026-07-02T06:12:48.320Z",
   "cities": [
     {
       "name": "Philadelphia, PA",
@@ -533,8 +533,8 @@
       "name": "Narberth, PA",
       "country": "US",
       "state": "PA",
-      "lat": 40.00726,
-      "lng": -75.2624168,
+      "lat": 40.0084456,
+      "lng": -75.26046,
       "count": 1
     },
     {

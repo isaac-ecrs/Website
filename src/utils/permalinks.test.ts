@@ -1,19 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import {
-  trimSlash,
-  cleanSlug,
-  getPermalink,
-  getCanonical,
-  getHomePermalink,
-  getBlogPermalink,
-  getAsset,
-  applyGetPermalinks,
-} from './permalinks';
+import { trimSlash, getPermalink, getCanonical, getHomePermalink, getAsset, applyGetPermalinks } from './permalinks';
 
 // Config loaded from src/config.yaml via vitest.config.ts virtual module:
 //   SITE.site = 'https://ecrs.org', SITE.base = '/', SITE.trailingSlash = false
-//   BLOG_BASE = 'blog', CATEGORY_BASE = 'category', TAG_BASE = 'tag'
-//   POST_PERMALINK_PATTERN = '%slug%' (from permalink '/%slug%')
 
 describe('trimSlash', () => {
   it('removes leading and trailing slashes', () => {
@@ -31,24 +20,6 @@ describe('trimSlash', () => {
   it('returns empty string for slash-only input', () => {
     expect(trimSlash('/')).toBe('');
     expect(trimSlash('')).toBe('');
-  });
-});
-
-describe('cleanSlug', () => {
-  it('slugifies a simple string', () => {
-    expect(cleanSlug('Hello World')).toBe('hello-world');
-  });
-
-  it('strips leading and trailing slashes', () => {
-    expect(cleanSlug('/foo/')).toBe('foo');
-  });
-
-  it('slugifies each path segment independently', () => {
-    expect(cleanSlug('/My Category/My Post/')).toBe('my-category/my-post');
-  });
-
-  it('handles an empty string', () => {
-    expect(cleanSlug('')).toBe('');
   });
 });
 
@@ -89,22 +60,6 @@ describe('getPermalink', () => {
     expect(getPermalink('about', 'page')).toBe('/about');
   });
 
-  it('generates a post permalink', () => {
-    expect(getPermalink('my-post', 'post')).toBe('/my-post');
-  });
-
-  it('generates a category permalink', () => {
-    expect(getPermalink('sports', 'category')).toBe('/category/sports');
-  });
-
-  it('generates a tag permalink', () => {
-    expect(getPermalink('typescript', 'tag')).toBe('/tag/typescript');
-  });
-
-  it('generates a blog index permalink', () => {
-    expect(getPermalink('', 'blog')).toBe('/blog');
-  });
-
   it('generates the home permalink', () => {
     expect(getPermalink('/', 'home')).toBe('/');
   });
@@ -117,12 +72,6 @@ describe('getPermalink', () => {
 describe('getHomePermalink', () => {
   it('returns /', () => {
     expect(getHomePermalink()).toBe('/');
-  });
-});
-
-describe('getBlogPermalink', () => {
-  it('returns /blog', () => {
-    expect(getBlogPermalink()).toBe('/blog');
   });
 });
 
@@ -155,17 +104,13 @@ describe('applyGetPermalinks', () => {
     expect(applyGetPermalinks({ href: { type: 'home' } })).toEqual({ href: '/' });
   });
 
-  it('resolves href with type blog', () => {
-    expect(applyGetPermalinks({ href: { type: 'blog' } })).toEqual({ href: '/blog' });
-  });
-
   it('resolves href with type asset', () => {
     expect(applyGetPermalinks({ href: { type: 'asset', url: 'logo.png' } })).toEqual({ href: '/logo.png' });
   });
 
   it('resolves href with explicit url and type', () => {
-    expect(applyGetPermalinks({ href: { type: 'tag', url: 'typescript' } })).toEqual({
-      href: '/tag/typescript',
+    expect(applyGetPermalinks({ href: { type: 'page', url: 'about' } })).toEqual({
+      href: '/about',
     });
   });
 

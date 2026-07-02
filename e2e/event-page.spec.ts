@@ -10,17 +10,17 @@ import { test, expect } from '@playwright/test';
  * The combinatorial state-machine logic (hasCosts, registerMode, etc.)
  * is covered by unit tests in src/__tests__/eventSections.test.ts.
  *
- * Events used here:
- *   Past:    2026-fun-day-in-philly      (March 14 2026)
- *   Future:  2026-fall-fun-day           (November 7 2026)
- *   Fixture: e2e-popover-fixture         (draft=true, excluded from listings;
- *                                         has cognitoFormId, fee, and classes
+ * Events used here (all draft: true fixtures, excluded from listings and
+ * sitemap so they never rot as real content comes and goes):
+ *   Past:    e2e-past-event              (2024 — no registration, costs, or classes)
+ *   Future:  e2e-future-event            (2099 — no registration, costs, or classes)
+ *   Rich:    e2e-popover-fixture         (2099 — cognitoFormId, fee, and classes
  *                                         with a leaderId to drive popover tests)
  */
 
 test.describe('past event', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/events/2026-fun-day-in-philly');
+    await page.goto('/events/e2e-past-event');
   });
 
   test('shows "Past Event" badge', async ({ page }) => {
@@ -36,7 +36,7 @@ test.describe('past event', () => {
   });
 
   test('has a working ICS download link', async ({ page }) => {
-    const response = await page.request.get('/events/2026-fun-day-in-philly.ics');
+    const response = await page.request.get('/events/e2e-past-event.ics');
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toContain('text/calendar');
   });
@@ -52,7 +52,7 @@ test.describe('past event', () => {
 
 test.describe('future event without registration options', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/events/2026-fall-fun-day');
+    await page.goto('/events/e2e-future-event');
   });
 
   test('does not show "Past Event" badge', async ({ page }) => {
@@ -92,7 +92,9 @@ test.describe('e2e fixture event (draft)', () => {
   });
 
   test('page loads and shows title', async ({ page }) => {
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('E2E Test Fixture');
+    // Scoped by name: the embedded Cognito form injects its own <h1>,
+    // so an unscoped level-1 locator resolves to two elements.
+    await expect(page.getByRole('heading', { level: 1, name: /E2E Test Fixture/ })).toBeVisible();
   });
 
   test('does not show "Past Event" badge (future date)', async ({ page }) => {

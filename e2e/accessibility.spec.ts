@@ -81,11 +81,11 @@ test('events listing has no critical a11y violations', async ({ page }, testInfo
 });
 
 test('past event detail has no critical a11y violations', async ({ page }, testInfo) => {
-  await audit(page, testInfo, '/events/2026-fun-day-in-philly');
+  await audit(page, testInfo, '/events/e2e-past-event');
 });
 
 test('future event detail has no critical a11y violations', async ({ page }, testInfo) => {
-  await audit(page, testInfo, '/events/2026-fall-fun-day');
+  await audit(page, testInfo, '/events/e2e-future-event');
 });
 
 test('fixture event (classes + form + popover) has no critical a11y violations', async ({ page }, testInfo) => {

@@ -1,7 +1,11 @@
 # -------------------------------------------------------
-# Decap CMS Configuration for ECRS
+# Sveltia CMS Configuration for ECRS
 # Backend: GitHub OAuth via Sveltia CMS Auth Worker (Cloudflare)
 # Hosting: Cloudflare Pages
+#
+# Note: Sveltia commits directly to `main` — it does not support
+# Decap's editorial_workflow, and nothing here should assume
+# PR-based content review. See docs/deployment-and-cms.md.
 # -------------------------------------------------------
 
 backend:
@@ -10,8 +14,6 @@ backend:
   branch: main
   auth_scope: public_repo
   base_url: https://sveltia-cms-auth.isaac-cd9.workers.dev
-
-publish_mode: editorial_workflow
 
 local_backend: true
 
@@ -112,7 +114,6 @@ collections:
               widget: 'string',
               hint: 'Number from the Cognito Forms embed URL',
             }
-          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '600' }
 
       - name: 'donation'
         label: 'Donate'
@@ -132,13 +133,6 @@ collections:
               name: 'cognitoFormId',
               widget: 'string',
               hint: 'The number at the end of the Cognito Forms embed URL (e.g. 17)',
-            }
-          - {
-              label: 'Form Height (px)',
-              name: 'cognitoFormHeight',
-              widget: 'string',
-              default: '600',
-              hint: 'Adjust if the form is taller or shorter than the default',
             }
 
       - name: 'membership'
@@ -174,7 +168,6 @@ collections:
               widget: 'string',
               hint: 'Number from the Cognito Forms embed URL',
             }
-          - { label: 'Form Height (px)', name: 'cognitoFormHeight', widget: 'string', default: '1400' }
 
       - name: 'people'
         label: 'Our People'
@@ -322,7 +315,6 @@ collections:
 
       # ── Registration ──────────────────────────────────────────────
       - { label: 'Registration URL', name: 'registrationUrl', widget: 'string', required: false }
-      - { label: 'Registration Email', name: 'registrationEmail', widget: 'string', required: false }
       - {
           label: 'Registration Deadline',
           name: 'registrationDeadline',
@@ -352,14 +344,6 @@ collections:
           widget: 'string',
           required: false,
           hint: 'Number at the end of the Cognito Forms embed URL (e.g. 17)',
-        }
-      - {
-          label: 'Cognito Form Height (px)',
-          name: 'cognitoFormHeight',
-          widget: 'string',
-          required: false,
-          default: '800',
-          hint: 'Adjust if the form is taller or shorter than the default',
         }
 
       # ── Pricing ───────────────────────────────────────────────────

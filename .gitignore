@@ -51,3 +51,6 @@ test-results/
 
 # Lighthouse CI output
 .lighthouseci/
+
+# Sveltia CMS bundle copied from node_modules by scripts/copy-sveltia-cms.mjs
+public/admin/sveltia-cms.js
