@@ -63,8 +63,7 @@
     const modal = document.querySelector('pagefind-modal');
     if (!modal) return;
     const inst = (modal as unknown as Record<string, unknown>).instance as
-      | { components?: unknown[]; componentsByType?: Record<string, unknown[]> }
-      | undefined;
+      { components?: unknown[]; componentsByType?: Record<string, unknown[]> } | undefined;
     if (!inst) return;
     const alive = (c: unknown) => c instanceof Element && c.isConnected;
     if (Array.isArray(inst.components)) inst.components = inst.components.filter(alive);
