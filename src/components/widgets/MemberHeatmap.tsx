@@ -121,7 +121,7 @@ export default function MemberHeatmap({ cities, activeSite, maskSmallCounts = fa
     <div className="relative border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800">
       <ComposableMap
         projection="geoMercator"
-        projectionConfig={{ center: [-96, 44], scale: 520 }}
+        projectionConfig={{ center: [-96, 44] as [number, number], scale: 520 } as never}
         viewBox="0 0 800 560"
         style={{ width: '100%', height: 'auto' }}
       >
@@ -188,7 +188,7 @@ export default function MemberHeatmap({ cities, activeSite, maskSmallCounts = fa
 
           {/* Active site pin */}
           {activeSite && (
-            <Marker coordinates={[activeSite.lng, activeSite.lat]}>
+            <Marker coordinates={[activeSite.lng, activeSite.lat] as never}>
               <circle r={6} fill="#1d4ed8" stroke="#ffffff" strokeWidth={2} />
               <circle r={14} fill="#1d4ed8" fillOpacity={0.15} />
             </Marker>
