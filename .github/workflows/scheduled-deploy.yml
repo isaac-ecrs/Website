@@ -10,4 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Cloudflare Pages deploy
-        run: curl -X POST "${{ secrets.CF_DEPLOY_HOOK_URL }}"
+        # --fail makes a 4xx/5xx from the deploy hook fail the workflow
+        # instead of silently reporting success.
+        run: curl --fail --silent --show-error -X POST "${{ secrets.CF_DEPLOY_HOOK_URL }}"

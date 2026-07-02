@@ -24,7 +24,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:a11y": "playwright test e2e/accessibility.spec.ts",
-    "lighthouse": "astro build && astro preview --port 4321 & sleep 3 && lhci autorun && kill %1",
+    "lighthouse": "npm run build && lhci autorun",
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix .",
     "fix:prettier": "prettier -w .",

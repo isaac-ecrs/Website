@@ -1,4 +1,4 @@
-name: GitHub Actions
+name: CI
 
 on:
   pull_request:
@@ -11,19 +11,54 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
+  # Detects whether a change touches anything beyond CMS-managed content.
+  # Content-only commits (the common case — every Sveltia edit) run just the
+  # fast validators (check + build); code changes also run the full test,
+  # e2e, and Lighthouse jobs.
+  changes:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 22
+    outputs:
+      content-only: ${{ steps.filter.outputs.content-only }}
     steps:
       - uses: actions/checkout@v7
-      - name: Use Node.js v${{ matrix.node-version }}
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          # content-only is true only when EVERY changed file matches
+          predicate-quantifier: 'every'
+          filters: |
+            content-only:
+              - 'src/data/**'
+              - 'public/images/**'
+
+  # Always runs: astro check + eslint + prettier.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Use Node.js 22
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+
+  # Always runs: the build is the only check that validates content against
+  # the zod schemas in src/content.config.ts, so it must run for CMS commits.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Use Node.js 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run build
@@ -35,6 +70,8 @@ jobs:
           fi
 
   test:
+    needs: changes
+    if: needs.changes.outputs.content-only != 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -55,6 +92,8 @@ jobs:
           fail_ci_if_error: false
 
   e2e:
+    needs: changes
+    if: needs.changes.outputs.content-only != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -64,12 +103,22 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(node -e "console.log(require('@playwright/test/package.json').version)")" >> "$GITHUB_OUTPUT"
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
       - run: npx playwright install chromium --with-deps
       - run: npm run test:e2e
         env:
           CI: true
 
-  check:
+  lighthouse:
+    needs: changes
+    if: needs.changes.outputs.content-only != 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -79,6 +128,6 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm run check
-      - name: Check formatting
-        run: npx prettier --check .
+      # Builds the site, serves it via `astro preview` (startServerCommand in
+      # .lighthouserc.json), and asserts a11y/best-practices/SEO >= 0.9.
+      - run: npm run lighthouse
